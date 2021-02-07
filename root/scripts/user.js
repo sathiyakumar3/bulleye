@@ -6,13 +6,14 @@ function load_navi() {
             const promises = []
             querySnapshot.forEach((doc) => {
                 var myvar = '';
+                var wallet_id = doc.id;
                 const promise = db.collection("wallets").doc(doc.id).collection('entries').get().then((querySnapshot) => {
                     var wallets_months = '';
                     var size = querySnapshot.size
                     const promises2 = []
                     const promise2 = querySnapshot.forEach((doc) => {
-                             wallets_months = '                                            <li class="menu-item" aria-haspopup="true">'+
-                            '                                                <a href="crud/file-upload/dropzonejs.html" class="menu-link">'+
+                             wallets_months = '                                            <li class="menu-item" aria-haspopup="true" >'+
+                            '                                                <a class="menu-link" onclick="load_page(\'content_pages/wallet.html\',\''+wallet_id+'\')">'+
                             '                                                    <i class="menu-bullet menu-bullet-dot">'+
                             '                                                            <span></span>'+
                             '                                                        </i>'+
@@ -25,8 +26,10 @@ function load_navi() {
                         // console.log("Reading..." + doc.id);
 
                     });
-
                     promises2.push(promise2);
+
+
+                    
 
                     Promise.all(promises2).then(results => {
                         //console.log(wallets_months);
@@ -37,7 +40,7 @@ function load_navi() {
                         '                                <i class="menu-icon ki ki-bold-more-hor icon-md"></i>'+
                         '                            </li>'+                        
  '<li class="menu-item menu-item-active" aria-haspopup="true">'+
-'                                <a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\''+doc.id+'\')">'+
+'                                <a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\''+wallet_id+'\')">'+
 '                                    <span class="svg-icon menu-icon">'+
 '											<!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->'+
 '											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">'+
@@ -157,7 +160,7 @@ function get_user(user) {
 
     user_local = user;
     var docRef = db.collection("users");
-    getoptdata(docRef, user.uid).then(function(finalResult) {
+    getoptdata(docRef, user.uid).then((function(finalResult) {
 
         document.getElementById("front_page_user_id").value = user.uid;
 
@@ -170,7 +173,7 @@ function get_user(user) {
             image_add(error);
         });
         load_navi();
-    }).catch((error) => {
+    })).catch((error) => {
         console.error(error);
     });
 
@@ -200,14 +203,14 @@ function image_add(url) {
 
     document.getElementById("imageframe").innerHTML = myvar;
     // Class definition
-    var KTImageInputDemo = function() {
+    var KTImageInputDemo = (function() {
         // Private functions
         var initDemos = function() {
 
             // Example 5
             var avatar5 = new KTImageInput('kt_image_5');
 
-            avatar5.on('change', function(imageInput) {
+            avatar5.on('change', (function(imageInput) {
 
 
                 var size = imageInput.input.files[0].size
@@ -225,7 +228,7 @@ function image_add(url) {
 
 
                     ref.putString(message, 'data_url').then((snapshot) => {
-                        snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                        snapshot.ref.getDownloadURL().then((function(downloadURL) {
                             const usersRef = db.collection("users");
                             var value = {
                                 "photo_url": downloadURL
@@ -233,7 +236,7 @@ function image_add(url) {
                             };
                             console.log("File available at", downloadURL);
                             updateoptdata(usersRef, user_local.uid, value);
-                        });
+                        }));
 
                         /*  ref.getDownloadURL()
                             .then((url) => {
@@ -254,9 +257,9 @@ function image_add(url) {
 
 
                 }
-            });
+            }));
 
-            avatar5.on('remove', function(imageInput) {
+            avatar5.on('remove', (function(imageInput) {
 
                 Swal.fire({
                     title: 'Are you sure?',
@@ -277,7 +280,7 @@ function image_add(url) {
                     }
                 });
 
-            });
+            }));
 
 
         }
@@ -288,9 +291,9 @@ function image_add(url) {
                 initDemos();
             }
         };
-    }();
+    })();
 
-    KTUtil.ready(function() {
+    KTUtil.ready((function() {
         KTImageInputDemo.init();
-    });
+    }));
 }
