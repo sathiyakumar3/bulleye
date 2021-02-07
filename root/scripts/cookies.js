@@ -34,10 +34,9 @@ function getoptdata(docRef, id) {
             var results = "";
             docRef.doc(id).get().then(function(doc) {
                 if (doc.exists) {
-                    console.log("Reading from database");
+                    console.log("[D] -Remote");
                     results = doc.data();
                     str = JSON.stringify(results);
-
                     setCookie(id, str);
                     resolve(results);
                 } else {
@@ -47,7 +46,7 @@ function getoptdata(docRef, id) {
                 reject(error);
             });
         } else {
-            console.log("Reading from Cookies");
+            console.log("[D] - Local");
             resolve(JSON.parse(find));
         }
     });
@@ -63,7 +62,6 @@ function setoptdata(docRef, id, data) {
         // Add a new document in collection "cities"
         docRef.doc(id).set(data)
             .then(function() {
-                console.log("Document successfully written!");
                 resolve("success");
             })
             .catch(function(error) {
@@ -73,22 +71,83 @@ function setoptdata(docRef, id, data) {
     });
 }
 
-function updateoptdata(docRef, id, data) {
-    str = JSON.stringify(data);
-    setCookie(id, str);
+function deloptfeild(docRef, id, field) {
+
+    var find = getCookie(id);
+    delete find[field];
+    setCookie(id, find);
     return new Promise(function(resolve, reject) {
-        // Add a new document in collection "cities"
-        docRef.doc(id).update(data)
-            .then(function() {
-                console.log("Document successfully written!");
+
+        docRef.doc(id).update({
+                [field]: firebase.firestore.FieldValue.delete()
+            }).then(function() {
                 resolve("success");
             })
             .catch(function(error) {
-                console.error("Error writing document: ", error);
+                console.error("Error deleteing Feild: ", error);
                 reject(error);
             });
     });
 }
+
+
+// Remove the 'capital' field from the document
+var user_icon_list = {};
+
+function get_user_icon(user_id) {
+    const ref = firebase.storage().ref().child('users/' + user_id);
+    return new Promise(function(resolve, reject) {
+
+        if (user_icon_list.hasOwnProperty(user_id)) {
+            console.log("[i]- Local");
+            var find = user_icon_list[user_id];
+
+            resolve(find);
+        } else {
+
+            console.log("[i]- Remote");
+            ref.getDownloadURL()
+                .then((url) => {
+                    user_icon_list[user_id] = url;
+                    resolve(url);
+                }).catch((error) => {
+                    // console.log(error);
+                    reject("assets/media/users/blank.png");
+                });
+
+        }
+    });
+
+}
+
+function updateoptdata(docRef, id, data) {
+    console.log(data);
+    getoptdata(docRef, id).then(function(arr) {
+        var obj = Object.assign({}, arr, data);
+        var str = JSON.stringify(obj);
+        setCookie(id, str);
+        return new Promise(function(resolve, reject) {
+            // Add a new document in collection "cities"
+            docRef.doc(id).update(data)
+                .then(function() {
+                    console.log("Document successfully written!");
+                    resolve("success");
+                })
+                .catch(function(error) {
+                    console.error("Error writing document: ", error);
+
+                    reject(error);
+                });
+        });
+    }).catch(function(error) {
+
+        console.log("Error getting document:", error);
+    });
+
+}
+
+
+
 
 function tes123t() {
     console.log("Yea!");

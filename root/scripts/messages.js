@@ -495,11 +495,6 @@ function chat_delete(key, chat_id) {
     }).catch(function(error) {
         console.log("Error getting document:", error);
     });
-
-
-
-
-
 }
 
 

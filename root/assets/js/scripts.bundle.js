@@ -6341,9 +6341,11 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
              * Set column title from options.columns settings
              */
             setHeadTitle: function(tablePart) {
+
                 if (typeof tablePart === 'undefined') tablePart = datatable.tableHead;
                 tablePart = $(tablePart)[0];
                 var columns = options.columns;
+
                 var row = tablePart.getElementsByTagName('tr')[0];
                 var ths = tablePart.getElementsByTagName('td');
 

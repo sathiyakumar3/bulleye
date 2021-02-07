@@ -3,7 +3,7 @@
         <!--begin::Info-->
         <div class="d-flex align-items-center flex-wrap mr-2">
             <!--begin::Page Title-->
-            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Dashboard 2 ew</h5>
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Sathiya's Pocket</h5>
             <!--end::Page Title-->
             <!--begin::Actions-->
             <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
@@ -20,12 +20,59 @@
             <a href="#" class="btn btn-clean btn-sm font-weight-bold font-size-base mr-1">Year</a>
             <!--end::Actions-->
             <!--begin::Daterange-->
-            <a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select dashboard daterange" data-placement="left">
+            <a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select data daterange" data-placement="top">
                 <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
                 <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Jan 30</span>
             </a>
             <!--end::Daterange-->
-            <a data-toggle="modal" data-target="#exampleModal" class="btn btn-light-primary font-weight-bold ml-2">Add Project</a>
+            <a class="btn btn-light-primary font-weight-bold ml-2" onclick="add_entry_modal()">Add Entry</a>
+            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                <!--begin::Navigation-->
+                <ul class="navi flex-column navi-hover py-2">
+                    <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose an option:</li>
+                    <li class="navi-item">
+                        <a href="#" class="navi-link">
+                            <span class="navi-icon">
+                            <i class="la la-print"></i>
+                        </span>
+                            <span class="navi-text">Print</span>
+                        </a>
+                    </li>
+                    <li class="navi-item">
+                        <a href="#" class="navi-link">
+                            <span class="navi-icon">
+                            <i class="la la-copy"></i>
+                        </span>
+                            <span class="navi-text">Copy</span>
+                        </a>
+                    </li>
+                    <li class="navi-item">
+                        <a href="#" class="navi-link">
+                            <span class="navi-icon">
+                            <i class="la la-file-excel-o"></i>
+                        </span>
+                            <span class="navi-text">Excel</span>
+                        </a>
+                    </li>
+                    <li class="navi-item">
+                        <a href="#" class="navi-link">
+                            <span class="navi-icon">
+                            <i class="la la-file-text-o"></i>
+                        </span>
+                            <span class="navi-text">CSV</span>
+                        </a>
+                    </li>
+                    <li class="navi-item">
+                        <a href="#" class="navi-link">
+                            <span class="navi-icon">
+                            <i class="la la-file-pdf-o"></i>
+                        </span>
+                            <span class="navi-text">PDF</span>
+                        </a>
+                    </li>
+                </ul>
+                <!--end::Navigation-->
+            </div>
             <!--begin::Dropdowns-->
             <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions" data-placement="left">
                 <a href="#" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -121,166 +168,103 @@
 
 <div class="d-flex flex-column-fluid">
     <!--begin::Container-->
-    <div class="container-fluid">
+    <div class="container">
+
         <div class="card card-custom gutter-b">
+
             <div class="card-body">
-                <div class="d-flex">
-                    <!--begin: Pic-->
-                    <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
-                        <div class="symbol symbol-50 symbol-lg-120">
-                            <img alt="Pic" src="assets/media/project-logos/3.png">
+
+                <!--begin: Datatable-->
+                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_2"></div>
+                <!--end: Datatable-->
+                <!--begin::Search Form-->
+                <div class="row align-items-center">
+                    <div class="d-flex align-items-center rounded flex-lg-fill">
+                        <!--begin::Icon-->
+                        <div class="d-flex align-items-center flex-lg-fill my-1">
+                            <!--begin::Actions-->
+                            <div class="col-md-4 my-2 my-md-0">
+                                <div class="input-icon">
+                                    <input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query_2" />
+                                    <span>
+                                                                <i class="flaticon2-search-1 text-muted"></i>
+                                                            </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 my-2 my-md-0">
+                                <div class="d-flex align-items-center">
+                                    <label class="mr-3 mb-0 d-none d-md-block">Status:</label>
+                                    <select class="form-control" id="kt_datatable_search_status_2">
+                                                                <option value="">All</option>
+                                                                <option value="1">Pending</option>
+                                                                <option value="2">Delivered</option>
+                                                                <option value="3">Canceled</option>
+                                                                <option value="4">Success</option>
+                                                                <option value="5">Info</option>
+                                                                <option value="6">Danger</option>
+                                                            </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 my-2 my-md-0">
+                                <div class="d-flex align-items-center">
+                                    <label class="mr-3 mb-0 d-none d-md-block">Type:</label>
+                                    <select class="form-control" id="kt_datatable_search_type_2">
+                                                                <option value="">All</option>
+                                                                <option value="1">Online</option>
+                                                                <option value="2">Retail</option>
+                                                                <option value="3">Direct</option>
+                                                            </select>
+                                </div>
+                            </div>
+
+
                         </div>
-                        <div class="symbol symbol-50 symbol-lg-120 symbol-primary d-none">
-                            <span class="font-size-h3 symbol-label font-weight-boldest">JM</span>
-                        </div>
+                        <!--begin: Item-->
+
                     </div>
-                    <!--end: Pic-->
-                    <!--begin: Info-->
-                    <div class="flex-grow-1">
-                        <!--begin: Title-->
-                        <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <div class="mr-3">
-                                <!--begin::Name-->
-                                <a href="#" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">Nexa - Next generation SAAS
-                                    <i class="flaticon2-correct text-success icon-md ml-2"></i></a>
-                                <!--end::Name-->
-                                <!--begin::Contacts-->
-                                <div class="d-flex flex-wrap my-2">
-                                    <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                        <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                            <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Mail-notification.svg-->
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24"></rect>
-                                                    <path d="M21,12.0829584 C20.6747915,12.0283988 20.3407122,12 20,12 C16.6862915,12 14,14.6862915 14,18 C14,18.3407122 14.0283988,18.6747915 14.0829584,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,8 C3,6.8954305 3.8954305,6 5,6 L19,6 C20.1045695,6 21,6.8954305 21,8 L21,12.0829584 Z M18.1444251,7.83964668 L12,11.1481833 L5.85557487,7.83964668 C5.4908718,7.6432681 5.03602525,7.77972206 4.83964668,8.14442513 C4.6432681,8.5091282 4.77972206,8.96397475 5.14442513,9.16035332 L11.6444251,12.6603533 C11.8664074,12.7798822 12.1335926,12.7798822 12.3555749,12.6603533 L18.8555749,9.16035332 C19.2202779,8.96397475 19.3567319,8.5091282 19.1603533,8.14442513 C18.9639747,7.77972206 18.5091282,7.6432681 18.1444251,7.83964668 Z" fill="#000000"></path>
-                                                    <circle fill="#000000" opacity="0.3" cx="19.5" cy="17.5" r="2.5"></circle>
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>jason@siastudio.com</a>
-                                    <a href="#" class="text-muted text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                        <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                            <!--begin::Svg Icon | path:assets/media/svg/icons/General/Lock.svg-->
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <mask fill="white">
-                                                        <use xlink:href="#path-1"></use>
-                                                    </mask>
-                                                    <g></g>
-                                                    <path d="M7,10 L7,8 C7,5.23857625 9.23857625,3 12,3 C14.7614237,3 17,5.23857625 17,8 L17,10 L18,10 C19.1045695,10 20,10.8954305 20,12 L20,18 C20,19.1045695 19.1045695,20 18,20 L6,20 C4.8954305,20 4,19.1045695 4,18 L4,12 C4,10.8954305 4.8954305,10 6,10 L7,10 Z M12,5 C10.3431458,5 9,6.34314575 9,8 L9,10 L15,10 L15,8 C15,6.34314575 13.6568542,5 12,5 Z" fill="#000000"></path>
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>PR Manager</a>
-                                    <a href="#" class="text-muted text-hover-primary font-weight-bold">
-                                        <span class="svg-icon svg-icon-md svg-icon-gray-500 mr-1">
-                                            <!--begin::Svg Icon | path:assets/media/svg/icons/Map/Marker2.svg-->
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24"></rect>
-                                                    <path d="M9.82829464,16.6565893 C7.02541569,15.7427556 5,13.1079084 5,10 C5,6.13400675 8.13400675,3 12,3 C15.8659932,3 19,6.13400675 19,10 C19,13.1079084 16.9745843,15.7427556 14.1717054,16.6565893 L12,21 L9.82829464,16.6565893 Z M12,12 C13.1045695,12 14,11.1045695 14,10 C14,8.8954305 13.1045695,8 12,8 C10.8954305,8 10,8.8954305 10,10 C10,11.1045695 10.8954305,12 12,12 Z" fill="#000000"></path>
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>Melbourne</a>
-                                </div>
-                                <!--end::Contacts-->
-                            </div>
-                            <div class="my-lg-0 my-1">
-                                <a href="#" class="btn btn-sm btn-light-success font-weight-bolder text-uppercase mr-3">Reports</a>
-                                <a href="#" class="btn btn-sm btn-info font-weight-bolder text-uppercase">New Task</a>
-                            </div>
-                        </div>
-                        <!--end: Title-->
-                        <!--begin: Content-->
-                        <div class="d-flex align-items-center flex-wrap justify-content-between">
-                            <div class="flex-grow-1 font-weight-bold text-dark-50 py-5 py-lg-2 mr-5">I distinguish three main text objectives could be merely to inform people.
-                                <br>A second could be persuade people. You want people to bay objective.</div>
-                            <div class="d-flex flex-wrap align-items-center py-2">
-                                <div class="d-flex align-items-center mr-10">
-                                    <div class="mr-6">
-                                        <div class="font-weight-bold mb-2">Start Date</div>
-                                        <span class="btn btn-sm btn-text btn-light-primary text-uppercase font-weight-bold">07 May, 2020</span>
-                                    </div>
-                                    <div class="">
-                                        <div class="font-weight-bold mb-2">Due Date</div>
-                                        <span class="btn btn-sm btn-text btn-light-danger text-uppercase font-weight-bold">10 June, 2021</span>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1 flex-shrink-0 w-150px w-xl-300px mt-4 mt-sm-0">
-                                    <span class="font-weight-bold">Progress</span>
-                                    <div class="progress progress-xs mt-2 mb-2">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 63%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <span class="font-weight-bolder text-dark">78%</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!--end: Content-->
-                    </div>
-                    <!--end: Info-->
+
                 </div>
+
+
+                <!--begin: Selected Rows Group Action Form-->
+                <div class="mt-10 mb-5 collapse" id="kt_datatable_group_action_form_2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-weight-bold text-danger mr-3">Selected
+                            <span id="kt_datatable_selected_records_2">0</span>records:</div>
+                        <div class="dropdown mr-2">
+                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">Update status</button>
+                            <div class="dropdown-menu dropdown-menu-sm">
+                                <ul class="nav nav-hover flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" onclick="update_selected('Not Paid')">
+                                            <span class="nav-text">Not Paid</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" onclick="update_selected('Paid')">
+                                            <span class="nav-text">Paid</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" onclick="update_selected('Income')">
+                                            <span class="nav-text">Income</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" onclick="update_selected('Expense')">
+                                            <span class="nav-text">Expense</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-danger mr-2" type="button" id="kt_datatable_delete_all" onclick="delete_selected()">Delete All</button>
+                        <button class="btn btn-sm btn-success" type="button" data-toggle="modal" data-target="#kt_datatable_fetch_modal_2">Fetch Selected Records</button>
+                    </div>
+                </div>
+                <!--end: Selected Rows Group Action Form-->
                 <div class="separator separator-solid my-7"></div>
-                <!--begin: Items-->
                 <div class="d-flex align-items-center flex-wrap">
-                    <!--begin: Item-->
-                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                        <span class="mr-4">
-                                <i class="flaticon-piggy-bank icon-2x text-muted font-weight-bold"></i>
-                            </span>
-                        <div class="d-flex flex-column text-dark-75">
-                            <span class="font-weight-bolder font-size-sm">Earnings</span>
-                            <span class="font-weight-bolder font-size-h5">
-                                <span class="text-dark-50 font-weight-bold">$</span>249,500</span>
-                        </div>
-                    </div>
-                    <!--end: Item-->
-                    <!--begin: Item-->
-                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                        <span class="mr-4">
-                                <i class="flaticon-confetti icon-2x text-muted font-weight-bold"></i>
-                            </span>
-                        <div class="d-flex flex-column text-dark-75">
-                            <span class="font-weight-bolder font-size-sm">Expenses</span>
-                            <span class="font-weight-bolder font-size-h5">
-                                <span class="text-dark-50 font-weight-bold">$</span>164,700</span>
-                        </div>
-                    </div>
-                    <!--end: Item-->
-                    <!--begin: Item-->
-                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                        <span class="mr-4">
-                                <i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
-                            </span>
-                        <div class="d-flex flex-column text-dark-75">
-                            <span class="font-weight-bolder font-size-sm">Net</span>
-                            <span class="font-weight-bolder font-size-h5">
-                                <span class="text-dark-50 font-weight-bold">$</span>782,300</span>
-                        </div>
-                    </div>
-                    <!--end: Item-->
-                    <!--begin: Item-->
-                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                        <span class="mr-4">
-                                <i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>
-                            </span>
-                        <div class="d-flex flex-column flex-lg-fill">
-                            <span class="text-dark-75 font-weight-bolder font-size-sm">73 Tasks</span>
-                            <a href="#" class="text-primary font-weight-bolder">View</a>
-                        </div>
-                    </div>
-                    <!--end: Item-->
-                    <!--begin: Item-->
-                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                        <span class="mr-4">
-                                <i class="flaticon-chat-1 icon-2x text-muted font-weight-bold"></i>
-                            </span>
-                        <div class="d-flex flex-column">
-                            <span class="text-dark-75 font-weight-bolder font-size-sm">648 Comments</span>
-                            <a href="#" class="text-primary font-weight-bolder">View</a>
-                        </div>
-                    </div>
-                    <!--end: Item-->
                     <!--begin: Item-->
                     <div class="d-flex align-items-center flex-lg-fill my-1">
                         <span class="mr-4">
@@ -308,809 +292,74 @@
                         </div>
                     </div>
                     <!--end: Item-->
+                    <!--begin: Item-->
+                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                        <span class="mr-4">
+                                        <i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>
+                                    </span>
+                        <div class="d-flex flex-column flex-lg-fill">
+                            <span class="text-dark-75 font-weight-bolder font-size-sm">73 Tasks</span>
+                            <a href="#" class="text-primary font-weight-bolder">View</a>
+                        </div>
+                    </div>
+                    <!--end: Item-->
+                    <!--begin: Item-->
+                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                        <span class="mr-4">
+                                        <i class="flaticon-chat-1 icon-2x text-muted font-weight-bold"></i>
+                                    </span>
+                        <div class="d-flex flex-column">
+                            <span class="text-dark-75 font-weight-bolder font-size-sm">648 Comments</span>
+                            <a href="#" class="text-primary font-weight-bolder">View</a>
+                        </div>
+                    </div>
+                    <!--end: Item-->
+                    <!--begin: Item-->
+                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                        <span class="mr-4">
+                                <i class="flaticon-piggy-bank icon-2x text-muted font-weight-bold"></i>
+                            </span>
+                        <div class="d-flex flex-column text-dark-75">
+                            <span class="font-weight-bolder font-size-sm">Earnings</span>
+                            <span class="font-weight-bolder font-size-h5" id="sum_earnings">
+                                <span class="text-dark-50 font-weight-bold">Rs</span>-</span>
+                        </div>
+                    </div>
+                    <!--end: Item-->
+                    <!--begin: Item-->
+                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                        <span class="mr-4">
+                                <i class="flaticon-confetti icon-2x text-muted font-weight-bold"></i>
+                            </span>
+                        <div class="d-flex flex-column text-dark-75">
+                            <span class="font-weight-bolder font-size-sm">Expenses</span>
+                            <span class="font-weight-bolder font-size-h5" id="sum_expenses">
+                                <span class="text-dark-50 font-weight-bold" id>Rs </span>-</span>
+                        </div>
+                    </div>
+                    <!--end: Item-->
+                    <!--begin: Item-->
+                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                        <span class="mr-4">
+                                <i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
+                            </span>
+                        <div class="d-flex flex-column text-dark-75">
+                            <span class="font-weight-bolder font-size-sm">Net</span>
+                            <span class="font-weight-bolder font-size-h5" id="sum_net">
+                                <span class="text-dark-50 font-weight-bold">Rs </span>-</span>
+                        </div>
+                    </div>
+                    <!--end: Item-->
+
+
                 </div>
-                <!--begin: Items-->
             </div>
         </div>
-        <div class="card card-custom gutter-b">
-            <div class="card-header flex-wrap border-0 pt-6 pb-0">
-                <div class="card-title">
-                    <h3 class="card-label">Everyday Transaction
-                        <span class="d-block text-muted pt-2 font-size-sm">List of all</span></h3>
-                </div>
-                <div class="card-toolbar">
-                    <!--begin::Dropdown-->
-                    <input class="btn btn-secondary mr-2" type="submit" value="Submit" onclick="myFunction()">
-                    <div class="dropdown dropdown-inline mr-2">
-                        <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="svg-icon svg-icon-md">
-                                <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <rect x="0" y="0" width="24" height="24" />
-                                        <path d="M3,16 L5,16 C5.55228475,16 6,15.5522847 6,15 C6,14.4477153 5.55228475,14 5,14 L3,14 L3,12 L5,12 C5.55228475,12 6,11.5522847 6,11 C6,10.4477153 5.55228475,10 5,10 L3,10 L3,8 L5,8 C5.55228475,8 6,7.55228475 6,7 C6,6.44771525 5.55228475,6 5,6 L3,6 L3,4 C3,3.44771525 3.44771525,3 4,3 L10,3 C10.5522847,3 11,3.44771525 11,4 L11,19 C11,19.5522847 10.5522847,20 10,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,16 Z" fill="#000000" opacity="0.3" />
-                                        <path d="M16,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,15.2485298 C21,15.7329761 20.8241635,16.200956 20.5051534,16.565539 L17.8762883,19.5699562 C17.6944473,19.7777745 17.378566,19.7988332 17.1707477,19.6169922 C17.1540423,19.602375 17.1383289,19.5866616 17.1237117,19.5699562 L14.4948466,16.565539 C14.1758365,16.200956 14,15.7329761 14,15.2485298 L14,5 C14,3.8954305 14.8954305,3 16,3 Z" fill="#000000" />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>Export</button>
 
-                        <!--begin::Dropdown Menu-->
-                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                            <!--begin::Navigation-->
-                            <ul class="navi flex-column navi-hover py-2">
-                                <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose an option:</li>
-                                <li class="navi-item">
-                                    <a href="#" class="navi-link">
-                                        <span class="navi-icon">
-                                                <i class="la la-print"></i>
-                                            </span>
-                                        <span class="navi-text">Print</span>
-                                    </a>
-                                </li>
-                                <li class="navi-item">
-                                    <a href="#" class="navi-link">
-                                        <span class="navi-icon">
-                                                <i class="la la-copy"></i>
-                                            </span>
-                                        <span class="navi-text">Copy</span>
-                                    </a>
-                                </li>
-                                <li class="navi-item">
-                                    <a href="#" class="navi-link">
-                                        <span class="navi-icon">
-                                                <i class="la la-file-excel-o"></i>
-                                            </span>
-                                        <span class="navi-text">Excel</span>
-                                    </a>
-                                </li>
-                                <li class="navi-item">
-                                    <a href="#" class="navi-link">
-                                        <span class="navi-icon">
-                                                <i class="la la-file-text-o"></i>
-                                            </span>
-                                        <span class="navi-text">CSV</span>
-                                    </a>
-                                </li>
-                                <li class="navi-item">
-                                    <a href="#" class="navi-link">
-                                        <span class="navi-icon">
-                                                <i class="la la-file-pdf-o"></i>
-                                            </span>
-                                        <span class="navi-text">PDF</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!--end::Navigation-->
-                        </div>
-                        <!--end::Dropdown Menu-->
-                    </div>
-                    <!--end::Dropdown-->
-
-
-                </div>
-            </div>
-            <div class="card-body">
-                <!--begin: Search Form-->
-                <!--begin::Search Form-->
-                <div class="row align-items-center">
-                    <div class="d-flex align-items-center rounded flex-lg-fill">
-                        <!--begin::Icon-->
-                        <div class="d-flex align-items-center flex-lg-fill my-1">
-                            <!--begin::Actions-->
-                            <div class="col-md-4 my-2 my-md-0">
-                                <div class="input-icon">
-                                    <input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query_2" />
-                                    <span>
-                                                        <i class="flaticon2-search-1 text-muted"></i>
-                                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-4 my-2 my-md-0">
-                                <div class="d-flex align-items-center">
-                                    <label class="mr-3 mb-0 d-none d-md-block">Status:</label>
-                                    <select class="form-control" id="kt_datatable_search_status_2">
-                                                        <option value="">All</option>
-                                                        <option value="1">Pending</option>
-                                                        <option value="2">Delivered</option>
-                                                        <option value="3">Canceled</option>
-                                                        <option value="4">Success</option>
-                                                        <option value="5">Info</option>
-                                                        <option value="6">Danger</option>
-                                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4 my-2 my-md-0">
-                                <div class="d-flex align-items-center">
-                                    <label class="mr-3 mb-0 d-none d-md-block">Type:</label>
-                                    <select class="form-control" id="kt_datatable_search_type_2">
-                                                        <option value="">All</option>
-                                                        <option value="1">Online</option>
-                                                        <option value="2">Retail</option>
-                                                        <option value="3">Direct</option>
-                                                    </select>
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <!--begin: Item-->
-
-                    </div>
-
-                </div>
-
-
-                <!--end::Search Form-->
-                <!--end: Search Form-->
-                <!--begin: Selected Rows Group Action Form-->
-                <div class="mt-10 mb-5 collapse" id="kt_datatable_group_action_form_2">
-                    <div class="d-flex align-items-center">
-                        <div class="font-weight-bold text-danger mr-3">Selected
-                            <span id="kt_datatable_selected_records_2">0</span>records:</div>
-                        <div class="dropdown mr-2">
-                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">Update status</button>
-                            <div class="dropdown-menu dropdown-menu-sm">
-                                <ul class="nav nav-hover flex-column">
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <span class="nav-text">Pending</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <span class="nav-text">Delivered</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <span class="nav-text">Canceled</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <button class="btn btn-sm btn-danger mr-2" type="button" id="kt_datatable_delete_all">Delete All</button>
-                        <button class="btn btn-sm btn-success" type="button" data-toggle="modal" data-target="#kt_datatable_fetch_modal_2">Fetch Selected Records</button>
-                    </div>
-                </div>
-                <!--end: Selected Rows Group Action Form-->
-                <!--begin: Datatable-->
-                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_2"></div>
-                <!--end: Datatable-->
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-4">
-                <!--begin::Mixed Widget 16-->
-                <div class="card card-custom gutter-b card-stretch">
-                    <!--begin::Header-->
-                    <div class="card-header border-0 pt-5">
-                        <div class="card-title">
-                            <div class="card-label">
-                                <div class="font-weight-bolder">Weekly Sales Stats</div>
-                                <div class="font-size-sm text-muted mt-2">890,344 Sales</div>
-                            </div>
-                        </div>
-                        <div class="card-toolbar">
-                            <div class="dropdown dropdown-inline">
-                                <a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="ki ki-bold-more-hor"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                                    <!--begin::Navigation-->
-                                    <ul class="navi navi-hover">
-                                        <li class="navi-header font-weight-bold py-4">
-                                            <span class="font-size-lg">Choose Label:</span>
-                                            <i class="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
-                                        </li>
-                                        <li class="navi-separator mb-3 opacity-70"></li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-success">Customer</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-danger">Partner</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-warning">Suplier</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-primary">Member</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-dark">Staff</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-separator mt-3 opacity-70"></li>
-                                        <li class="navi-footer py-4">
-                                            <a class="btn btn-clean font-weight-bold btn-sm" href="#">
-                                                <i class="ki ki-plus icon-sm"></i>Add new</a>
-                                        </li>
-                                    </ul>
-                                    <!--end::Navigation-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end::Header-->
-                    <!--begin::Body-->
-                    <div class="card-body d-flex flex-column">
-                        <!--begin::Chart-->
-                        <div class="flex-grow-1" style="position: relative;">
-                            <div id="kt_mixed_widget_16_chart" style="height: 200px; min-height: 178.7px;">
-                                <div id="apexchartsy9lly5e2" class="apexcharts-canvas apexchartsy9lly5e2 apexcharts-theme-light" style="width: 321px; height: 178.7px;"><svg id="SvgjsSvg1489" width="321" height="178.7" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS"
-                                        transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG1491" class="apexcharts-inner apexcharts-graphical" transform="translate(73.5, 0)"><defs id="SvgjsDefs1490"><clipPath id="gridRectMasky9lly5e2"><rect id="SvgjsRect1493" width="182" height="200" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="gridRectMarkerMasky9lly5e2"><rect id="SvgjsRect1494" width="180" height="202" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><g id="SvgjsG1495" class="apexcharts-radialbar"><g id="SvgjsG1496"><g id="SvgjsG1497" class="apexcharts-tracks"><g id="SvgjsG1498" class="apexcharts-radialbar-track apexcharts-track" rel="1"><path id="apexcharts-radialbarTrack-0" d="M 88 22.415609756097552 A 65.58439024390245 65.58439024390245 0 1 1 87.9885533645814 22.415610755004934" fill="none" fill-opacity="1" stroke="rgba(243,246,249,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="6.179512195121951" stroke-dasharray="0" class="apexcharts-radialbar-area" data:pathOrig="M 88 22.415609756097552 A 65.58439024390245 65.58439024390245 0 1 1 87.9885533645814 22.415610755004934"></path></g><g id="SvgjsG1500" class="apexcharts-radialbar-track apexcharts-track" rel="2"><path id="apexcharts-radialbarTrack-1" d="M 88 33.595121951219504 A 54.404878048780496 54.404878048780496 0 1 1 87.99050455753722 33.59512277985318" fill="none" fill-opacity="1" stroke="rgba(243,246,249,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="6.179512195121951" stroke-dasharray="0" class="apexcharts-radialbar-area" data:pathOrig="M 88 33.595121951219504 A 54.404878048780496 54.404878048780496 0 1 1 87.99050455753722 33.59512277985318"></path></g><g id="SvgjsG1502" class="apexcharts-radialbar-track apexcharts-track" rel="3"><path id="apexcharts-radialbarTrack-2" d="M 88 44.774634146341455 A 43.225365853658545 43.225365853658545 0 1 1 87.99245575049304 44.77463480470142" fill="none" fill-opacity="1" stroke="rgba(243,246,249,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="6.179512195121951" stroke-dasharray="0" class="apexcharts-radialbar-area" data:pathOrig="M 88 44.774634146341455 A 43.225365853658545 43.225365853658545 0 1 1 87.99245575049304 44.77463480470142"></path></g><g id="SvgjsG1504" class="apexcharts-radialbar-track apexcharts-track" rel="4"><path id="apexcharts-radialbarTrack-3" d="M 88 55.95414634146341 A 32.04585365853659 32.04585365853659 0 1 1 87.99440694344885 55.954146829549664" fill="none" fill-opacity="1" stroke="rgba(243,246,249,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="6.179512195121951" stroke-dasharray="0" class="apexcharts-radialbar-area" data:pathOrig="M 88 55.95414634146341 A 32.04585365853659 32.04585365853659 0 1 1 87.99440694344885 55.954146829549664"></path></g></g><g id="SvgjsG1506"><g id="SvgjsG1510" class="apexcharts-series apexcharts-radial-series" seriesName="Progress" rel="1" data:realIndex="0"><path id="SvgjsPath1511" d="M 88 22.415609756097552 A 65.58439024390245 65.58439024390245 0 1 1 49.450462634039795 141.05888627303557" fill="none" fill-opacity="0.85" stroke="rgba(137,80,252,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="6.179512195121951" stroke-dasharray="0" class="apexcharts-radialbar-area apexcharts-radialbar-slice-0" data:angle="216" data:value="60" index="0" j="0" data:pathOrig="M 88 22.415609756097552 A 65.58439024390245 65.58439024390245 0 1 1 49.450462634039795 141.05888627303557"></path></g><g id="SvgjsG1512" class="apexcharts-series apexcharts-radial-series" seriesName="seriesx2" rel="2" data:realIndex="1"><path id="SvgjsPath1513" d="M 88 33.595121951219504 A 54.404878048780496 54.404878048780496 0 0 1 88 142.4048780487805" fill="none" fill-opacity="0.85" stroke="rgba(246,78,96,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="6.179512195121951" stroke-dasharray="0" class="apexcharts-radialbar-area apexcharts-radialbar-slice-1" data:angle="180" data:value="50" index="0" j="1" data:pathOrig="M 88 33.595121951219504 A 54.404878048780496 54.404878048780496 0 0 1 88 142.4048780487805"></path></g><g id="SvgjsG1514" class="apexcharts-series apexcharts-radial-series" seriesName="seriesx3" rel="3" data:realIndex="2"><path id="SvgjsPath1515" d="M 88 44.774634146341455 A 43.225365853658545 43.225365853658545 0 1 1 44.774634146341455 88" fill="none" fill-opacity="0.85" stroke="rgba(27,197,189,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="6.179512195121951" stroke-dasharray="0" class="apexcharts-radialbar-area apexcharts-radialbar-slice-2" data:angle="270" data:value="75" index="0" j="2" data:pathOrig="M 88 44.774634146341455 A 43.225365853658545 43.225365853658545 0 1 1 44.774634146341455 88"></path></g><g id="SvgjsG1516" class="apexcharts-series apexcharts-radial-series" seriesName="seriesx4" rel="4" data:realIndex="3"><path id="SvgjsPath1517" d="M 88 55.95414634146341 A 32.04585365853659 32.04585365853659 0 1 1 57.52258205780789 78.0972866202596" fill="none" fill-opacity="0.85" stroke="rgba(54,153,255,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="6.179512195121951" stroke-dasharray="0" class="apexcharts-radialbar-area apexcharts-radialbar-slice-3" data:angle="288" data:value="80" index="0" j="3" data:pathOrig="M 88 55.95414634146341 A 32.04585365853659 32.04585365853659 0 1 1 57.52258205780789 78.0972866202596"></path></g><circle id="SvgjsCircle1507" r="28.95609756097561" cx="88" cy="88" class="apexcharts-radialbar-hollow" fill="transparent"></circle><g id="SvgjsG1508" class="apexcharts-datalabels-group" transform="translate(0, 0) scale(1)" style="opacity: 1;"><text id="SvgjsText1509" font-family="Helvetica, Arial, sans-serif" x="88" y="98" text-anchor="middle" dominant-baseline="auto" font-size="18px" font-weight="700" fill="#5e6278" class="apexcharts-text apexcharts-datalabel-value" style="font-family: Helvetica, Arial, sans-serif;">60%</text></g></g></g></g><line id="SvgjsLine1518" x1="0" y1="0" x2="176" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine1519" x1="0" y1="0" x2="176" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line></g><g id="SvgjsG1492" class="apexcharts-annotations"></g></svg>
-                                    <div class="apexcharts-legend"></div>
-                                </div>
-                            </div>
-                            <div class="resize-triggers">
-                                <div class="expand-trigger">
-                                    <div style="width: 322px; height: 218px;"></div>
-                                </div>
-                                <div class="contract-trigger"></div>
-                            </div>
-                        </div>
-                        <!--end::Chart-->
-                        <!--begin::Items-->
-                        <div class="mt-10 mb-5">
-                            <div class="row row-paddingless mb-10">
-                                <!--begin::Item-->
-                                <div class="col">
-                                    <div class="d-flex align-items-center mr-2">
-                                        <!--begin::Symbol-->
-                                        <div class="symbol symbol-45 symbol-light-info mr-4 flex-shrink-0">
-                                            <div class="symbol-label">
-                                                <span class="svg-icon svg-icon-lg svg-icon-info">
-                                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Shopping/Cart3.svg-->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24"></rect>
-                                                            <path d="M12,4.56204994 L7.76822128,9.6401844 C7.4146572,10.0644613 6.7840925,10.1217854 6.3598156,9.76822128 C5.9355387,9.4146572 5.87821464,8.7840925 6.23177872,8.3598156 L11.2317787,2.3598156 C11.6315738,1.88006147 12.3684262,1.88006147 12.7682213,2.3598156 L17.7682213,8.3598156 C18.1217854,8.7840925 18.0644613,9.4146572 17.6401844,9.76822128 C17.2159075,10.1217854 16.5853428,10.0644613 16.2317787,9.6401844 L12,4.56204994 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                                            <path d="M3.5,9 L20.5,9 C21.0522847,9 21.5,9.44771525 21.5,10 C21.5,10.132026 21.4738562,10.2627452 21.4230769,10.3846154 L17.7692308,19.1538462 C17.3034221,20.271787 16.2111026,21 15,21 L9,21 C7.78889745,21 6.6965779,20.271787 6.23076923,19.1538462 L2.57692308,10.3846154 C2.36450587,9.87481408 2.60558331,9.28934029 3.11538462,9.07692308 C3.23725479,9.02614384 3.36797398,9 3.5,9 Z M12,17 C13.1045695,17 14,16.1045695 14,15 C14,13.8954305 13.1045695,13 12,13 C10.8954305,13 10,13.8954305 10,15 C10,16.1045695 10.8954305,17 12,17 Z" fill="#000000"></path>
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Title-->
-                                        <div>
-                                            <div class="font-size-h4 text-dark-75 font-weight-bolder">$2,034</div>
-                                            <div class="font-size-sm text-muted font-weight-bold mt-1">Author Sales</div>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                </div>
-                                <!--end::Item-->
-                                <!--begin::Item-->
-                                <div class="col">
-                                    <div class="d-flex align-items-center mr-2">
-                                        <!--begin::Symbol-->
-                                        <div class="symbol symbol-45 symbol-light-danger mr-4 flex-shrink-0">
-                                            <div class="symbol-label">
-                                                <span class="svg-icon svg-icon-lg svg-icon-danger">
-                                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24"></rect>
-                                                            <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000"></path>
-                                                            <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1"></rect>
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Title-->
-                                        <div>
-                                            <div class="font-size-h4 text-dark-75 font-weight-bolder">$706</div>
-                                            <div class="font-size-sm text-muted font-weight-bold mt-1">Commission</div>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                </div>
-                                <!--end::Item-->
-                            </div>
-                            <div class="row row-paddingless">
-                                <!--begin::Item-->
-                                <div class="col">
-                                    <div class="d-flex align-items-center mr-2">
-                                        <!--begin::Symbol-->
-                                        <div class="symbol symbol-45 symbol-light-success mr-4 flex-shrink-0">
-                                            <div class="symbol-label">
-                                                <span class="svg-icon svg-icon-lg svg-icon-success">
-                                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Shopping/Cart3.svg-->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24"></rect>
-                                                            <path d="M12,4.56204994 L7.76822128,9.6401844 C7.4146572,10.0644613 6.7840925,10.1217854 6.3598156,9.76822128 C5.9355387,9.4146572 5.87821464,8.7840925 6.23177872,8.3598156 L11.2317787,2.3598156 C11.6315738,1.88006147 12.3684262,1.88006147 12.7682213,2.3598156 L17.7682213,8.3598156 C18.1217854,8.7840925 18.0644613,9.4146572 17.6401844,9.76822128 C17.2159075,10.1217854 16.5853428,10.0644613 16.2317787,9.6401844 L12,4.56204994 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                                            <path d="M3.5,9 L20.5,9 C21.0522847,9 21.5,9.44771525 21.5,10 C21.5,10.132026 21.4738562,10.2627452 21.4230769,10.3846154 L17.7692308,19.1538462 C17.3034221,20.271787 16.2111026,21 15,21 L9,21 C7.78889745,21 6.6965779,20.271787 6.23076923,19.1538462 L2.57692308,10.3846154 C2.36450587,9.87481408 2.60558331,9.28934029 3.11538462,9.07692308 C3.23725479,9.02614384 3.36797398,9 3.5,9 Z M12,17 C13.1045695,17 14,16.1045695 14,15 C14,13.8954305 13.1045695,13 12,13 C10.8954305,13 10,13.8954305 10,15 C10,16.1045695 10.8954305,17 12,17 Z" fill="#000000"></path>
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Title-->
-                                        <div>
-                                            <div class="font-size-h4 text-dark-75 font-weight-bolder">$49</div>
-                                            <div class="font-size-sm text-muted font-weight-bold mt-1">Average Bid</div>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                </div>
-                                <!--end::Item-->
-                                <!--begin::Item-->
-                                <div class="col">
-                                    <div class="d-flex align-items-center mr-2">
-                                        <!--begin::Symbol-->
-                                        <div class="symbol symbol-45 symbol-light-primary mr-4 flex-shrink-0">
-                                            <div class="symbol-label">
-                                                <span class="svg-icon svg-icon-lg svg-icon-primary">
-                                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Shopping/Barcode-read.svg-->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24"></rect>
-                                                            <rect fill="#000000" opacity="0.3" x="4" y="4" width="8" height="16"></rect>
-                                                            <path d="M6,18 L9,18 C9.66666667,18.1143819 10,18.4477153 10,19 C10,19.5522847 9.66666667,19.8856181 9,20 L4,20 L4,15 C4,14.3333333 4.33333333,14 5,14 C5.66666667,14 6,14.3333333 6,15 L6,18 Z M18,18 L18,15 C18.1143819,14.3333333 18.4477153,14 19,14 C19.5522847,14 19.8856181,14.3333333 20,15 L20,20 L15,20 C14.3333333,20 14,19.6666667 14,19 C14,18.3333333 14.3333333,18 15,18 L18,18 Z M18,6 L15,6 C14.3333333,5.88561808 14,5.55228475 14,5 C14,4.44771525 14.3333333,4.11438192 15,4 L20,4 L20,9 C20,9.66666667 19.6666667,10 19,10 C18.3333333,10 18,9.66666667 18,9 L18,6 Z M6,6 L6,9 C5.88561808,9.66666667 5.55228475,10 5,10 C4.44771525,10 4.11438192,9.66666667 4,9 L4,4 L9,4 C9.66666667,4 10,4.33333333 10,5 C10,5.66666667 9.66666667,6 9,6 L6,6 Z" fill="#000000" fill-rule="nonzero"></path>
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Title-->
-                                        <div>
-                                            <div class="font-size-h4 text-dark-75 font-weight-bolder">$5.8M</div>
-                                            <div class="font-size-sm text-muted font-weight-bold mt-1">All Time Sales</div>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                </div>
-                                <!--end::Item-->
-                            </div>
-                        </div>
-                        <!--end::Items-->
-                    </div>
-                    <!--end::Body-->
-                </div>
-                <!--end::Mixed Widget 16-->
-            </div>
-            <div class="col-xl-4">
-                <!--begin::Mixed Widget 17-->
-                <div class="card card-custom gutter-b card-stretch">
-                    <!--begin::Header-->
-                    <div class="card-header border-0 pt-5">
-                        <div class="card-title font-weight-bolder">
-                            <div class="card-label">Weekly Sales Stats
-                                <div class="font-size-sm text-muted mt-2">890,344 Sales</div>
-                            </div>
-                        </div>
-                        <div class="card-toolbar">
-                            <div class="dropdown dropdown-inline">
-                                <a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="ki ki-bold-more-hor"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                                    <!--begin::Naviigation-->
-                                    <ul class="navi">
-                                        <li class="navi-header font-weight-bold py-5">
-                                            <span class="font-size-lg">Add New:</span>
-                                            <i class="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
-                                        </li>
-                                        <li class="navi-separator mb-3 opacity-70"></li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-icon">
-                                                    <i class="flaticon2-shopping-cart-1"></i>
-                                                </span>
-                                                <span class="navi-text">Order</span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-icon">
-                                                    <i class="navi-icon flaticon2-calendar-8"></i>
-                                                </span>
-                                                <span class="navi-text">Members</span>
-                                                <span class="navi-label">
-                                                    <span class="label label-light-danger label-rounded font-weight-bold">3</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-icon">
-                                                    <i class="navi-icon flaticon2-telegram-logo"></i>
-                                                </span>
-                                                <span class="navi-text">Project</span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-icon">
-                                                    <i class="navi-icon flaticon2-new-email"></i>
-                                                </span>
-                                                <span class="navi-text">Record</span>
-                                                <span class="navi-label">
-                                                    <span class="label label-light-success label-rounded font-weight-bold">5</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-separator mt-3 opacity-70"></li>
-                                        <li class="navi-footer pt-5 pb-4">
-                                            <a class="btn btn-light-primary font-weight-bolder btn-sm" href="#">More options</a>
-                                            <a class="btn btn-clean font-weight-bold btn-sm d-none" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
-                                        </li>
-                                    </ul>
-                                    <!--end::Naviigation-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end::Header-->
-                    <!--begin::Body-->
-                    <div class="card-body p-0 d-flex flex-column" style="position: relative;">
-                        <!--begin::Items-->
-                        <div class="flex-grow-1 card-spacer">
-                            <div class="row row-paddingless mt-5 mb-10">
-                                <!--begin::Item-->
-                                <div class="col">
-                                    <div class="d-flex align-items-center mr-2">
-                                        <!--begin::Symbol-->
-                                        <div class="symbol symbol-45 symbol-light-info mr-4 flex-shrink-0">
-                                            <div class="symbol-label">
-                                                <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\General\Star.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                        <polygon points="0 0 24 0 24 24 0 24"/>
-                                                        <path d="M12,18 L7.91561963,20.1472858 C7.42677504,20.4042866 6.82214789,20.2163401 6.56514708,19.7274955 C6.46280801,19.5328351 6.42749334,19.309867 6.46467018,19.0931094 L7.24471742,14.545085 L3.94038429,11.3241562 C3.54490071,10.938655 3.5368084,10.3055417 3.92230962,9.91005817 C4.07581822,9.75257453 4.27696063,9.65008735 4.49459766,9.61846284 L9.06107374,8.95491503 L11.1032639,4.81698575 C11.3476862,4.32173209 11.9473121,4.11839309 12.4425657,4.36281539 C12.6397783,4.46014562 12.7994058,4.61977315 12.8967361,4.81698575 L14.9389263,8.95491503 L19.5054023,9.61846284 C20.0519472,9.69788046 20.4306287,10.2053233 20.351211,10.7518682 C20.3195865,10.9695052 20.2170993,11.1706476 20.0596157,11.3241562 L16.7552826,14.545085 L17.5353298,19.0931094 C17.6286908,19.6374458 17.263103,20.1544017 16.7187666,20.2477627 C16.5020089,20.2849396 16.2790408,20.2496249 16.0843804,20.1472858 L12,18 Z" fill="#000000"/>
-                                                    </g>
-                                                </svg><!--end::Svg Icon--></span>
-                                            </div>
-                                        </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Title-->
-                                        <div>
-                                            <div class="font-size-h4 text-dark-75 font-weight-bolder">$2,034</div>
-                                            <div class="font-size-sm text-muted font-weight-bold mt-1">Author Sales</div>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                </div>
-                                <!--end::Item-->
-                                <!--begin::Item-->
-                                <div class="col">
-                                    <div class="d-flex align-items-center mr-2">
-                                        <!--begin::Symbol-->
-                                        <div class="symbol symbol-45 symbol-light-danger mr-4 flex-shrink-0">
-                                            <div class="symbol-label">
-                                                <span class="svg-icon svg-icon-lg svg-icon-danger">
-                                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24"></rect>
-                                                            <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000"></path>
-                                                            <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1"></rect>
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Title-->
-                                        <div>
-                                            <div class="font-size-h4 text-dark-75 font-weight-bolder">$706</div>
-                                            <div class="font-size-sm text-muted font-weight-bold mt-1">Commision</div>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                </div>
-                                <!--end::Widget Item-->
-                            </div>
-                            <div class="row row-paddingless">
-                                <!--begin::Item-->
-                                <div class="col">
-                                    <div class="d-flex align-items-center mr-2">
-                                        <!--begin::Symbol-->
-                                        <div class="symbol symbol-45 symbol-light-success mr-4 flex-shrink-0">
-                                            <div class="symbol-label">
-                                                <span class="svg-icon svg-icon-lg svg-icon-success">
-                                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Shopping/Cart3.svg-->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24"></rect>
-                                                            <path d="M12,4.56204994 L7.76822128,9.6401844 C7.4146572,10.0644613 6.7840925,10.1217854 6.3598156,9.76822128 C5.9355387,9.4146572 5.87821464,8.7840925 6.23177872,8.3598156 L11.2317787,2.3598156 C11.6315738,1.88006147 12.3684262,1.88006147 12.7682213,2.3598156 L17.7682213,8.3598156 C18.1217854,8.7840925 18.0644613,9.4146572 17.6401844,9.76822128 C17.2159075,10.1217854 16.5853428,10.0644613 16.2317787,9.6401844 L12,4.56204994 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                                            <path d="M3.5,9 L20.5,9 C21.0522847,9 21.5,9.44771525 21.5,10 C21.5,10.132026 21.4738562,10.2627452 21.4230769,10.3846154 L17.7692308,19.1538462 C17.3034221,20.271787 16.2111026,21 15,21 L9,21 C7.78889745,21 6.6965779,20.271787 6.23076923,19.1538462 L2.57692308,10.3846154 C2.36450587,9.87481408 2.60558331,9.28934029 3.11538462,9.07692308 C3.23725479,9.02614384 3.36797398,9 3.5,9 Z M12,17 C13.1045695,17 14,16.1045695 14,15 C14,13.8954305 13.1045695,13 12,13 C10.8954305,13 10,13.8954305 10,15 C10,16.1045695 10.8954305,17 12,17 Z" fill="#000000"></path>
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Title-->
-                                        <div>
-                                            <div class="font-size-h4 text-dark-75 font-weight-bolder">$49</div>
-                                            <div class="font-size-sm text-muted font-weight-bold mt-1">Average Bid</div>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                </div>
-                                <!--end::Item-->
-                                <!--begin::Item-->
-                                <div class="col">
-                                    <div class="d-flex align-items-center mr-2">
-                                        <!--begin::Symbol-->
-                                        <div class="symbol symbol-45 symbol-light-primary mr-4 flex-shrink-0">
-                                            <div class="symbol-label">
-                                                <span class="svg-icon svg-icon-lg svg-icon-primary">
-                                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Shopping/Barcode-read.svg-->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24"></rect>
-                                                            <rect fill="#000000" opacity="0.3" x="4" y="4" width="8" height="16"></rect>
-                                                            <path d="M6,18 L9,18 C9.66666667,18.1143819 10,18.4477153 10,19 C10,19.5522847 9.66666667,19.8856181 9,20 L4,20 L4,15 C4,14.3333333 4.33333333,14 5,14 C5.66666667,14 6,14.3333333 6,15 L6,18 Z M18,18 L18,15 C18.1143819,14.3333333 18.4477153,14 19,14 C19.5522847,14 19.8856181,14.3333333 20,15 L20,20 L15,20 C14.3333333,20 14,19.6666667 14,19 C14,18.3333333 14.3333333,18 15,18 L18,18 Z M18,6 L15,6 C14.3333333,5.88561808 14,5.55228475 14,5 C14,4.44771525 14.3333333,4.11438192 15,4 L20,4 L20,9 C20,9.66666667 19.6666667,10 19,10 C18.3333333,10 18,9.66666667 18,9 L18,6 Z M6,6 L6,9 C5.88561808,9.66666667 5.55228475,10 5,10 C4.44771525,10 4.11438192,9.66666667 4,9 L4,4 L9,4 C9.66666667,4 10,4.33333333 10,5 C10,5.66666667 9.66666667,6 9,6 L6,6 Z" fill="#000000" fill-rule="nonzero"></path>
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <!--end::Symbol-->
-                                        <!--begin::Title-->
-                                        <div>
-                                            <div class="font-size-h4 text-dark-75 font-weight-bolder">$5.8M</div>
-                                            <div class="font-size-sm text-muted font-weight-bold mt-1">All Time Sales</div>
-                                        </div>
-                                        <!--end::Title-->
-                                    </div>
-                                </div>
-                                <!--end::Item-->
-                            </div>
-                        </div>
-                        <!--end::Items-->
-                        <!--begin::Chart-->
-                        <div id="kt_mixed_widget_17_chart" class="card-rounded-bottom" data-color="warning" style="height: 200px; min-height: 200px;">
-                            <div id="apexchartskrrhsrnog" class="apexcharts-canvas apexchartskrrhsrnog apexcharts-theme-light" style="width: 379px; height: 200px;"><svg id="SvgjsSvg1520" width="379" height="200" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS"
-                                    transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG1522" class="apexcharts-inner apexcharts-graphical" transform="translate(0, 0)"><defs id="SvgjsDefs1521"><clipPath id="gridRectMaskkrrhsrnog"><rect id="SvgjsRect1525" width="386" height="203" x="-3.5" y="-1.5" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="gridRectMarkerMaskkrrhsrnog"><rect id="SvgjsRect1526" width="383" height="204" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><g id="SvgjsG1533" class="apexcharts-xaxis" transform="translate(0, 0)"><g id="SvgjsG1534" class="apexcharts-xaxis-texts-g" transform="translate(0, -4)"></g></g><g id="SvgjsG1542" class="apexcharts-grid"><g id="SvgjsG1543" class="apexcharts-gridlines-horizontal" style="display: none;"><line id="SvgjsLine1545" x1="0" y1="0" x2="379" y2="0" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1546" x1="0" y1="20" x2="379" y2="20" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1547" x1="0" y1="40" x2="379" y2="40" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1548" x1="0" y1="60" x2="379" y2="60" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1549" x1="0" y1="80" x2="379" y2="80" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1550" x1="0" y1="100" x2="379" y2="100" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1551" x1="0" y1="120" x2="379" y2="120" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1552" x1="0" y1="140" x2="379" y2="140" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1553" x1="0" y1="160" x2="379" y2="160" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1554" x1="0" y1="180" x2="379" y2="180" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1555" x1="0" y1="200" x2="379" y2="200" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line></g><g id="SvgjsG1544" class="apexcharts-gridlines-vertical" style="display: none;"></g><line id="SvgjsLine1557" x1="0" y1="200" x2="379" y2="200" stroke="transparent" stroke-dasharray="0"></line><line id="SvgjsLine1556" x1="0" y1="1" x2="0" y2="200" stroke="transparent" stroke-dasharray="0"></line></g><g id="SvgjsG1527" class="apexcharts-area-series apexcharts-plot-series"><g id="SvgjsG1528" class="apexcharts-series" seriesName="NetxProfit" data:longestSeries="true" rel="1" data:realIndex="0"><path id="SvgjsPath1531" d="M0 200L0 100C26.529999999999998 100 49.269999999999996 116.66666666666666 75.8 116.66666666666666C102.33 116.66666666666666 125.07 50 151.6 50C178.13 50 200.87 100 227.4 100C253.93 100 276.67 16.666666666666657 303.2 16.666666666666657C329.73 16.666666666666657 352.47 16.666666666666657 379 16.666666666666657C379 16.666666666666657 379 16.666666666666657 379 200M379 16.666666666666657C379 16.666666666666657 379 16.666666666666657 379 16.666666666666657 " fill="rgba(255,244,222,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="0" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskkrrhsrnog)" pathTo="M 0 200L 0 100C 26.529999999999998 100 49.269999999999996 116.66666666666666 75.8 116.66666666666666C 102.33 116.66666666666666 125.07 50 151.6 50C 178.13 50 200.87 100 227.4 100C 253.93 100 276.67 16.666666666666657 303.2 16.666666666666657C 329.73 16.666666666666657 352.47 16.666666666666657 379 16.666666666666657C 379 16.666666666666657 379 16.666666666666657 379 200M 379 16.666666666666657z" pathFrom="M -1 200L -1 200L 75.8 200L 151.6 200L 227.4 200L 303.2 200L 379 200"></path><path id="SvgjsPath1532" d="M0 100C26.529999999999998 100 49.269999999999996 116.66666666666666 75.8 116.66666666666666C102.33 116.66666666666666 125.07 50 151.6 50C178.13 50 200.87 100 227.4 100C253.93 100 276.67 16.666666666666657 303.2 16.666666666666657C329.73 16.666666666666657 352.47 16.666666666666657 379 16.666666666666657C379 16.666666666666657 379 16.666666666666657 379 16.666666666666657 " fill="none" fill-opacity="1" stroke="#ffa800" stroke-opacity="1" stroke-linecap="butt" stroke-width="3" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskkrrhsrnog)" pathTo="M 0 100C 26.529999999999998 100 49.269999999999996 116.66666666666666 75.8 116.66666666666666C 102.33 116.66666666666666 125.07 50 151.6 50C 178.13 50 200.87 100 227.4 100C 253.93 100 276.67 16.666666666666657 303.2 16.666666666666657C 329.73 16.666666666666657 352.47 16.666666666666657 379 16.666666666666657" pathFrom="M -1 200L -1 200L 75.8 200L 151.6 200L 227.4 200L 303.2 200L 379 200"></path><g id="SvgjsG1529" class="apexcharts-series-markers-wrap" data:realIndex="0"><g class="apexcharts-series-markers"><circle id="SvgjsCircle1563" r="0" cx="75.8" cy="116.66666666666666" class="apexcharts-marker wdjx159apj no-pointer-events" stroke="#ffa800" fill="#fff4de" fill-opacity="1" stroke-width="3" stroke-opacity="0.9" default-marker-size="0"></circle></g></g></g><g id="SvgjsG1530" class="apexcharts-datalabels" data:realIndex="0"></g></g><line id="SvgjsLine1558" x1="0" y1="0" x2="379" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine1559" x1="0" y1="0" x2="379" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line><g id="SvgjsG1560" class="apexcharts-yaxis-annotations"></g><g id="SvgjsG1561" class="apexcharts-xaxis-annotations"></g><g id="SvgjsG1562" class="apexcharts-point-annotations"></g></g><g id="SvgjsG1541" class="apexcharts-yaxis" rel="0" transform="translate(-18, 0)"></g><g id="SvgjsG1523" class="apexcharts-annotations"></g></svg>
-                                <div class="apexcharts-legend" style="max-height: 100px;"></div>
-                                <div class="apexcharts-tooltip apexcharts-theme-light" style="left: 86.8px; top: 119.667px;">
-                                    <div class="apexcharts-tooltip-title" style="font-family: Poppins; font-size: 12px;">Mar</div>
-                                    <div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(255, 244, 222);"></span>
-                                        <div class="apexcharts-tooltip-text" style="font-family: Poppins; font-size: 12px;">
-                                            <div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label">Net Profit: </span><span class="apexcharts-tooltip-text-value">$25 thousands</span></div>
-                                            <div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="apexcharts-xaxistooltip apexcharts-xaxistooltip-bottom apexcharts-theme-light" style="left: 53.4875px; top: 202px;">
-                                    <div class="apexcharts-xaxistooltip-text" style="font-family: Poppins; font-size: 12px; min-width: 24.9844px;">Mar</div>
-                                </div>
-                                <div class="apexcharts-yaxistooltip apexcharts-yaxistooltip-0 apexcharts-yaxistooltip-left apexcharts-theme-light">
-                                    <div class="apexcharts-yaxistooltip-text"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--end::Chart-->
-                        <div class="resize-triggers">
-                            <div class="expand-trigger">
-                                <div style="width: 380px; height: 446px;"></div>
-                            </div>
-                            <div class="contract-trigger"></div>
-                        </div>
-                    </div>
-                    <!--end::Body-->
-                </div>
-                <!--end::Mixed Widget 17-->
-            </div>
-            <div class="col-xl-4">
-                <!--begin::Mixed Widget 18-->
-                <div class="card card-custom gutter-b card-stretch">
-                    <!--begin::Header-->
-                    <div class="card-header border-0 pt-5">
-                        <div class="card-title font-weight-bolder">
-                            <div class="card-label">Weekly Sales Stats
-                                <div class="font-size-sm text-muted mt-2">890,344 Sales</div>
-                            </div>
-                        </div>
-                        <div class="card-toolbar">
-                            <div class="dropdown dropdown-inline">
-                                <a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="ki ki-bold-more-hor"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                                    <!--begin::Navigation-->
-                                    <ul class="navi navi-hover">
-                                        <li class="navi-header font-weight-bold py-4">
-                                            <span class="font-size-lg">Choose Label:</span>
-                                            <i class="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
-                                        </li>
-                                        <li class="navi-separator mb-3 opacity-70"></li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-success">Customer</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-danger">Partner</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-warning">Suplier</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-primary">Member</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-item">
-                                            <a href="#" class="navi-link">
-                                                <span class="navi-text">
-                                                    <span class="label label-xl label-inline label-light-dark">Staff</span>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="navi-separator mt-3 opacity-70"></li>
-                                        <li class="navi-footer py-4">
-                                            <a class="btn btn-clean font-weight-bold btn-sm" href="#">
-                                                <i class="ki ki-plus icon-sm"></i>Add new</a>
-                                        </li>
-                                    </ul>
-                                    <!--end::Navigation-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end::Header-->
-                    <!--begin::Body-->
-                    <div class="card-body" style="position: relative;">
-                        <!--begin::Chart-->
-                        <div id="kt_mixed_widget_18_chart" style="height: 250px; min-height: 205.971px;">
-                            <div id="apexchartsrdmbkkkz" class="apexcharts-canvas apexchartsrdmbkkkz apexcharts-theme-light" style="width: 321px; height: 205.971px;"><svg id="SvgjsSvg1564" width="321" height="205.970703125" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS"
-                                    transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG1566" class="apexcharts-inner apexcharts-graphical" transform="translate(48.5, 0)"><defs id="SvgjsDefs1565"><clipPath id="gridRectMaskrdmbkkkz"><rect id="SvgjsRect1568" width="232" height="250" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="gridRectMarkerMaskrdmbkkkz"><rect id="SvgjsRect1569" width="230" height="252" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><g id="SvgjsG1570" class="apexcharts-radialbar"><g id="SvgjsG1571"><g id="SvgjsG1572" class="apexcharts-tracks"><g id="SvgjsG1573" class="apexcharts-radialbar-track apexcharts-track" rel="1"><path id="apexcharts-radialbarTrack-0" d="M 29.71097560975609 112.99999999999999 A 83.28902439024391 83.28902439024391 0 0 1 196.28902439024392 113" fill="none" fill-opacity="1" stroke="rgba(225,240,255,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="10.636585365853659" stroke-dasharray="0" class="apexcharts-radialbar-area" data:pathOrig="M 29.71097560975609 112.99999999999999 A 83.28902439024391 83.28902439024391 0 0 1 196.28902439024392 113"></path></g></g><g id="SvgjsG1575"><g id="SvgjsG1580" class="apexcharts-series apexcharts-radial-series" seriesName="Progress" rel="1" data:realIndex="0"><path id="SvgjsPath1581" d="M 29.71097560975609 112.99999999999999 A 83.28902439024391 83.28902439024391 0 0 1 169.80297804535178 52.08626370794575" fill="none" fill-opacity="0.85" stroke="rgba(54,153,255,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="10.636585365853659" stroke-dasharray="0" class="apexcharts-radialbar-area apexcharts-radialbar-slice-0" data:angle="133" data:value="74" index="0" j="0" data:pathOrig="M 29.71097560975609 112.99999999999999 A 83.28902439024391 83.28902439024391 0 0 1 169.80297804535178 52.08626370794575"></path></g><circle id="SvgjsCircle1576" r="77.97073170731709" cx="113" cy="113" class="apexcharts-radialbar-hollow" fill="transparent"></circle><g id="SvgjsG1577" class="apexcharts-datalabels-group" transform="translate(0, 0) scale(1)" style="opacity: 1;"><text id="SvgjsText1578" font-family="Helvetica, Arial, sans-serif" x="113" y="108" text-anchor="middle" dominant-baseline="auto" font-size="13px" font-weight="700" fill="#b5b5c3" class="apexcharts-text apexcharts-datalabel-label" style="font-family: Helvetica, Arial, sans-serif;">Progress</text><text id="SvgjsText1579" font-family="Helvetica, Arial, sans-serif" x="113" y="89" text-anchor="middle" dominant-baseline="auto" font-size="30px" font-weight="700" fill="#5e6278" class="apexcharts-text apexcharts-datalabel-value" style="font-family: Helvetica, Arial, sans-serif;">74%</text></g></g></g></g><line id="SvgjsLine1582" x1="0" y1="0" x2="226" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine1583" x1="0" y1="0" x2="226" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line></g><g id="SvgjsG1567" class="apexcharts-annotations"></g></svg>
-                                <div class="apexcharts-legend"></div>
-                            </div>
-                        </div>
-                        <!--end::Chart-->
-                        <!--begin::Items-->
-                        <div class="mt-n12 position-relative zindex-0">
-                            <!--begin::Widget Item-->
-                            <div class="d-flex align-items-center mb-8">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-circle symbol-40 symbol-light mr-3 flex-shrink-0">
-                                    <div class="symbol-label">
-                                        <span class="svg-icon svg-icon-lg svg-icon-gray-500">
-                                            <!--begin::Svg Icon | path:assets/media/svg/icons/Media/Equalizer.svg-->
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24"></rect>
-                                                    <rect fill="#000000" opacity="0.3" x="13" y="4" width="3" height="16" rx="1.5"></rect>
-                                                    <rect fill="#000000" x="8" y="9" width="3" height="11" rx="1.5"></rect>
-                                                    <rect fill="#000000" x="18" y="11" width="3" height="9" rx="1.5"></rect>
-                                                    <rect fill="#000000" x="3" y="13" width="3" height="7" rx="1.5"></rect>
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                    </div>
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Title-->
-                                <div>
-                                    <a href="#" class="font-size-h6 text-dark-75 text-hover-primary font-weight-bolder">Most Sales</a>
-                                    <div class="font-size-sm text-muted font-weight-bold mt-1">Authors with the best sales</div>
-                                </div>
-                                <!--end::Title-->
-                            </div>
-                            <!--end::Widget Item-->
-                            <!--begin::Widget Item-->
-                            <div class="d-flex align-items-center mb-8">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-circle symbol-40 symbol-light mr-3 flex-shrink-0">
-                                    <div class="symbol-label">
-                                        <span class="svg-icon svg-icon-lg svg-icon-gray-500">
-                                            <!--begin::Svg Icon | path:assets/media/svg/icons/Shopping/Chart-pie.svg-->
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24"></rect>
-                                                    <path d="M4.00246329,12.2004927 L13,14 L13,4.06189375 C16.9463116,4.55399184 20,7.92038235 20,12 C20,16.418278 16.418278,20 12,20 C7.64874861,20 4.10886412,16.5261253 4.00246329,12.2004927 Z" fill="#000000" opacity="0.3"></path>
-                                                    <path d="M3.0603968,10.0120794 C3.54712466,6.05992157 6.91622084,3 11,3 L11,11.6 L3.0603968,10.0120794 Z" fill="#000000"></path>
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                    </div>
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Title-->
-                                <div>
-                                    <a href="#" class="font-size-h6 text-dark-75 text-hover-primary font-weight-bolder">Total Sales Lead</a>
-                                    <div class="font-size-sm text-muted font-weight-bold mt-1">40% increased on week-to-week reports</div>
-                                </div>
-                                <!--end::Title-->
-                            </div>
-                            <!--end::Widget Item-->
-                            <!--begin::Widget Item-->
-                            <div class="d-flex align-items-center">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-circle symbol-40 symbol-light mr-3 flex-shrink-0">
-                                    <div class="symbol-label">
-                                        <span class="svg-icon svg-icon-lg svg-icon-gray-500">
-                                            <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                                                    <path d="M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z" fill="#000000" fill-rule="nonzero"></path>
-                                                    <path d="M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z" fill="#000000" opacity="0.3"></path>
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                    </div>
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Title-->
-                                <div>
-                                    <a href="#" class="font-size-h6 text-dark-75 text-hover-primary font-weight-bolder">Average Bestseller</a>
-                                    <div class="font-size-sm text-muted font-weight-bold mt-1">Pitstop Email Marketing</div>
-                                </div>
-                                <!--end::Title-->
-                            </div>
-                            <!--end::Widget Item-->
-                        </div>
-                        <!--end::Items-->
-                        <div class="resize-triggers">
-                            <div class="expand-trigger">
-                                <div style="width: 380px; height: 446px;"></div>
-                            </div>
-                            <div class="contract-trigger"></div>
-                        </div>
-                    </div>
-                    <!--end::Body-->
-                </div>
-                <!--end::Mixed Widget 18-->
-            </div>
-        </div>
 
         <!--begin::Modal-->
         <div class="modal fade" id="kt_datatable_fetch_modal_2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel1">Selected Records</h5>
@@ -1131,28 +380,27 @@
         </div>
         <!--end::Modal-->
 
-        <!-- Button trigger modal-->
 
-        <!-- Modal-->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-md" role="document">
+        <!-- Edit Form Modal-->
+        <div class="modal fade" id="edit_incex_form_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add an Expense/Income</h5>
+                        <h5 class="modal-title">Add/Edit - Income/Expense</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <i aria-hidden="true" class="ki ki-close"></i>
                         </button>
                     </div>
 
-                    <form class="form" id="add_incex_form">
+                    <form class="form" id="edit_incex_form">
                         <div class="modal-body">
 
                             <div class="form-group row">
                                 <label class="col-form-label text-right col-lg-3 col-sm-12">Date & Time</label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <div class="input-group date" id="kt_datetimepicker_9" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" placeholder="Select date &amp; time" data-target="#kt_datetimepicker_9" />
-                                        <div class="input-group-append" data-target="#kt_datetimepicker_9" data-toggle="datetimepicker">
+                                    <div class="input-group date" id="kt_datetimepicker_10" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" placeholder="Select date &amp; time" data-target="#kt_datetimepicker_10" />
+                                        <div class="input-group-append" data-target="#kt_datetimepicker_10" data-toggle="datetimepicker">
                                             <span class="input-group-text">
                                                 <i class="ki ki-calendar"></i>
                                             </span>
@@ -1164,15 +412,15 @@
                             <div class="form-group row">
                                 <label class="col-form-label text-right col-lg-3 col-sm-12">Category</label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <select class="form-control selectpicker" data-size="7" data-live-search="true" title="Choose a Category" name="form_catergory">
-                                        <option>Shopping</option>
-                                        <option>Entertainment</option>
-                                        <option>Transportation</option>
-                                        <option>Productivity</option>
-                                        <option>Meals</option>
-                                        <option>Lodging</option>
-                                        <option>Family</option>
-                                        <option>Friends</option>
+                                    <select class="form-control selectpicker" data-size="7" data-live-search="true" title="Choose a Category" name="form_catergory_2" id="edit_cat_selec">
+                                        <option value="Shopping">Shopping</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Transportation">Transportation</option>
+                                        <option value="Productivity">Productivity</option>
+                                        <option value="Meals">Meals</option>
+                                        <option value="Lodging">Lodging</option>
+                                        <option value="Family">Family</option>
+                                        <option value="Friends">Friends</option>
                                     </select>
                                 </div>
                             </div>
@@ -1180,7 +428,7 @@
                             <div class="form-group row">
                                 <label class="col-form-label text-right col-lg-3 col-sm-12">Description</label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <input type="text" class="form-control" id="kt_maxlength_3" maxlength="6" placeholder="" type="text" name="form_description" value="">
+                                    <input type="text" class="form-control" maxlength="20" placeholder="" type="text" name="form_description_2" value="">
                                 </div>
                             </div>
 
@@ -1189,10 +437,7 @@
                                 <div class="col-lg-9 col-md-9 col-sm-12">
                                     <div class="row align-items-center">
                                         <div class="col-lg-4">
-                                            <input type="text" class="form-control" id="kt_nouislider_2_input" placeholder="Currency" name="form_amount" />
-                                        </div>
-                                        <div class="col-8">
-                                            <div id="kt_nouislider_2" class="nouislider nouislider-handle-danger"></div>
+                                            <input type="text" class="form-control" placeholder="Currency" name="form_amount_2" />
                                         </div>
                                     </div>
                                 </div>
@@ -1204,14 +449,15 @@
                                     <div class="radio-inline">
                                         <div class="col-lg-4">
                                             <label class="radio radio-primary">
-                                                <input type="radio" name="form_radios11" checked="checked" value="Expense">
+                                                <input type="radio" name="form_radios11_2" checked value="Expense" id="expense_radio">
                                                 <span></span><h7>Expense</h7></label>
+
 
                                         </div>
 
                                         <div class="col-lg-4">
                                             <label class="radio radio-primary">
-                                                <input type="radio" name="form_radios11"  value="Income">
+                                                <input type="radio" name="form_radios11_2"  value="Income" id="income_radio">
                                                 <span></span><h7>Income</h7></label>
                                         </div>
 
@@ -1231,7 +477,7 @@
                                     <div class="radio-inline">
                                         <div class="col-lg-4">
                                             <label class="radio radio-primary">
-                                                <input type="radio" name="radios11" checked="checked" value="Paid">
+                                                <input type="radio" name="radios11_2" checked="checked" value="Paid" id="paid_radio">
                                                 <span></span><h7>Paid</h7></label>
 
                                         </div>
@@ -1239,7 +485,7 @@
                                         <div class="col-lg-4">
 
                                             <label class="radio radio-primary">
-                                                <input type="radio" name="radios11" value="Not Paid">
+                                                <input type="radio" name="radios11_2" value="Not Paid" id="not_paid_radio">
                                                 <span></span><h7>Not Paid</h7></label>
 
                                         </div>
@@ -1254,7 +500,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary font-weight-bold mr-2"><i class="flaticon2-plus-1"></i>Add</button>
+                            <button type="submit" class="btn btn-primary font-weight-bold mr-2"><i class="flaticon2-plus-1"></i>Edit</button>
 
 
                         </div>
@@ -1262,8 +508,6 @@
                 </div>
             </div>
         </div>
-
-
 
     </div>
     <!--end::Container-->
