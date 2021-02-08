@@ -1,9 +1,9 @@
 var user_local;
 var user_Ref = db.collection("users");
 
-function menu_subitems(vari, name, link) {
+function menu_subitems(name, link) {
     return new Promise(function(resolve, reject) {
-        vari = '<li class="menu-item" aria-haspopup="true" >' +
+     var   vari = '<li class="menu-item" aria-haspopup="true" >' +
             '<a class="menu-link" onclick="load_page(\'content_pages/wallet.html\',\'' + link + '\')">' +
             '<i class="menu-bullet menu-bullet-dot">' +
             '<span></span>' +
@@ -20,26 +20,22 @@ function menu_subitems(vari, name, link) {
 
 function load_navi() {
     return new Promise(function(resolve, reject) {
-        var results = [];
-        var months_var;
-        var users_var;
+
         db.collection("wallets").where("users", "array-contains", user_local.uid).get()
             .then((querySnapshot) => {
-
                 var promises_wallet = [];
                 querySnapshot.forEach((doc) => {
                     const promise2 = new Promise((resolve, reject) => {
                         var wallet_id = doc.id;
+                        var wallet_name = doc.data().name;
                         var promises_users = [];
                         var promises_records = [];
                         var user_list = doc.data().users;
-                        const get_users = new Promise((resolve, reject) => {
-                             months_var =[];
-                          
+                        const get_users = new Promise((resolve, reject) => {           
                             user_list.forEach(function(entry) {
                                 const promise = new Promise((resolve, reject) => {
                                     getoptdata(user_Ref, entry).then(function(finalResult) {
-                                        menu_subitems(months_var,finalResult.name,finalResult.name).then((results) => {
+                                        menu_subitems(finalResult.name,finalResult.name).then((results) => {
                                             resolve(results);
                                         }).catch((error) => {
                                             console.log(error);
@@ -59,12 +55,11 @@ function load_navi() {
 
                         });
                         const get_months = new Promise((resolve, reject) => {
-                            db.collection("wallets").doc(doc.id).collection('entries').get().then((querySnapshot) => {
-                                users_var=[];
+                            db.collection("wallets").doc(doc.id).collection('entries').get().then((querySnapshot) => {                               
                                 querySnapshot.forEach((doc) => {
                                     const promise = new Promise((resolve, reject) => {
                                       //  resolve(doc.id);
-                                        menu_subitems(users_var,doc.id,doc.id).then((results) => {
+                                        menu_subitems(doc.id,doc.id).then((results) => {
                                             resolve(results);
                                         }).catch((error) => {
                                             console.log(error);
@@ -80,10 +75,17 @@ function load_navi() {
                             });
                         });
                         return Promise.all([get_months, get_users]).then((values) => {
+                            var m_size = values[0].length;
+                            var n_size = values[1].length;
+                            var m = values[0].join('')
+                            var u = values[1].join('')
                             var tabl = {
-                                months: values[0],
-                                users: values[1],
-                                wallet_id: wallet_id
+                                months: m,
+                                users: u,
+                                months_size:m_size,
+                                users_size:n_size,
+                                wallet_id: wallet_id,
+                                wallet_name:wallet_name
                             }
                             resolve(tabl);
                         });
@@ -99,68 +101,25 @@ function load_navi() {
                 console.log("Error getting documents: ", error);
             });
     });
-
-
-
-    document.getElementById("list_navi").innerHTML = document.getElementById("list_navi").innerHTML + myvar2;
 }
 
+
 function generate_navi(data){
-  
-  console.log(data);
-    Object.keys(data).map(function(key, index) {
-        console.log(data[key]);
-        var name= data[key]['users'];
-        var month= data[key]['months'];
-        for (item in month) { 
-            console.log(item)
-        }
-      /*   console.log(data[key]['users']);
-        var name= data[key]['users'];
-        var month= data[key]['months'];
-        for (item in month) { 
-            console.log(item);
-            const promise2 = new Promise(function(resolve, reject) { 
-                menu_subitems(months_var,item,item).then((results) => {
-                 resolve(results);
-             }).catch((error) => {
-                 console.log(error);
-                 reject(error);
-             });
-                });
-                promises.push(promise2);
-            } 
-
-            for (item in name) { 
-                const promise4 = new Promise(function(resolve, reject) { 
-                    menu_subitems(users_var,item,item).then((results) => {
-                        resolve(results);
-                    }).catch((error) => {
-                        console.log(error);
-                        reject(error);
-                    });
-        
-                });
-                promises.push(promise4);
-            }
-
-
- 
-        Promise.all(promises).then((values) => {
-            console.log(values); 
-        }).catch((error) => {
-            console.log(error);       
-        }); */
- 
-});
-
-/* 
-   var myvar = '<li class="menu-section">' +
-    '<h4 class="menu-text">' + 'name' + '</h4>' +
+  var navi ="";
+  for(let i = 0; i < data.length; i++){ 
+    var users_list= data[i]['users'];
+    var months_list=  data[i]['months'];
+    var wallet_id = data[i]['wallet_id'];
+    var wallet_name = data[i]['wallet_name'];
+    var months_size = data[i]['months_size'];
+    var users_size = data[i]['users_size'];
+    
+   var my_wallet = '<li class="menu-section">' +
+    '<h4 class="menu-text">' + wallet_name+ '</h4>' +
     '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
     '</li>' +
     '<li class="menu-item menu-item-active" aria-haspopup="true">' +
-    '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + "32" + '\')">' +
+    '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + wallet_id + '\')">' +
     '<span class="svg-icon menu-icon">' +
     '<!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->' +
     '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -191,13 +150,13 @@ function generate_navi(data){
     '</span>' +
     '<span class="menu-text">Records</span>' +
     '<span class="menu-label">' +
-    '<span class="label label-rounded label-primary">' + 3 + '</span>' +
+    '<span class="label label-rounded label-primary">' + months_size + '</span>' +
     '</span>' +
     '<i class="menu-arrow"></i>' +
     '</a>' +
     '<div class="menu-submenu" kt-hidden-height="120" style="display: none; overflow: hidden;">' +
     '<i class="menu-arrow"></i>' +
-    '<ul class="menu-subnav">' + wallets_months +
+    '<ul class="menu-subnav">' + months_list +
     '</ul>' +
     '</div>' +
     '</li>' +
@@ -217,13 +176,13 @@ function generate_navi(data){
     '</span>' +
     '<span class="menu-text">Users</span>' +
     '<span class="menu-label">' +
-    '<span class="label label-rounded label-primary">' + size + '</span>' +
+    '<span class="label label-rounded label-primary">' + users_size + '</span>' +
     '</span>' +
     '<i class="menu-arrow"></i>' +
     '</a>' +
     '<div class="menu-submenu" kt-hidden-height="120" style="display: none; overflow: hidden;">' +
     '<i class="menu-arrow"></i>' +
-    '<ul class="menu-subnav">' + users_var +
+    '<ul class="menu-subnav">' + users_list +
     '</ul>' +
     '</div>' +
     '</li>' +
@@ -244,25 +203,12 @@ function generate_navi(data){
     ' </a>' +
     '</li>' +
     '</li>';
-//   myvar = myvar + wallets_months;
+    navi = my_wallet +navi;
+}
 
-document.getElementById("list_navi").innerHTML = document.getElementById("list_navi").innerHTML + myvar;
 //  console.log(myvar);
 // document.getElementById("list_navi").innerHTML = myvar;
-
-
-
-
-
-
-
-
-
-
-
-
-
-var myvar2 = '<li class="menu-section">' +
+var ending = '<li class="menu-section">' +
     '<h4 class="menu-text">Files</h4>' +
     '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
     '</li><li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
@@ -281,7 +227,7 @@ var myvar2 = '<li class="menu-section">' +
     '<span class="menu-text">Add Wallets</span>' +
     '</a>' +
     '</li>';
- */
+    document.getElementById("list_navi").innerHTML =    document.getElementById("list_navi").innerHTML + navi+ ending;
    
 }
 
@@ -303,10 +249,7 @@ function get_user(user) {
         //  var new = load_navi();
 
         load_navi().then(function(finalResult) {
-
-            generate_navi(finalResult);
-
-        
+            generate_navi(finalResult);        
         }).catch((error) => {
             console.log(error);
             // cons(error);
