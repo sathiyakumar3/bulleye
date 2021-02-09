@@ -2,41 +2,13 @@
 // Class definition
 var tabler = [];
 var datatable = "";
-
+var selected_entry = "";
 var wallet_Ref = "";
 
 
-var KTDatatableRecordSelectionDemo = function() {
+var start_app = function() {
     var read_data = function() {
-
-
-        /* 
-                var date = new Date(),
-                    y = date.getFullYear(),
-                    m = date.getMonth();
-                var firstDay = new Date(y, m, 1);
-                var lastDay = new Date(y, m + 1, 0);
-
-                wallet_Ref.where('last_updated', '>', firstDay).where('last_updated', '<', lastDay)
-                    .get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((doc) => {
-                            // doc.data() is never undefined for query doc snapshots
-                            console.log(doc.id, " => ", doc.data());
-
-
-                        });
-                    })
-                    .catch((error) => {
-                        console.log("Error getting documents: ", error);
-                    });
-         */
-
-
-        var user_Ref = db.collection("users");
-        var today = new Date();
-        var entry_id = monthts(today);
-        wallet_Ref.doc(entry_id).onSnapshot(function(doc) {
+        wallet_Ref.doc(selected_entry).onSnapshot(function(doc) {
             var arr = doc.data();
             delete arr["last_updated"];
             var counter = 0;
@@ -493,9 +465,10 @@ var KTDatatableRecordSelectionDemo = function() {
 
 
 jQuery(document).ready(function() {
-    var wallet_id = document.getElementById("page_data").value;
+    var wallet_id = global_data[0];
+    selected_entry = global_data[1];
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
-    KTDatatableRecordSelectionDemo.init();
+    start_app.init();
 });
 
 

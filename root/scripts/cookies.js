@@ -34,7 +34,7 @@ function getoptdata(docRef, id) {
             var results = "";
             docRef.doc(id).get().then(function(doc) {
                 if (doc.exists) {
-                    console.log("[D] -Remote");
+                    console.log("[R] - " + docRef + " - " + id);
                     results = doc.data();
                     str = JSON.stringify(results);
                     setCookie(id, str);
@@ -46,7 +46,6 @@ function getoptdata(docRef, id) {
                 reject(error);
             });
         } else {
-            console.log("[D] - Local");
             resolve(JSON.parse(find));
         }
     });
@@ -62,6 +61,7 @@ function setoptdata(docRef, id, data) {
         // Add a new document in collection "cities"
         docRef.doc(id).set(data)
             .then(function() {
+                console.log("[W] - " + docRef + " - " + id);
                 resolve("success");
             })
             .catch(function(error) {
@@ -81,6 +81,7 @@ function deloptfeild(docRef, id, field) {
         docRef.doc(id).update({
                 [field]: firebase.firestore.FieldValue.delete()
             }).then(function() {
+                console.log("[U] - " + docRef + " - " + id);
                 resolve("success");
             })
             .catch(function(error) {
@@ -99,13 +100,10 @@ function get_user_icon(user_id) {
     return new Promise(function(resolve, reject) {
 
         if (user_icon_list.hasOwnProperty(user_id)) {
-            console.log("[i]- Local");
             var find = user_icon_list[user_id];
-
             resolve(find);
         } else {
-
-            console.log("[i]- Remote");
+            console.log("[I] - " + user_id);
             ref.getDownloadURL()
                 .then((url) => {
                     user_icon_list[user_id] = url;
@@ -121,7 +119,6 @@ function get_user_icon(user_id) {
 }
 
 function updateoptdata(docRef, id, data) {
-    console.log(data);
     getoptdata(docRef, id).then(function(arr) {
         var obj = Object.assign({}, arr, data);
         var str = JSON.stringify(obj);
@@ -130,25 +127,16 @@ function updateoptdata(docRef, id, data) {
             // Add a new document in collection "cities"
             docRef.doc(id).update(data)
                 .then(function() {
-                    console.log("Document successfully written!");
+                    console.log("[U2] - " + docRef + " - " + id);
                     resolve("success");
                 })
                 .catch(function(error) {
                     console.error("Error writing document: ", error);
-
                     reject(error);
                 });
         });
     }).catch(function(error) {
-
         console.log("Error getting document:", error);
     });
 
-}
-
-
-
-
-function tes123t() {
-    console.log("Yea!");
 }
