@@ -118,7 +118,7 @@ function generate_navi(data) {
         var wallet_name = data[i]['wallet_name'];
         var months_size = data[i]['months_size'];
         var users_size = data[i]['users_size'];
-        var month_data = [wallet_id];
+        var month_data = [wallet_id,wallet_name];
 
 
         var my_wallet = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +

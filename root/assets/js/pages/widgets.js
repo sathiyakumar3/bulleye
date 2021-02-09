@@ -4104,62 +4104,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initTilesWidget20 = function () {
-        var element = document.getElementById("kt_tiles_widget_20_chart");
 
-        if (!element) {
-            return;
-        }
-
-        var options = {
-            series: [74],
-            chart: {
-                height: 250,
-                type: 'radialBar',
-                offsetY: 0
-            },
-            plotOptions: {
-                radialBar: {
-                    startAngle: -90,
-                    endAngle: 90,
-
-                    hollow: {
-                        margin: 0,
-                        size: "70%"
-                    },
-                    dataLabels: {
-                        showOn: "always",
-                        name: {
-                            show: true,
-                            fontSize: "13px",
-                            fontWeight: "400",
-                            offsetY: -5,
-                            color: KTApp.getSettings()['colors']['gray']['gray-300']
-                        },
-                        value: {
-                            color: KTApp.getSettings()['colors']['theme']['inverse']['primary'],
-                            fontSize: "22px",
-                            fontWeight: "bold",
-                            offsetY: -40,
-                            show: true
-                        }
-                    },
-                    track: {
-                        background: KTUtil.changeColor(KTApp.getSettings()['colors']['theme']['base']['primary'], -7),
-                        strokeWidth: '100%'
-                    }
-                }
-            },
-            colors: [KTApp.getSettings()['colors']['theme']['inverse']['primary']],
-            stroke: {
-                lineCap: "round",
-            },
-            labels: ["Progress"]
-        };
-
-        var chart = new ApexCharts(element, options);
-        chart.render();
-    }
 
     var _initMixedWidget21 = function () {
         var element = document.getElementById("kt_tiles_widget_21_chart");
@@ -4664,7 +4609,7 @@ var KTWidgets = function () {
             _initTilesWidget5();
             _initTilesWidget8();
             _initTilesWidget17();
-            _initTilesWidget20();
+     
             _initMixedWidget21();
             _initMixedWidget23();
 
