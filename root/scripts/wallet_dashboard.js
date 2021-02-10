@@ -241,66 +241,62 @@ function get_user_div(user, value, total,user_profile) {
     return myvar
 }
 function build_table(user, value, total,obj){
-  
-    console.log(obj[user]['category']);
+    var date = new Date(user);
+    switch (obj[user]['payment']) {
+        case 'Paid':           
+            var myvar2 = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="update_entry(\'' + obj[user]['description']  + '\', \'' + obj[user]['category']+ '\', \'' + obj[user]['amount'] + '\', \'' + user + '\', \'' + obj[user]['type']  + '\', \'' + 'Not Paid' + '\', \'' + obj[user]['user'] + '\')">' +
+                '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Error-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+                '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+                '        <rect x="0" y="0" width="24" height="24"/>' +
+                '        <path d="M12.0355339,10.6213203 L14.863961,7.79289322 C15.2544853,7.40236893 15.8876503,7.40236893 16.2781746,7.79289322 C16.6686989,8.18341751 16.6686989,8.81658249 16.2781746,9.20710678 L13.4497475,12.0355339 L16.2781746,14.863961 C16.6686989,15.2544853 16.6686989,15.8876503 16.2781746,16.2781746 C15.8876503,16.6686989 15.2544853,16.6686989 14.863961,16.2781746 L12.0355339,13.4497475 L9.20710678,16.2781746 C8.81658249,16.6686989 8.18341751,16.6686989 7.79289322,16.2781746 C7.40236893,15.8876503 7.40236893,15.2544853 7.79289322,14.863961 L10.6213203,12.0355339 L7.79289322,9.20710678 C7.40236893,8.81658249 7.40236893,8.18341751 7.79289322,7.79289322 C8.18341751,7.40236893 8.81658249,7.40236893 9.20710678,7.79289322 L12.0355339,10.6213203 Z" fill="#000000"/>' +
+                '    </g>' +
+                '</svg><!--end::Svg Icon--></span>' +
+                '</a>';
+            break;
+        case 'Not Paid':
+            
+            var myvar2 = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="update_entry(\'' + obj[user]['description'] + '\', \'' + obj[user]['category'] + '\', \'' + obj[user]['amount'] + '\', \'' + user + '\', \'' + obj[user]['type']  + '\', \'' + 'Paid' + '\', \'' + obj[user]['user'] + '\')">' +
+                '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Done-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+                '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+                '        <rect x="0" y="0" width="24" height="24"/>' +
+
+                '        <path d="M16.7689447,7.81768175 C17.1457787,7.41393107 17.7785676,7.39211077 18.1823183,7.76894473 C18.5860689,8.1457787 18.6078892,8.77856757 18.2310553,9.18231825 L11.2310553,16.6823183 C10.8654446,17.0740439 10.2560456,17.107974 9.84920863,16.7592566 L6.34920863,13.7592566 C5.92988278,13.3998345 5.88132125,12.7685345 6.2407434,12.3492086 C6.60016555,11.9298828 7.23146553,11.8813212 7.65079137,12.2407434 L10.4229928,14.616916 L16.7689447,7.81768175 Z" fill="#000000" fill-rule="nonzero"/>' +
+                '    </g>' +
+                '</svg><!--end::Svg Icon--></span>' +
+                '</a>';
+            break;
+        default:
+    }
 var myvar = '<tr>'+
 '                                        <td class="pl-0 py-8">'+
 '                                            <div class="d-flex align-items-center">'+
-'                                                <div class="symbol symbol-50 flex-shrink-0 mr-4">'+
-'                                                    <div class="symbol-label" style="background-image: url(\'assets/media/stock-600x400/img-26.jpg\')"></div>'+
-'                                                </div>'+
+get_cat_icon(obj[user]['category']) +                                             
 '                                                <div>'+
-'                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Sant Extreanet Solution</a>'+
-'                                                    <span class="text-muted font-weight-bold d-block">HTML, JS, ReactJS</span>'+
+'                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">'+obj[user]['description']+'</a>'+
+'                                                    <span class="text-muted font-weight-bold d-block">'+obj[user]['category']+'</span>'+
 '                                                </div>'+
 '                                            </div>'+
 '                                        </td>'+
 '                                        <td>'+
-'                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">$2,790</span>'+
-'                                            <span class="text-muted font-weight-bold">Paid</span>'+
+'                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">'+shortdate(date)+'</span>'+
+'                                            <span class="text-muted font-weight-bold">'+shorttime(date)+'</span>'+
 '                                        </td>'+
 '                                        <td>'+
-'                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">$520</span>'+
-'                                            <span class="text-muted font-weight-bold">Paid</span>'+
+'                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">Rs '+numberWithCommas(obj[user]['amount'])+'</span>'+
+'                                            <span class="text-danger font-weight-bold">Not Paid</span>'+
 '                                        </td>'+
 '                                        <td>'+
-'                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">Bradly Beal</span>'+
-'                                            <span class="text-muted font-weight-bold">Insurance</span>'+
-'                                        </td>'+
-'                                        <td>'+
-'                                            <span class="label label-lg label-light-primary label-inline">Approved</span>'+
-'                                        </td>'+
-'                                        <td class="text-right pr-0">'+
-'                                            <a href="#" class="btn btn-icon btn-light btn-hover-primary btn-sm mr-3">'+
-'                                                <span class="svg-icon svg-icon-md svg-icon-primary">'+
-'                                                                <!--begin::Svg Icon | path:assets/media/svg/icons/General/Bookmark.svg-->'+
-'                                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">'+
-'                                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-'                                                                        <rect x="0" y="0" width="24" height="24" />'+
-'                                                                        <path d="M8,4 L16,4 C17.1045695,4 18,4.8954305 18,6 L18,17.726765 C18,18.2790497 17.5522847,18.726765 17,18.726765 C16.7498083,18.726765 16.5087052,18.6329798 16.3242754,18.4639191 L12.6757246,15.1194142 C12.2934034,14.7689531 11.7065966,14.7689531 11.3242754,15.1194142 L7.67572463,18.4639191 C7.26860564,18.8371115 6.63603827,18.8096086 6.26284586,18.4024896 C6.09378519,18.2180598 6,17.9769566 6,17.726765 L6,6 C6,4.8954305 6.8954305,4 8,4 Z" fill="#000000" />'+
-'                                                                    </g>'+
-'                                                                </svg>'+
-'                                                                <!--end::Svg Icon-->'+
-'                                                            </span>'+
-'                                            </a>'+
-'                                            <a href="#" class="btn btn-icon btn-light btn-hover-primary btn-sm">'+
-'                                                <span class="svg-icon svg-icon-md svg-icon-primary">'+
-'                                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->'+
-'                                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">'+
-'                                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-'                                                                        <polygon points="0 0 24 0 24 24 0 24" />'+
-'                                                                        <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1" />'+
-'                                                                        <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />'+
-'                                                                    </g>'+
-'                                                                </svg>'+
-'                                                                <!--end::Svg Icon-->'+
-'                                                            </span>'+
-'                                            </a>'+
+'                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">'+obj[user]['user_name']+'</span>'+
+'                                            <span class="text-muted font-weight-bold">'+obj[user]['user_email']+'</span>'+
+'                                        </td>'+                                 
+'                                        <td class="text-centre">'+
+myvar2+
 '                                        </td>'+
 '                                    </tr>';
 	
 return myvar
 }
+
 var wallet_Ref = '';
 var chart = "";
 var element = "";
@@ -395,12 +391,14 @@ var start_app = function() {
                                         var REC_amount = values[2]['Amount'];
                                         var REC_user = values[2]['user'];
                                         var REC_type = values[2]['Type'];
+                                        var REC_description= values[2]['Description'];
                                         var REC_payment = values[2]['Payment'];
                                         var REC_repeated = values[2]['Repeated'];
                                         var REC_timestamp = values[2]['Timestamp'];
                                         var REC_user_email = values[1]['user_email'];
                                         var REC_user_name = values[1]['user_name'];
                                         var REC_user_photo = values[0]['photo_url'];
+                                        
                                         
                                         if (!user_profile.hasOwnProperty([user_id])) {
                                             user_profile = {
@@ -434,13 +432,19 @@ var start_app = function() {
                                             }
                                         } else {
                                             not_paid_sum = not_paid_sum + Number(REC_amount);
-                                            not_paid_table = {
+                                            not_paid_table.push({
                                                 [REC_timestamp]:{                                            
                                                 category:REC_category,
                                                 amount:REC_amount,
-                                                username:REC_user_name,
+                                                user_name:REC_user_name,
+                                                user_email:REC_user_email,
+                                                description:REC_description,
+                                                user:REC_user,
+                                                type:REC_type,
+                                                payment:REC_payment
+
                                                 }
-                                        }
+                                        });
                                         }
 
                                         if (REC_repeated != 'once') {
@@ -539,6 +543,7 @@ var start_app = function() {
                                 process_row(cat_b, "testtt", sum_expense,user_profile,1);
                                 process_row(cat_2, "testtt2", sum_income,user_profile,1);
                                 process_row(cat_3, "testtt3", sum_expense,user_profile,2);
+                                console.log(not_paid_table);
                                 process_row(not_paid_table, "table_23", sum_expense,user_profile,3);
 
                                 
@@ -954,3 +959,20 @@ jQuery(document).ready(function() {
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     start_app.init();
 });
+function update_entry(description, category, amount, timestamp, type, payment, user) {
+    var timestamp = new Date(timestamp);
+    var value = {
+        [timestamp]: {
+            "user": user,
+            "Description": description,
+            "Category": category,
+            "Type": type,
+            "Payment": payment,
+            "Amount": amount,
+            "Repeated": 'once',
+        },
+        last_updated: timestamp
+    };
+    var entry_id = monthts(timestamp);
+    updateoptdata(wallet_Ref, entry_id, value);
+}
