@@ -1,14 +1,27 @@
 "use strict";
 
-function process_row(obj, html, total) {
+function process_row(obj, html, total,user_profile,sel) {
     var html_div = "";
     var counter_c = 0;
-
     var keysSorted = Object.keys(obj).sort(function(a, b) { return obj[b] - obj[a] });
     Object.keys(keysSorted).sort().map(function(key, index) {
         counter_c++;
         if (counter_c <= 5) {
-            html_div = html_div + get_cat_div(keysSorted[index], obj[keysSorted[index]], total);
+            switch(sel) {
+                case 1:
+                    html_div = html_div + get_cat_div(keysSorted[index], obj[keysSorted[index]], total);
+                  break;
+                case 2:
+                    html_div = html_div + get_user_div(keysSorted[index], obj[keysSorted[index]], total,user_profile);
+                  break;
+                  case 3:
+                    html_div = html_div + build_table(keysSorted[index], obj[keysSorted[index]], total,obj);
+                  break;
+                default:
+                  // code block
+              }
+           
+            
         }
     });
     document.getElementById(html).innerHTML = html_div;
@@ -148,7 +161,7 @@ function get_cat_div(cat, value, total) {
         '        <div class="d-flex flex-column w-100 mr-2">' +
         '            <div class="d-flex align-items-center justify-content-between mb-2">' +
         '                <span class="text-muted mr-2 font-size-sm font-weight-bold">' + pecentage + '%</span>' +
-        '                <span class="text-muted font-size-sm font-weight-bold">Rs ' + value + '</span>' +
+        '                <span class="text-muted font-size-sm font-weight-bold">Rs ' + numberWithCommas(value) + '</span>' +
         '            </div>' +
         '            <div class="progress progress-xs w-100">' +
         '                <div class="progress-bar ' + state + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' +
@@ -174,7 +187,7 @@ function get_cat_div(cat, value, total) {
     return myvar
 }
 
-function get_user_div(user, value, total) {
+function get_user_div(user, value, total,user_profile) {
     var pecentage = Math.round((value / total) * 100);
     var state = 'bg-info';
     if (pecentage > 75) {
@@ -191,21 +204,21 @@ function get_user_div(user, value, total) {
         '                                                <td class="pl-0">' +
         '                                                    <div class="symbol symbol-50 symbol-light mr-2 mt-2">' +
         '                                                        <span class="symbol-label">' +
-        '																					<img src="assets/media/svg/avatars/018-girl-9.svg" class="h-75 align-self-end" alt="" />' +
+        '																					<img src="'+user_profile[user]['photo_url']+'" class="h-75 align-self-end" alt="" />' +
         '																				</span>' +
         '                                                    </div>' +
         '                                                </td>' +
         '                                                <td class="pl-0">' +
-        '                                                    <a href="#" class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">Jessie Clarcson</a>' +
-        '                                                    <span class="text-muted font-weight-bold d-block">HTML, CSS Coding</span>' +
+        '                                                    <a href="#" class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">'+user_profile[user]['user_name']+'</a>' +
+        '                                                    <span class="text-muted font-weight-bold d-block">'+user_profile[user]['user_email']+'</span>' +
         '                                                </td>' +
         '                                                <td></td>' +
         '                                                <td class="text-right">' +
         '                                                    <span class="text-muted font-weight-bold d-block font-size-sm">Paid</span>' +
-        '                                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">$1,200,000</span>' +
+        '                                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">Rs '+numberWithCommas(value)+'</span>' +
         '                                                </td>' +
         '                                                <td class="text-right">' +
-        '                                                    <span class="font-weight-bolder text-warning">+52%</span>' +
+        '                                                    <span class="font-weight-bolder text-warning">'+pecentage+' %</span>' +
         '                                                </td>' +
         '                                                <td class="text-right pr-0">' +
         '                                                    <a href="#" class="btn btn-icon btn-light btn-sm">' +
@@ -223,8 +236,70 @@ function get_user_div(user, value, total) {
         '                                                    </a>' +
         '                                                </td>' +
         '                                            </tr>';
+        
 
     return myvar
+}
+function build_table(user, value, total,obj){
+  
+    console.log(obj[user]['category']);
+var myvar = '<tr>'+
+'                                        <td class="pl-0 py-8">'+
+'                                            <div class="d-flex align-items-center">'+
+'                                                <div class="symbol symbol-50 flex-shrink-0 mr-4">'+
+'                                                    <div class="symbol-label" style="background-image: url(\'assets/media/stock-600x400/img-26.jpg\')"></div>'+
+'                                                </div>'+
+'                                                <div>'+
+'                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Sant Extreanet Solution</a>'+
+'                                                    <span class="text-muted font-weight-bold d-block">HTML, JS, ReactJS</span>'+
+'                                                </div>'+
+'                                            </div>'+
+'                                        </td>'+
+'                                        <td>'+
+'                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">$2,790</span>'+
+'                                            <span class="text-muted font-weight-bold">Paid</span>'+
+'                                        </td>'+
+'                                        <td>'+
+'                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">$520</span>'+
+'                                            <span class="text-muted font-weight-bold">Paid</span>'+
+'                                        </td>'+
+'                                        <td>'+
+'                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">Bradly Beal</span>'+
+'                                            <span class="text-muted font-weight-bold">Insurance</span>'+
+'                                        </td>'+
+'                                        <td>'+
+'                                            <span class="label label-lg label-light-primary label-inline">Approved</span>'+
+'                                        </td>'+
+'                                        <td class="text-right pr-0">'+
+'                                            <a href="#" class="btn btn-icon btn-light btn-hover-primary btn-sm mr-3">'+
+'                                                <span class="svg-icon svg-icon-md svg-icon-primary">'+
+'                                                                <!--begin::Svg Icon | path:assets/media/svg/icons/General/Bookmark.svg-->'+
+'                                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">'+
+'                                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
+'                                                                        <rect x="0" y="0" width="24" height="24" />'+
+'                                                                        <path d="M8,4 L16,4 C17.1045695,4 18,4.8954305 18,6 L18,17.726765 C18,18.2790497 17.5522847,18.726765 17,18.726765 C16.7498083,18.726765 16.5087052,18.6329798 16.3242754,18.4639191 L12.6757246,15.1194142 C12.2934034,14.7689531 11.7065966,14.7689531 11.3242754,15.1194142 L7.67572463,18.4639191 C7.26860564,18.8371115 6.63603827,18.8096086 6.26284586,18.4024896 C6.09378519,18.2180598 6,17.9769566 6,17.726765 L6,6 C6,4.8954305 6.8954305,4 8,4 Z" fill="#000000" />'+
+'                                                                    </g>'+
+'                                                                </svg>'+
+'                                                                <!--end::Svg Icon-->'+
+'                                                            </span>'+
+'                                            </a>'+
+'                                            <a href="#" class="btn btn-icon btn-light btn-hover-primary btn-sm">'+
+'                                                <span class="svg-icon svg-icon-md svg-icon-primary">'+
+'                                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->'+
+'                                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">'+
+'                                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
+'                                                                        <polygon points="0 0 24 0 24 24 0 24" />'+
+'                                                                        <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1" />'+
+'                                                                        <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />'+
+'                                                                    </g>'+
+'                                                                </svg>'+
+'                                                                <!--end::Svg Icon-->'+
+'                                                            </span>'+
+'                                            </a>'+
+'                                        </td>'+
+'                                    </tr>';
+	
+return myvar
 }
 var wallet_Ref = '';
 var chart = "";
@@ -245,12 +320,13 @@ var start_app = function() {
         var cat_b = [];
         var cat_2 = [];
         var cat_3 = [];
+        var not_paid_table =[];
+        var user_profile =[];
         var counter = 0;
         var sum_expense = 0;
         var sum_income = 0;
         var re_sum_expense = 0;
         var re_sum_income = 0;
-
         var not_paid_sum = 0;
         var first_day = "";
         var last_day = "";
@@ -322,6 +398,20 @@ var start_app = function() {
                                         var REC_payment = values[2]['Payment'];
                                         var REC_repeated = values[2]['Repeated'];
                                         var REC_timestamp = values[2]['Timestamp'];
+                                        var REC_user_email = values[1]['user_email'];
+                                        var REC_user_name = values[1]['user_name'];
+                                        var REC_user_photo = values[0]['photo_url'];
+                                        
+                                        if (!user_profile.hasOwnProperty([user_id])) {
+                                            user_profile = {
+                                                [user_id]:{                                            
+                                                user_name:REC_user_name,
+                                                user_email:REC_user_email,
+                                                photo_url:REC_user_photo,
+                                                }
+                                        }
+                                        } 
+                                        
 
                                         if (!cat_b.hasOwnProperty([REC_category])) {
                                             cat_b[REC_category] = 0;
@@ -329,8 +419,6 @@ var start_app = function() {
                                         if (!cat_3.hasOwnProperty([REC_user])) {
                                             cat_3[REC_user] = 0;
                                         }
-
-
 
                                         if (REC_payment == 'Paid') {
                                             if (REC_type == 'Expense') {
@@ -342,9 +430,17 @@ var start_app = function() {
                                                 sum_income = sum_income + Number(REC_amount);
                                                 sum_income2 = sum_income2 + Number(REC_amount);
                                                 cat_2[REC_category] = Number(cat_b[REC_category]) + Number(REC_amount);
+
                                             }
                                         } else {
                                             not_paid_sum = not_paid_sum + Number(REC_amount);
+                                            not_paid_table = {
+                                                [REC_timestamp]:{                                            
+                                                category:REC_category,
+                                                amount:REC_amount,
+                                                username:REC_user_name,
+                                                }
+                                        }
                                         }
 
                                         if (REC_repeated != 'once') {
@@ -365,10 +461,6 @@ var start_app = function() {
                                         if (last_day == "" || datetime > last_day) {
                                             last_day = REC_timestamp;
                                         }
-
-
-
-
                                         resolve($.extend(values[0], values[1], values[2]));
                                     });
 
@@ -378,17 +470,12 @@ var start_app = function() {
                         });
 
                         Promise.all(promises).then((values) => {
-
-
                             data.push(sum_income2 - sum_expense2);
                             data3.push(re_sum_income2 - re_sum_expense2);
                             data1.push(sum_income2);
                             data2.push(sum_expense2);
-
-                            //  catdiv.push(get_cat_div(cat));
-
-                            // older = sum_income;
                             cat.push(rec_name);
+
                             if (items_counter == items) {
 
                                 if (alltime) {
@@ -449,26 +536,25 @@ var start_app = function() {
                                 document.getElementById("start_date").innerText = shortdateclean(last_day);
                                 _initChartsWidget3(data, data3, cat);
                                 _initChartsWidget4(data1, data2, cat);
+                                process_row(cat_b, "testtt", sum_expense,user_profile,1);
+                                process_row(cat_2, "testtt2", sum_income,user_profile,1);
+                                process_row(cat_3, "testtt3", sum_expense,user_profile,2);
+                                process_row(not_paid_table, "table_23", sum_expense,user_profile,3);
 
-                                process_row(cat_b, "testtt", sum_expense);
-
-                                process_row(cat_2, "testtt2", sum_income);
-
-
-
-                                var html_div3 = "";
+                                
+                            /*     var html_div3 = "";
                                 var counter_c4 = 0;
                                 var keysSorted3 = Object.keys(cat_3).sort(function(a, b) { return cat_3[b] - cat_3[a] });
                                 Object.keys(keysSorted3).sort().map(function(key, index) {
                                     counter_c4++;
                                     if (counter_c4 <= 5) {
-                                        html_div3 = html_div3 + get_user_div(keysSorted3[index], cat_3[keysSorted3[index]], sum_expense);
+                                        html_div3 = html_div3 + get_user_div(keysSorted3[index], cat_3[keysSorted3[index]], sum_expense,user_profile);
                                     }
                                 });
-                                console.log(html_div3);
+                               
 
-                                document.getElementById("testtt2").innerHTML = html_div2;
-                                document.getElementById("testtt3").innerHTML = html_div3;
+                               
+                                document.getElementById("testtt3").innerHTML = html_div3; */
                             }
                             resolve("sucess");
                         });
