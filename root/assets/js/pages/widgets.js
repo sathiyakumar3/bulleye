@@ -1,11 +1,11 @@
 "use strict";
 
 // Class definition
-var KTWidgets = function () {
+var KTWidgets = function() {
     // Private properties
 
     // General Controls
-    var _initDaterangepicker = function () {
+    var _initDaterangepicker = function() {
         if ($('#kt_dashboard_daterangepicker').length == 0) {
             return;
         }
@@ -53,7 +53,7 @@ var KTWidgets = function () {
     }
 
     // Stats widgets
-    var _initStatsWidget7 = function () {
+    var _initStatsWidget7 = function() {
         var element = document.getElementById("kt_stats_widget_7_chart");
 
         if (!element) {
@@ -167,7 +167,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -184,7 +184,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initStatsWidget8 = function () {
+    var _initStatsWidget8 = function() {
         var element = document.getElementById("kt_stats_widget_8_chart");
 
         if (!element) {
@@ -298,7 +298,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -315,7 +315,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initStatsWidget9 = function () {
+    var _initStatsWidget9 = function() {
         var element = document.getElementById("kt_stats_widget_9_chart");
 
         if (!element) {
@@ -429,7 +429,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -446,7 +446,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initStatsWidget10 = function () {
+    var _initStatsWidget10 = function() {
         var element = document.getElementById("kt_stats_widget_10_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
         var color = KTUtil.hasAttr(element, 'data-color') ? KTUtil.attr(element, 'data-color') : 'info';
@@ -564,7 +564,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -581,7 +581,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initStatsWidget11 = function () {
+    var _initStatsWidget11 = function() {
         var element = document.getElementById("kt_stats_widget_11_chart");
 
         var height = parseInt(KTUtil.css(element, 'height'));
@@ -700,7 +700,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -717,7 +717,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initStatsWidget12 = function () {
+    var _initStatsWidget12 = function() {
         var element = document.getElementById("kt_stats_widget_12_chart");
 
         var height = parseInt(KTUtil.css(element, 'height'));
@@ -836,7 +836,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -854,123 +854,9 @@ var KTWidgets = function () {
     }
 
     // Charts widgets
-    var _initChartsWidget1 = function () {
-        var element = document.getElementById("kt_charts_widget_1_chart");
 
-        if (!element) {
-            return;
-        }
 
-        var options = {
-            series: [{
-                name: 'Net Profit',
-                data: [44, 55, 57, 56, 61, 58]
-            }, {
-                name: 'Revenue',
-                data: [76, 85, 101, 98, 87, 105]
-            }],
-            chart: {
-                type: 'bar',
-                height: 350,
-                toolbar: {
-                    show: false
-                }
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: ['30%'],
-                    endingShape: 'rounded'
-                },
-            },
-            legend: {
-                show: false
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ['transparent']
-            },
-            xaxis: {
-                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false
-                },
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            fill: {
-                opacity: 1
-            },
-            states: {
-                normal: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                hover: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                active: {
-                    allowMultipleDataPointsSelection: false,
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                }
-            },
-            tooltip: {
-                style: {
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                },
-                y: {
-                    formatter: function (val) {
-                        return "$" + val + " thousands"
-                    }
-                }
-            },
-            colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['gray']['gray-300']],
-            grid: {
-                borderColor: KTApp.getSettings()['colors']['gray']['gray-200'],
-                strokeDashArray: 4,
-                yaxis: {
-                    lines: {
-                        show: true
-                    }
-                }
-            }
-        };
-
-        var chart = new ApexCharts(element, options);
-        chart.render();
-    }
-
-    var _initChartsWidget2 = function () {
+    var _initChartsWidget2 = function() {
         var element = document.getElementById("kt_charts_widget_2_chart");
 
         if (!element) {
@@ -1065,7 +951,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -1086,272 +972,11 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initChartsWidget3 = function () {
-        var element = document.getElementById("kt_charts_widget_3_chart");
 
-        if (!element) {
-            return;
-        }
 
-        var options = {
-            series: [{
-                name: 'Net Profit',
-                data: [30, 40, 40, 90, 90, 70, 70]
-            }],
-            chart: {
-                type: 'area',
-                height: 350,
-                toolbar: {
-                    show: false
-                }
-            },
-            plotOptions: {
 
-            },
-            legend: {
-                show: false
-            },
-            dataLabels: {
-                enabled: false
-            },
-            fill: {
-                type: 'solid',
-                opacity: 1
-            },
-            stroke: {
-                curve: 'smooth',
-                show: true,
-                width: 3,
-                colors: [KTApp.getSettings()['colors']['theme']['base']['info']]
-            },
-            xaxis: {
-                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false
-                },
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                },
-                crosshairs: {
-                    position: 'front',
-                    stroke: {
-                        color: KTApp.getSettings()['colors']['theme']['base']['info'],
-                        width: 1,
-                        dashArray: 3
-                    }
-                },
-                tooltip: {
-                    enabled: true,
-                    formatter: undefined,
-                    offsetY: 0,
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            states: {
-                normal: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                hover: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                active: {
-                    allowMultipleDataPointsSelection: false,
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                }
-            },
-            tooltip: {
-                style: {
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                },
-                y: {
-                    formatter: function (val) {
-                        return "$" + val + " thousands"
-                    }
-                }
-            },
-            colors: [KTApp.getSettings()['colors']['theme']['light']['info']],
-            grid: {
-                borderColor: KTApp.getSettings()['colors']['gray']['gray-200'],
-                strokeDashArray: 4,
-                yaxis: {
-                    lines: {
-                        show: true
-                    }
-                }
-            },
-            markers: {
-                //size: 5,
-                //colors: [KTApp.getSettings()['colors']['theme']['light']['danger']],
-                strokeColor: KTApp.getSettings()['colors']['theme']['base']['info'],
-                strokeWidth: 3
-            }
-        };
 
-        var chart = new ApexCharts(element, options);
-        chart.render();
-    }
-
-    var _initChartsWidget4 = function () {
-        var element = document.getElementById("kt_charts_widget_4_chart");
-
-        if (!element) {
-            return;
-        }
-
-        var options = {
-            series: [{
-                name: 'Net Profit',
-                data: [60, 50, 80, 40, 100, 60]
-            }, {
-                name: 'Revenue',
-                data: [70, 60, 110, 40, 50, 70]
-            }],
-            chart: {
-                type: 'area',
-                height: 350,
-                toolbar: {
-                    show: false
-                }
-            },
-            plotOptions: {},
-            legend: {
-                show: false
-            },
-            dataLabels: {
-                enabled: false
-            },
-            fill: {
-                type: 'solid',
-                opacity: 1
-            },
-            stroke: {
-                curve: 'smooth'
-            },
-            xaxis: {
-                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false
-                },
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                },
-                crosshairs: {
-                    position: 'front',
-                    stroke: {
-                        color: KTApp.getSettings()['colors']['theme']['light']['success'],
-                        width: 1,
-                        dashArray: 3
-                    }
-                },
-                tooltip: {
-                    enabled: true,
-                    formatter: undefined,
-                    offsetY: 0,
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            states: {
-                normal: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                hover: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                active: {
-                    allowMultipleDataPointsSelection: false,
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                }
-            },
-            tooltip: {
-                style: {
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                },
-                y: {
-                    formatter: function (val) {
-                        return "$" + val + " thousands"
-                    }
-                }
-            },
-            colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['theme']['base']['warning']],
-            grid: {
-                borderColor: KTApp.getSettings()['colors']['gray']['gray-200'],
-                strokeDashArray: 4,
-                yaxis: {
-                    lines: {
-                        show: true
-                    }
-                }
-            },
-            markers: {
-                colors: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']],
-                strokeColor: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']],
-                strokeWidth: 3
-            }
-        };
-
-        var chart = new ApexCharts(element, options);
-        chart.render();
-    }
-
-    var _initChartsWidget5 = function () {
+    var _initChartsWidget5 = function() {
         var element = document.getElementById("kt_charts_widget_5_chart");
 
         if (!element) {
@@ -1449,7 +1074,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -1470,7 +1095,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initChartsWidget6 = function () {
+    var _initChartsWidget6 = function() {
         var element = document.getElementById("kt_charts_widget_6_chart");
 
         if (!element) {
@@ -1576,7 +1201,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -1603,7 +1228,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initChartsWidget7 = function () {
+    var _initChartsWidget7 = function() {
         var element = document.getElementById("kt_charts_widget_7_chart");
 
         if (!element) {
@@ -1723,7 +1348,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -1749,7 +1374,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initChartsWidget8 = function () {
+    var _initChartsWidget8 = function() {
         var element = document.getElementById("kt_charts_widget_8_chart");
 
         if (!element) {
@@ -1766,7 +1391,7 @@ var KTWidgets = function () {
             }, {
                 name: 'Expenses',
                 data: [60, 60, 40, 40, 30, 30]
-            },],
+            }, ],
             chart: {
                 type: 'area',
                 height: 300,
@@ -1884,7 +1509,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -1911,7 +1536,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initChartsWidget9 = function () {
+    var _initChartsWidget9 = function() {
         var element = document.getElementById("kt_charts_widget_9_chart");
 
         if (!element) {
@@ -2014,7 +1639,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -2036,7 +1661,7 @@ var KTWidgets = function () {
     }
 
     // Mixed widgets
-    var _initMixedWidget1 = function () {
+    var _initMixedWidget1 = function() {
         var element = document.getElementById("kt_mixed_widget_1_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -2155,7 +1780,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 },
@@ -2175,7 +1800,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget2 = function () {
+    var _initMixedWidget2 = function() {
         var element = document.getElementById("kt_mixed_widget_2_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -2303,7 +1928,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 },
@@ -2323,7 +1948,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget3 = function () {
+    var _initMixedWidget3 = function() {
         var element = document.getElementById("kt_mixed_widget_3_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -2451,7 +2076,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 },
@@ -2471,7 +2096,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget4 = function () {
+    var _initMixedWidget4 = function() {
         var element = document.getElementById("kt_mixed_widget_4_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -2573,7 +2198,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 },
@@ -2601,7 +2226,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget5 = function () {
+    var _initMixedWidget5 = function() {
         var element = document.getElementById("kt_mixed_widget_5_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -2703,7 +2328,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 },
@@ -2731,7 +2356,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget6 = function () {
+    var _initMixedWidget6 = function() {
         var element = document.getElementById("kt_mixed_widget_6_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -2833,7 +2458,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 },
@@ -2861,7 +2486,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget13 = function () {
+    var _initMixedWidget13 = function() {
         var element = document.getElementById("kt_mixed_widget_13_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -2978,7 +2603,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -2995,7 +2620,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget14 = function () {
+    var _initMixedWidget14 = function() {
         var element = document.getElementById("kt_mixed_widget_14_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -3027,7 +2652,7 @@ var KTWidgets = function () {
                             fontWeight: '700',
                             offsetY: 12,
                             show: true,
-                            formatter: function (val) {
+                            formatter: function(val) {
                                 return val + '%';
                             }
                         }
@@ -3049,7 +2674,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget15 = function () {
+    var _initMixedWidget15 = function() {
         var element = document.getElementById("kt_mixed_widget_15_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -3177,7 +2802,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -3194,7 +2819,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget16 = function () {
+    var _initMixedWidget16 = function() {
         var element = document.getElementById("kt_mixed_widget_16_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -3231,7 +2856,7 @@ var KTWidgets = function () {
                             show: true,
                             label: 'Total',
                             fontWeight: "bold",
-                            formatter: function (w) {
+                            formatter: function(w) {
                                 // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
                                 return '60%';
                             }
@@ -3259,7 +2884,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget17 = function () {
+    var _initMixedWidget17 = function() {
         var element = document.getElementById("kt_mixed_widget_17_chart");
         var color = KTUtil.hasAttr(element, 'data-color') ? KTUtil.attr(element, 'data-color') : 'warning';
         var height = parseInt(KTUtil.css(element, 'height'));
@@ -3377,7 +3002,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -3394,7 +3019,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget18 = function () {
+    var _initMixedWidget18 = function() {
         var element = document.getElementById("kt_mixed_widget_18_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -3453,7 +3078,7 @@ var KTWidgets = function () {
     }
 
     // Tiles
-    var _initTilesWidget1 = function () {
+    var _initTilesWidget1 = function() {
         var element = document.getElementById("kt_tiles_widget_1_chart");
         var color = KTUtil.hasAttr(element, 'data-color') ? KTUtil.attr(element, 'data-color') : 'primary';
         var height = parseInt(KTUtil.css(element, 'height'));
@@ -3582,7 +3207,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -3603,7 +3228,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initTilesWidget2 = function () {
+    var _initTilesWidget2 = function() {
         var element = document.getElementById("kt_tiles_widget_2_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -3718,7 +3343,7 @@ var KTWidgets = function () {
                 },
                 y: {
                     title: {
-                        formatter: function (val) {
+                        formatter: function(val) {
                             return val + "";
                         }
                     }
@@ -3736,7 +3361,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initTilesWidget5 = function () {
+    var _initTilesWidget5 = function() {
         var element = document.getElementById("kt_tiles_widget_5_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
 
@@ -3821,7 +3446,7 @@ var KTWidgets = function () {
                 },
                 y: {
                     title: {
-                        formatter: function (val) {
+                        formatter: function(val) {
                             return val + "";
                         }
                     }
@@ -3837,7 +3462,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initTilesWidget8 = function () {
+    var _initTilesWidget8 = function() {
         var element = document.getElementById("kt_tiles_widget_8_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
         var color = KTUtil.hasAttr(element, 'data-color') ? KTUtil.attr(element, 'data-color') : 'danger';
@@ -3954,7 +3579,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -3975,7 +3600,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initTilesWidget17 = function () {
+    var _initTilesWidget17 = function() {
         var element = document.getElementById("kt_tiles_widget_17_chart");
 
         if (!element) {
@@ -4086,7 +3711,7 @@ var KTWidgets = function () {
                 },
                 y: {
                     title: {
-                        formatter: function (val) {
+                        formatter: function(val) {
                             return val + "";
                         }
                     }
@@ -4106,7 +3731,7 @@ var KTWidgets = function () {
 
 
 
-    var _initMixedWidget21 = function () {
+    var _initMixedWidget21 = function() {
         var element = document.getElementById("kt_tiles_widget_21_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
         var color = KTUtil.hasAttr(element, 'data-color') ? KTUtil.attr(element, 'data-color') : 'info';
@@ -4224,7 +3849,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -4241,7 +3866,7 @@ var KTWidgets = function () {
         chart.render();
     }
 
-    var _initMixedWidget23 = function () {
+    var _initMixedWidget23 = function() {
         var element = document.getElementById("kt_tiles_widget_23_chart");
         var height = parseInt(KTUtil.css(element, 'height'));
         var color = KTUtil.hasAttr(element, 'data-color') ? KTUtil.attr(element, 'data-color') : 'primary';
@@ -4359,7 +3984,7 @@ var KTWidgets = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "$" + val + " thousands"
                     }
                 }
@@ -4496,7 +4121,7 @@ var KTWidgets = function () {
             return;
         }
 
-        KTUtil.on(table, 'thead th .checkbox > input', 'change', function (e) {
+        KTUtil.on(table, 'thead th .checkbox > input', 'change', function(e) {
             var checkboxes = KTUtil.findAll(table, 'tbody td .checkbox > input');
 
             for (var i = 0, len = checkboxes.length; i < len; i++) {
@@ -4505,7 +4130,7 @@ var KTWidgets = function () {
         });
     }
 
-    var _initPriceSlider = function (element) {
+    var _initPriceSlider = function(element) {
         // init slider
         var slider = document.getElementById(element);
         if (typeof slider === 'undefined') {
@@ -4566,7 +4191,7 @@ var KTWidgets = function () {
 
     // Public methods
     return {
-        init: function () {
+        init: function() {
             // General Controls
             _initDaterangepicker();
 
@@ -4579,10 +4204,10 @@ var KTWidgets = function () {
             _initStatsWidget12();
 
             // Charts Widgets
-            _initChartsWidget1();
+
             _initChartsWidget2();
-            _initChartsWidget3();
-            _initChartsWidget4();
+
+
             _initChartsWidget5();
             _initChartsWidget6();
             _initChartsWidget7();
@@ -4609,7 +4234,7 @@ var KTWidgets = function () {
             _initTilesWidget5();
             _initTilesWidget8();
             _initTilesWidget17();
-     
+
             _initMixedWidget21();
             _initMixedWidget23();
 
@@ -4646,6 +4271,6 @@ if (typeof module !== 'undefined') {
     module.exports = KTWidgets;
 }
 
-jQuery(document).ready(function () {
+jQuery(document).ready(function() {
     KTWidgets.init();
 });
