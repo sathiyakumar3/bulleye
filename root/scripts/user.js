@@ -283,6 +283,7 @@ function get_user(user) {
             image_add(url);
         }).catch((error) => {
             image_add(error);
+            console.log(error);
         });
         //  var new = load_navi();
 
