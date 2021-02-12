@@ -40,7 +40,7 @@ function getoptdata(docRef, id) {
                     setCookie(id, str);
                     resolve(results);
                 } else {
-                    reject("User doesn't exist.");
+                    reject("Document doesn't exist.");
                 }
             }).catch(function(error) {
                 reject(error);

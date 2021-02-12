@@ -13,7 +13,7 @@ function shortdateclean(d) {
 }
 
 function monthts(d) {
-    return (monthNames[d.getMonth()] + d.getFullYear());
+    return (monthNames[d.getMonth()] + " " + d.getFullYear());
 }
 
 function shorttime(d) {

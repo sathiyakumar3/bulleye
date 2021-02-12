@@ -18,8 +18,8 @@ function process_row(obj, html, total, user_profile, sel) {
 
     var html_div = "";
     var counter_c = 0;
-    var keysSorted = Object.keys(obj).sort(function (a, b) { return obj[b] - obj[a] });
-    Object.keys(keysSorted).sort().map(function (key, index) {
+    var keysSorted = Object.keys(obj).sort(function(a, b) { return obj[b] - obj[a] });
+    Object.keys(keysSorted).sort().map(function(key, index) {
         counter_c++;
         if (counter_c <= 5 || sel == 3) {
             switch (sel) {
@@ -36,7 +36,7 @@ function process_row(obj, html, total, user_profile, sel) {
                     html_div = html_div + user_circle_gen(keysSorted[index], obj[keysSorted[index]], total, user_profile);
                     break;
                 default:
-                // code block
+                    // code block
             }
         }
     });
@@ -127,6 +127,7 @@ function get_user_div(user, value, total, user_profile) {
 
     return myvar
 }
+
 function build_table(user, obj) {
     var date = new Date(obj[user]['Timestamp']);
     switch (obj[user]['Payment']) {
@@ -198,15 +199,16 @@ function build_table(user, obj) {
 
 function remove_not_paid(array) {
     var obj = [];
-    Object.keys(array).sort().map(function (key, index) {
+    Object.keys(array).sort().map(function(key, index) {
         if (array[key]['Payment'] == 'Not Paid') {
             obj.push(array[key]);
         };
     });
     return obj;
 }
+
 function enable_tips() {
-    tips_enabled= true;
+    tips_enabled = true;
     var expression = 1;
     var default_message = '<div class="card card-custom wave wave-animate-slow wave-primary mb-8 mb-lg-0">' +
         '											<div class="card-body">' +
@@ -233,7 +235,7 @@ function enable_tips() {
         '										</div>';
     document.getElementById("tips_board").innerHTML = default_message;
     var myvar = '';
-    setInterval(function () {
+    setInterval(function() {
 
         switch (expression) {
             case 1:
@@ -329,7 +331,7 @@ function enable_tips() {
 
             default:
                 expression = 1;
-            // code block
+                // code block
         }
 
         document.getElementById("tips_board").innerHTML = myvar;
@@ -350,7 +352,7 @@ function data_for_pie(data) {
     var data_set = [];
     var cat_set = [];
 
-    Object.keys(data).sort().map(function (key, index) {
+    Object.keys(data).sort().map(function(key, index) {
         data_set.push(data[key]);
         cat_set.push(key);
 
@@ -361,7 +363,7 @@ function data_for_pie(data) {
 }
 
 function update_tabler(timestamp, payment) {
-    Object.keys(tabler).sort().map(function (key, index) {
+    Object.keys(tabler).sort().map(function(key, index) {
         var ts = new Date(tabler[key]['Timestamp']);
         var ts2 = new Date(timestamp);
         if (ts - ts2 == 0) {
@@ -372,10 +374,10 @@ function update_tabler(timestamp, payment) {
     start_app.refresh();
 }
 
-var start_app = function () {
+var start_app = function() {
 
 
-    var read_data = function (from, to, first_time) {
+    var read_data = function(from, to, first_time) {
         selected_start = from;
         selected_end = to;
 
@@ -411,12 +413,12 @@ var start_app = function () {
                     var sum_expense2 = 0;
                     var re_sum_expense2 = 0;
                     var re_sum_income2 = 0;
-                    wallet_Ref.doc(doc.id).onSnapshot(function (doc) {
+                    wallet_Ref.doc(doc.id).onSnapshot(function(doc) {
                         items_counter++;
                         var arr = doc.data();
                         var rec_name = doc.id;
                         delete arr["last_updated"];
-                        Object.keys(arr).sort().map(function (key, index) {
+                        Object.keys(arr).sort().map(function(key, index) {
 
                             var today = new Date(key).getTime();
                             if (today >= from && today <= to) {
@@ -434,7 +436,7 @@ var start_app = function () {
                                     });
 
                                     const user_details_prom = new Promise((resolve, reject) => {
-                                        getoptdata(user_Ref, user_id).then(function (finalResult) {
+                                        getoptdata(user_Ref, user_id).then(function(finalResult) {
                                             var user_email = finalResult.email;
                                             var user_name = finalResult.name;
                                             resolve({ user_email, user_name });
@@ -590,14 +592,10 @@ var start_app = function () {
                                 document.getElementById("RC_balance_per").innerHTML = rc_net_pec + " %";
                                 document.getElementById("RC_balance_bar").style.width = rc_net_pec + "%";
 
-
-
                                 if (document.getElementById("not_paid_text") !== null) {
                                     document.getElementById("not_paid_text").innerHTML = 'Please note that the dashboard is generated based on all the paid transactions only.<br>There is a sum of <b class="text-danger"> Rs ' + numberWithCommas(not_paid_sum) + '</b> yet to tbe paid.'
 
                                 }
-
-
 
                                 document.getElementById("net_percent").innerHTML = net_pec + " %";
                                 document.getElementById("net_percent_bar").style.width = net_pec + "%";
@@ -612,16 +610,15 @@ var start_app = function () {
 
                                 process_row(cat_b, "testtt", sum_expense, user_profile, 1);
                                 process_row(cat_2, "testtt2", sum_income, user_profile, 1);
-                                if(user_sum>1){
+                                if (user_sum > 1) {
                                     document.getElementById("user_list_md").innerText = user_sum + " Users";
-                                }else{
+                                } else {
                                     document.getElementById("user_list_md").innerText = user_sum + " User";
                                 }
-                              
-                                
+
+
                                 process_row(cat_3, "testtt3", sum_expense, user_profile, 2);
                                 process_row(cat_3, "image_list", sum_expense, user_profile, 4);
-                                // console.log(cat_2);
 
                                 var data66 = data_for_pie(cat_2);
                                 piechart_123(data66[0], data66[1]);
@@ -635,9 +632,9 @@ var start_app = function () {
                                     _init_main_chart(data, data2, cat);
 
 
-                              
+
                                 }
-                                if (not_paid_sum == 0 && tips_enabled==false) {
+                                if (not_paid_sum == 0 && tips_enabled == false) {
                                     enable_tips();
                                 }
                             }
@@ -653,7 +650,7 @@ var start_app = function () {
                 console.log("Error getting documents: ", error);
             });
     };
-    var _initDaterangepicker = function (start, end) {
+    var _initDaterangepicker = function(start, end) {
         if ($('#kt_dashboard_daterangepicker').length == 0) {
             return;
         }
@@ -724,10 +721,8 @@ var start_app = function () {
 
     }
 
-    var _initTilesWidget20 = function (percentage) {
-        var element = document.getElementById("kt_tiles_widget_20_chart");
+    var _initTilesWidget20 = function(percentage) {
 
-        var range = $('#kt_dashboard_daterangepicker_title').html() + " " + $('#kt_dashboard_daterangepicker_date').html();
         var options = {
             series: [percentage],
             chart: {
@@ -771,20 +766,15 @@ var start_app = function () {
             stroke: {
                 lineCap: "round",
             },
-            labels: [range]
+            labels: [$('#kt_dashboard_daterangepicker_title').html() + " " + $('#kt_dashboard_daterangepicker_date').html()]
         };
-        if (chart != "") {
-            //  $('#kt_datatable_2').KTDatatable().clear();
-            chart.destroy();
 
-        }
-        chart = new ApexCharts(element, options);
-        chart.render();
+        generate_chart("kt_tiles_widget_20_chart", options);
     }
-    var piechart_123 = function (data_set, cat_set) {
-        var series = data_set;
+    var piechart_123 = function(data_set, cat_set) {
+
         var options = {
-            series: series,
+            series: data_set,
             chart: {
                 type: 'pie',
             },
@@ -798,38 +788,38 @@ var start_app = function () {
                     }
                 }
             }],
-            colors: [info,danger,warning,success, primary],
+            colors: [info, danger, warning, success, primary],
             tooltip: {
                 style: {
                     fontSize: '12px',
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "Rs " + numberWithCommas(val);
                     }
                 }
             },
-            
-  legend: {
-    show: true,  
-    position: 'bottom',
-    horizontalAlign: 'center', 
-}
+
+            legend: {
+                show: true,
+                position: 'bottom',
+                horizontalAlign: 'center',
+            }
         };
-        generate_chart("kt_pie_chart_cat", options, series);
+        generate_chart("kt_pie_chart_cat", options);
     }
 
-    var _init_main_chart_2 = function (data, data1, cat) {
-        var series = [{
-            name: 'Net Income',
-            data: data
-        }, {
-            name: 'Recurring Income',
-            data: data1
-        }];
+    var _init_main_chart_2 = function(data, data1, cat) {
+
         var options = {
-            series: series,
+            series: [{
+                name: 'Net Income',
+                data: data
+            }, {
+                name: 'Recurring Income',
+                data: data1
+            }],
             chart: {
                 type: 'bar',
                 height: 350,
@@ -910,7 +900,7 @@ var start_app = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "Rs " + numberWithCommas(val);
                     }
                 }
@@ -926,18 +916,18 @@ var start_app = function () {
                 }
             }
         };
-        generate_chart("kt_main_chart_2", options, series)
+        generate_chart("kt_main_chart_2", options)
     }
-    var _init_main_chart = function (data1, data2, cat) {
-        var series = [{
-            name: 'Net Income',
-            data: data1
-        }, {
-            name: 'Expense',
-            data: data2
-        }];
+    var _init_main_chart = function(data1, data2, cat) {
+
         var options = {
-            series: series,
+            series: [{
+                name: 'Net Income',
+                data: data1
+            }, {
+                name: 'Expense',
+                data: data2
+            }],
             chart: {
                 type: 'area',
                 height: 350,
@@ -1028,7 +1018,7 @@ var start_app = function () {
                     fontFamily: KTApp.getSettings()['font-family']
                 },
                 y: {
-                    formatter: function (val) {
+                    formatter: function(val) {
                         return "Rs " + numberWithCommas(val);
                     }
                 }
@@ -1049,38 +1039,35 @@ var start_app = function () {
                 strokeWidth: 3
             }
         };
-        generate_chart("kt_main_chart", options, series)
+        generate_chart("kt_main_chart", options)
 
     }
 
-   
-    var generate_chart = function (div_id, options, series) {
+
+    var generate_chart = function(div_id, options) {
         var element = document.getElementById(div_id);
         if (!element) {
             return;
         }
-
         var chart = new ApexCharts(element, options);
-      
-        if (chat_elements.hasOwnProperty(div_id)) {          
+        if (chat_elements.hasOwnProperty(div_id)) {
             chat_elements[div_id].destroy();
             chart.render();
         } else {
-           chat_elements[div_id] = chart;
+            chat_elements[div_id] = chart;
             chart.render();
         }
-      
     }
 
 
 
     return {
-        init: function () {
+        init: function() {
             selected_start = new Date('1/1/1900').getTime();
             selected_end = new Date('1/1/2100').getTime();
             read_data(selected_start, selected_end, true);
         },
-        refresh: function () {
+        refresh: function() {
             read_data(selected_start, selected_end, false);
         },
 
@@ -1099,12 +1086,11 @@ function name_intials(str) {
 }
 
 
-jQuery(document).ready(function () {
+jQuery(document).ready(function() {
     var wallet_id = global_data[0];
     var wallet_name = global_data[1];
     document.getElementById("wallet_title").innerText = wallet_name;
     document.getElementById("wallet_init").innerText = name_intials(wallet_name);
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     start_app.init();
-
 });

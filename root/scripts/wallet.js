@@ -27,7 +27,6 @@ var start_app = function() {
                         resolve({ photo_url: 'none' });
                     });
                 });
-
                 const user_details_prom = new Promise((resolve, reject) => {
                     getoptdata(user_Ref, user_id).then(function(finalResult) {
                         user_email = finalResult.email;
@@ -54,23 +53,18 @@ var start_app = function() {
                     console.log("ROW");
                     if (values[2]['Payment'] == 'Paid') {
                         if (values[2]['Type'] == 'Expense') {
-
                             sum_expense = sum_expense + Number(values[2]['Amount']);
-
                         } else {
-
                             sum_income = sum_income + Number(values[2]['Amount']);
                         }
                     }
-
-
                     return $.extend(values[0], values[1], values[2]);
                 });
             });
             return Promise.all(promises).then((values) => {
                 console.log("[Table] - Fetch");
                 // tabler = values;
-               
+
                 var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
                 document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
                 document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
@@ -470,4 +464,3 @@ jQuery(document).ready(function() {
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     start_app.init();
 });
-
