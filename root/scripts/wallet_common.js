@@ -1,37 +1,9 @@
 
-function entry_delete(key) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-            var entry_id = monthts(new Date(key));
-            console.log(key);
-            console.log(entry_id);
-            deloptfeild(wallet_Ref, entry_id, key).then(function() {
-                    Swal.fire(
-                        'Deleted!',
-                        'Your file has been deleted.',
-                        'success'
-                    )
-                })
-                .catch(function(error) {
-                    console.error("Error writing document: ", error);
-                });
-        }
-    })
 
 
-}
-
-function update_entry(description, category, amount, timestamp, type, payment, user) {
-    var timestamp = new Date(timestamp);
+function update_entry(description, category, amount, timestamp2, type, payment, user) {
+    return new Promise(function(resolve, reject) {
+    var timestamp = new Date(timestamp2);
     var value = {
         [timestamp]: {
             "user": user,
@@ -44,8 +16,16 @@ function update_entry(description, category, amount, timestamp, type, payment, u
         },
         last_updated: timestamp
     };
-    var entry_id = monthts(timestamp);
-    updateoptdata(wallet_Ref, entry_id, value);
+    
+    var entry_id = monthts(timestamp);    
+  
+          updateoptdata(wallet_Ref, entry_id, value).then(function() {              
+        resolve('sucess');
+    }).catch((error) => {
+        console.log(error);
+       reject(error);
+    });
+});
 }
 
 function edit_entry_modal(description, category, amount, timestamp, type, payment) {

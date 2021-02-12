@@ -8,11 +8,7 @@ var selected_end;
 var datetime_loaded = false;
 var chat_elements = [];
 var tips_enabled = false;
-const primary = '#6993FF';
-const success = '#1BC5BD';
-const info = '#8950FC';
-const warning = '#FFA800';
-const danger = '#F64E60';
+
 
 function process_row(obj, html, total, user_profile, sel) {
 
@@ -375,12 +371,9 @@ function update_tabler(timestamp, payment) {
 }
 
 var start_app = function() {
-
-
     var read_data = function(from, to, first_time) {
         selected_start = from;
         selected_end = to;
-
         var data = [];
         var data1 = [];
         var data2 = [];
@@ -389,7 +382,6 @@ var start_app = function() {
         var cat_b = [];
         var cat_2 = [];
         var cat_3 = [];
-
         var user_profile = [];
         var user_sum = 0;
         var counter = 0;
@@ -406,7 +398,6 @@ var start_app = function() {
         wallet_Ref.orderBy("last_updated").get()
             .then((querySnapshot) => {
                 var items_counter = 0;
-                var older = 0;
                 querySnapshot.forEach((doc) => {
                     var items = querySnapshot.size;
                     var sum_income2 = 0;
@@ -772,7 +763,11 @@ var start_app = function() {
         generate_chart("kt_tiles_widget_20_chart", options);
     }
     var piechart_123 = function(data_set, cat_set) {
-
+        const primary = '#6993FF';
+        const success = '#1BC5BD';
+        const info = '#8950FC';
+        const warning = '#FFA800';
+        const danger = '#F64E60';
         var options = {
             series: data_set,
             chart: {

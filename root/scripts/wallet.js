@@ -4,90 +4,142 @@ var tabler = [];
 var datatable = "";
 var selected_entry = "";
 var wallet_Ref = "";
+var selected_start;
+var selected_end;
+var datetime_loaded = false;
+
+
+
 
 
 var start_app = function() {
-    var read_data = function() {
-        wallet_Ref.doc(selected_entry).onSnapshot(function(doc) {
-            var arr = doc.data();
-            delete arr["last_updated"];
-            var counter = 0;
-            var sum_expense = 0;
-            var sum_income = 0;
-            tabler = [];
-            let promises = Object.keys(arr).sort().map(function(key, index) {
-                counter++;
-                var user_id = arr[key].user;
-                var user_name;
-                var user_email;
-                const user_image_prom = new Promise((resolve, reject) => {
-                    get_user_icon(user_id).then((url) => {
-                        resolve({ photo_url: url });
-                    }).catch((error) => {
-                        resolve({ photo_url: 'none' });
+  
+    var read_data = function(from, to, first_time) {
+        selected_start = from;
+        selected_end = to;    
+        var first_day = "";
+        var last_day = "";
+        var promises = [];
+        tabler =[];
+        wallet_Ref.orderBy("last_updated").get()
+            .then((querySnapshot) => {
+                var items_counter = 0;
+                querySnapshot.forEach((doc) => {
+                    var items = querySnapshot.size;         
+                    wallet_Ref.doc(doc.id).onSnapshot(function(doc) {
+                        items_counter++;
+                        var arr = doc.data();
+                        delete arr["last_updated"];
+                        var counter = 0;
+                        var sum_expense = 0;
+                        var sum_income = 0;
+                        Object.keys(arr).sort().map(function(key, index) {
+                            var today = new Date(key).getTime();
+                            if (today >= from && today <= to) {
+                                const promises8 = new Promise((resolve, reject) => {
+                                    counter++;
+                                    var user_id = arr[key].user;
+                                    var user_Ref = db.collection("users");
+
+                                    const user_image_prom = new Promise((resolve, reject) => {
+                                        get_user_icon(user_id).then((url) => {
+                                            resolve({ photo_url: url });
+                                        }).catch((error) => {
+                                            resolve({ photo_url: 'none' });
+                                        });
+                                    });
+
+                                    const user_details_prom = new Promise((resolve, reject) => {
+                                        getoptdata(user_Ref, user_id).then(function(finalResult) {
+                                            var user_email = finalResult.email;
+                                            var user_name = finalResult.name;
+                                            resolve({ user_email, user_name });
+                                        }).catch((error) => {
+                                            console.log(error);
+                                            reject(error);
+                                        });
+                                    });
+
+                                    const wallet_details_prom = new Promise((resolve, reject) => {
+                                        resolve({
+                                            RecordID: counter,
+                                            user: arr[key].user,
+                                            Description: arr[key].Description,
+                                            Category: arr[key].Category,
+                                            Type: arr[key].Type,
+                                            Amount: arr[key].Amount,
+                                            Payment: arr[key].Payment,
+                                            Repeated: arr[key].Repeated,
+                                            Timestamp: new Date(key),
+                                        });
+                                    });
+
+                                    Promise.all([user_image_prom, user_details_prom, wallet_details_prom]).then((values) => {
+                                        var datetime = values[2]['Timestamp'];
+                                        if (first_day == "" || datetime < first_day) {
+                                            first_day = datetime;
+                                        }
+                                        if (last_day == "" || datetime > last_day) {
+                                            last_day = datetime;
+                                        }
+
+                                        if (values[2]['Payment'] == 'Paid') {
+                                            if (values[2]['Type'] == 'Expense') {
+                                                sum_expense = sum_expense + Number(values[2]['Amount']);
+                                            } else {
+                                                sum_income = sum_income + Number(values[2]['Amount']);
+                                            }
+                                        }
+                                     resolve($.extend(values[0], values[1], values[2]));
+
+                                    });
+
+                                });
+                                promises.push(promises8);
+                            }
+                        });
+
+                        Promise.all(promises).then((values) => {                          
+                            if (items_counter == items) {                                    
+                                var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
+                                document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
+                                document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
+                                if ((sum_income - sum_expense) < 0) {
+                                    document.getElementById("sum_net").classList.add("text-danger");
+                                } else {
+                                    document.getElementById("sum_net").classList.add("text-success");
+                                }
+                                document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
+                                tabler = $.extend(tabler, values);
+                                initialze_table();
+                               // process_row(tabler);
+                                if (first_time) {
+                                    _initDaterangepicker(first_day, last_day);
+                                }
+                                }                              
+                            resolve("sucess");
+                        });
+
+
                     });
                 });
-                const user_details_prom = new Promise((resolve, reject) => {
-                    getoptdata(user_Ref, user_id).then(function(finalResult) {
-                        user_email = finalResult.email;
-                        user_name = finalResult.name;
-                        resolve({ user_email, user_name });
-                    }).catch((error) => {
-                        console.log(error);
-                        reject(error);
-                    });
-                });
 
-                const wallet_details_prom = {
-                    RecordID: counter,
-                    user: arr[key].user,
-                    Description: arr[key].Description,
-                    Category: arr[key].Category,
-                    Type: arr[key].Type,
-                    Amount: arr[key].Amount,
-                    Payment: arr[key].Payment,
-                    Repeated: arr[key].Repeated,
-                    Timestamp: new Date(key),
-                };
-                return Promise.all([user_image_prom, user_details_prom, wallet_details_prom]).then((values) => {
-                    console.log("ROW");
-                    if (values[2]['Payment'] == 'Paid') {
-                        if (values[2]['Type'] == 'Expense') {
-                            sum_expense = sum_expense + Number(values[2]['Amount']);
-                        } else {
-                            sum_income = sum_income + Number(values[2]['Amount']);
-                        }
-                    }
-                    return $.extend(values[0], values[1], values[2]);
-                });
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
             });
-            return Promise.all(promises).then((values) => {
-                console.log("[Table] - Fetch");
-                // tabler = values;
-
-                var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
-                document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
-                document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
-                if ((sum_income - sum_expense) < 0) {
-                    document.getElementById("sum_net").classList.add("text-danger");
-                } else {
-                    document.getElementById("sum_net").classList.add("text-success");
-                }
-                document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
-                tabler = $.extend(tabler, values);
-                initialze_table();
-            });
-
-        });
     };
 
-    var _initDaterangepicker = function() {
+    var _initDaterangepicker = function(start, end) {
         if ($('#kt_dashboard_daterangepicker').length == 0) {
             return;
         }
+        start = moment(start);
+        end = moment(end);
+
         var picker = $('#kt_dashboard_daterangepicker');
-        var start = moment();
-        var end = moment();
+        // var all_f = new Date('1/1/1900').getTime();
+        // var all_l = new Date('1/1/2100').getTime();
 
         function cb(start, end, label) {
             var title = '';
@@ -96,6 +148,7 @@ var start_app = function() {
             if ((end - start) < 100 || label == 'Today') {
                 title = 'Today:';
                 range = start.format('MMM D');
+
             } else if (label == 'Yesterday') {
                 title = 'Yesterday:';
                 range = start.format('MMM D');
@@ -103,9 +156,18 @@ var start_app = function() {
                 range = start.format('MMM D') + ' - ' + end.format('MMM D');
             }
 
+
             $('#kt_dashboard_daterangepicker_date').html(range);
             $('#kt_dashboard_daterangepicker_title').html(title);
+            if (datetime_loaded == false) {
+                datetime_loaded = true;
+            } else {
+                read_data(start, end, false);
+            }         
+         
+
         }
+
 
         picker.daterangepicker({
             direction: KTUtil.isRTL(),
@@ -120,11 +182,16 @@ var start_app = function() {
                 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                 'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'All time': [start, end]
             }
         }, cb);
-
+        //  console.log(start);
+        //  console.log(end);
+        //  console.log(start2);
+        //   console.log(end2);
         cb(start, end, '');
+
     }
 
     var initialze_table = function() {
@@ -270,7 +337,7 @@ var start_app = function() {
                         switch (row.Payment) {
                             case 'Paid':
                                 pay = 'Not Paid';
-                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="update_entry(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\')">' +
+                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\')">' +
                                     '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Error-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
                                     '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
                                     '        <rect x="0" y="0" width="24" height="24"/>' +
@@ -281,7 +348,7 @@ var start_app = function() {
                                 break;
                             case 'Not Paid':
                                 pay = 'Paid';
-                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="update_entry(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\')">' +
+                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\')">' +
                                     '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Done-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
                                     '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
                                     '        <rect x="0" y="0" width="24" height="24"/>' +
@@ -441,26 +508,78 @@ var start_app = function() {
             var user_id = document.getElementById("front_page_user_id").value;
             var given_date = $("#kt_datetimepicker_10").find("input").val();
             var timestamp = new Date(given_date);
-
-            update_entry(description, category, amount, timestamp, type, payment, user_id);
-
+            
+            sendtoupdate(description, category, amount, timestamp, type, payment, user_id);
+           
         });
     }
     return {
         init: function() {
-
-            read_data();
-
+            selected_start = new Date('1/1/1900').getTime();
+            selected_end = new Date('1/1/2100').getTime();
+            read_data(selected_start, selected_end, true);
             edit_entry_From_validation();
-            _initDaterangepicker();
         },
+        refresh: function() {
+            read_data(selected_start, selected_end, false);
+        },
+
     };
 }();
 
+function sendtoupdate(description, category, amount, timestamp, type, payment, user_id){
+    update_entry(description, category, amount, timestamp, type, payment, user_id).then(function() {            
+        start_app.refresh();
+    }).catch((error) => {
+        console.log(error);               
+    });
+}
+
+function entry_delete(key) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            var entry_id = monthts(new Date(key));
+        
+            deloptfeild(wallet_Ref, entry_id, key).then(function() {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                    start_app.refresh();
+                   
+                })
+                .catch(function(error) {
+                    console.error("Error writing document: ", error);
+                   
+                });
+            
+        }
+    })
+
+
+}
 
 jQuery(document).ready(function() {
     var wallet_id = global_data[0];
-    selected_entry = global_data[1];
+    var wallet_name = global_data[1];
+    //document.getElementById("wallet_title").innerText = wallet_name;
+  //  document.getElementById("wallet_init").innerText = name_intials(wallet_name);
+   // wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
-    start_app.init();
+   start_app.init();
 });
+
+function op(){
+ 
+    start_app.refresh();
+}

@@ -119,7 +119,8 @@ function get_user_icon(user_id) {
 }
 
 function updateoptdata(docRef, id, data) {
-    getoptdata(docRef, id).then(function(arr) {
+
+    return getoptdata(docRef, id).then(function(arr) {
         var obj = Object.assign({}, arr, data);
         var str = JSON.stringify(obj);
         setCookie(id, str);
@@ -137,6 +138,7 @@ function updateoptdata(docRef, id, data) {
         });
     }).catch(function(error) {
         console.log("Error getting document:", error);
+      
     });
 
 }
