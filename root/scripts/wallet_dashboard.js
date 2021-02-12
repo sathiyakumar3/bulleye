@@ -5,7 +5,14 @@ var chart = "";
 var element = "";
 var selected_start;
 var selected_end;
-var datetime_loaded =false;
+var datetime_loaded = false;
+var chat_elements = [];
+var tips_enabled = false;
+const primary = '#6993FF';
+const success = '#1BC5BD';
+const info = '#8950FC';
+const warning = '#FFA800';
+const danger = '#F64E60';
 
 function process_row(obj, html, total, user_profile, sel) {
 
@@ -14,7 +21,7 @@ function process_row(obj, html, total, user_profile, sel) {
     var keysSorted = Object.keys(obj).sort(function (a, b) { return obj[b] - obj[a] });
     Object.keys(keysSorted).sort().map(function (key, index) {
         counter_c++;
-        if (counter_c <= 5||sel==3) {
+        if (counter_c <= 5 || sel == 3) {
             switch (sel) {
                 case 1:
                     html_div = html_div + get_cat_div(keysSorted[index], obj[keysSorted[index]], total);
@@ -25,22 +32,22 @@ function process_row(obj, html, total, user_profile, sel) {
                 case 3:
                     html_div = html_div + build_table(key, obj);
                     break;
-                    case 4:
-                        html_div = html_div + user_circle_gen(keysSorted[index], obj[keysSorted[index]], total, user_profile);
-                        break;
+                case 4:
+                    html_div = html_div + user_circle_gen(keysSorted[index], obj[keysSorted[index]], total, user_profile);
+                    break;
                 default:
                 // code block
             }
         }
     });
-   
+
     document.getElementById(html).innerHTML = html_div;
 
 }
 
 function get_cat_div(cat, value, total) {
     var pecentage = Math.round((value / total) * 100);
- 
+
     var myvar = '<tr>' +
         '    <th class="pl-0 py-5">' + get_cat_icon(cat) +
         '    </th>' +
@@ -79,7 +86,7 @@ function get_cat_div(cat, value, total) {
 }
 
 function get_user_div(user, value, total, user_profile) {
-    var pecentage = Math.round((value / total) * 100); 
+    var pecentage = Math.round((value / total) * 100);
     var myvar = '<tr>' +
         '                                                <td class="pl-0">' +
         '                                                    <div class="symbol symbol-50 symbol-light mr-2 mt-2">' +
@@ -147,17 +154,17 @@ function build_table(user, obj) {
             break;
         default:
     }
-    var income ="";
-    var expense ="";
-if(obj[user]['Type']=='Income'){
-    income = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(obj[user]['Amount']) +
-    '</div><a class="' + format_payment(obj[user]['Payment']) + ' font-weight-bold">' + obj[user]['Payment']+ '</a></div>';
-    expense ="";
-}else{
-    expense = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(obj[user]['Amount']) +
-    '</div><a class="' + format_payment(obj[user]['Payment']) + ' font-weight-bold">' + obj[user]['Payment']+ '</a></div>';
-    income ="";
-}
+    var income = "";
+    var expense = "";
+    if (obj[user]['Type'] == 'Income') {
+        income = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(obj[user]['Amount']) +
+            '</div><a class="' + format_payment(obj[user]['Payment']) + ' font-weight-bold">' + obj[user]['Payment'] + '</a></div>';
+        expense = "";
+    } else {
+        expense = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(obj[user]['Amount']) +
+            '</div><a class="' + format_payment(obj[user]['Payment']) + ' font-weight-bold">' + obj[user]['Payment'] + '</a></div>';
+        income = "";
+    }
     var myvar = '<tr>' +
         '                                        <td class="pl-0 py-8">' +
         '                                            <div class="d-flex align-items-center">' +
@@ -168,19 +175,19 @@ if(obj[user]['Type']=='Income'){
         '                                                </div>' +
         '                                            </div>' +
         '                                        </td>' +
-  
 
-        
- '<td class="datatable-cell-center datatable-cell" data-field="Description" data-autohide-disabled="false" aria-label="erwer">'+
-'<span style="width: 100px;"><span style="width: 110px;"><div class="font-weight-bolder text-primary mb-0">' + shortdate(date) +
- '</div><div class="text-muted">' + shorttime(date) + '</div></span></span></td>'+
-	
- 
-        '                                        <td>'+ income+
+
+
+        '<td class="datatable-cell-center datatable-cell" data-field="Description" data-autohide-disabled="false" aria-label="erwer">' +
+        '<span style="width: 100px;"><span style="width: 110px;"><div class="font-weight-bolder text-primary mb-0">' + shortdate(date) +
+        '</div><div class="text-muted">' + shorttime(date) + '</div></span></span></td>' +
+
+
+        '                                        <td>' + income +
         '                                        </td>' +
-        '                                        <td>' +expense+
+        '                                        <td>' + expense +
         '                                        </td>' +
-        
+
         '                                        <td class="text-centre">' +
         myvar2 +
         '                                        </td>' +
@@ -198,154 +205,168 @@ function remove_not_paid(array) {
     });
     return obj;
 }
-function enable_tips(){
-    var expression =1;
-    var default_message = '<div class="card card-custom wave wave-animate-slow wave-primary mb-8 mb-lg-0">'+
-    '											<div class="card-body">'+
-    '												<div class="d-flex align-items-center p-5">'+
-    '													<div class="mr-6">'+
-    '														<span class="svg-icon svg-icon-primary svg-icon-4x">'+
-    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Home/Mirror.svg-->'+
-    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">'+
-    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-    '																	<rect x="0" y="0" width="24" height="24"></rect>'+
-    '																	<path d="M13,17.0484323 L13,18 L14,18 C15.1045695,18 16,18.8954305 16,20 L8,20 C8,18.8954305 8.8954305,18 10,18 L11,18 L11,17.0482312 C6.89844817,16.5925472 3.58685702,13.3691811 3.07555009,9.22038742 C3.00799634,8.67224972 3.3975866,8.17313318 3.94572429,8.10557943 C4.49386199,8.03802567 4.99297853,8.42761593 5.06053229,8.97575363 C5.4896663,12.4577884 8.46049164,15.1035129 12.0008191,15.1035129 C15.577644,15.1035129 18.5681939,12.4043008 18.9524872,8.87772126 C19.0123158,8.32868667 19.505897,7.93210686 20.0549316,7.99193546 C20.6039661,8.05176407 21.000546,8.54534521 20.9407173,9.09437981 C20.4824216,13.3000638 17.1471597,16.5885839 13,17.0484323 Z" fill="#000000" fill-rule="nonzero"></path>'+
-    '																	<path d="M12,14 C8.6862915,14 6,11.3137085 6,8 C6,4.6862915 8.6862915,2 12,2 C15.3137085,2 18,4.6862915 18,8 C18,11.3137085 15.3137085,14 12,14 Z M8.81595773,7.80077353 C8.79067542,7.43921955 8.47708263,7.16661749 8.11552864,7.19189981 C7.75397465,7.21718213 7.4813726,7.53077492 7.50665492,7.89232891 C7.62279197,9.55316612 8.39667037,10.8635466 9.79502238,11.7671393 C10.099435,11.9638458 10.5056723,11.8765328 10.7023788,11.5721203 C10.8990854,11.2677077 10.8117724,10.8614704 10.5073598,10.6647638 C9.4559885,9.98538454 8.90327706,9.04949813 8.81595773,7.80077353 Z" fill="#000000" opacity="0.3"></path>'+
-    '																</g>'+
-    '															</svg>'+
-    '															<!--end::Svg Icon-->'+
-    '														</span>'+
-    '													</div>'+
-    '													<div class="d-flex flex-column">'+
-    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">Get Started</a>'+
-    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>'+
-    '													</div>'+
-    '												</div>'+
-    '											</div>'+
-    '										</div>';
+function enable_tips() {
+    tips_enabled= true;
+    var expression = 1;
+    var default_message = '<div class="card card-custom wave wave-animate-slow wave-primary mb-8 mb-lg-0">' +
+        '											<div class="card-body">' +
+        '												<div class="d-flex align-items-center p-5">' +
+        '													<div class="mr-6">' +
+        '														<span class="svg-icon svg-icon-primary svg-icon-4x">' +
+        '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Home/Mirror.svg-->' +
+        '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+        '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+        '																	<rect x="0" y="0" width="24" height="24"></rect>' +
+        '																	<path d="M13,17.0484323 L13,18 L14,18 C15.1045695,18 16,18.8954305 16,20 L8,20 C8,18.8954305 8.8954305,18 10,18 L11,18 L11,17.0482312 C6.89844817,16.5925472 3.58685702,13.3691811 3.07555009,9.22038742 C3.00799634,8.67224972 3.3975866,8.17313318 3.94572429,8.10557943 C4.49386199,8.03802567 4.99297853,8.42761593 5.06053229,8.97575363 C5.4896663,12.4577884 8.46049164,15.1035129 12.0008191,15.1035129 C15.577644,15.1035129 18.5681939,12.4043008 18.9524872,8.87772126 C19.0123158,8.32868667 19.505897,7.93210686 20.0549316,7.99193546 C20.6039661,8.05176407 21.000546,8.54534521 20.9407173,9.09437981 C20.4824216,13.3000638 17.1471597,16.5885839 13,17.0484323 Z" fill="#000000" fill-rule="nonzero"></path>' +
+        '																	<path d="M12,14 C8.6862915,14 6,11.3137085 6,8 C6,4.6862915 8.6862915,2 12,2 C15.3137085,2 18,4.6862915 18,8 C18,11.3137085 15.3137085,14 12,14 Z M8.81595773,7.80077353 C8.79067542,7.43921955 8.47708263,7.16661749 8.11552864,7.19189981 C7.75397465,7.21718213 7.4813726,7.53077492 7.50665492,7.89232891 C7.62279197,9.55316612 8.39667037,10.8635466 9.79502238,11.7671393 C10.099435,11.9638458 10.5056723,11.8765328 10.7023788,11.5721203 C10.8990854,11.2677077 10.8117724,10.8614704 10.5073598,10.6647638 C9.4559885,9.98538454 8.90327706,9.04949813 8.81595773,7.80077353 Z" fill="#000000" opacity="0.3"></path>' +
+        '																</g>' +
+        '															</svg>' +
+        '															<!--end::Svg Icon-->' +
+        '														</span>' +
+        '													</div>' +
+        '													<div class="d-flex flex-column">' +
+        '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">Get Started</a>' +
+        '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>' +
+        '													</div>' +
+        '												</div>' +
+        '											</div>' +
+        '										</div>';
     document.getElementById("tips_board").innerHTML = default_message;
-    var myvar='';
-    setInterval(function() {
-   
-    switch(expression) {
-            case 1:          
-     myvar = '<div class="card card-custom wave wave-animate-fast wave-success">'+
-    '											<div class="card-body">'+
-    '												<div class="d-flex align-items-center p-5">'+
-    '													<div class="mr-6">'+
-    '														<span class="svg-icon svg-icon-success svg-icon-4x">'+
-    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Design/Sketch.svg-->'+
-    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">'+
-    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-    '																	<rect x="0" y="0" width="24" height="24"></rect>'+
-    '																	<polygon fill="#000000" opacity="0.3" points="5 3 19 3 23 8 1 8"></polygon>'+
-    '																	<polygon fill="#000000" points="23 8 12 20 1 8"></polygon>'+
-    '																</g>'+
-    '															</svg>'+
-    '															<!--end::Svg Icon-->'+
-    '														</span>'+
-    '													</div>'+
-    '													<div class="d-flex flex-column">'+
-    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">User Guide</a>'+
-    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>'+
-    '													</div>'+
-    '												</div>'+
-    '											</div>'+
-    '										</div>';
-        
-    expression++;
-              break;
+    var myvar = '';
+    setInterval(function () {
+
+        switch (expression) {
+            case 1:
+                myvar = '<div class="card card-custom wave wave-animate-fast wave-success">' +
+                    '											<div class="card-body">' +
+                    '												<div class="d-flex align-items-center p-5">' +
+                    '													<div class="mr-6">' +
+                    '														<span class="svg-icon svg-icon-success svg-icon-4x">' +
+                    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Design/Sketch.svg-->' +
+                    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+                    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+                    '																	<rect x="0" y="0" width="24" height="24"></rect>' +
+                    '																	<polygon fill="#000000" opacity="0.3" points="5 3 19 3 23 8 1 8"></polygon>' +
+                    '																	<polygon fill="#000000" points="23 8 12 20 1 8"></polygon>' +
+                    '																</g>' +
+                    '															</svg>' +
+                    '															<!--end::Svg Icon-->' +
+                    '														</span>' +
+                    '													</div>' +
+                    '													<div class="d-flex flex-column">' +
+                    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">User Guide</a>' +
+                    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>' +
+                    '													</div>' +
+                    '												</div>' +
+                    '											</div>' +
+                    '										</div>';
+
+                expression++;
+                break;
             case 2:
-             
-    myvar = '<div class="card card-custom wave wave-animate-slow mb-8 mb-lg-0">'+
-    '											<div class="card-body">'+
-    '												<div class="d-flex align-items-center p-5">'+
-    '													<div class="mr-6">'+
-    '														<span class="svg-icon svg-icon-warning svg-icon-4x">'+
-    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Shopping/Chart-bar1.svg-->'+
-    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">'+
-    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-    '																	<rect x="0" y="0" width="24" height="24"></rect>'+
-    '																	<rect fill="#000000" opacity="0.3" x="12" y="4" width="3" height="13" rx="1.5"></rect>'+
-    '																	<rect fill="#000000" opacity="0.3" x="7" y="9" width="3" height="8" rx="1.5"></rect>'+
-    '																	<path d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z" fill="#000000" fill-rule="nonzero"></path>'+
-    '																	<rect fill="#000000" opacity="0.3" x="17" y="11" width="3" height="6" rx="1.5"></rect>'+
-    '																</g>'+
-    '															</svg>'+
-    '															<!--end::Svg Icon-->'+
-    '														</span>'+
-    '													</div>'+
-    '													<div class="d-flex flex-column">'+
-    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">Get Started</a>'+
-    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>'+
-    '													</div>'+
-    '												</div>'+
-    '											</div>'+
-    '										</div>';
-        
-    expression++;
-              break;
-    
-              case 3:
-              
-    var myvar = '<div class="card card-custom wave wave-animate-slower mb-8 mb-lg-0">'+
-    '											<div class="card-body">'+
-    '												<div class="d-flex align-items-center p-5">'+
-    '													<div class="mr-6">'+
-    '														<span class="svg-icon svg-icon-success svg-icon-4x">'+
-    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Shopping/Settings.svg-->'+
-    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">'+
-    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-    '																	<rect opacity="0.200000003" x="0" y="0" width="24" height="24"></rect>'+
-    '																	<path d="M4.5,7 L9.5,7 C10.3284271,7 11,7.67157288 11,8.5 C11,9.32842712 10.3284271,10 9.5,10 L4.5,10 C3.67157288,10 3,9.32842712 3,8.5 C3,7.67157288 3.67157288,7 4.5,7 Z M13.5,15 L18.5,15 C19.3284271,15 20,15.6715729 20,16.5 C20,17.3284271 19.3284271,18 18.5,18 L13.5,18 C12.6715729,18 12,17.3284271 12,16.5 C12,15.6715729 12.6715729,15 13.5,15 Z" fill="#000000" opacity="0.3"></path>'+
-    '																	<path d="M17,11 C15.3431458,11 14,9.65685425 14,8 C14,6.34314575 15.3431458,5 17,5 C18.6568542,5 20,6.34314575 20,8 C20,9.65685425 18.6568542,11 17,11 Z M6,19 C4.34314575,19 3,17.6568542 3,16 C3,14.3431458 4.34314575,13 6,13 C7.65685425,13 9,14.3431458 9,16 C9,17.6568542 7.65685425,19 6,19 Z" fill="#000000"></path>'+
-    '																</g>'+
-    '															</svg>'+
-    '															<!--end::Svg Icon-->'+
-    '														</span>'+
-    '													</div>'+
-    '													<div class="d-flex flex-column">'+
-    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">Tutorials</a>'+
-    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>'+
-    '													</div>'+
-    '												</div>'+
-    '											</div>'+
-    '										</div>';
-    expression++;
-    break;
-    case 4:            
-    
-    myvar = default_message;       
-        expression=1;
-        break;
-    
+
+                myvar = '<div class="card card-custom wave wave-animate-slow mb-8 mb-lg-0">' +
+                    '											<div class="card-body">' +
+                    '												<div class="d-flex align-items-center p-5">' +
+                    '													<div class="mr-6">' +
+                    '														<span class="svg-icon svg-icon-warning svg-icon-4x">' +
+                    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Shopping/Chart-bar1.svg-->' +
+                    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+                    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+                    '																	<rect x="0" y="0" width="24" height="24"></rect>' +
+                    '																	<rect fill="#000000" opacity="0.3" x="12" y="4" width="3" height="13" rx="1.5"></rect>' +
+                    '																	<rect fill="#000000" opacity="0.3" x="7" y="9" width="3" height="8" rx="1.5"></rect>' +
+                    '																	<path d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z" fill="#000000" fill-rule="nonzero"></path>' +
+                    '																	<rect fill="#000000" opacity="0.3" x="17" y="11" width="3" height="6" rx="1.5"></rect>' +
+                    '																</g>' +
+                    '															</svg>' +
+                    '															<!--end::Svg Icon-->' +
+                    '														</span>' +
+                    '													</div>' +
+                    '													<div class="d-flex flex-column">' +
+                    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">Get Started</a>' +
+                    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>' +
+                    '													</div>' +
+                    '												</div>' +
+                    '											</div>' +
+                    '										</div>';
+
+                expression++;
+                break;
+
+            case 3:
+
+                var myvar = '<div class="card card-custom wave wave-animate-slower mb-8 mb-lg-0">' +
+                    '											<div class="card-body">' +
+                    '												<div class="d-flex align-items-center p-5">' +
+                    '													<div class="mr-6">' +
+                    '														<span class="svg-icon svg-icon-success svg-icon-4x">' +
+                    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Shopping/Settings.svg-->' +
+                    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+                    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+                    '																	<rect opacity="0.200000003" x="0" y="0" width="24" height="24"></rect>' +
+                    '																	<path d="M4.5,7 L9.5,7 C10.3284271,7 11,7.67157288 11,8.5 C11,9.32842712 10.3284271,10 9.5,10 L4.5,10 C3.67157288,10 3,9.32842712 3,8.5 C3,7.67157288 3.67157288,7 4.5,7 Z M13.5,15 L18.5,15 C19.3284271,15 20,15.6715729 20,16.5 C20,17.3284271 19.3284271,18 18.5,18 L13.5,18 C12.6715729,18 12,17.3284271 12,16.5 C12,15.6715729 12.6715729,15 13.5,15 Z" fill="#000000" opacity="0.3"></path>' +
+                    '																	<path d="M17,11 C15.3431458,11 14,9.65685425 14,8 C14,6.34314575 15.3431458,5 17,5 C18.6568542,5 20,6.34314575 20,8 C20,9.65685425 18.6568542,11 17,11 Z M6,19 C4.34314575,19 3,17.6568542 3,16 C3,14.3431458 4.34314575,13 6,13 C7.65685425,13 9,14.3431458 9,16 C9,17.6568542 7.65685425,19 6,19 Z" fill="#000000"></path>' +
+                    '																</g>' +
+                    '															</svg>' +
+                    '															<!--end::Svg Icon-->' +
+                    '														</span>' +
+                    '													</div>' +
+                    '													<div class="d-flex flex-column">' +
+                    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">Tutorials</a>' +
+                    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>' +
+                    '													</div>' +
+                    '												</div>' +
+                    '											</div>' +
+                    '										</div>';
+                expression++;
+                break;
+            case 4:
+
+                myvar = default_message;
+                expression = 1;
+                break;
+
             default:
-                expression =1;
-              // code block
-          }
-          
-          document.getElementById("tips_board").innerHTML = myvar;
-    }, 10* 1000); 
-      
+                expression = 1;
+            // code block
+        }
+
+        document.getElementById("tips_board").innerHTML = myvar;
+    }, 10 * 1000);
+
 }
 
 function user_circle_gen(user, value, total, user_profile) {
- 
-    var myvar = '<div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="' + user_profile[user]['user_name'] + '">'+
-    '<img alt="Pic" src="' + user_profile[user]['photo_url'] + '">'+
-'</div>';
+
+    var myvar = '<div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="' + user_profile[user]['user_name'] + '">' +
+        '<img alt="Pic" src="' + user_profile[user]['photo_url'] + '">' +
+        '</div>';
 
     return myvar
 }
 
+function data_for_pie(data) {
+    var data_set = [];
+    var cat_set = [];
 
-function update_tabler(timestamp,payment){
+    Object.keys(data).sort().map(function (key, index) {
+        data_set.push(data[key]);
+        cat_set.push(key);
+
+    });
+
+    return [data_set, cat_set]
+
+}
+
+function update_tabler(timestamp, payment) {
     Object.keys(tabler).sort().map(function (key, index) {
         var ts = new Date(tabler[key]['Timestamp']);
-        var ts2 = new Date(timestamp);   
-         if (ts-ts2 == 0) {      
-            tabler[key]['Payment']=payment;
-         }
+        var ts2 = new Date(timestamp);
+        if (ts - ts2 == 0) {
+            tabler[key]['Payment'] = payment;
+        }
     });
     process_row(tabler, "table_23", '', '', 3);
     start_app.refresh();
@@ -353,11 +374,11 @@ function update_tabler(timestamp,payment){
 
 var start_app = function () {
 
-   
+
     var read_data = function (from, to, first_time) {
         selected_start = from;
         selected_end = to;
-      
+
         var data = [];
         var data1 = [];
         var data2 = [];
@@ -368,6 +389,7 @@ var start_app = function () {
         var cat_3 = [];
 
         var user_profile = [];
+        var user_sum = 0;
         var counter = 0;
         var sum_expense = 0;
         var sum_income = 0;
@@ -458,6 +480,7 @@ var start_app = function () {
                                                     photo_url: REC_user_photo,
                                                 }
                                             }
+                                            user_sum++;
                                         }
 
 
@@ -523,7 +546,7 @@ var start_app = function () {
 
                             if (items_counter == items) {
 
-                            
+
                                 var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
                                 document.getElementById("sum_earnings_m").innerHTML = currency + numberWithCommas(sum_income);
                                 document.getElementById("sum_expenses_m").innerHTML = currency + numberWithCommas(sum_expense);
@@ -567,16 +590,15 @@ var start_app = function () {
                                 document.getElementById("RC_balance_per").innerHTML = rc_net_pec + " %";
                                 document.getElementById("RC_balance_bar").style.width = rc_net_pec + "%";
 
-                                
-                              
-                                if(document.getElementById("not_paid_text") !== null)
-                                {
+
+
+                                if (document.getElementById("not_paid_text") !== null) {
                                     document.getElementById("not_paid_text").innerHTML = 'Please note that the dashboard is generated based on all the paid transactions only.<br>There is a sum of <b class="text-danger"> Rs ' + numberWithCommas(not_paid_sum) + '</b> yet to tbe paid.'
-                             
+
                                 }
-                                 
-                               
-                               
+
+
+
                                 document.getElementById("net_percent").innerHTML = net_pec + " %";
                                 document.getElementById("net_percent_bar").style.width = net_pec + "%";
 
@@ -586,24 +608,38 @@ var start_app = function () {
 
                                 document.getElementById("end_date").innerText = shortdateclean(first_day);
                                 document.getElementById("start_date").innerText = shortdateclean(last_day);
-                            
+
+
                                 process_row(cat_b, "testtt", sum_expense, user_profile, 1);
                                 process_row(cat_2, "testtt2", sum_income, user_profile, 1);
+                                if(user_sum>1){
+                                    document.getElementById("user_list_md").innerText = user_sum + " Users";
+                                }else{
+                                    document.getElementById("user_list_md").innerText = user_sum + " User";
+                                }
+                              
+                                
                                 process_row(cat_3, "testtt3", sum_expense, user_profile, 2);
                                 process_row(cat_3, "image_list", sum_expense, user_profile, 4);
+                                // console.log(cat_2);
+
+                                var data66 = data_for_pie(cat_2);
+                                piechart_123(data66[0], data66[1]);
                                 tabler = $.extend(tabler, values);
-                                 tabler = remove_not_paid(tabler);
+                                tabler = remove_not_paid(tabler);
                                 process_row(tabler, "table_23", '', '', 3);
-                               
+
                                 if (first_time) {
                                     _initDaterangepicker(first_day, last_day);
-                                    _initChartsWidget3(data, data3, cat);
-                                    _initChartsWidget4(data1, data2, cat);
-                                    _initChartsWidget44();
-                                    if(not_paid_sum==0){
-                                        enable_tips()
-                                    }
-                                  }
+                                    _init_main_chart_2(data, data3, cat);
+                                    _init_main_chart(data, data2, cat);
+
+
+                              
+                                }
+                                if (not_paid_sum == 0 && tips_enabled==false) {
+                                    enable_tips();
+                                }
                             }
                             resolve("sucess");
                         });
@@ -623,15 +659,15 @@ var start_app = function () {
         }
         start = moment(start);
         end = moment(end);
-          
+
         var picker = $('#kt_dashboard_daterangepicker');
-       // var all_f = new Date('1/1/1900').getTime();
-       // var all_l = new Date('1/1/2100').getTime();
+        // var all_f = new Date('1/1/1900').getTime();
+        // var all_l = new Date('1/1/2100').getTime();
 
         function cb(start, end, label) {
             var title = '';
             var range = '';
-           
+
             if ((end - start) < 100 || label == 'Today') {
                 title = 'Today:';
                 range = start.format('MMM D');
@@ -646,14 +682,14 @@ var start_app = function () {
 
             $('#kt_dashboard_daterangepicker_date').html(range);
             $('#kt_dashboard_daterangepicker_title').html(title);
-          if(datetime_loaded==false){
-                     datetime_loaded = true;
-               
-          }else{
-            read_data(start, end, false);
-          }
-          
-          var today = new Date(); 
+            if (datetime_loaded == false) {
+                datetime_loaded = true;
+
+            } else {
+                read_data(start, end, false);
+            }
+
+            var today = new Date();
             var pro_per = Math.round(((start - today) / (start - end)) * 100);
             if (pro_per > 100) {
                 pro_per = 100;
@@ -745,20 +781,55 @@ var start_app = function () {
         chart = new ApexCharts(element, options);
         chart.render();
     }
-
-    var _initChartsWidget3 = function (data, data1, cat) {
-        if (element != "") {
-            element.destroy();
-        }
-        element = document.getElementById("kt_charts_widget_3_chart");
+    var piechart_123 = function (data_set, cat_set) {
+        var series = data_set;
         var options = {
-            series: [{
-                name: 'Net Income',
-                data: data
-            }, {
-                name: 'Recurring Income',
-                data: data1
+            series: series,
+            chart: {
+                type: 'pie',
+            },
+            labels: cat_set,
+            responsive: [{
+                breakpoint: 480,
+                options: {
+
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
             }],
+            colors: [info,danger,warning,success, primary],
+            tooltip: {
+                style: {
+                    fontSize: '12px',
+                    fontFamily: KTApp.getSettings()['font-family']
+                },
+                y: {
+                    formatter: function (val) {
+                        return "Rs " + numberWithCommas(val);
+                    }
+                }
+            },
+            
+  legend: {
+    show: true,  
+    position: 'bottom',
+    horizontalAlign: 'center', 
+}
+        };
+        generate_chart("kt_pie_chart_cat", options, series);
+    }
+
+    var _init_main_chart_2 = function (data, data1, cat) {
+        var series = [{
+            name: 'Net Income',
+            data: data
+        }, {
+            name: 'Recurring Income',
+            data: data1
+        }];
+        var options = {
+            series: series,
             chart: {
                 type: 'bar',
                 height: 350,
@@ -855,25 +926,18 @@ var start_app = function () {
                 }
             }
         };
-
-        var chart = new ApexCharts(element, options);
-        chart.render();
+        generate_chart("kt_main_chart_2", options, series)
     }
-    var _initChartsWidget4 = function (data1, data2, cat) {
-        var element = document.getElementById("kt_charts_widget_4_chart");
-
-        if (!element) {
-            return;
-        }
-
+    var _init_main_chart = function (data1, data2, cat) {
+        var series = [{
+            name: 'Net Income',
+            data: data1
+        }, {
+            name: 'Expense',
+            data: data2
+        }];
         var options = {
-            series: [{
-                name: 'Income',
-                data: data1
-            }, {
-                name: 'Expense',
-                data: data2
-            }],
+            series: series,
             chart: {
                 type: 'area',
                 height: 350,
@@ -985,79 +1049,62 @@ var start_app = function () {
                 strokeWidth: 3
             }
         };
+        generate_chart("kt_main_chart", options, series)
 
-        var chart = new ApexCharts(element, options);
-        chart.render();
-    }   
-    var _initChartsWidget44 = function () {
-        var element = document.getElementById("kt_charts_widget_3r_chart");
+    }
 
+   
+    var generate_chart = function (div_id, options, series) {
+        var element = document.getElementById(div_id);
         if (!element) {
             return;
         }
 
-       
-      
-        var options = {
-            series: [44, 55, 13, 43, 22],
-            chart: {
-            width: 380,
-            type: 'pie',
-          },
-          labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-          responsive: [{
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200
-              },
-              legend: {
-                position: 'bottom'
-              }
-            }
-          }]
-          };
-  
-  
-       
-
         var chart = new ApexCharts(element, options);
-        chart.render();
-    }   
+      
+        if (chat_elements.hasOwnProperty(div_id)) {          
+            chat_elements[div_id].destroy();
+            chart.render();
+        } else {
+           chat_elements[div_id] = chart;
+            chart.render();
+        }
+      
+    }
+
+
 
     return {
-        init: function () {        
-           selected_start= new Date('1/1/1900').getTime();
-           selected_end = new Date('1/1/2100').getTime();   
-            read_data(selected_start, selected_end, true);       
+        init: function () {
+            selected_start = new Date('1/1/1900').getTime();
+            selected_end = new Date('1/1/2100').getTime();
+            read_data(selected_start, selected_end, true);
         },
-        refresh: function () {                    
-             read_data(selected_start, selected_end, false);       
-         },
+        refresh: function () {
+            read_data(selected_start, selected_end, false);
+        },
+
     };
 }();
 
-function name_intials(str){
+function name_intials(str) {
     var acronym;
-    if(str.trim().indexOf(' ') != -1){  
+    if (str.trim().indexOf(' ') != -1) {
         var matches = str.match(/\b(\w)/g); // ['J','S','O','N']
-        acronym = matches.join('');        
-    }else{
-        acronym=  str.substring(0, 2)
+        acronym = matches.join('').substring(0, 2)
+    } else {
+        acronym = str.substring(0, 2)
     }
     return acronym;
 }
 
 
 jQuery(document).ready(function () {
-    name_intials('fg');
-
     var wallet_id = global_data[0];
     var wallet_name = global_data[1];
     document.getElementById("wallet_title").innerText = wallet_name;
     document.getElementById("wallet_init").innerText = name_intials(wallet_name);
-    
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     start_app.init();
-});
 
+});
