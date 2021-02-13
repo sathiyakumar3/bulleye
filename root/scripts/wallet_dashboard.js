@@ -378,6 +378,9 @@ var start_app = function() {
         var data1 = [];
         var data2 = [];
         var data3 = [];
+        var data4 = [];
+        var data5 = [];
+
         var cat = [];
         var cat_b = [];
         var cat_2 = [];
@@ -511,6 +514,7 @@ var start_app = function() {
                                                 re_sum_income2 = sum_income + Number(REC_amount);
                                             }
 
+
                                         }
 
                                         var datetime = REC_timestamp;
@@ -536,6 +540,9 @@ var start_app = function() {
                             data1.push(sum_income2);
                             data2.push(sum_expense2);
                             cat.push(rec_name);
+
+                           
+                            
 
                             if (items_counter == items) {
 
@@ -619,6 +626,7 @@ var start_app = function() {
                                 if (first_time) {
                                     _initDaterangepicker(first_day, last_day);
                                     _init_main_chart_2(data, data3, cat);
+                                    _init_main_chart_3(data, data3, cat);
                                     _init_main_chart(data1, data2, cat);
 
                                 }
@@ -803,7 +811,128 @@ var start_app = function() {
     }
 
     var _init_main_chart_2 = function(data, data1, cat) {
-
+     
+    
+            var e = {
+                series: [{
+                    name: "Net Profit",
+                    data: data
+                }],
+                chart: {
+                    type: "area",
+                    height: 350,
+                    toolbar: {
+                        show: !1
+                    }
+                },
+                plotOptions: {},
+                legend: {
+                    show: !1
+                },
+                dataLabels: {
+                    enabled: !1
+                },
+                fill: {
+                    type: "solid",
+                    opacity: 1
+                },
+                stroke: {
+                    curve: "smooth",
+                    show: !0,
+                    width: 3,
+                    colors: [KTApp.getSettings().colors.theme.base.info]
+                },
+                xaxis: {
+                    categories:cat,
+                    axisBorder: {
+                        show: !1
+                    },
+                    axisTicks: {
+                        show: !1
+                    },
+                    labels: {
+                        style: {
+                            colors: KTApp.getSettings().colors.gray["gray-500"],
+                            fontSize: "12px",
+                            fontFamily: KTApp.getSettings()["font-family"]
+                        }
+                    },
+                    crosshairs: {
+                        position: "front",
+                        stroke: {
+                            color: KTApp.getSettings().colors.theme.base.info,
+                            width: 1,
+                            dashArray: 3
+                        }
+                    },
+                    tooltip: {
+                        enabled: !0,
+                        formatter: void 0,
+                        offsetY: 0,
+                        style: {
+                            fontSize: "12px",
+                            fontFamily: KTApp.getSettings()["font-family"]
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        style: {
+                            colors: KTApp.getSettings().colors.gray["gray-500"],
+                            fontSize: "12px",
+                            fontFamily: KTApp.getSettings()["font-family"]
+                        }
+                    }
+                },
+                states: {
+                    normal: {
+                        filter: {
+                            type: "none",
+                            value: 0
+                        }
+                    },
+                    hover: {
+                        filter: {
+                            type: "none",
+                            value: 0
+                        }
+                    },
+                    active: {
+                        allowMultipleDataPointsSelection: !1,
+                        filter: {
+                            type: "none",
+                            value: 0
+                        }
+                    }
+                },
+                tooltip: {
+                    style: {
+                        fontSize: "12px",
+                        fontFamily: KTApp.getSettings()["font-family"]
+                    },
+                    y: {
+                        formatter: function(t) {
+                            return "Rs " + numberWithCommas(t);
+                        }
+                    }
+                },
+                colors: [KTApp.getSettings().colors.theme.light.success],
+                grid: {
+                    borderColor: KTApp.getSettings().colors.gray["gray-200"],
+                    strokeDashArray: 4,
+                    yaxis: {
+                        lines: {
+                            show: !0
+                        }
+                    }
+                },
+                markers: {
+                    strokeColor: KTApp.getSettings().colors.theme.base.success,
+                    strokeWidth: 3
+                }
+            };
+            
+    
         var options = {
             series: [{
                 name: 'Net Income',
@@ -910,6 +1039,71 @@ var start_app = function() {
         };
         generate_chart("kt_main_chart_2", options)
     }
+    var _init_main_chart_3 = function(data, data1, cat) {
+     console.log(data1);
+        const primary = '#6993FF';
+        const success = '#1BC5BD';
+        const info = '#8950FC';
+        const warning = '#FFA800';
+        const danger = '#F64E60';
+      
+        var options = {
+            series: [{
+            name: 'PRODUCT A',
+            data: [44, 55, 41, 67, 22, 43]
+          }, {
+            name: 'PRODUCT B',
+            data: [13, 23, 20, 8, 13, 27]
+          }],
+            chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true,
+            toolbar: {
+              show: true
+            },
+            zoom: {
+              enabled: true
+            }
+          },
+          colors: [success, primary],
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0
+              }
+            }
+          }],
+          plotOptions: {
+            bar: {
+              borderRadius: 8,
+              horizontal: false,
+            },
+          },
+          xaxis: {
+            type: 'datetime',
+            categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
+              '01/05/2011 GMT', '01/06/2011 GMT'
+            ],
+          },
+          legend: {
+            position: 'right',
+            offsetY: 40
+          },
+          fill: {
+            opacity: 1
+          }
+          };
+  
+     
+        
+
+   
+    generate_chart("kt_main_chart_3", options)
+}
     var _init_main_chart = function(data1, data2, cat) {
 
         var options = {
