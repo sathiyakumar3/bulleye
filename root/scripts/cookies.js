@@ -65,7 +65,7 @@ function setoptdata(docRef, id, data) {
                 resolve("success");
             })
             .catch(function(error) {
-                console.error("Error writing document: ", error);
+              
                 reject(error);
             });
     });
@@ -119,26 +119,25 @@ function get_user_icon(user_id) {
 }
 
 function updateoptdata(docRef, id, data) {
-
-    return getoptdata(docRef, id).then(function(arr) {
+    return new Promise(function(resolve, reject) {
+    getoptdata(docRef, id).then(function(arr) {
         var obj = Object.assign({}, arr, data);
         var str = JSON.stringify(obj);
         setCookie(id, str);
-        return new Promise(function(resolve, reject) {
-            // Add a new document in collection "cities"
+       
             docRef.doc(id).update(data)
                 .then(function() {
                     console.log("[U2] - " + docRef + " - " + id);
                     resolve("success");
                 })
                 .catch(function(error) {
-                    console.error("Error writing document: ", error);
+                   
                     reject(error);
                 });
-        });
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
       
+    }).catch(function(error) {
+      
+        reject(error);
     });
-
+});
 }

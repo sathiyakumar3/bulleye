@@ -607,7 +607,6 @@ var start_app = function() {
                                     document.getElementById("user_list_md").innerText = user_sum + " User";
                                 }
 
-
                                 process_row(cat_3, "testtt3", sum_expense, user_profile, 2);
                                 process_row(cat_3, "image_list", sum_expense, user_profile, 4);
 
@@ -620,13 +619,11 @@ var start_app = function() {
                                 if (first_time) {
                                     _initDaterangepicker(first_day, last_day);
                                     _init_main_chart_2(data, data3, cat);
-                                    _init_main_chart(data, data2, cat);
-
-
+                                    _init_main_chart(data1, data2, cat);
 
                                 }
                                 if (not_paid_sum == 0 && tips_enabled == false) {
-                                    enable_tips();
+                                   // enable_tips();
                                 }
                             }
                             resolve("sucess");
@@ -917,7 +914,7 @@ var start_app = function() {
 
         var options = {
             series: [{
-                name: 'Net Income',
+                name: 'Income',
                 data: data1
             }, {
                 name: 'Expense',
@@ -1053,7 +1050,62 @@ var start_app = function() {
             chart.render();
         }
     }
+    var edit_entry_From_validation = function() {
+        FormValidation.formValidation(
+            document.getElementById('edit_incex_form'), {
+                fields: {
+                    form_catergory_2: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Category is requried.'
+                            }
+                        }
+                    },
+                    form_description_2: {
+                        validators: {
+                            notEmpty: {
+                                message: 'A description is required.'
+                            },
+                        }
+                    },
 
+                    form_amount_2: {
+                        validators: {
+                            notEmpty: {
+                                message: 'An Amount is required.'
+                            },
+                        }
+                    }
+
+                },
+
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    // Validate fields when clicking the Submit button
+                    submitButton: new FormValidation.plugins.SubmitButton(),
+
+                    // Bootstrap Framework Integration
+                    bootstrap: new FormValidation.plugins.Bootstrap({
+                        eleInvalidClass: '',
+                        eleValidClass: '',
+                    })
+                }
+            }
+        ).on('core.form.valid', function() {
+            $('#edit_incex_form_modal').modal('toggle');
+            var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;
+            var description = document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value;
+            var amount = document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value;
+            var type = $('input[name="form_radios11_2"]:checked').val();
+            var payment = $('input[name="radios11_2"]:checked').val();
+            var user_id = document.getElementById("front_page_user_id").value;
+            var given_date = $("#kt_datetimepicker_10").find("input").val();
+            var timestamp = new Date(given_date);
+            
+            sendtoupdate(description, category, amount, timestamp, type, payment, user_id);
+           
+        });
+    }
 
 
     return {
@@ -1061,6 +1113,7 @@ var start_app = function() {
             selected_start = new Date('1/1/1900').getTime();
             selected_end = new Date('1/1/2100').getTime();
             read_data(selected_start, selected_end, true);
+            edit_entry_From_validation();
         },
         refresh: function() {
             read_data(selected_start, selected_end, false);
@@ -1084,6 +1137,10 @@ function name_intials(str) {
 jQuery(document).ready(function() {
     var wallet_id = global_data[0];
     var wallet_name = global_data[1];
+    
+    
+    document.getElementById("t_wallet_name").innerText = wallet_name;
+    document.getElementById("t_wallet_id").innerText = wallet_id;
     document.getElementById("wallet_title").innerText = wallet_name;
     document.getElementById("wallet_init").innerText = name_intials(wallet_name);
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');

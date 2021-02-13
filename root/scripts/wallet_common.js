@@ -2,30 +2,40 @@
 
 
 function update_entry(description, category, amount, timestamp2, type, payment, user) {
-    return new Promise(function(resolve, reject) {
-    var timestamp = new Date(timestamp2);
-    var value = {
-        [timestamp]: {
-            "user": user,
-            "Description": description,
-            "Category": category,
-            "Type": type,
-            "Payment": payment,
-            "Amount": amount,
-            "Repeated": 'once',
-        },
-        last_updated: timestamp
-    };
-    
-    var entry_id = monthts(timestamp);    
-  
-          updateoptdata(wallet_Ref, entry_id, value).then(function() {              
-        resolve('sucess');
-    }).catch((error) => {
-        console.log(error);
-       reject(error);
+    return new Promise(function (resolve, reject) {
+        var timestamp = new Date(timestamp2);
+        var value = {
+            [timestamp]: {
+                "user": user,
+                "Description": description,
+                "Category": category,
+                "Type": type,
+                "Payment": payment,
+                "Amount": amount,
+                "Repeated": 'once',
+            },
+            last_updated: timestamp
+        };
+        var entry_id = monthts(timestamp);
+        updateoptdata(wallet_Ref, entry_id, value).then(function () {
+            resolve('sucess');
+        }).catch((error) => {
+            if (error == 'Document doesn\'t exist.') {                       
+                    setoptdata(wallet_Ref, entry_id, value).then(function () {            
+                    resolve('sucess');
+                }).catch((error) => {             
+                    reject(error);
+                });           
+            }         
+        });
     });
-});
+}
+function sendtoupdate(description, category, amount, timestamp, type, payment, user_id){
+    update_entry(description, category, amount, timestamp, type, payment, user_id).then(function() {    
+        start_app.refresh();
+    }).catch((error) => {
+        console.log(error);               
+    });
 }
 
 function edit_entry_modal(description, category, amount, timestamp, type, payment) {
@@ -42,7 +52,7 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
             break;
         default:
     }
-    console.log(payment);
+
     switch (payment) {
         case 'Not Paid':
             document.getElementById("not_paid_radio").checked = true;
@@ -67,41 +77,12 @@ function add_entry_modal() {
     document.getElementById("paid_radio").checked = true;
     $('#kt_datetimepicker_10').datetimepicker('clear');
     $('#kt_datetimepicker_10').datetimepicker('destroy');
-    $('#kt_datetimepicker_10').datetimepicker({
-        defaultDate: new Date(),
-    });
+
+    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), enable: true });
 
 }
 
-function update_selected(update) {
-    var ids = datatable.checkbox().getSelectedId();
-    for (var i = 0; i < ids.length; i++) {
-        var data = datatable.dataSet[ids[i] - 1];
-        var description = data.Description;
-        var category = data.Category;
-        var amount = data.Amount;
-        var timestamp = data.Timestamp;
-        var type = data.Type;
-        var payment = data.Payment;
-        var user = data.user;
-        switch (update) {
-            case "Not Paid":
-                payment = "Not Paid";
-                break;
-            case "Paid":
-                payment = "Paid";
-                break;
-            case "Income":
-                type = "Income";
-                break;
-            case "Expense":
-                type = "Expense";
-                break;
-            default:
-        }
-        update_entry(description, category, amount, timestamp, type, payment, user);
-    }
-};
+
 
 function delete_selected() {
 
@@ -122,7 +103,7 @@ function delete_selected() {
                 var timestamp = data.Timestamp;
                 var entry_id = monthts(new Date(timestamp));
                 console.log(2);
-                deloptfeild(wallet_Ref, entry_id, timestamp).then(function() { console.log("done"); });
+                deloptfeild(wallet_Ref, entry_id, timestamp).then(function () { console.log("done"); });
 
 
 
@@ -304,7 +285,7 @@ function format_payment(pay) {
             return 'text-danger';
     }
 }
-function format_progress_bar(pecentage){
+function format_progress_bar(pecentage) {
     var state = 'bg-info';
     if (pecentage > 75) {
         state = 'bg-error';
@@ -315,6 +296,6 @@ function format_progress_bar(pecentage){
     } else {
         state = 'bg-info';
     }
-     return state
+    return state
 }
 

@@ -3,12 +3,13 @@
         <!--begin::Info-->
         <div class="d-flex align-items-center flex-wrap mr-2">
             <!--begin::Page Title-->
-            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Sathiya's Pocket</h5>
+            <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Wallet Table</h5>
             <!--end::Page Title-->
             <!--begin::Actions-->
             <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-            <span class="text-muted font-weight-bold mr-4">#XRS-45670</span>
-            <a href="#" class="btn btn-light-warning font-weight-bolder btn-sm" onclick="op()">Add New</a>
+            <span class="text-muted font-weight-bold mr-4" id="t_wallet_name">#XRS-45670</span>
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            <span class="text-muted font-weight-bold mr-4" id="t_wallet_id">#XRS-45670</span>
             <!--end::Actions-->
         </div>
         <!--end::Info-->
@@ -25,54 +26,8 @@
                 <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Jan 30</span>
             </a>
             <!--end::Daterange-->
-            <a class="btn btn-light-primary font-weight-bold ml-2" onclick="add_entry_modal()">Add Entry</a>
-            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                <!--begin::Navigation-->
-                <ul class="navi flex-column navi-hover py-2">
-                    <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose an option:</li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-print"></i>
-                        </span>
-                            <span class="navi-text">Print</span>
-                        </a>
-                    </li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-copy"></i>
-                        </span>
-                            <span class="navi-text">Copy</span>
-                        </a>
-                    </li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-file-excel-o"></i>
-                        </span>
-                            <span class="navi-text">Excel</span>
-                        </a>
-                    </li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-file-text-o"></i>
-                        </span>
-                            <span class="navi-text">CSV</span>
-                        </a>
-                    </li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-file-pdf-o"></i>
-                        </span>
-                            <span class="navi-text">PDF</span>
-                        </a>
-                    </li>
-                </ul>
-                <!--end::Navigation-->
-            </div>
+            <a class="btn btn-light-success font-weight-bold ml-2" onclick="add_entry_modal()">Add Entry</a>
+       
             <!--begin::Dropdowns-->
             <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions" data-placement="left">
                 <a href="#" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -173,26 +128,7 @@
         <div class="card card-custom gutter-b">
 
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
-                        <thead>
-                            <tr class="text-uppercase">
-                                <th style="min-width: 175px" class="pl-7">
-                                    <span class="text-dark-75">Category</span>
-                                </th>
-                                <th style="min-width: 100px">Date</th>
-                                <th style="min-width: 100px">Income</th>
-                                <th style="min-width: 100px">Expense</th>
-                                <th style="min-width: 75px">Actions</th>
-
-                            </tr>
-                        </thead>
-                        <tbody id="table_23">
-
-
-                        </tbody>
-                    </table>
-                </div>
+           
                 <!--begin: Datatable-->
                 <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_2"></div>
                 <!--end: Datatable-->
@@ -289,38 +225,12 @@
                         <span class="mr-4">
                                 <i class="flaticon-network icon-2x text-muted font-weight-bold"></i>
                             </span>
-                        <div class="symbol-group symbol-hover">
-                            <div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="Mark Stone">
-                                <img alt="Pic" src="assets/media/users/300_25.jpg">
-                            </div>
-                            <div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="Charlie Stone">
-                                <img alt="Pic" src="assets/media/users/300_19.jpg">
-                            </div>
-                            <div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="Luca Doncic">
-                                <img alt="Pic" src="assets/media/users/300_22.jpg">
-                            </div>
-                            <div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="Nick Mana">
-                                <img alt="Pic" src="assets/media/users/300_23.jpg">
-                            </div>
-                            <div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="Teresa Fox">
-                                <img alt="Pic" src="assets/media/users/300_18.jpg">
-                            </div>
-                            <div class="symbol symbol-30 symbol-circle symbol-light">
-                                <span class="symbol-label font-weight-bold">5+</span>
-                            </div>
+                        <div class="symbol-group symbol-hover" id="image_list_3">
                         </div>
                     </div>
                     <!--end: Item-->
                     <!--begin: Item-->
-                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                        <span class="mr-4">
-                                        <i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>
-                                    </span>
-                        <div class="d-flex flex-column flex-lg-fill">
-                            <span class="text-dark-75 font-weight-bolder font-size-sm">73 Tasks</span>
-                            <a href="#" class="text-primary font-weight-bolder">View</a>
-                        </div>
-                    </div>
+
                     <!--end: Item-->
                     <!--begin: Item-->
                     <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
@@ -328,11 +238,22 @@
                                         <i class="flaticon-chat-1 icon-2x text-muted font-weight-bold"></i>
                                     </span>
                         <div class="d-flex flex-column">
-                            <span class="text-dark-75 font-weight-bolder font-size-sm">648 Comments</span>
-                            <a href="#" class="text-primary font-weight-bolder">View</a>
+                            <span class="text-dark-75 font-weight-bolder font-size-sm" id=user_list_2>---</span>
+                            <a href="#" class="text-primary font-weight-bolder" data-toggle="modal" data-target="#detailed_users">View Users</a>
+
+
                         </div>
                     </div>
                     <!--end: Item-->
+                    <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
+                        <span class="mr-4">
+                                        <i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>
+                                    </span>
+                        <div class="d-flex flex-column flex-lg-fill">
+                            <span class="text-dark-75 font-weight-bolder font-size-sm" id="number_items_2">- Entries</span>
+                            <a href="#" class="text-primary font-weight-bolder">View Records</a>
+                        </div>
+                    </div>
                     <!--begin: Item-->
                     <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
                         <span class="mr-4">
@@ -362,16 +283,14 @@
                         <span class="mr-4">
                                 <i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
                             </span>
-                        <div class="d-flex flex-column text-dark-75">
+                        <div class="d-flex flex-column text-dark-75 text-danger">
                             <span class="font-weight-bolder font-size-sm">Net</span>
                             <span class="font-weight-bolder font-size-h5" id="sum_net">
                                 <span class="text-dark-50 font-weight-bold">Rs </span>-</span>
                         </div>
                     </div>
                     <!--end: Item-->
-
-
-                </div>
+                </div>           
             </div>
         </div>
 
@@ -400,133 +319,8 @@
         <!--end::Modal-->
 
 
-        <!-- Edit Form Modal-->
-        <div class="modal fade" id="edit_incex_form_modal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add/Edit - Income/Expense</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <i aria-hidden="true" class="ki ki-close"></i>
-                        </button>
-                    </div>
-
-                    <form class="form" id="edit_incex_form">
-                        <div class="modal-body">
-
-                            <div class="form-group row">
-                                <label class="col-form-label text-right col-lg-3 col-sm-12">Date & Time</label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <div class="input-group date" id="kt_datetimepicker_10" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" placeholder="Select date &amp; time" data-target="#kt_datetimepicker_10" />
-                                        <div class="input-group-append" data-target="#kt_datetimepicker_10" data-toggle="datetimepicker">
-                                            <span class="input-group-text">
-                                                <i class="ki ki-calendar"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-form-label text-right col-lg-3 col-sm-12">Category</label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <select class="form-control selectpicker" data-size="7" data-live-search="true" title="Choose a Category" name="form_catergory_2" id="edit_cat_selec">
-                                        <option value="Shopping">Shopping</option>
-                                        <option value="Entertainment">Entertainment</option>
-                                        <option value="Transportation">Transportation</option>
-                                        <option value="Productivity">Productivity</option>
-                                        <option value="Meals">Meals</option>
-                                        <option value="Lodging">Lodging</option>
-                                        <option value="Family">Family</option>
-                                        <option value="Friends">Friends</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-form-label text-right col-lg-3 col-sm-12">Description</label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <input type="text" class="form-control" maxlength="20" placeholder="" type="text" name="form_description_2" value="">
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-6">
-                                <label class="col-form-label text-right col-lg-3 col-sm-12">Amount</label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <div class="row align-items-center">
-                                        <div class="col-lg-4">
-                                            <input type="text" class="form-control" placeholder="Currency" name="form_amount_2" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-form-label text-right col-lg-3 col-sm-12">Type</label>
-                                <div class="col-9 col-form-label">
-                                    <div class="radio-inline">
-                                        <div class="col-lg-4">
-                                            <label class="radio radio-primary">
-                                                <input type="radio" name="form_radios11_2" checked value="Expense" id="expense_radio">
-                                                <span></span><h7>Expense</h7></label>
 
 
-                                        </div>
-
-                                        <div class="col-lg-4">
-                                            <label class="radio radio-primary">
-                                                <input type="radio" name="form_radios11_2"  value="Income" id="income_radio">
-                                                <span></span><h7>Income</h7></label>
-                                        </div>
-
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-
-
-                            <div class="form-group row">
-                                <label class="col-form-label text-right col-lg-3 col-sm-12">Payment</label>
-
-                                <div class="col-9 col-form-label">
-                                    <div class="radio-inline">
-                                        <div class="col-lg-4">
-                                            <label class="radio radio-primary">
-                                                <input type="radio" name="radios11_2" checked="checked" value="Paid" id="paid_radio">
-                                                <span></span><h7>Paid</h7></label>
-
-                                        </div>
-
-                                        <div class="col-lg-4">
-
-                                            <label class="radio radio-primary">
-                                                <input type="radio" name="radios11_2" value="Not Paid" id="not_paid_radio">
-                                                <span></span><h7>Not Paid</h7></label>
-
-                                        </div>
-
-
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary font-weight-bold mr-2"><i class="flaticon2-plus-1"></i>Edit</button>
-
-
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
 
     </div>
     <!--end::Container-->

@@ -1,26 +1,28 @@
 "use strict";
 // Class definition
-var tabler = [];
+
 var datatable = "";
-var selected_entry = "";
+
 var wallet_Ref = "";
 var selected_start;
 var selected_end;
 var datetime_loaded = false;
 
 
-
-
-
 var start_app = function() {
   
-    var read_data = function(from, to, first_time) {
+    var read_data2 = function(from, to, first_time) {
         selected_start = from;
         selected_end = to;    
         var first_day = "";
         var last_day = "";
         var promises = [];
-        tabler =[];
+        var tabler =[];
+        var user_sum =0;
+        var user_profile = [];
+        var counter = 0;
+        var sum_expense = 0;
+        var sum_income = 0;
         wallet_Ref.orderBy("last_updated").get()
             .then((querySnapshot) => {
                 var items_counter = 0;
@@ -29,10 +31,8 @@ var start_app = function() {
                     wallet_Ref.doc(doc.id).onSnapshot(function(doc) {
                         items_counter++;
                         var arr = doc.data();
-                        delete arr["last_updated"];
-                        var counter = 0;
-                        var sum_expense = 0;
-                        var sum_income = 0;
+                        delete arr["last_updated"];                       
+
                         Object.keys(arr).sort().map(function(key, index) {
                             var today = new Date(key).getTime();
                             if (today >= from && today <= to) {
@@ -90,6 +90,16 @@ var start_app = function() {
                                                 sum_income = sum_income + Number(values[2]['Amount']);
                                             }
                                         }
+                                        if (!user_profile.hasOwnProperty([user_id])) {
+                                            user_profile = {
+                                                [user_id]: {
+                                                    user_name: values[1]['user_email'] ,
+                                                    user_email: values[1]['user_email'] ,
+                                                    photo_url: values[0]['photo_url'] ,
+                                                }
+                                            }
+                                            user_sum++;
+                                        }
                                      resolve($.extend(values[0], values[1], values[2]));
 
                                     });
@@ -100,7 +110,8 @@ var start_app = function() {
                         });
 
                         Promise.all(promises).then((values) => {                          
-                            if (items_counter == items) {                                    
+                            if (items_counter == items) {                           
+                                document.getElementById("number_items_2").innerText = counter + " Entries";         
                                 var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
                                 document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
                                 document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
@@ -109,9 +120,16 @@ var start_app = function() {
                                 } else {
                                     document.getElementById("sum_net").classList.add("text-success");
                                 }
+                                if (user_sum > 1) {
+                                    document.getElementById("user_list_2").innerText = user_sum + " Users";
+                                } else {
+                                    document.getElementById("user_list_2").innerText = user_sum + " User";
+                                }
                                 document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
-                                tabler = $.extend(tabler, values);
-                                initialze_table();
+                                document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
+                                
+                                tabler = $.extend(tabler, values);                                
+                                initialze_table(process_row(tabler));
                                // process_row(tabler);
                                 if (first_time) {
                                     _initDaterangepicker(first_day, last_day);
@@ -129,7 +147,28 @@ var start_app = function() {
                 console.log("Error getting documents: ", error);
             });
     };
+    function process_row(obj) {
+        obj.sort(function(a, b) {
+            var c = new Date(a.Timestamp);
+            var d = new Date(b.Timestamp);
+            return c-d;
+        });           
+        return obj;    
+    }
 
+    function user_circle_gen(user_profile) {
+        var html_div = "";
+    
+        Object.keys(user_profile).sort().map(function(key, index) {
+            var myvar = '<div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="' + user_profile[key]['user_name'] + '">' +
+            '<img alt="Pic" src="' + user_profile[key]['photo_url'] + '">' +
+            '</div>';
+            html_div = html_div +myvar;
+        });
+      
+    
+        return html_div
+    }
     var _initDaterangepicker = function(start, end) {
         if ($('#kt_dashboard_daterangepicker').length == 0) {
             return;
@@ -162,7 +201,7 @@ var start_app = function() {
             if (datetime_loaded == false) {
                 datetime_loaded = true;
             } else {
-                read_data(start, end, false);
+                read_data2(start, end, false);
             }         
          
 
@@ -185,19 +224,12 @@ var start_app = function() {
                 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
                 'All time': [start, end]
             }
-        }, cb);
-        //  console.log(start);
-        //  console.log(end);
-        //  console.log(start2);
-        //   console.log(end2);
+        }, cb);     
         cb(start, end, '');
 
     }
 
-    var initialze_table = function() {
-
-
-
+    var initialze_table = function(tabler) {
         var options = {
             data: {
                 type: 'local',
@@ -259,6 +291,7 @@ var start_app = function() {
                     title: 'Category',
                     width: 200,
                     autoHide: false,
+                    sortable: true,
                     template: function(row) {
                         var myvar = '<div class="d-flex align-items-center">' +
                             '<div class="symbol symbol-40 symbol-success flex-shrink-0">' + get_cat_icon(row.Category) +
@@ -275,6 +308,7 @@ var start_app = function() {
                     textAlign: 'center',
                     autoHide: false,
                     width: 100,
+                    sortable: true,
                     template: function(row) {
                         var datetime = row.Timestamp;
                         var e = new Date(datetime);
@@ -287,6 +321,7 @@ var start_app = function() {
                     title: 'Repeated',
                     width: 100,
                     autoHide: true,
+                    sortable: true,
                     template: function(row) {
                         return format_repeat(row.Repeated);
                     },
@@ -298,6 +333,7 @@ var start_app = function() {
                     textAlign: 'center',
                     width: 100,
                     autoHide: false,
+                    sortable: true,
                     template: function(row) {
                         if (row.Type == "Income") {
                             var test = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(row.Amount) +
@@ -315,6 +351,7 @@ var start_app = function() {
                     width: 100,
                     textAlign: 'center',
                     autoHide: false,
+                    sortable: true,
                     template: function(row) {
                         if (row.Type == "Expense") {
                             var test = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(row.Amount) +
@@ -327,7 +364,7 @@ var start_app = function() {
                     },
                 }, {
                     field: 'Actions',
-                    title: 'Actions',
+                    title: 'Actions',              
                     sortable: false,
                     textAlign: 'center',
                     autoHide: true,
@@ -517,23 +554,45 @@ var start_app = function() {
         init: function() {
             selected_start = new Date('1/1/1900').getTime();
             selected_end = new Date('1/1/2100').getTime();
-            read_data(selected_start, selected_end, true);
+            read_data2(selected_start, selected_end, true);
             edit_entry_From_validation();
         },
         refresh: function() {
-            read_data(selected_start, selected_end, false);
+            read_data2(selected_start, selected_end, false);
         },
 
     };
 }();
+function update_selected(update) {
+    var ids = datatable.checkbox().getSelectedId();
+    for (var i = 0; i < ids.length; i++) {
+        var data = datatable.dataSet[ids[i] - 1];
+        var description = data.Description;
+        var category = data.Category;
+        var amount = data.Amount;
+        var timestamp = data.Timestamp;
+        var type = data.Type;
+        var payment = data.Payment;
+        var user = data.user;
+        switch (update) {
+            case "Not Paid":
+                payment = "Not Paid";
+                break;
+            case "Paid":
+                payment = "Paid";
+                break;
+            case "Income":
+                type = "Income";
+                break;
+            case "Expense":
+                type = "Expense";
+                break;
+            default:
+        }
+        sendtoupdate(description, category, amount, timestamp, type, payment, user);
+    }
+};
 
-function sendtoupdate(description, category, amount, timestamp, type, payment, user_id){
-    update_entry(description, category, amount, timestamp, type, payment, user_id).then(function() {            
-        start_app.refresh();
-    }).catch((error) => {
-        console.log(error);               
-    });
-}
 
 function entry_delete(key) {
     Swal.fire({
@@ -572,14 +631,17 @@ function entry_delete(key) {
 jQuery(document).ready(function() {
     var wallet_id = global_data[0];
     var wallet_name = global_data[1];
-    //document.getElementById("wallet_title").innerText = wallet_name;
-  //  document.getElementById("wallet_init").innerText = name_intials(wallet_name);
-   // wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+    document.getElementById("t_wallet_name").innerText = wallet_name;
+    document.getElementById("t_wallet_id").innerText = wallet_id;
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
    start_app.init();
 });
 
 function op(){
- 
-    start_app.refresh();
+    var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    var firstDay = new Date(y, m, 1);
+    var lastDay = new Date(y, m + 1, 0);
+    read_data2(firstDay, lastDay, false);
+  //  read_data2(start, end, false);
+    
 }

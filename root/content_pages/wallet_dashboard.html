@@ -7,8 +7,9 @@
             <!--end::Page Title-->
             <!--begin::Actions-->
             <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-            <span class="text-muted font-weight-bold mr-4">#XRS-45670</span>
-            <a href="#" class="btn btn-light-warning font-weight-bolder btn-sm">Add New</a>
+            <span class="text-muted font-weight-bold mr-4" id="t_wallet_name">#XRS-45670</span>
+            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+            <span class="text-muted font-weight-bold mr-4" id="t_wallet_id">#XRS-45670</span>
             <!--end::Actions-->
         </div>
         <!--end::Info-->
@@ -25,54 +26,8 @@
                 <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Jan 30</span>
             </a>
             <!--end::Daterange-->
-            <a data-toggle="modal" data-target="#add_incex_form_modal" class="btn btn-light-primary font-weight-bold ml-2">Add Entry</a>
-            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                <!--begin::Navigation-->
-                <ul class="navi flex-column navi-hover py-2">
-                    <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose an option:</li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-print"></i>
-                        </span>
-                            <span class="navi-text">Print</span>
-                        </a>
-                    </li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-copy"></i>
-                        </span>
-                            <span class="navi-text">Copy</span>
-                        </a>
-                    </li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-file-excel-o"></i>
-                        </span>
-                            <span class="navi-text">Excel</span>
-                        </a>
-                    </li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-file-text-o"></i>
-                        </span>
-                            <span class="navi-text">CSV</span>
-                        </a>
-                    </li>
-                    <li class="navi-item">
-                        <a href="#" class="navi-link">
-                            <span class="navi-icon">
-                            <i class="la la-file-pdf-o"></i>
-                        </span>
-                            <span class="navi-text">PDF</span>
-                        </a>
-                    </li>
-                </ul>
-                <!--end::Navigation-->
-            </div>
+            <a class="btn btn-light-success font-weight-bold ml-2" onclick="add_entry_modal()">Add Entry</a>
+  
             <!--begin::Dropdowns-->
             <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions" data-placement="left">
                 <a href="#" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

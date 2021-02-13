@@ -133,7 +133,8 @@ function generate_navi(data, p_wallet) {
         var wallet_name = data[i]['wallet_name'];
         var months_size = 0;
         var users_size = data[i]['users_size'];
-        var month_data = [wallet_id, wallet_name];        
+        var month_data = wallet_id+","+ wallet_name;
+       
         if(wallet_id!=p_wallet){
         var my_wallet = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
             '    <a href="javascript:;" class="menu-link menu-toggle">' +
@@ -244,6 +245,8 @@ function generate_navi(data, p_wallet) {
             '</li>';
         navi = my_wallet + navi;
         }else{
+                   
+            load_page('content_pages/wallet_dashboard.html', month_data);    
              starting = '<li class="menu-item menu-item-active" aria-haspopup="true">' +
             '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + month_data + '\')">' +
             '<span class="svg-icon menu-icon">' +
@@ -375,7 +378,9 @@ function generate_navi(data, p_wallet) {
         '</a>' +
         '</li>';
 
-    document.getElementById("list_navi").innerHTML = starting + navi + ending;
+    document.getElementById("list_navi").innerHTML = starting + navi + ending
+  
+    
 }
 
 function get_user(user) {

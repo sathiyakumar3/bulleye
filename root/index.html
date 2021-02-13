@@ -2834,6 +2834,132 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
     </div>
     <!--end::Chat Panel-->
+    <div class="modal fade" id="edit_incex_form_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add/Edit - Income/Expense</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <form class="form" id="edit_incex_form">
+                    <div class="modal-body">
+
+                        <div class="form-group row">
+                            <label class="col-form-label text-right col-lg-3 col-sm-12">Date & Time</label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <div class="input-group date" id="kt_datetimepicker_10" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" placeholder="Select date &amp; time" data-target="#kt_datetimepicker_10" />
+                                    <div class="input-group-append" data-target="#kt_datetimepicker_10" data-toggle="datetimepicker">
+                                        <span class="input-group-text">
+                                            <i class="ki ki-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-form-label text-right col-lg-3 col-sm-12">Category</label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <select class="form-control selectpicker" data-size="7" data-live-search="true" title="Choose a Category" name="form_catergory_2" id="edit_cat_selec">
+                                    <option value="Shopping">Shopping</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Transportation">Transportation</option>
+                                    <option value="Productivity">Productivity</option>
+                                    <option value="Meals">Meals</option>
+                                    <option value="Lodging">Lodging</option>
+                                    <option value="Family">Family</option>
+                                    <option value="Friends">Friends</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-form-label text-right col-lg-3 col-sm-12">Description</label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <input type="text" class="form-control" maxlength="20" placeholder="" type="text" name="form_description_2" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-6">
+                            <label class="col-form-label text-right col-lg-3 col-sm-12">Amount</label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control" placeholder="Currency" name="form_amount_2" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-form-label text-right col-lg-3 col-sm-12">Type</label>
+                            <div class="col-9 col-form-label">
+                                <div class="radio-inline">
+                                    <div class="col-lg-4">
+                                        <label class="radio radio-primary">
+                                            <input type="radio" name="form_radios11_2" checked value="Expense" id="expense_radio">
+                                            <span></span><h7>Expense</h7></label>
+
+
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label class="radio radio-primary">
+                                            <input type="radio" name="form_radios11_2"  value="Income" id="income_radio">
+                                            <span></span><h7>Income</h7></label>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group row">
+                            <label class="col-form-label text-right col-lg-3 col-sm-12">Payment</label>
+
+                            <div class="col-9 col-form-label">
+                                <div class="radio-inline">
+                                    <div class="col-lg-4">
+                                        <label class="radio radio-primary">
+                                            <input type="radio" name="radios11_2" checked="checked" value="Paid" id="paid_radio">
+                                            <span></span><h7>Paid</h7></label>
+
+                                    </div>
+
+                                    <div class="col-lg-4">
+
+                                        <label class="radio radio-primary">
+                                            <input type="radio" name="radios11_2" value="Not Paid" id="not_paid_radio">
+                                            <span></span><h7>Not Paid</h7></label>
+
+                                    </div>
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary font-weight-bold mr-2">Okay</button>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!--begin::Scrolltop-->
     <div id="kt_scrolltop" class="scrolltop">
         <span class="svg-icon">
