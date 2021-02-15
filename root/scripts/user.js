@@ -279,7 +279,7 @@ function generate_navi(data, p_wallet) {
             '<span class="menu-text">Work Sheet</span>' +
             '</a>' +
             '</li>' +'<li class="menu-item" aria-haspopup="true">' +
-            '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + 'Table' + '\')">' +
+            '<a class="menu-link" onclick="load_page(\'content_pages/wallet_trends.html\',\'' +month_data + '\')">' +
             '<span class="svg-icon menu-icon">' +
             '<!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->' +
             '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
