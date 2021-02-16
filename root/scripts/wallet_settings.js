@@ -26,3 +26,4 @@ jQuery(document).ready(function() {
     //  wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     // start_app.init();
 });
+console.log('ds');
