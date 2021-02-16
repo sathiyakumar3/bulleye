@@ -146,21 +146,21 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!--begin::Menu Nav-->
                         <ul class="menu-nav" id="list_navi">
 
-                          
+
 
                             <li class="menu-section">
-                                
+
                                 <h4 class="menu-text">Loading your wallets.</h4>
-                                
+
                                 <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
-                               
+
                             </li>
                             <li class="menu-section">
-                                
+
                                 <h4 class="menu-text">Please Wait...</h4> &nbsp &nbsp &nbsp
                                 <div class="spinner"></div>
                                 <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
-                                
+
                             </li>
 
                         </ul>
@@ -2833,38 +2833,60 @@ License: You must have a valid license purchased only from themeforest(the above
             </div>
         </div>
     </div>
+
     <!--end::Chat Panel-->
     <div class="modal fade" id="edit_incex_form_modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add/Edit - Income/Expense</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <i aria-hidden="true" class="ki ki-close"></i>
-                    </button>
+                    <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
+                        <div class="symbol symbol-lg-75">
+                            <span class="" id="form_header">
+                                <div class="symbol symbol-45 symbol-light-info mr-4 flex-shrink-0">
+                                <div class="symbol-label">
+                          <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\General\Star.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                           <polygon points="0 0 24 0 24 24 0 24"/>
+                      <path d="M12,18 L7.91561963,20.1472858 C7.42677504,20.4042866 6.82214789,20.2163401 6.56514708,19.7274955 C6.46280801,19.5328351 6.42749334,19.309867 6.46467018,19.0931094 L7.24471742,14.545085 L3.94038429,11.3241562 C3.54490071,10.938655 3.5368084,10.3055417 3.92230962,9.91005817 C4.07581822,9.75257453 4.27696063,9.65008735 4.49459766,9.61846284 L9.06107374,8.95491503 L11.1032639,4.81698575 C11.3476862,4.32173209 11.9473121,4.11839309 12.4425657,4.36281539 C12.6397783,4.46014562 12.7994058,4.61977315 12.8967361,4.81698575 L14.9389263,8.95491503 L19.5054023,9.61846284 C20.0519472,9.69788046 20.4306287,10.2053233 20.351211,10.7518682 C20.3195865,10.9695052 20.2170993,11.1706476 20.0596157,11.3241562 L16.7552826,14.545085 L17.5353298,19.0931094 C17.6286908,19.6374458 17.263103,20.1544017 16.7187666,20.2477627 C16.5020089,20.2849396 16.2790408,20.2496249 16.0843804,20.1472858 L12,18 Z" fill="#000000"/>
+                    </g>
+                  </svg><!--end::Svg Icon--></span>
+                        </div>
+                    </div>'
+                    </span>
                 </div>
 
-                <form class="form" id="edit_incex_form">
-                    <div class="modal-body">
+            </div>
+            <div class="mr-2">
+                <h3 class="font-weight-bolder" id="title_33">Add to Wallet</h3>
+                <div class="text-muted font-size-lg mt-2">The first step towards financial insights.</div>
+            </div>
 
-                        <div class="form-group row">
-                            <label class="col-form-label text-right col-lg-3 col-sm-12">Date & Time</label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <div class="input-group date" id="kt_datetimepicker_10" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" placeholder="Select date &amp; time" data-target="#kt_datetimepicker_10" />
-                                    <div class="input-group-append" data-target="#kt_datetimepicker_10" data-toggle="datetimepicker">
-                                        <span class="input-group-text">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+        </div>
+
+        <form class="form" id="edit_incex_form">
+            <div class="modal-body">
+
+                <div class="form-group row">
+                    <label class="col-form-label text-right col-lg-3 col-sm-12">Date & Time</label>
+                    <div class="col-lg-9 col-md-9 col-sm-12">
+                        <div class="input-group date" id="kt_datetimepicker_10" data-target-input="nearest">
+                            <input type="text" class="form-control form-control-solid datetimepicker-input" placeholder="Select date &amp; time" data-target="#kt_datetimepicker_10" />
+                            <div class="input-group-append" data-target="#kt_datetimepicker_10" data-toggle="datetimepicker">
+                                <span class="input-group-text">
                                             <i class="ki ki-calendar"></i>
                                         </span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="form-group row">
-                            <label class="col-form-label text-right col-lg-3 col-sm-12">Category</label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <select class="form-control selectpicker" data-size="7" data-live-search="true" title="Choose a Category" name="form_catergory_2" id="edit_cat_selec">
+                <div class="form-group row">
+                    <label class="col-form-label text-right col-lg-3 col-sm-12">Category</label>
+                    <div class="col-lg-9 col-md-9 col-sm-12">
+                        <select class="form-control form-control-solid selectpicker" data-size="7" data-live-search="true" title="Choose a Category" name="form_catergory_2" onchange="myselected3()" id="edit_cat_selec">
                                     <option value="Shopping">Shopping</option>
                                     <option value="Entertainment">Entertainment</option>
                                     <option value="Transportation">Transportation</option>
@@ -2874,91 +2896,123 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <option value="Family">Family</option>
                                     <option value="Friends">Friends</option>
                                 </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="col-form-label text-right col-lg-3 col-sm-12">Description</label>
+                    <div class="col-lg-9 col-md-9 col-sm-12">
+                        <input type="text" class="form-control form-control-solid" maxlength="20" placeholder="Description" type="text" name="form_description_2" value="">
+                    </div>
+                </div>
+
+                <div class="form-group row mb-6">
+                    <label class="col-form-label text-right col-lg-3 col-sm-12">Amount</label>
+                    <div class="col-lg-9 col-md-9 col-sm-12">
+                        <div class="input-group input-group-solid">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Rs</span>
+                            </div>
+                            <input type="number" value="1" id="example-number-input4" class="form-control" placeholder="Amount" name="form_amount_2">
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group row">
+                    <label for="example-number-input" class="col-form-label text-right col-lg-3 col-sm-12">Repeat</label>
+                    <div class="col-4">
+
+                        <select class="form-control form-control-solid" data-size="7" data-live-search="true" title="Choose a Category" name="form_catergory_2" id="repeat_selection" onchange="myselected()">
+                                    <option value="Once" selected >Once</option>
+                                    <option value="Daily">Daily</option>
+                                    <option value="Monthly">Monthly</option>
+                                    <option value="Weekly">Weekly</option>                                  
+                                </select>
+
+
+                    </div>
+                    <div class="col-5">
+                        <div class="input-group input-group-solid">
+                            <input type="number" value="1" id="example-number-input2" class="form-control" placeholder="Username" aria-describedby="basic-addon2" disabled=true>
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="selected_repeated">Time</span>
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-form-label text-right col-lg-3 col-sm-12">Description</label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <input type="text" class="form-control" maxlength="20" placeholder="" type="text" name="form_description_2" value="">
-                            </div>
-                        </div>
+                    </div>
+                </div>
 
-                        <div class="form-group row mb-6">
-                            <label class="col-form-label text-right col-lg-3 col-sm-12">Amount</label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <div class="row align-items-center">
-                                    <div class="col-lg-4">
-                                        <input type="text" class="form-control" placeholder="Currency" name="form_amount_2" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="form-group row">
-                            <label class="col-form-label text-right col-lg-3 col-sm-12">Type</label>
-                            <div class="col-9 col-form-label">
-                                <div class="radio-inline">
-                                    <div class="col-lg-4">
-                                        <label class="radio radio-primary">
+                <div class="form-group row">
+                    <label class="col-form-label text-right col-lg-3 col-sm-12">Type</label>
+                    <div class="col-9 col-form-label">
+                        <div class="radio-inline">
+                            <div class="col-lg-4">
+                                <label class="radio radio-lg radio-primary">
                                             <input type="radio" name="form_radios11_2" checked value="Expense" id="expense_radio">
                                             <span></span><h7>Expense</h7></label>
 
 
-                                    </div>
+                            </div>
 
-                                    <div class="col-lg-4">
-                                        <label class="radio radio-primary">
+                            <div class="col-lg-4">
+                                <label class="radio radio-lg radio-primary">
                                             <input type="radio" name="form_radios11_2"  value="Income" id="income_radio">
                                             <span></span><h7>Income</h7></label>
-                                    </div>
-
-
-                                </div>
-
                             </div>
+
+
                         </div>
 
+                    </div>
+                </div>
 
 
 
-                        <div class="form-group row">
-                            <label class="col-form-label text-right col-lg-3 col-sm-12">Payment</label>
 
-                            <div class="col-9 col-form-label">
-                                <div class="radio-inline">
-                                    <div class="col-lg-4">
-                                        <label class="radio radio-primary">
+                <div class="form-group row">
+                    <label class="col-form-label text-right col-lg-3 col-sm-12">Payment</label>
+
+                    <div class="col-9 col-form-label">
+                        <div class="radio-inline">
+                            <div class="col-lg-4">
+                                <label class="radio radio-lg radio-primary">
                                             <input type="radio" name="radios11_2" checked="checked" value="Paid" id="paid_radio">
                                             <span></span><h7>Paid</h7></label>
 
-                                    </div>
+                            </div>
 
-                                    <div class="col-lg-4">
+                            <div class="col-lg-5">
 
-                                        <label class="radio radio-primary">
+                                <label class="radio radio-lg radio-primary">
                                             <input type="radio" name="radios11_2" value="Not Paid" id="not_paid_radio">
                                             <span></span><h7>Not Paid</h7></label>
-
-                                    </div>
-
-
-
-                                </div>
+                                <span class="form-text text-danger" id="recommended" style="display:none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Recommended</span>
 
                             </div>
+
+
+
                         </div>
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary font-weight-bold mr-2">Okay</button>
+                </div>
 
-
-                    </div>
-                </form>
             </div>
-        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary font-weight-bold mr-2">Okay</button>
+
+
+            </div>
+        </form>
+    </div>
+    </div>
     </div>
     <!--begin::Scrolltop-->
     <div id="kt_scrolltop" class="scrolltop">
@@ -3042,6 +3096,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <script src="scripts/cookies.js"></script>
     <script src="scripts/general.js"></script>
     <script src="scripts/user.js"></script>
+    <script src="scripts/wallet_common.js"></script>
     <script src="scripts/content.js"></script>
     <script src="assets/plugins/global/plugins.bundle.js"></script>
     <script src="assets/js/scripts.bundle.js"></script>
@@ -3049,12 +3104,12 @@ License: You must have a valid license purchased only from themeforest(the above
     <script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
 
     <script>
-       // load_page('content_pages/wallet_dashboard.html', 'CClzfdfHEX6hbJaVXF5x,Sampath Bank');
+        // load_page('content_pages/wallet_dashboard.html', 'CClzfdfHEX6hbJaVXF5x,Sampath Bank');
     </script>
     <!--end::Global Theme Bundle-->
-    <!--begin::Page Vendors(used by this page)-->
+    <!--begin::Page Vendosed by this page-->
     <!-- <script src="assets\js\pages\crud\file-upload\image-input.js"></script> -->
-    <!--end::Page Scripts-->
+    <!--end::Page Scris-->
 </body>
 <!--end::Body-->
 

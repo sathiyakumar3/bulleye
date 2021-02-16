@@ -10,15 +10,15 @@ var datetime_loaded = false;
 
 
 var start_app = function() {
-  
+
     var read_data2 = function(from, to, first_time) {
         selected_start = from;
-        selected_end = to;    
+        selected_end = to;
         var first_day = "";
         var last_day = "";
         var promises = [];
-        var tabler =[];
-        var user_sum =0;
+        var tabler = [];
+        var user_sum = 0;
         var user_profile = [];
         var counter = 0;
         var sum_expense = 0;
@@ -27,11 +27,11 @@ var start_app = function() {
             .then((querySnapshot) => {
                 var items_counter = 0;
                 querySnapshot.forEach((doc) => {
-                    var items = querySnapshot.size;         
+                    var items = querySnapshot.size;
                     wallet_Ref.doc(doc.id).onSnapshot(function(doc) {
                         items_counter++;
                         var arr = doc.data();
-                        delete arr["last_updated"];                       
+                        delete arr["last_updated"];
 
                         Object.keys(arr).sort().map(function(key, index) {
                             var today = new Date(key).getTime();
@@ -93,14 +93,14 @@ var start_app = function() {
                                         if (!user_profile.hasOwnProperty([user_id])) {
                                             user_profile = {
                                                 [user_id]: {
-                                                    user_name: values[1]['user_email'] ,
-                                                    user_email: values[1]['user_email'] ,
-                                                    photo_url: values[0]['photo_url'] ,
+                                                    user_name: values[1]['user_email'],
+                                                    user_email: values[1]['user_email'],
+                                                    photo_url: values[0]['photo_url'],
                                                 }
                                             }
                                             user_sum++;
                                         }
-                                     resolve($.extend(values[0], values[1], values[2]));
+                                        resolve($.extend(values[0], values[1], values[2]));
 
                                     });
 
@@ -109,9 +109,9 @@ var start_app = function() {
                             }
                         });
 
-                        Promise.all(promises).then((values) => {                          
-                            if (items_counter == items) {                           
-                                document.getElementById("number_items_2").innerText = counter + " Entries";         
+                        Promise.all(promises).then((values) => {
+                            if (items_counter == items) {
+                                document.getElementById("number_items_2").innerText = counter + " Entries";
                                 var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
                                 document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
                                 document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
@@ -127,14 +127,14 @@ var start_app = function() {
                                 }
                                 document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
                                 document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
-                                
-                                tabler = $.extend(tabler, values);                                
+
+                                tabler = $.extend(tabler, values);
                                 initialze_table(process_row(tabler));
-                               // process_row(tabler);
+                                // process_row(tabler);
                                 if (first_time) {
                                     _initDaterangepicker(first_day, last_day);
                                 }
-                                }                              
+                            }
                             resolve("sucess");
                         });
 
@@ -147,26 +147,27 @@ var start_app = function() {
                 console.log("Error getting documents: ", error);
             });
     };
+
     function process_row(obj) {
         obj.sort(function(a, b) {
             var c = new Date(a.Timestamp);
             var d = new Date(b.Timestamp);
-            return c-d;
-        });           
-        return obj;    
+            return c - d;
+        });
+        return obj;
     }
 
     function user_circle_gen(user_profile) {
         var html_div = "";
-    
+
         Object.keys(user_profile).sort().map(function(key, index) {
             var myvar = '<div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="' + user_profile[key]['user_name'] + '">' +
-            '<img alt="Pic" src="' + user_profile[key]['photo_url'] + '">' +
-            '</div>';
-            html_div = html_div +myvar;
+                '<img alt="Pic" src="' + user_profile[key]['photo_url'] + '">' +
+                '</div>';
+            html_div = html_div + myvar;
         });
-      
-    
+
+
         return html_div
     }
     var _initDaterangepicker = function(start, end) {
@@ -202,8 +203,8 @@ var start_app = function() {
                 datetime_loaded = true;
             } else {
                 read_data2(start, end, false);
-            }         
-         
+            }
+
 
         }
 
@@ -224,7 +225,7 @@ var start_app = function() {
                 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
                 'All time': [start, end]
             }
-        }, cb);     
+        }, cb);
         cb(start, end, '');
 
     }
@@ -248,9 +249,41 @@ var start_app = function() {
             },
             // column sorting
             sortable: true,
-            responsive: true,
-            pagination: false,
+            drawCallback: function(settings) {
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
 
+                api.column(4, { page: 'current' }).data().each(function(group, i) {
+                    console.log(last);
+                    console.log(1)
+                    if (last !== group) {
+                        $(rows).eq(i).before(
+                            '<tr class="group"><td colspan="10">' + group + '</td></tr>',
+                        );
+                        last = group;
+                    }
+                });
+            },
+            pagination: false,
+            rows: {
+                afterTemplate: function(row, data, index) {
+                    /* 
+                                        if (7 == data['RecordID']) {
+                                            $('td:eq(4)', row).html('<tr class="group"><td colspan="10">' + 'Monday!' + '</td></tr>');
+                                            console.log(row + " : " + index);
+                                            $(row).eq(index).before(
+                                                '<tr class="group"><td colspan="10">' + 'fdg' + '</td></tr>',
+                                            );
+                                        } */
+
+
+
+
+
+
+                }
+            },
             // columns definition
             columns: [{
                     field: 'RecordID',
@@ -266,7 +299,7 @@ var start_app = function() {
                     title: 'User',
                     width: 175,
                     sortable: true,
-                    autoHide: true,
+
                     template: function(data) {
 
                         var icon = "";
@@ -290,7 +323,7 @@ var start_app = function() {
                     field: 'Category',
                     title: 'Category',
                     width: 200,
-                    autoHide: false,
+
                     sortable: true,
                     template: function(row) {
                         var myvar = '<div class="d-flex align-items-center">' +
@@ -320,7 +353,7 @@ var start_app = function() {
                     field: 'Repeated',
                     title: 'Repeated',
                     width: 100,
-                    autoHide: true,
+
                     sortable: true,
                     template: function(row) {
                         return format_repeat(row.Repeated);
@@ -364,17 +397,17 @@ var start_app = function() {
                     },
                 }, {
                     field: 'Actions',
-                    title: 'Actions',              
+                    title: 'Actions',
                     sortable: false,
                     textAlign: 'center',
-                    autoHide: true,
+                    autoHide: false,
                     template: function(row) {
                         var myvar = ''; // code block
                         var pay = "";
                         switch (row.Payment) {
                             case 'Paid':
                                 pay = 'Not Paid';
-                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\')">' +
+                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\', \'' + row.Repeated + '\')">' +
                                     '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Error-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
                                     '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
                                     '        <rect x="0" y="0" width="24" height="24"/>' +
@@ -385,7 +418,7 @@ var start_app = function() {
                                 break;
                             case 'Not Paid':
                                 pay = 'Paid';
-                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\')">' +
+                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\', \'' + row.Repeated + '\')">' +
                                     '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Done-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
                                     '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
                                     '        <rect x="0" y="0" width="24" height="24"/>' +
@@ -494,68 +527,13 @@ var start_app = function() {
 
     }
 
-    var edit_entry_From_validation = function() {
-        FormValidation.formValidation(
-            document.getElementById('edit_incex_form'), {
-                fields: {
-                    form_catergory_2: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Category is requried.'
-                            }
-                        }
-                    },
-                    form_description_2: {
-                        validators: {
-                            notEmpty: {
-                                message: 'A description is required.'
-                            },
-                        }
-                    },
 
-                    form_amount_2: {
-                        validators: {
-                            notEmpty: {
-                                message: 'An Amount is required.'
-                            },
-                        }
-                    }
-
-                },
-
-                plugins: {
-                    trigger: new FormValidation.plugins.Trigger(),
-                    // Validate fields when clicking the Submit button
-                    submitButton: new FormValidation.plugins.SubmitButton(),
-
-                    // Bootstrap Framework Integration
-                    bootstrap: new FormValidation.plugins.Bootstrap({
-                        eleInvalidClass: '',
-                        eleValidClass: '',
-                    })
-                }
-            }
-        ).on('core.form.valid', function() {
-            $('#edit_incex_form_modal').modal('toggle');
-            var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;
-            var description = document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value;
-            var amount = document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value;
-            var type = $('input[name="form_radios11_2"]:checked').val();
-            var payment = $('input[name="radios11_2"]:checked').val();
-            var user_id = document.getElementById("front_page_user_id").value;
-            var given_date = $("#kt_datetimepicker_10").find("input").val();
-            var timestamp = new Date(given_date);
-            
-            sendtoupdate(description, category, amount, timestamp, type, payment, user_id);
-           
-        });
-    }
     return {
         init: function() {
             selected_start = new Date('1/1/1900').getTime();
             selected_end = new Date('1/1/2100').getTime();
             read_data2(selected_start, selected_end, true);
-            edit_entry_From_validation();
+
         },
         refresh: function() {
             read_data2(selected_start, selected_end, false);
@@ -563,6 +541,7 @@ var start_app = function() {
 
     };
 }();
+
 function update_selected(update) {
     var ids = datatable.checkbox().getSelectedId();
     for (var i = 0; i < ids.length; i++) {
@@ -572,6 +551,7 @@ function update_selected(update) {
         var amount = data.Amount;
         var timestamp = data.Timestamp;
         var type = data.Type;
+        var repeat = data.Repeated;
         var payment = data.Payment;
         var user = data.user;
         switch (update) {
@@ -589,8 +569,17 @@ function update_selected(update) {
                 break;
             default:
         }
-        sendtoupdate(description, category, amount, timestamp, type, payment, user);
+        update_entry(description, category, amount, timestamp, type, payment, user, repeat).then(function() {
+
+        }).catch((error) => {
+            console.log(error);
+        });
+        if (i == (ids.length - 1)) {
+            start_app.refresh();
+        }
+
     }
+
 };
 
 
@@ -607,7 +596,7 @@ function entry_delete(key) {
         if (result.isConfirmed) {
 
             var entry_id = monthts(new Date(key));
-        
+
             deloptfeild(wallet_Ref, entry_id, key).then(function() {
                     Swal.fire(
                         'Deleted!',
@@ -615,13 +604,10 @@ function entry_delete(key) {
                         'success'
                     )
                     start_app.refresh();
-                   
                 })
                 .catch(function(error) {
                     console.error("Error writing document: ", error);
-                   
                 });
-            
         }
     })
 
@@ -634,14 +620,43 @@ jQuery(document).ready(function() {
     document.getElementById("t_wallet_name").innerText = wallet_name;
     document.getElementById("t_wallet_id").innerText = wallet_id;
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
-   start_app.init();
+    start_app.init();
 });
 
-function op(){
-    var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+function op() {
+    var date = new Date(),
+        y = date.getFullYear(),
+        m = date.getMonth();
     var firstDay = new Date(y, m, 1);
     var lastDay = new Date(y, m + 1, 0);
     read_data2(firstDay, lastDay, false);
-  //  read_data2(start, end, false);
-    
+    //  read_data2(start, end, false);
+
 }
+
+function delete_selected() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to delete the selected.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Delete!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log(1);
+            var ids = datatable.checkbox().getSelectedId();
+            for (var i = 0; i < ids.length; i++) {
+                var data = datatable.dataSet[ids[i] - 1];
+                var timestamp = data.Timestamp;
+                var entry_id = monthts(new Date(timestamp));
+                deloptfeild(wallet_Ref, entry_id, timestamp).then(function() {});
+                if (i == (ids.length - 1)) {
+                    start_app.refresh();
+                }
+            }
+        }
+    })
+
+};

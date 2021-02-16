@@ -1,8 +1,44 @@
+function myselected() {
+    var selected_repeated = document.getElementById('repeat_selection').value;
+    var text = "";
+    switch (selected_repeated) {
+        case 'Monthly':
+            document.getElementById('recommended').style.display = "block";
+            document.getElementById('example-number-input2').disabled = false;
+            text = 'Months';
+            break;
+        case 'Weekly':
+            document.getElementById('recommended').style.display = "block";
+            document.getElementById('example-number-input2').disabled = false;
+            text = 'Weeks';
+            break;
+        case 'Daily':
 
+            document.getElementById('recommended').style.display = "block";
+            document.getElementById('example-number-input2').disabled = false;
+            text = 'Days';
+            break;
+        case 'Once':
+            document.getElementById('recommended').style.display = "none";
+            document.getElementById('example-number-input2').disabled = true;
+            document.getElementById('example-number-input2').value = 1;
+            text = 'Time';
+            break;
+        default:
+            document.getElementById('recommended').style.display = "block";
+            document.getElementById('example-number-input2').disabled = false;
+            text = 'Time';
+    }
+    document.getElementById('selected_repeated').innerText = text;
+}
 
+function myselected3() {
+    var category = document.getElementById('edit_cat_selec').value;
+    document.getElementById('form_header').innerHTML = get_cat_icon(category);
+}
 
-function update_entry(description, category, amount, timestamp2, type, payment, user) {
-    return new Promise(function (resolve, reject) {
+function update_entry(description, category, amount, timestamp2, type, payment, user, repeat) {
+    return new Promise(function(resolve, reject) {
         var timestamp = new Date(timestamp2);
         var value = {
             [timestamp]: {
@@ -12,31 +48,33 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
                 "Type": type,
                 "Payment": payment,
                 "Amount": amount,
-                "Repeated": 'once',
+                "Repeated": repeat,
             },
             last_updated: timestamp
         };
         var entry_id = monthts(timestamp);
-        updateoptdata(wallet_Ref, entry_id, value).then(function () {
+        updateoptdata(wallet_Ref, entry_id, value).then(function() {
             resolve('sucess');
         }).catch((error) => {
-            if (error == 'Document doesn\'t exist.') {                       
-                    setoptdata(wallet_Ref, entry_id, value).then(function () {            
+            if (error == 'Document doesn\'t exist.') {
+                setoptdata(wallet_Ref, entry_id, value).then(function() {
                     resolve('sucess');
-                }).catch((error) => {             
+                }).catch((error) => {
                     reject(error);
-                });           
-            }         
+                });
+            }
         });
     });
 }
-function sendtoupdate(description, category, amount, timestamp, type, payment, user_id){
-    update_entry(description, category, amount, timestamp, type, payment, user_id).then(function() {    
+
+function sendtoupdate(description, category, amount, timestamp, type, payment, user_id, repeat) {
+    update_entry(description, category, amount, timestamp, type, payment, user_id, repeat).then(function() {
         start_app.refresh();
     }).catch((error) => {
-        console.log(error);               
+        console.log(error);
     });
 }
+
 
 function edit_entry_modal(description, category, amount, timestamp, type, payment) {
     $('#edit_incex_form_modal').modal('toggle');
@@ -66,6 +104,8 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
     $('#kt_datetimepicker_10').datetimepicker('destroy');
     $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(timestamp), disable: true });
 
+
+    document.getElementById('title_33').innerText = "Edit Entry"
 }
 
 function add_entry_modal() {
@@ -79,45 +119,19 @@ function add_entry_modal() {
     $('#kt_datetimepicker_10').datetimepicker('destroy');
 
     $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), enable: true });
-
+    document.getElementById('title_33').innerText = "Add to Wallet"
 }
 
-
-
-function delete_selected() {
-
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You are about to delete the selected.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Delete!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            console.log(1);
-            var ids = datatable.checkbox().getSelectedId();
-            for (var i = 0; i < ids.length; i++) {
-                var data = datatable.dataSet[ids[i] - 1];
-                var timestamp = data.Timestamp;
-                var entry_id = monthts(new Date(timestamp));
-                console.log(2);
-                deloptfeild(wallet_Ref, entry_id, timestamp).then(function () { console.log("done"); });
-
-
-
-
-
-
-            }
-
-        }
-    })
-
-};
-
-
+function name_intials(str) {
+    var acronym;
+    if (str.trim().indexOf(' ') != -1) {
+        var matches = str.match(/\b(\w)/g); // ['J','S','O','N']
+        acronym = matches.join('').substring(0, 2)
+    } else {
+        acronym = str.substring(0, 2)
+    }
+    return acronym;
+}
 
 function get_cat_icon(opt) {
     var myvar = "";
@@ -167,7 +181,7 @@ function get_cat_icon(opt) {
             break;
         case "Lodging":
 
-            myvar = '<div class="symbol symbol-45 symbol-light-info mr-4 flex-shrink-0">' +
+            myvar = '<div class="symbol symbol-60 symbol-light-info mr-4 flex-shrink-0">' +
                 '                                            <div class="symbol-label">' +
                 '                                                <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Home\Home.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
                 '                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
@@ -285,6 +299,7 @@ function format_payment(pay) {
             return 'text-danger';
     }
 }
+
 function format_progress_bar(pecentage) {
     var state = 'bg-info';
     if (pecentage > 75) {
@@ -298,4 +313,3 @@ function format_progress_bar(pecentage) {
     }
     return state
 }
-
