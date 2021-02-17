@@ -245,7 +245,7 @@ function generate_navi(data, p_wallet) {
                 '</li>';
             navi = my_wallet + navi;
         } else {
-            load_page('content_pages/wallet.html', month_data);
+            load_page('content_pages/wallet_settings.html', month_data);
             starting = '<li class="menu-item menu-item-active" aria-haspopup="true">' +
                 '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + month_data + '\')">' +
                 '<span class="svg-icon menu-icon">' +

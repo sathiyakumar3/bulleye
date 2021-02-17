@@ -65,7 +65,24 @@ function setoptdata(docRef, id, data) {
                 resolve("success");
             })
             .catch(function(error) {
-              
+
+                reject(error);
+            });
+    });
+}
+
+function addoptdata(docRef, data) {
+    str = JSON.stringify(data);
+    setCookie(id, str);
+    return new Promise(function(resolve, reject) {
+        // Add a new document in collection "cities"
+        docRef.add(data)
+            .then(function() {
+                console.log("[W] - " + docRef);
+                resolve("success");
+            })
+            .catch(function(error) {
+
                 reject(error);
             });
     });
@@ -120,24 +137,24 @@ function get_user_icon(user_id) {
 
 function updateoptdata(docRef, id, data) {
     return new Promise(function(resolve, reject) {
-    getoptdata(docRef, id).then(function(arr) {
-        var obj = Object.assign({}, arr, data);
-        var str = JSON.stringify(obj);
-        setCookie(id, str);
-       
+        getoptdata(docRef, id).then(function(arr) {
+            var obj = Object.assign({}, arr, data);
+            var str = JSON.stringify(obj);
+            setCookie(id, str);
+
             docRef.doc(id).update(data)
                 .then(function() {
                     console.log("[U2] - " + docRef + " - " + id);
                     resolve("success");
                 })
                 .catch(function(error) {
-                   
+
                     reject(error);
                 });
-      
-    }).catch(function(error) {
-      
-        reject(error);
+
+        }).catch(function(error) {
+
+            reject(error);
+        });
     });
-});
 }
