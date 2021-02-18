@@ -78,50 +78,6 @@ function load_navi() {
 
 
 
-
-
-
-/* 
-    <li class="menu-item menu-item-active" aria-haspopup="true">
-    <a class="menu-link" onclick="load_page('content_pages/wallet_dashboard.html')">
-        <span class="svg-icon menu-icon">
-                <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24"/>
-                        <path d="M4.00246329,12.2004927 L13,14 L13,4.06189375 C16.9463116,4.55399184 20,7.92038235 20,12 C20,16.418278 16.418278,20 12,20 C7.64874861,20 4.10886412,16.5261253 4.00246329,12.2004927 Z" fill="#000000" opacity="0.3"/>
-                        <path d="M3.0603968,10.0120794 C3.54712466,6.05992157 6.91622084,3 11,3 L11,11.6 L3.0603968,10.0120794 Z" fill="#000000"/>
-                    </g>
-                </svg>
-                <!--end::Svg Icon-->
-            </span>
-        <span class="menu-text">Home</span>
-    </a>
-</li>
-<li class="menu-item menu-item-active" aria-haspopup="true">
-    <a class="menu-link" onclick="load_page('content_pages/wallet.html')">
-        <span class="svg-icon menu-icon">
-                <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24"/>
-<path d="M4,4 L20,4 C21.1045695,4 22,4.8954305 22,6 L22,18 C22,19.1045695 21.1045695,20 20,20 L4,20 C2.8954305,20 2,19.1045695 2,18 L2,6 C2,4.8954305 2.8954305,4 4,4 Z" fill="#000000" opacity="0.3"/>
-<path d="M18.5,11 L5.5,11 C4.67157288,11 4,11.6715729 4,12.5 L4,13 L8.58578644,13 C8.85100293,13 9.10535684,13.1053568 9.29289322,13.2928932 L10.2928932,14.2928932 C10.7456461,14.7456461 11.3597108,15 12,15 C12.6402892,15 13.2543539,14.7456461 13.7071068,14.2928932 L14.7071068,13.2928932 C14.8946432,13.1053568 15.1489971,13 15.4142136,13 L20,13 L20,12.5 C20,11.6715729 19.3284271,11 18.5,11 Z" fill="#000000"/>
-<path d="M5.5,6 C4.67157288,6 4,6.67157288 4,7.5 L4,8 L20,8 L20,7.5 C20,6.67157288 19.3284271,6 18.5,6 L5.5,6 Z" fill="#000000"/>
-                    </g>
-                </svg>
-                <!--end::Svg Icon-->
-            </span>
-        <span class="menu-text">Wallet</span>
-    </a>
-</li>
-
-
-<li class="menu-section">
-    <h4 class="menu-text">Secondary Wallets</h4>
-    <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
-</li> */
-
 function generate_navi(data, p_wallet) {
 
     var starting = "";
@@ -133,7 +89,8 @@ function generate_navi(data, p_wallet) {
         var wallet_name = data[i]['wallet_name'];
         var months_size = 0;
         var users_size = data[i]['users_size'];
-        var month_data = wallet_id + "," + wallet_name;
+        console.log(user_local.uid);
+        var month_data = wallet_id + "," + wallet_name + "," + user_local.uid;
 
         if (wallet_id != p_wallet) {
             var my_wallet = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
@@ -245,7 +202,7 @@ function generate_navi(data, p_wallet) {
                 '</li>';
             navi = my_wallet + navi;
         } else {
-            load_page('content_pages/wallet_settings.html', month_data);
+            //   load_page('content_pages/wallet.html', month_data);
             starting = '<li class="menu-item menu-item-active" aria-haspopup="true">' +
                 '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + month_data + '\')">' +
                 '<span class="svg-icon menu-icon">' +
@@ -346,8 +303,11 @@ function generate_navi(data, p_wallet) {
         }
     }
 
-    var ending = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
-        '<a class="menu-link" onclick="load_page(\'content_pages/content_2.html\')">' +
+    var ending = '<li class="menu-section">' +
+        '<h4 class="menu-text">Others</h4>' +
+        '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
+        '</li><li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+        '<a href="#" class="btn btn-primary font-weight-bolder font-size-sm" data-toggle="modal" data-target="#add_new_wallet">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -393,7 +353,6 @@ function get_user(user) {
     getoptdata(docRef, user.uid).then((function(finalResult) {
 
         document.getElementById("front_page_user_id").value = user.uid;
-
         document.getElementById("front_page_name_1").innerHTML = finalResult.name;
         document.getElementById("front_page_name_2").innerHTML = finalResult.name;
         document.getElementById("front_page_email_1").innerHTML = finalResult.email;
@@ -404,13 +363,10 @@ function get_user(user) {
             image_add(error);
             console.log(error);
         });
-
-
         load_navi().then(function(data) {
             generate_navi(data, finalResult.primary_wallet);
         }).catch((error) => {
             console.log(error);
-
         });
 
 
@@ -419,13 +375,6 @@ function get_user(user) {
     });
 
 }
-
-
-
-
-'use strict';
-
-
 
 function image_add(url) {
 
@@ -445,17 +394,10 @@ function image_add(url) {
         ' </div>';
 
     document.getElementById("imageframe").innerHTML = myvar;
-    // Class definition
     var KTImageInputDemo = (function() {
-        // Private functions
         var start_app_main = function() {
-
-            // Example 5
             var avatar5 = new KTImageInput('kt_image_5');
-
             avatar5.on('change', (function(imageInput) {
-
-
                 var size = imageInput.input.files[0].size
                 console.log(size);
                 if (size > 1000000) {
@@ -468,8 +410,6 @@ function image_add(url) {
 
                     const ref = firebase.storage().ref().child('users/' + user_local.uid);
                     var message = imageInput.src;
-
-
                     ref.putString(message, 'data_url').then((snapshot) => {
                         snapshot.ref.getDownloadURL().then((function(downloadURL) {
                             const usersRef = db.collection("users");
@@ -481,19 +421,6 @@ function image_add(url) {
                             updateoptdata(usersRef, user_local.uid, value);
                         }));
 
-                        /*  ref.getDownloadURL()
-                            .then((url) => {
-                                console.log(url);
-                        
-                               
-                                console.log(value);
-                               // updateoptdata(usersRef, user_local.uid, value);
-
-                            }).catch((error) => {                              
-                                console.log(error);
-                            });
- */
-
                     }).catch((error) => {
                         console.error(error);
                     });
@@ -503,7 +430,6 @@ function image_add(url) {
             }));
 
             avatar5.on('remove', (function(imageInput) {
-
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -515,10 +441,8 @@ function image_add(url) {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         const ref = firebase.storage().ref().child('users/' + user_local.uid);
-                        ref.delete().then(() => {
-                            // File deleted successfully
-                        }).catch((error) => {
-                            // Uh-oh, an error occurred!
+                        ref.delete().then(() => {}).catch((error) => {
+                            console.log(error);
                         });
                     }
                 });
@@ -558,10 +482,7 @@ function image_add(url) {
 
                     plugins: {
                         trigger: new FormValidation.plugins.Trigger(),
-                        // Validate fields when clicking the Submit button
                         submitButton: new FormValidation.plugins.SubmitButton(),
-
-                        // Bootstrap Framework Integration
                         bootstrap: new FormValidation.plugins.Bootstrap({
                             eleInvalidClass: '',
                             eleValidClass: '',
@@ -592,11 +513,9 @@ function image_add(url) {
                     switch (selected_repeated) {
                         case 'Monthly':
                             timestamp.setMonth(timestamp.getMonth() + 1);
-                            // timestamp = new Date(timestamp.getMonth() + 1);
                             break;
                         case 'Weekly':
                             timestamp.setDate(timestamp.getDate() + 7);
-
                             break;
                         case 'Daily':
                             timestamp.setDate(timestamp.getDate() + 1);
@@ -607,10 +526,7 @@ function image_add(url) {
                     if (i == (num_of_repeat - 1)) {
                         start_app.refresh();
                     }
-
                 }
-                //sendtoupdate(description, category, amount, timestamp, type, payment, user_id);
-
             });
         }
         return {

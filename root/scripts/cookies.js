@@ -71,30 +71,12 @@ function setoptdata(docRef, id, data) {
     });
 }
 
-function addoptdata(docRef, data) {
-    str = JSON.stringify(data);
-    setCookie(id, str);
-    return new Promise(function(resolve, reject) {
-        // Add a new document in collection "cities"
-        docRef.add(data)
-            .then(function() {
-                console.log("[W] - " + docRef);
-                resolve("success");
-            })
-            .catch(function(error) {
-
-                reject(error);
-            });
-    });
-}
 
 function deloptfeild(docRef, id, field) {
-
     var find = getCookie(id);
     delete find[field];
     setCookie(id, find);
     return new Promise(function(resolve, reject) {
-
         docRef.doc(id).update({
                 [field]: firebase.firestore.FieldValue.delete()
             }).then(function() {
@@ -115,7 +97,6 @@ var user_icon_list = {};
 function get_user_icon(user_id) {
     const ref = firebase.storage().ref().child('users/' + user_id);
     return new Promise(function(resolve, reject) {
-
         if (user_icon_list.hasOwnProperty(user_id)) {
             var find = user_icon_list[user_id];
             resolve(find);
@@ -129,13 +110,16 @@ function get_user_icon(user_id) {
                     // console.log(error);
                     reject("assets/media/users/blank.png");
                 });
-
         }
     });
-
 }
 
+
+
+
+
 function updateoptdata(docRef, id, data) {
+
     return new Promise(function(resolve, reject) {
         getoptdata(docRef, id).then(function(arr) {
             var obj = Object.assign({}, arr, data);
@@ -157,4 +141,61 @@ function updateoptdata(docRef, id, data) {
             reject(error);
         });
     });
+}
+
+
+
+function uptoptarray(docRef, id, arrayname, data) {
+    return new Promise(function(resolve, reject) {
+        var find = getCookie(id);
+        find = JSON.parse(find);
+        find[[arrayname]].push(data);
+        var str = JSON.stringify(find);
+        setCookie(id, str);
+        docRef.doc(id).update({
+                [arrayname]: firebase.firestore.FieldValue.arrayUnion(data)
+            }).then(function() {
+                console.log("[U] - " + docRef + " - " + id);
+                resolve("success");
+            })
+            .catch(function(error) {
+                console.error("Error updating array: ", error);
+                reject(error);
+            });
+    });
+}
+
+
+
+function deltoptarray(docRef, id, arrayname, item, data) {
+    return new Promise(function(resolve, reject) {
+        var find = getCookie(id);
+        find = JSON.parse(find);
+
+        find[[arrayname]] = rmelearray(item, find[[arrayname]]);
+        var str = JSON.stringify(find);
+        setCookie(id, str);
+
+        docRef.doc(id).update({
+                [arrayname]: firebase.firestore.FieldValue.arrayRemove(data[item])
+            }).then(function() {
+                console.log("[U] - " + docRef + " - " + id);
+                resolve("success");
+            })
+            .catch(function(error) {
+                console.error("Error updating array: ", error);
+                reject(error);
+            });
+    });
+}
+
+function rmelearray(i, actual) {
+    delete actual[i];
+    var newArray = new Array();
+    for (var i = 0; i < actual.length; i++) {
+        if (actual[i]) {
+            newArray.push(actual[i]);
+        }
+    }
+    return newArray;
 }

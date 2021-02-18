@@ -129,7 +129,7 @@ var start_app = function() {
                                 document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
 
                                 tabler = $.extend(tabler, values);
-                                initialze_table(process_row(tabler));
+                                initialze_table(sort_obj(tabler, 'Timestamp'));
                                 // process_row(tabler);
                                 if (first_time) {
                                     _initDaterangepicker(first_day, last_day);
@@ -148,28 +148,7 @@ var start_app = function() {
             });
     };
 
-    function process_row(obj) {
-        obj.sort(function(a, b) {
-            var c = new Date(a.Timestamp);
-            var d = new Date(b.Timestamp);
-            return c - d;
-        });
-        return obj;
-    }
 
-    function user_circle_gen(user_profile) {
-        var html_div = "";
-
-        Object.keys(user_profile).sort().map(function(key, index) {
-            var myvar = '<div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="' + user_profile[key]['user_name'] + '">' +
-                '<img alt="Pic" src="' + user_profile[key]['photo_url'] + '">' +
-                '</div>';
-            html_div = html_div + myvar;
-        });
-
-
-        return html_div
-    }
     var _initDaterangepicker = function(start, end) {
         if ($('#kt_dashboard_daterangepicker').length == 0) {
             return;
@@ -276,12 +255,6 @@ var start_app = function() {
                                                 '<tr class="group"><td colspan="10">' + 'fdg' + '</td></tr>',
                                             );
                                         } */
-
-
-
-
-
-
                 }
             },
             // columns definition
@@ -301,23 +274,8 @@ var start_app = function() {
                     sortable: true,
 
                     template: function(data) {
+                        return icon_nd_photo_name_email(data.photo_url, data.user_name, data.user_email);
 
-                        var icon = "";
-                        if (data.photo_url == 'none') {
-                            icon = ' <div class="symbol symbol-40 symbol-' + getrandomstate() + ' flex-shrink-0">' +
-                                '<div class="symbol-label">' + data.user_name.substring(0, 1) + '</div></div>';
-
-                        } else {
-                            icon = '<div class="symbol symbol-40 flex-shrink-0">' +
-                                '<div class="symbol-label" style="background-image: url(' + data.photo_url + ')"></div>' +
-                                '</div>';
-                        }
-                        var ending = ' <div class="ml-2">' +
-                            '<div class="text-dark-75 font-weight-bold line-height-sm">' + data.user_name + '</div>' +
-                            '<a href="#" class="font-size-sm text-dark-50 text-hover-primary">' +
-                            data.user_email + '</a>\
-                        </div>\</div>';
-                        return ('<div class="d-flex align-items-center">' + icon + ending);
                     }
                 }, {
                     field: 'Category',
@@ -326,14 +284,8 @@ var start_app = function() {
 
                     sortable: true,
                     template: function(row) {
-                        var myvar = '<div class="d-flex align-items-center">' +
-                            '<div class="symbol symbol-40 symbol-success flex-shrink-0">' + get_cat_icon(row.Category) +
-                            '</div>' +
-                            '<div class="ml-2">' +
-                            '<div class="text-dark-75 font-weight-bold line-height-sm">' + row.Description + '</div>' +
-                            '<a href="#" class="font-size-sm text-dark-50 text-hover-primary">' + row.Category + '</a>' +
-                            '</div></div>';
-                        return myvar;
+
+                        return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Category, row.Description);
                     },
                 }, {
                     field: 'Description',
@@ -343,10 +295,8 @@ var start_app = function() {
                     width: 100,
                     sortable: true,
                     template: function(row) {
-                        var datetime = row.Timestamp;
-                        var e = new Date(datetime);
-                        var myvar = '<span style="width: 110px;"><div class="font-weight-bolder text-primary mb-0">' + shortdate(e) + '</div><div class="text-muted">' + formatAMPM(e) + '</div></span>';
 
+                        var myvar = dnt4table(row.Timestamp);
                         return myvar;
                     },
                 }, {
@@ -368,13 +318,7 @@ var start_app = function() {
                     autoHide: false,
                     sortable: true,
                     template: function(row) {
-                        if (row.Type == "Income") {
-                            var test = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(row.Amount) +
-                                '</div><a class="' + format_payment(row.Payment) + ' font-weight-bold">' + row.Payment + '</a></div>';
-                            return test
-                        } else {
-                            return "";
-                        }
+                        return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income')
                     },
                 },
 
@@ -386,14 +330,8 @@ var start_app = function() {
                     autoHide: false,
                     sortable: true,
                     template: function(row) {
-                        if (row.Type == "Expense") {
-                            var test = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(row.Amount) +
-                                '</div><a class="' + format_payment(row.Payment) + ' font-weight-bold">' + row.Payment + '</a></div>';
-                            return test
+                        return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense')
 
-                        } else {
-                            return "";
-                        }
                     },
                 }, {
                     field: 'Actions',
@@ -401,63 +339,11 @@ var start_app = function() {
                     sortable: false,
                     textAlign: 'center',
                     autoHide: false,
-                    template: function(row) {
-                        var myvar = ''; // code block
-                        var pay = "";
-                        switch (row.Payment) {
-                            case 'Paid':
-                                pay = 'Not Paid';
-                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\', \'' + row.Repeated + '\')">' +
-                                    '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Error-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                                    '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                                    '        <rect x="0" y="0" width="24" height="24"/>' +
-                                    '        <path d="M12.0355339,10.6213203 L14.863961,7.79289322 C15.2544853,7.40236893 15.8876503,7.40236893 16.2781746,7.79289322 C16.6686989,8.18341751 16.6686989,8.81658249 16.2781746,9.20710678 L13.4497475,12.0355339 L16.2781746,14.863961 C16.6686989,15.2544853 16.6686989,15.8876503 16.2781746,16.2781746 C15.8876503,16.6686989 15.2544853,16.6686989 14.863961,16.2781746 L12.0355339,13.4497475 L9.20710678,16.2781746 C8.81658249,16.6686989 8.18341751,16.6686989 7.79289322,16.2781746 C7.40236893,15.8876503 7.40236893,15.2544853 7.79289322,14.863961 L10.6213203,12.0355339 L7.79289322,9.20710678 C7.40236893,8.81658249 7.40236893,8.18341751 7.79289322,7.79289322 C8.18341751,7.40236893 8.81658249,7.40236893 9.20710678,7.79289322 L12.0355339,10.6213203 Z" fill="#000000"/>' +
-                                    '    </g>' +
-                                    '</svg><!--end::Svg Icon--></span>' +
-                                    '</a>';
-                                break;
-                            case 'Not Paid':
-                                pay = 'Paid';
-                                myvar = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + pay + '\', \'' + row.user + '\', \'' + row.Repeated + '\')">' +
-                                    '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Done-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                                    '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                                    '        <rect x="0" y="0" width="24" height="24"/>' +
+                    template: function(row) {; // code block
 
-                                    '        <path d="M16.7689447,7.81768175 C17.1457787,7.41393107 17.7785676,7.39211077 18.1823183,7.76894473 C18.5860689,8.1457787 18.6078892,8.77856757 18.2310553,9.18231825 L11.2310553,16.6823183 C10.8654446,17.0740439 10.2560456,17.107974 9.84920863,16.7592566 L6.34920863,13.7592566 C5.92988278,13.3998345 5.88132125,12.7685345 6.2407434,12.3492086 C6.60016555,11.9298828 7.23146553,11.8813212 7.65079137,12.2407434 L10.4229928,14.616916 L16.7689447,7.81768175 Z" fill="#000000" fill-rule="nonzero"/>' +
-                                    '    </g>' +
-                                    '</svg><!--end::Svg Icon--></span>' +
-                                    '</a>';
-                                break;
-                            default:
-                        }
-                        var delete_button = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="entry_delete(\'' + row.Timestamp + '\')">' +
-                            '        <span class="svg-icon svg-icon-md svg-icon-primary">' +
-                            '            <!--begin::Svg Icon | path:assets/media/svg/icons/General/Trash.svg-->' +
-                            '            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                            '                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                            '                    <rect x="0" y="0" width="24" height="24"></rect>' +
-                            '                    <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"></path>' +
-                            '                    <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"></path>' +
-                            '                </g>' +
-                            '            </svg>' +
-                            '            <!--end::Svg Icon-->' +
-                            '        </span>' +
-                            '    </a>';
-
-
-                        var edit_button = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3" onclick="edit_entry_modal(\'' + row.Description + '\', \'' + row.Category + '\', \'' + row.Amount + '\', \'' + row.Timestamp + '\', \'' + row.Type + '\', \'' + row.Payment + '\')">' +
-                            '        <span class="svg-icon svg-icon-md svg-icon-primary">' +
-                            '            <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Write.svg-->' +
-                            '            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                            '                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                            '                    <rect x="0" y="0" width="24" height="24"></rect>' +
-                            '                    <path d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953)"></path>' +
-                            '                    <path d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>' +
-                            '                </g>' +
-                            '            </svg>' +
-                            '            <!--end::Svg Icon-->' +
-                            '        </span>' +
-                            '    </a>';
+                        var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated);
+                        var delete_button = delete_button1(row.Timestamp);
+                        var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp);
                         return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>';
                     },
                 }
@@ -542,6 +428,47 @@ var start_app = function() {
     };
 }();
 
+
+
+jQuery(document).ready(function() {
+    var wallet_id = global_data[0];
+    var wallet_name = global_data[1];
+    cat2combo(wallet_id);
+    document.getElementById("t_wallet_name").innerText = wallet_name;
+    document.getElementById("t_wallet_id").innerText = wallet_id;
+    wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+    start_app.init();
+});
+
+
+
+function delete_selected() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to delete the selected.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Delete!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log(1);
+            var ids = datatable.checkbox().getSelectedId();
+            for (var i = 0; i < ids.length; i++) {
+                var data = datatable.dataSet[ids[i] - 1];
+                var timestamp = data.Timestamp;
+                var entry_id = monthts(new Date(timestamp));
+                deloptfeild(wallet_Ref, entry_id, timestamp).then(function() {});
+                if (i == (ids.length - 1)) {
+                    start_app.refresh();
+                }
+            }
+        }
+    })
+
+};
+
 function update_selected(update) {
     var ids = datatable.checkbox().getSelectedId();
     for (var i = 0; i < ids.length; i++) {
@@ -613,50 +540,3 @@ function entry_delete(key) {
 
 
 }
-
-jQuery(document).ready(function() {
-    var wallet_id = global_data[0];
-    var wallet_name = global_data[1];
-    document.getElementById("t_wallet_name").innerText = wallet_name;
-    document.getElementById("t_wallet_id").innerText = wallet_id;
-    wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
-    start_app.init();
-});
-
-function op() {
-    var date = new Date(),
-        y = date.getFullYear(),
-        m = date.getMonth();
-    var firstDay = new Date(y, m, 1);
-    var lastDay = new Date(y, m + 1, 0);
-    read_data2(firstDay, lastDay, false);
-    //  read_data2(start, end, false);
-
-}
-
-function delete_selected() {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You are about to delete the selected.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Delete!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            console.log(1);
-            var ids = datatable.checkbox().getSelectedId();
-            for (var i = 0; i < ids.length; i++) {
-                var data = datatable.dataSet[ids[i] - 1];
-                var timestamp = data.Timestamp;
-                var entry_id = monthts(new Date(timestamp));
-                deloptfeild(wallet_Ref, entry_id, timestamp).then(function() {});
-                if (i == (ids.length - 1)) {
-                    start_app.refresh();
-                }
-            }
-        }
-    })
-
-};

@@ -20,16 +20,13 @@ function process_row(obj, html, total, user_profile, sel) {
         if (counter_c <= 5 || sel == 3) {
             switch (sel) {
                 case 1:
-                    html_div = html_div + get_cat_div(keysSorted[index], obj[keysSorted[index]], total);
+                    html_div = html_div + build_category_widget(keysSorted[index], obj[keysSorted[index]], total);
                     break;
                 case 2:
-                    html_div = html_div + get_user_div(keysSorted[index], obj[keysSorted[index]], total, user_profile);
+                    html_div = html_div + build_user_widget(keysSorted[index], obj[keysSorted[index]], total, user_profile);
                     break;
                 case 3:
                     html_div = html_div + build_table(key, obj);
-                    break;
-                case 4:
-                    html_div = html_div + user_circle_gen(keysSorted[index], obj[keysSorted[index]], total, user_profile);
                     break;
                 default:
                     // code block
@@ -41,86 +38,30 @@ function process_row(obj, html, total, user_profile, sel) {
 
 }
 
-function get_cat_div(cat, value, total) {
-    var pecentage = Math.round((value / total) * 100);
-
+function build_category_widget(cat, value, total) {
     var myvar = '<tr>' +
-        '    <th class="pl-0 py-5">' + get_cat_icon(cat) +
-        '    </th>' +
-        '    <td class="pl-0">' +
-        '        <a href="#" class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">' + cat + '</a>' +
-        '        <span class="text-muted font-weight-bold d-block">Amazing Templates</span>' +
+        '    <td class="pl-0" style="min-width: 260px">' + icon_nd_name(get_cat_ic(cat), cat) +
         '    </td>' +
-        '    <td>' +
-        '        <div class="d-flex flex-column w-100 mr-2">' +
-        '            <div class="d-flex align-items-center justify-content-between mb-2">' +
-        '                <span class="text-muted mr-2 font-size-sm font-weight-bold">' + pecentage + '%</span>' +
-        '                <span class="text-muted font-size-sm font-weight-bold">Rs ' + numberWithCommas(value) + '</span>' +
-        '            </div>' +
-        '            <div class="progress progress-xs w-100">' +
-        '                <div class="progress-bar ' + format_progress_bar(pecentage) + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' +
-        '            </div>' +
-        '        </div>' +
+        '    <td>' + percentage_form(value, total) +
         '    </td>' +
         '    <td class="text-right pr-0">' +
-        '        <a href="#" class="btn btn-icon btn-light btn-sm">' +
-        '                                                        <span class="svg-icon svg-icon-md svg-icon-success">' +
-        '                                                            <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->' +
-        '                                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-        '                                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-        '                                                                    <polygon points="0 0 24 0 24 24 0 24" />' +
-        '                                                                    <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1" />' +
-        '                                                                    <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />' +
-        '                                                                </g>' +
-        '                                                            </svg>' +
-        '                                                            <!--end::Svg Icon-->' +
-        '                                                        </span>' + '        </a>' +
+        dummy_button() +
         '    </td>' +
         '</tr>';
-
     return myvar
 }
 
-function get_user_div(user, value, total, user_profile) {
-    var pecentage = Math.round((value / total) * 100);
+function build_user_widget(user, value, total, user_profile) {
     var myvar = '<tr>' +
-        '                                                <td class="pl-0">' +
-        '                                                    <div class="symbol symbol-50 symbol-light mr-2 mt-2">' +
-        '                                                        <span class="symbol-label">' +
-        '																					<img src="' + user_profile[user]['photo_url'] + '" class="h-75 align-self-end" alt="" />' +
-        '																				</span>' +
-        '                                                    </div>' +
-        '                                                </td>' +
-        '                                                <td class="pl-0">' +
-        '                                                    <a href="#" class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">' + user_profile[user]['user_name'] + '</a>' +
-        '                                                    <span class="text-muted font-weight-bold d-block">' + user_profile[user]['user_email'] + '</span>' +
-        '                                                </td>' +
-        '                                                <td></td>' +
-        '                                                <td class="text-right">' +
-        '                                                    <span class="text-muted font-weight-bold d-block font-size-sm">Paid</span>' +
-        '                                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">Rs ' + numberWithCommas(value) + '</span>' +
-        '                                                </td>' +
-        '                                                <td class="text-right">' +
-        '                                                    <span class="font-weight-bolder text-warning">' + pecentage + ' %</span>' +
-        '                                                </td>' +
-        '                                                <td class="text-right pr-0">' +
-        '                                                    <a href="#" class="btn btn-icon btn-light btn-sm">' +
-        '                                                        <span class="svg-icon svg-icon-md svg-icon-success">' +
-        '																					<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->' +
-        '																					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-        '																						<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-        '																							<polygon points="0 0 24 0 24 24 0 24" />' +
-        '																							<rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1" />' +
-        '																							<path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />' +
-        '																						</g>' +
-        '																					</svg>' +
-        '																					<!--end::Svg Icon-->' +
-        '																				</span>' +
-        '                                                    </a>' +
-        '                                                </td>' +
-        '                                            </tr>';
-
-
+        '<td class="pl-0">' + icon_nd_photo_name_email(user_profile[user]['photo_url'], user_profile[user]['user_name'], user_profile[user]['user_email']) + '</td>' +
+        '<td></td>' +
+        '<td>' + payment_status_fomt('dummy', 'Paid', value, 'dummy') +
+        ' </td>' +
+        '<td class="text-right">' + percentage_form(value, total) +
+        '</td>' +
+        '<td class="text-right pr-0">' + dummy_button() +
+        ' </td>' +
+        '</tr>';
     return myvar
 }
 
@@ -151,44 +92,21 @@ function build_table(user, obj) {
             break;
         default:
     }
-    var income = "";
-    var expense = "";
-    if (obj[user]['Type'] == 'Income') {
-        income = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(obj[user]['Amount']) +
-            '</div><a class="' + format_payment(obj[user]['Payment']) + ' font-weight-bold">' + obj[user]['Payment'] + '</a></div>';
-        expense = "";
-    } else {
-        expense = '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(obj[user]['Amount']) +
-            '</div><a class="' + format_payment(obj[user]['Payment']) + ' font-weight-bold">' + obj[user]['Payment'] + '</a></div>';
-        income = "";
-    }
+
     var myvar = '<tr>' +
-        '                                        <td class="pl-0 py-8">' +
-        '                                            <div class="d-flex align-items-center">' +
-        get_cat_icon(obj[user]['Category']) +
-        '                                                <div>' +
-        '                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">' + obj[user]['Description'] + '</a>' +
-        '                                                    <span class="text-muted font-weight-bold d-block">' + obj[user]['Category'] + '</span>' +
-        '                                                </div>' +
-        '                                            </div>' +
-        '                                        </td>' +
-
-
-
-        '<td class="datatable-cell-center datatable-cell" data-field="Description" data-autohide-disabled="false" aria-label="erwer">' +
-        '<span style="width: 100px;"><span style="width: 110px;"><div class="font-weight-bolder text-primary mb-0">' + shortdate(date) +
-        '</div><div class="text-muted">' + shorttime(date) + '</div></span></span></td>' +
-
-
-        '                                        <td>' + income +
-        '                                        </td>' +
-        '                                        <td>' + expense +
-        '                                        </td>' +
-
-        '                                        <td class="text-centre">' +
+        '<td class="pl-0 py-8">' +
+        '<div class="d-flex align-items-center">' +
+        icon_nd_name_nd_description(get_cat_ic(obj[user]['Category']), obj[user]['Category'], obj[user]['Description']) +
+        '</div>' +
+        '</td>' +
+        '<td>' + dnt4table(obj[user]['Timestamp']) + '</td>' + '<td>' + payment_status_fomt(obj[user]['Type'], obj[user]['Payment'], obj[user]['Amount'], 'Income') +
+        '</td>' +
+        '<td>' + payment_status_fomt(obj[user]['Type'], obj[user]['Payment'], obj[user]['Amount'], 'Expense') +
+        '</td>' +
+        '<td class="text-centre">' +
         myvar2 +
-        '                                        </td>' +
-        '                                    </tr>';
+        '</td>' +
+        '</tr>';
 
     return myvar
 }
@@ -340,14 +258,7 @@ function enable_tips2() {
 
 }
 
-function user_circle_gen(user, value, total, user_profile) {
 
-    var myvar = '<div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="' + user_profile[user]['user_name'] + '">' +
-        '<img alt="Pic" src="' + user_profile[user]['photo_url'] + '">' +
-        '</div>';
-
-    return myvar
-}
 
 function data_for_pie(data) {
     var data_set = [];
@@ -624,28 +535,6 @@ var start_app = function() {
                                     net_pec = Math.round(((sum_income - sum_expense) / sum_income) * 100);
                                 }
 
-                                /*                                 if ((re_sum_income - re_sum_expense) < 0) {
-                                                                    document.getElementById("RC_balance_title").innerText = "Have Planned Excess Expense!";
-                                
-                                                                    document.getElementById("RC_balance").innerText = " Rs " + numberWithCommas(re_sum_income - re_sum_expense);
-                                                                    document.getElementById("RC_balance").classList.remove("text-success");
-                                                                    document.getElementById("RC_balance").classList.add("text-warning");
-                                                                    document.getElementById("RC_balance_bar").classList.remove("bg-success");
-                                                                    document.getElementById("RC_balance_bar").classList.add("bg-warning");
-                                                                    rc_net_pec = Math.round(((re_sum_expense - re_sum_income) / re_sum_expense) * 100);
-                                                                } else {
-                                                                    document.getElementById("RC_balance_title").innerText = "Savings Oriented Plan!";
-                                
-                                                                    document.getElementById("RC_balance").innerText = " Rs " + numberWithCommas(re_sum_expense - re_sum_income);
-                                                                    document.getElementById("RC_balance").classList.remove("text-warning");
-                                                                    document.getElementById("RC_balance").classList.add("text-success");
-                                                                    document.getElementById("RC_balance_bar").classList.remove("bg-warning");
-                                                                    document.getElementById("RC_balance_bar").classList.add("bg-success");
-                                                                    rc_net_pec = Math.round(((re_sum_income - re_sum_expense) / re_sum_income) * 100);
-                                                                } */
-
-                                ///     document.getElementById("RC_balance_per").innerHTML = rc_net_pec + " %";
-                                //    document.getElementById("RC_balance_bar").style.width = rc_net_pec + "%";
 
                                 if (document.getElementById("not_paid_text") !== null) {
                                     document.getElementById("not_paid_text").innerHTML = 'Please note that the dashboard is generated based on all the paid transactions only.<br>There is a sum of <b class="text-danger"> Rs ' + numberWithCommas(not_paid_sum) + '</b> yet to tbe paid.'
@@ -672,8 +561,7 @@ var start_app = function() {
                                 }
 
                                 process_row(cat_3, "testtt3", sum_expense, user_profile, 2);
-                                process_row(cat_3, "image_list", sum_expense, user_profile, 4);
-
+                                document.getElementById("image_list").innerHTML = user_circle_gen(user_profile);
                                 var data66 = data_for_pie(cat_2);
                                 piechart_123(data66[0], data66[1]);
                                 tabler = $.extend(tabler, values);
@@ -827,8 +715,6 @@ var start_app = function() {
         cb(start, end, '');
 
     }
-
-
     var piechart_123 = function(data_set, cat_set) {
         const primary = '#6993FF';
         const success = '#1BC5BD';
@@ -874,7 +760,6 @@ var start_app = function() {
 
         generate_chart("kt_pie_chart_cat", options);
     }
-
     var _init_main_chart_2 = function(data, data1, cat) {
 
         var options = {
@@ -1152,9 +1037,7 @@ var start_app = function() {
                         return "Rs " + numberWithCommas(w.globals.stackedSeriesTotals[dataPointIndex]);
                     return "";
                 },
-
             },
-
             tooltip: {
                 style: {
                     fontSize: '12px',
@@ -1301,8 +1184,6 @@ var start_app = function() {
         generate_chart("kt_main_chart", options)
 
     }
-
-
     var generate_chart = function(div_id, options) {
         var element = document.getElementById(div_id);
         if (!element) {
@@ -1340,8 +1221,7 @@ var start_app = function() {
 jQuery(document).ready(function() {
     var wallet_id = global_data[0];
     var wallet_name = global_data[1];
-
-
+    cat2combo(wallet_id);
     document.getElementById("t_wallet_name").innerText = wallet_name;
     document.getElementById("t_wallet_id").innerText = wallet_id;
     document.getElementById("wallet_title").innerText = wallet_name;
