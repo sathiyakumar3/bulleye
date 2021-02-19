@@ -305,7 +305,7 @@ var KTLogin = function() {
                 validator.validate().then(function(status) {
                     if (status == 'Valid') {
                         wizard.goTo(wizard.getNewStep());
-                        KTUtil.getById("sum_email").value = form.querySelector('[name="su_email"]').value;
+                        KTUtil.getById("sum_email").value = form.querySelector('[name="su_email"]').value.toLowerCase();
                         KTUtil.getById("sum_password").value = form.querySelector('[name="su_password"]').value;
                         KTUtil.getById("sum_name").innerHTML = form.querySelector('[name="su_name"]').value;
                         KTUtil.getById("sum_gender").innerHTML = form.querySelector('[name="su_gender"]').value;

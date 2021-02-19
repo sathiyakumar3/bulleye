@@ -52,6 +52,22 @@ function getoptdata(docRef, id) {
 }
 
 
+function addoptdata(docRef, data) {
+    return new Promise(function(resolve, reject) {
+        docRef.add(data)
+            .then((doc) => {
+                var str = JSON.stringify(data);
+                setCookie(doc.id, str);
+                console.log("Document written with ID: ", doc.id);
+                resolve(doc.id);
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+                reject(error);
+            });
+    });
+}
+
 
 
 function setoptdata(docRef, id, data) {
@@ -143,12 +159,30 @@ function updateoptdata(docRef, id, data) {
     });
 }
 
+function deloptdoc(docRef, id) {
+    eraseCookie(id);
+    return new Promise(function(resolve, reject) {
+        docRef.doc(id).delete().then(function() {
+                console.log("[U] - " + docRef + " - " + id);
+                resolve("success");
+            })
+            .catch(function(error) {
+                console.error("Error updating array: ", error);
+                reject(error);
+            });
+    });
+}
+
 
 
 function uptoptarray(docRef, id, arrayname, data) {
     return new Promise(function(resolve, reject) {
         var find = getCookie(id);
         find = JSON.parse(find);
+        if (find != "") {
+            console.log("wonder why");
+        }
+
         find[[arrayname]].push(data);
         var str = JSON.stringify(find);
         setCookie(id, str);
@@ -162,6 +196,7 @@ function uptoptarray(docRef, id, arrayname, data) {
                 console.error("Error updating array: ", error);
                 reject(error);
             });
+
     });
 }
 
@@ -187,15 +222,4 @@ function deltoptarray(docRef, id, arrayname, item, data) {
                 reject(error);
             });
     });
-}
-
-function rmelearray(i, actual) {
-    delete actual[i];
-    var newArray = new Array();
-    for (var i = 0; i < actual.length; i++) {
-        if (actual[i]) {
-            newArray.push(actual[i]);
-        }
-    }
-    return newArray;
 }

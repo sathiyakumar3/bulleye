@@ -1227,5 +1227,7 @@ jQuery(document).ready(function() {
     document.getElementById("wallet_title").innerText = wallet_name;
     document.getElementById("wallet_init").innerText = name_intials(wallet_name);
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+    var wallet_type = global_data[3];
+    document.getElementById("t_wallet_type").innerText = wallet_type;
     start_app.init();
 });

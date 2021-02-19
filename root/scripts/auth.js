@@ -1,27 +1,3 @@
-function setCookie(cookieName, cookieValue) {
-    var d = new Date();
-    d.setTime(d.getTime() + 2 * 24 * 60 * 60 * 1000);
-    var expires = "expires=" + d.toGMTString();
-    document.cookie = cookieName + "=" +
-        cookieValue + ";" + expires + ";path=/";
-}
-
-function getCookie(cookieName) {
-    var name = cookieName + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var cookieArray = decodedCookie.split(";");
-    for (var i = 0; i < cookieArray.length; i++) {
-        var cookie = cookieArray[i];
-        while (cookie.charAt(0) == " ") {
-            cookie = cookie.substring(1);
-        }
-        if (cookie.indexOf(name) == 0) {
-            return cookie.substring(name.length, cookie.length);
-        }
-    }
-    return "";
-}
-
 function sign_in() {
     var email = getCookie("email");
     var password = getCookie("password");
@@ -50,7 +26,7 @@ function sign_in() {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                email = document.getElementById('swal-input1').value;
+                email = (document.getElementById('swal-input1').value);
                 password = document.getElementById('swal-input2').value;
                 remember_me = document.getElementById('remember_me').checked;
                 firebase_signin(email, password, remember_me);

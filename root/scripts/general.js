@@ -13,7 +13,7 @@ function shortdateclean(d) {
 }
 
 function monthts(d) {
-    return (monthNames[d.getMonth()] +" " + d.getFullYear());
+    return (monthNames[d.getMonth()] + " " + d.getFullYear());
 }
 
 function shorttime(d) {
@@ -40,4 +40,15 @@ function formatAMPM(date) {
 function shortts(d) {
     return ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" +
         d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+}
+
+function rmelearray(i, actual) {
+    delete actual[i];
+    var newArray = new Array();
+    for (var i = 0; i < actual.length; i++) {
+        if (actual[i]) {
+            newArray.push(actual[i]);
+        }
+    }
+    return newArray;
 }

@@ -9,8 +9,8 @@ var selected_end;
 var datetime_loaded = false;
 
 
-var start_app = function() {
 
+var start_app = function() {
     var read_data2 = function(from, to, first_time) {
         selected_start = from;
         selected_end = to;
@@ -129,6 +129,7 @@ var start_app = function() {
                                 document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
 
                                 tabler = $.extend(tabler, values);
+
                                 initialze_table(sort_obj(tabler, 'Timestamp'));
                                 // process_row(tabler);
                                 if (first_time) {
@@ -273,8 +274,16 @@ var start_app = function() {
                     width: 175,
                     sortable: true,
 
-                    template: function(data) {
-                        return icon_nd_photo_name_email(data.photo_url, data.user_name, data.user_email);
+                    template: function(row) {
+                        /*        get_user_info(row.user).then((function(doc) { // console.log(doc);\
+                                   console.log(row.user);
+                                   console.log(doc);
+                                   return doc;
+
+                               })).catch((error) => {
+                                   console.error(error);
+                               }); */
+                        return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email);
 
                     }
                 }, {
@@ -437,6 +446,8 @@ jQuery(document).ready(function() {
     document.getElementById("t_wallet_name").innerText = wallet_name;
     document.getElementById("t_wallet_id").innerText = wallet_id;
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+    var wallet_type = global_data[3];
+    document.getElementById("t_wallet_type").innerText = wallet_type;
     start_app.init();
 });
 

@@ -33,8 +33,8 @@ function myselected() {
 }
 
 function myselected3() {
-    var category = document.getElementById('edit_cat_selec').value;  
-    document.getElementById('sel_icon_add').innerHTML = '<svg><use xlink:href="#'+get_cat_ic(category)+ '"></use></svg>';
+    var category = document.getElementById('edit_cat_selec').value;
+    document.getElementById('sel_icon_add').innerHTML = '<svg><use xlink:href="#' + get_cat_ic(category) + '"></use></svg>';
 }
 
 function update_entry(description, category, amount, timestamp2, type, payment, user, repeat) {
@@ -367,9 +367,51 @@ function user_circle_gen(user_profile) {
     return html_div
 }
 
+
+
+
 /////////////////////////////////////////////////////////////////
 /* Table Elements */
 ////////////////////////////////////////////////////////////////
+
+function get_user_info(user_id) {
+    return new Promise(function(resolve, reject) {
+        var user_Ref = db.collection("users");
+        const user_details_prom = new Promise((resolve, reject) => {
+            getoptdata(user_Ref, user_id).then(function(finalResult) {
+                var user_email = finalResult.email;
+                var user_name = finalResult.name;
+                resolve({ user_email, user_name });
+            }).catch((error) => {
+                console.log(error);
+                var user_email = 'Default';
+                var user_name = 'Adminiate'
+                resolve({ user_email, user_name });
+            });
+        });
+
+        const user_image_prom = new Promise((resolve, reject) => {
+            get_user_icon(user_id).then((url) => {
+                resolve({ photo_url: url });
+            }).catch((error) => {
+                resolve({ photo_url: 'none' });
+            });
+        });
+
+        return Promise.all([user_image_prom, user_details_prom]).then((values) => {
+            var username = values[1]['user_name'];
+            var email = values[1]['user_email'];
+            var photo = values[0]['photo_url'];
+            //  resolve($.extend(values[0], values[1], values[2]));
+            resolve(icon_nd_photo_name_email(photo, username, email));
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+}
+
+
+
 
 function dnt4table(datetime) {
 
@@ -432,6 +474,7 @@ function icon_nd_photo_name_email(photo, username, email) {
     </div>\</div>';
     return ('<div class="d-flex align-items-center">' + icon + ending);
 }
+
 
 function payment_status_fomt(type, payment, amount, int_type) {
     if (type == int_type) {
