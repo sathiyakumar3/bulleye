@@ -202,7 +202,7 @@ function generate_navi(data, p_wallet) {
                 '</li>';
             navi = my_wallet + navi;
         } else {
-            //   load_page('content_pages/wallet.html', month_data);
+               load_page('content_pages/wallet.html', month_data);
             starting = '<li class="menu-item menu-item-active" aria-haspopup="true">' +
                 '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + month_data + '\')">' +
                 '<span class="svg-icon menu-icon">' +
@@ -307,7 +307,7 @@ function generate_navi(data, p_wallet) {
         '<h4 class="menu-text">Others</h4>' +
         '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
         '</li><li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
-        '<a href="#" class="btn btn-primary font-weight-bolder font-size-sm" data-toggle="modal" data-target="#add_new_wallet">' +
+        '<a href="#" class="btn  btn-hover-transparent-white  font-size-sm" data-toggle="modal" data-target="#add_new_wallet">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -451,6 +451,86 @@ function image_add(url) {
 
 
         }
+        
+        var add_new_wallet_From_validation = function() {
+            FormValidation.formValidation(
+                document.getElementById('edit_incex_form'), {
+                    fields: {
+                        form_catergory_2: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Category is requried.'
+                                }
+                            }
+                        },
+                        form_description_2: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'A description is required.'
+                                },
+                            }
+                        },
+
+                        form_amount_2: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'An Amount is required.'
+                                },
+                            }
+                        }
+
+                    },
+
+                    plugins: {
+                        trigger: new FormValidation.plugins.Trigger(),
+                        submitButton: new FormValidation.plugins.SubmitButton(),
+                        bootstrap: new FormValidation.plugins.Bootstrap({
+                            eleInvalidClass: '',
+                            eleValidClass: '',
+                        })
+                    }
+                }
+            ).on('core.form.valid', function() {
+                $('#edit_incex_form_modal').modal('toggle');
+                var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;
+                var description = document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value;
+                var amount = document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value;
+                var type = $('input[name="form_radios11_2"]:checked').val();
+                var payment = $('input[name="radios11_2"]:checked').val();
+                var user_id = document.getElementById("front_page_user_id").value;
+                var given_date = $("#kt_datetimepicker_10").find("input").val();
+                var timestamp = new Date(given_date);
+                var selected_repeated = document.getElementById('repeat_selection').value;
+                var num_of_repeat = document.getElementById('example-number-input2').value;
+                console.log(selected_repeated);
+                console.log(num_of_repeat);
+
+                for (i = 0; i < num_of_repeat; i++) {
+                    update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated).then(function() {
+                        console.log('done');
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                    switch (selected_repeated) {
+                        case 'Monthly':
+                            timestamp.setMonth(timestamp.getMonth() + 1);
+                            break;
+                        case 'Weekly':
+                            timestamp.setDate(timestamp.getDate() + 7);
+                            break;
+                        case 'Daily':
+                            timestamp.setDate(timestamp.getDate() + 1);
+                            break;
+                        default:
+
+                    }
+                    if (i == (num_of_repeat - 1)) {
+                        start_app.refresh();
+                    }
+                }
+            });
+        }
+
         var edit_entry_From_validation = function() {
             FormValidation.formValidation(
                 document.getElementById('edit_incex_form'), {
@@ -534,6 +614,7 @@ function image_add(url) {
             init: function() {
                 start_app_main();
                 edit_entry_From_validation();
+                add_new_wallet_From_validation();
             }
         };
     })();

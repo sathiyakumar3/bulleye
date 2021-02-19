@@ -33,8 +33,8 @@ function myselected() {
 }
 
 function myselected3() {
-    var category = document.getElementById('edit_cat_selec').value;
-    document.getElementById('form_header').innerHTML = get_cat_icon(category);
+    var category = document.getElementById('edit_cat_selec').value;  
+    document.getElementById('sel_icon_add').innerHTML = '<svg><use xlink:href="#'+get_cat_ic(category)+ '"></use></svg>';
 }
 
 function update_entry(description, category, amount, timestamp2, type, payment, user, repeat) {

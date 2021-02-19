@@ -3,8 +3,8 @@ var wallet_id = "";
 var user_local = "";
 var cat_table;
 
-function test3(d) {
-    console.log(d);
+function change_icon(d) {
+   
     document.getElementById("icon_text").value = d;
     document.getElementById("sel_icon").innerHTML = '<svg><use xlink:href="#' + d + '"></use></svg>';
 }
