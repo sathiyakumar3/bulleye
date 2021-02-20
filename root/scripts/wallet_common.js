@@ -335,7 +335,7 @@ function cat2combo(wallet_id) {
     var select = document.getElementById('edit_cat_selec');
     getoptdata(wallet_base_Ref, wallet_id).then((function(doc) {
         cat_icon_list = doc.categories;
-        console.log(doc);
+     
         for (let i = 0; i < cat_icon_list.length; i++) {
             newar[cat_icon_list[i]['name']] = cat_icon_list[i];
             var opt = document.createElement('option');
@@ -394,7 +394,7 @@ function get_user_info(user_id) {
             get_user_icon(user_id).then((url) => {
                 resolve({ photo_url: url });
             }).catch((error) => {
-                resolve({ photo_url: 'none' });
+                resolve({ photo_url: error });
             });
         });
 
