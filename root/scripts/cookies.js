@@ -136,34 +136,46 @@ function get_user_icon(user_id) {
 
 function updateoptdata(docRef, id, data) {
 
+
     return new Promise(function(resolve, reject) {
-        getoptdata(docRef, id).then(function(arr) {
-            var obj = Object.assign({}, arr, data);
-            var str = JSON.stringify(obj);
-            setCookie(id, str);
+        /*         getoptdata(docRef, id).then(function(arr) {
+                    var obj = Object.assign({}, arr, data);
+                    var str = JSON.stringify(obj);
+                    setCookie(id, str); */
 
-            docRef.doc(id).update(data)
-                .then(function() {
-                    console.log("[U2] - " + docRef + " - " + id);
-                    resolve("success");
-                })
-                .catch(function(error) {
+        docRef.doc(id).update(data)
+            .then(function() {
+                var find = getCookie(id);
+                find = JSON.parse(find);
+                console.log('B - ' + JSON.stringify(find));
+                var finalobj1 = {};
+                for (var _obj in find) finalobj1[_obj] = find[_obj];
+                for (var _obj in data) finalobj1[_obj] = data[_obj];
+                find = finalobj1;
+                console.log('A - ' + JSON.stringify(find));
+                var str = JSON.stringify(find);
+                setCookie(id, str);
+                console.log("[U2] - " + docRef + " - " + id);
+                resolve("success");
+            })
+            .catch(function(error) {
 
-                    reject(error);
-                });
+                reject(error);
+            });
 
-        }).catch(function(error) {
+        /*     }).catch(function(error) {
 
-            reject(error);
-        });
+                reject(error);
+            }); */
     });
 }
 
 function deloptdoc(docRef, id) {
-    eraseCookie(id);
+
     return new Promise(function(resolve, reject) {
         docRef.doc(id).delete().then(function() {
                 console.log("[U] - " + docRef + " - " + id);
+                eraseCookie(id);
                 resolve("success");
             })
             .catch(function(error) {
@@ -177,18 +189,15 @@ function deloptdoc(docRef, id) {
 
 function uptoptarray(docRef, id, arrayname, data) {
     return new Promise(function(resolve, reject) {
-        var find = getCookie(id);
-        find = JSON.parse(find);
-        if (find != "") {
-            console.log("wonder why");
-        }
 
-        find[[arrayname]].push(data);
-        var str = JSON.stringify(find);
-        setCookie(id, str);
         docRef.doc(id).update({
                 [arrayname]: firebase.firestore.FieldValue.arrayUnion(data)
             }).then(function() {
+                var find = getCookie(id);
+                find = JSON.parse(find);
+                find[[arrayname]].push(data);
+                var str = JSON.stringify(find);
+                setCookie(id, str);
                 console.log("[U] - " + docRef + " - " + id);
                 resolve("success");
             })
@@ -204,16 +213,17 @@ function uptoptarray(docRef, id, arrayname, data) {
 
 function deltoptarray(docRef, id, arrayname, item, data) {
     return new Promise(function(resolve, reject) {
-        var find = getCookie(id);
-        find = JSON.parse(find);
-
-        find[[arrayname]] = rmelearray(item, find[[arrayname]]);
-        var str = JSON.stringify(find);
-        setCookie(id, str);
 
         docRef.doc(id).update({
                 [arrayname]: firebase.firestore.FieldValue.arrayRemove(data[item])
             }).then(function() {
+                var find = getCookie(id);
+                find = JSON.parse(find);
+
+                find[[arrayname]] = rmelearray(item, find[[arrayname]]);
+                var str = JSON.stringify(find);
+                setCookie(id, str);
+
                 console.log("[U] - " + docRef + " - " + id);
                 resolve("success");
             })

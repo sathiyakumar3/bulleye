@@ -52,12 +52,17 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
             },
             last_updated: timestamp
         };
+        console.log("join");
         var entry_id = monthts(timestamp);
         updateoptdata(wallet_Ref, entry_id, value).then(function() {
+            console.log("Updated!");
             resolve('sucess');
         }).catch((error) => {
-            if (error == 'Document doesn\'t exist.') {
+            console.log(error);
+            console.log(error.code);
+            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') {
                 setoptdata(wallet_Ref, entry_id, value).then(function() {
+                    console.log("Updated!");
                     resolve('sucess');
                 }).catch((error) => {
                     reject(error);
@@ -335,7 +340,7 @@ function cat2combo(wallet_id) {
     var select = document.getElementById('edit_cat_selec');
     getoptdata(wallet_base_Ref, wallet_id).then((function(doc) {
         cat_icon_list = doc.categories;
-     
+
         for (let i = 0; i < cat_icon_list.length; i++) {
             newar[cat_icon_list[i]['name']] = cat_icon_list[i];
             var opt = document.createElement('option');
