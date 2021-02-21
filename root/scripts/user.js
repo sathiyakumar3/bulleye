@@ -323,6 +323,10 @@ function get_user(user) {
         });
         load_navi().then(function(data) {
             generate_navi(data, finalResult.primary_wallet);
+
+            if (data.length == 0) {
+                $('#add_new_wallet').modal('toggle');
+            }
         }).catch((error) => {
             console.log(error);
         });
@@ -459,13 +463,58 @@ function image_add(url) {
                 var categories = [{
                     created_on: timestamp,
                     created_by: 'Adminiate',
-                    icon: 'friends',
-                    name: 'Power'
+                    icon: 'transportation',
+                    name: 'Transportation'
+                }, {
+                    created_on: timestamp,
+                    created_by: 'Adminiate',
+                    icon: 'gift',
+                    name: 'Gift'
+                }, {
+                    created_on: timestamp,
+                    created_by: 'Adminiate',
+                    icon: 'education',
+                    name: 'Education'
+                }, {
+                    created_on: timestamp,
+                    created_by: 'Adminiate',
+                    icon: 'insurance',
+                    name: 'Insurance'
+                }, {
+                    created_on: timestamp,
+                    created_by: 'Adminiate',
+                    icon: 'office',
+                    name: 'Office'
+                }, {
+                    created_on: timestamp,
+                    created_by: 'Adminiate',
+                    icon: 'travel',
+                    name: 'Travel'
+                }, {
+                    created_on: timestamp,
+                    created_by: 'Adminiate',
+                    icon: 'entertainment',
+                    name: 'Entertainment'
+                }, {
+                    created_on: timestamp,
+                    created_by: 'Adminiate',
+                    icon: 'garden',
+                    name: 'Garden'
+                }, {
+                    created_on: timestamp,
+                    created_by: 'Adminiate',
+                    icon: 'meal',
+                    name: 'Food'
                 }, {
                     created_on: timestamp,
                     created_by: 'Adminiate',
                     icon: 'power',
-                    name: 'Eletricity'
+                    name: 'Electricity'
+                }, {
+                    created_on: timestamp,
+                    created_by: 'Adminiate',
+                    icon: 'shopping',
+                    name: 'Shopping'
                 }]
                 var data = {
                     name: name,

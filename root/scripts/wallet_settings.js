@@ -18,7 +18,9 @@ function input_icon() {
 
 
 
+
 function build_cat_table(obj) {
+
     var promises = [];
     for (let i = 0; i < obj.length; i++) {
 

@@ -334,6 +334,18 @@ function sort_obj(obj, key) {
 var cat_icon_list = {};
 var newar = [];
 
+function sortOn(property) {
+    return function(a, b) {
+        if (a[property] < b[property]) {
+            return -1;
+        } else if (a[property] > b[property]) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
+
 function cat2combo(wallet_id) {
 
     document.getElementById("edit_cat_selec").innerHTML = "";
@@ -341,6 +353,8 @@ function cat2combo(wallet_id) {
     var select = document.getElementById('edit_cat_selec');
     getoptdata(wallet_base_Ref, wallet_id).then((function(doc) {
         cat_icon_list = doc.categories;
+
+        cat_icon_list.sort(sortOn("name"));
 
         for (let i = 0; i < cat_icon_list.length; i++) {
             newar[cat_icon_list[i]['name']] = cat_icon_list[i];
