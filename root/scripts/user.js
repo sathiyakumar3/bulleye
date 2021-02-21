@@ -219,7 +219,6 @@ function generate_navi(data, p_wallet) {
         var wallet_id = data[i]['wallet_id'];
         var wallet_name = data[i]['wallet_name'];
         var wallet_type = data[i]['wallet_type'];
-        var months_size = 0;
         var users_size = data[i]['users_size'];
         var wallet_description = data[i]['wallet_description'];
         var month_data = wallet_id + "," + wallet_name + "," + user_local.uid + "," + wallet_type + "," + wallet_description;
