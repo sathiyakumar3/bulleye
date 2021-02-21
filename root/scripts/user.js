@@ -452,7 +452,7 @@ function image_add(url) {
                         })
                     }
                 }
-            ).on('core.form.valid', function() {
+            ).on('core.form.valid', function() {            
                 $('#add_new_wallet').modal('toggle');
                 var name = document.getElementById('add_new_wallet_form').querySelector('[name="ad_wal_name"]').value;
                 var description = document.getElementById('add_new_wallet_form').querySelector('[name="ad_wal_desc"]').value;
@@ -528,8 +528,31 @@ function image_add(url) {
                 }
 
                 var wallet_Ref = db.collection("wallets")
-                addoptdata(wallet_Ref, data).then(function() {
+                addoptdata(wallet_Ref, data).then(function(docid) {
+
+                    var data = {
+                        primary_wallet: docid
+                    }
+
+                    updateoptdata(user_Ref, user, data).then(function(finalResult) {
+                        get_user(user_local);
+                        Swal.fire(
+                            'Congratulations!',
+                            'You just added your first wallet!',
+                            'success'
+                        );
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+
+
+
+
                     get_user(user_local);
+
+
+
+
                 }).catch((error) => {
                     console.log(error);
                 });

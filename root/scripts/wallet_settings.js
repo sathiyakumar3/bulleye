@@ -165,7 +165,6 @@ function del_wall() {
 }
 
 function pin_wall() {
-    console.log('22');
     var data = {
         primary_wallet: wallet_id
     }
@@ -179,7 +178,6 @@ function pin_wall() {
     }).catch((error) => {
         console.log(error);
     });
-
 }
 
 

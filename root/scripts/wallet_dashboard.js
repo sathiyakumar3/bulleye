@@ -353,6 +353,8 @@ var start_app = function() {
                         delete arr["last_updated"];
                         var re_sum_expense2 = 0;
                         var re_sum_income2 = 0;
+                        var on_sum_expense2 = 0;
+                        var on_sum_income2 = 0;
                         Object.keys(arr).sort().map(function(key, index) {
 
                             var today = new Date(key).getTime();
@@ -438,14 +440,14 @@ var start_app = function() {
                                                 sum_income = sum_income + Number(REC_amount);
                                                 sum_income2 = sum_income2 + Number(REC_amount);
                                                 cat_2[REC_category] = Number(cat_b[REC_category]) + Number(REC_amount);
-
                                             }
                                         } else {
                                             not_paid_sum = not_paid_sum + Number(REC_amount);
                                         }
 
+                                        
 
-                                        if (REC_repeated != 'once') {
+                                        if (REC_repeated != 'Once') {
                                             if (REC_type == 'Expense') {
                                                 re_sum_expense = re_sum_expense + Number(REC_amount);
                                                 re_sum_expense2 = re_sum_expense2 + Number(REC_amount);
@@ -461,18 +463,19 @@ var start_app = function() {
                                             }
                                             up_counter++;
                                         } else {
-                                            if (REC_type == 'Expense') {
+                                            if (REC_type == 'Expense') {                                             
+                                                on_sum_expense2 = on_sum_expense2 + Number(REC_amount);
                                                 if (REC_payment == 'Not Paid') {
                                                     up_e_flag = true;
                                                 }
                                             } else {
+                                                on_sum_income2 = on_sum_income2 + Number(REC_amount);
                                                 if (REC_payment == 'Not Paid') {
                                                     up_i_flag = true;
                                                 }
                                             }
                                             p_counter++;
                                         }
-
 
 
 
@@ -502,8 +505,11 @@ var start_app = function() {
                             d_re_income.push(re_sum_income2);
                             d_re_expense.push(re_sum_expense2);
 
-                            d_on_income.push(sum_income2 - re_sum_income2);
-                            d_on_expense.push(sum_expense2 - re_sum_expense2);
+                            console.log(on_sum_income2);
+                            console.log(on_sum_expense2);
+
+                            d_on_income.push(on_sum_income2);
+                            d_on_expense.push(on_sum_expense2);
 
 
 
@@ -875,11 +881,11 @@ var start_app = function() {
 
         var options = {
             series: [{
-                name: 'Unplanned',
+                name: 'Occational',
                 type: 'column',
                 data: data
             }, {
-                name: 'Planned',
+                name: 'Recurring',
                 type: 'column',
                 data: data1
             }],
@@ -973,11 +979,11 @@ var start_app = function() {
 
         var options = {
             series: [{
-                name: 'Unplanned',
+                name: 'Occational',
                 type: 'column',
                 data: data
             }, {
-                name: 'Planned',
+                name: 'Recurring',
                 type: 'column',
                 data: data1
             }],
