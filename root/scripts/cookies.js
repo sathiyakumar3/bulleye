@@ -25,29 +25,30 @@ function getCookie(cookieName) {
 function eraseCookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
-var c=0;
-var d=0;
+var c = 0;
+var d = 0;
 
-function data_comp(x){
-    switch(x) {
+function data_comp(x) {
+    switch (x) {
         case 'c':
             c++;
-          break;
+            break;
         case 'd':
             d++;
-          break;
+            break;
         default:
-       
-      }
-    //  document.getElementById("data_compressor").innerHTML = percentage_form(c, c+d,d+ ' of ')
+
+    }
+    document.getElementById("data_compressor").innerHTML = percentage_form(c, c + d, d + ' of ')
 }
+
 function getoptdata(docRef, id) {
     var find = getCookie(id);
     return new Promise(function(resolve, reject) {
         if (find == "") {
             var results = "";
-            docRef.doc(id).get().then(function(doc) {       
-                data_comp('d');      
+            docRef.doc(id).get().then(function(doc) {
+                data_comp('d');
                 if (doc.exists) {
                     console.log("[R] - " + docRef + " - " + id);
                     results = doc.data();
@@ -61,7 +62,7 @@ function getoptdata(docRef, id) {
                 reject(error);
             });
         } else {
-            data_comp('c'); 
+            data_comp('c');
             resolve(JSON.parse(find));
         }
     });
@@ -131,14 +132,14 @@ function get_user_icon(user_id) {
     return new Promise(function(resolve, reject) {
         if (user_icon_list.hasOwnProperty(user_id)) {
             var find = user_icon_list[user_id];
-            data_comp('c'); 
+            data_comp('c');
             resolve(find);
         } else {
             console.log("[I] - " + user_id);
-           
+
             ref.getDownloadURL()
                 .then((url) => {
-                    data_comp('d'); 
+                    data_comp('d');
                     user_icon_list[user_id] = url;
                     resolve(url);
                 }).catch((error) => {
@@ -162,16 +163,26 @@ function updateoptdata(docRef, id, data) {
                     var str = JSON.stringify(obj);
                     setCookie(id, str); */
 
+        var find = getCookie(id);
+
+
+
+
         docRef.doc(id).update(data)
             .then(function() {
-                var find = getCookie(id);
-                find = JSON.parse(find);               
-                var finalobj1 = {};
-                for (var _obj in find) finalobj1[_obj] = find[_obj];
-                for (var _obj in data) finalobj1[_obj] = data[_obj];
-                find = finalobj1;             
-                var str = JSON.stringify(find);
-                setCookie(id, str);
+                if (find != '') {
+                    find = JSON.parse(find);
+                    var finalobj1 = {};
+                    for (var _obj in find) finalobj1[_obj] = find[_obj];
+                    for (var _obj in data) finalobj1[_obj] = data[_obj];
+                    find = finalobj1;
+                    var str = JSON.stringify(find);
+                    setCookie(id, str);
+                } else {
+                    var str = JSON.stringify(data);
+                    setCookie(id, str);
+                }
+
                 console.log("[U2] - " + docRef + " - " + id);
                 resolve("success");
             })

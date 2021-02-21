@@ -509,7 +509,7 @@ jQuery(document).ready(function() {
     user_id = global_data[2];
     var wallet_name = global_data[1];
     var wallet_type = global_data[3];
-    document.getElementById("t_wallet_name").innerText = wallet_name;
+    document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
     document.getElementById("t_wallet_id").innerText = wallet_id;
     var wallet_type = global_data[3];
     document.getElementById("t_wallet_type").innerText = wallet_type;

@@ -477,7 +477,7 @@ function image_add(url) {
                     users: [user],
                     categories: categories
                 }
-                console.log(data);
+
                 var wallet_Ref = db.collection("wallets")
                 addoptdata(wallet_Ref, data).then(function() {
                     get_user(user_local);
@@ -515,6 +515,15 @@ function image_add(url) {
                                     message: 'An Amount is required.'
                                 },
                             }
+                        },
+                        repeat_numbrs: {
+                            validators: {
+                                between: {
+                                    min: 0,
+                                    max: 30,
+                                    message: 'The number must be between 0 and 30'
+                                }
+                            }
                         }
 
                     },
@@ -540,12 +549,9 @@ function image_add(url) {
                 var timestamp = new Date(given_date);
                 var selected_repeated = document.getElementById('repeat_selection').value;
                 var num_of_repeat = document.getElementById('example-number-input2').value;
-                console.log(1);
-                console.log(description + "," + category + "," + amount + "," + timestamp + "," + type + "," + payment + "," + user_id + "," + selected_repeated);
+
                 for (i = 0; i < num_of_repeat; i++) {
-                    update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated).then(function() {
-                        console.log('done');
-                    }).catch((error) => {
+                    update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated).then(function() {}).catch((error) => {
                         console.log(error);
                     });
                     switch (selected_repeated) {

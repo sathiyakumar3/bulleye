@@ -443,7 +443,7 @@ jQuery(document).ready(function() {
     var wallet_id = global_data[0];
     var wallet_name = global_data[1];
     cat2combo(wallet_id);
-    document.getElementById("t_wallet_name").innerText = wallet_name;
+    document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
     document.getElementById("t_wallet_id").innerText = wallet_id;
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     var wallet_type = global_data[3];

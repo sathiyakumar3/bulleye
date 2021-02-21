@@ -52,17 +52,17 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
             },
             last_updated: timestamp
         };
-        console.log("join");
+
         var entry_id = monthts(timestamp);
         updateoptdata(wallet_Ref, entry_id, value).then(function() {
-            console.log("Updated!");
+
             resolve('sucess');
         }).catch((error) => {
             console.log(error);
             console.log(error.code);
             if (error == 'Document doesn\'t exist.' || error.code == 'not-found') {
                 setoptdata(wallet_Ref, entry_id, value).then(function() {
-                    console.log("Updated!");
+
                     resolve('sucess');
                 }).catch((error) => {
                     reject(error);
@@ -107,7 +107,7 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
     }
     $('#kt_datetimepicker_10').datetimepicker('clear');
     $('#kt_datetimepicker_10').datetimepicker('destroy');
-    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(timestamp), disable: true });
+    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(timestamp), format: 'MM/DD/YYYY hh:mm:ss A', disable: true });
 
 
     document.getElementById('title_33').innerText = "Edit Entry"
@@ -123,8 +123,9 @@ function add_entry_modal() {
     document.getElementById("paid_radio").checked = true;
     $('#kt_datetimepicker_10').datetimepicker('clear');
     $('#kt_datetimepicker_10').datetimepicker('destroy');
+    // 02 / 21 / 2021 10: 37 AM
 
-    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), enable: true });
+    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), format: 'MM/DD/YYYY hh:mm:ss A', enable: true });
     document.getElementById('title_33').innerText = "Add to Wallet"
 }
 
@@ -491,12 +492,12 @@ function payment_status_fomt(type, payment, amount, int_type) {
 
 }
 
-function percentage_form(value, total,item) {
+function percentage_form(value, total, item) {
     var pecentage = Math.round((value / total) * 100);
     var html_div = '<div class="d-flex flex-column w-100 mr-2">' +
         '<div class="d-flex align-items-center justify-content-between mb-2">' +
         '<span class="text-muted mr-2 font-size-sm font-weight-bold">' + pecentage + '%</span>' +
-        '<span class="text-muted font-size-sm font-weight-bold">'+item+' ' + numberWithCommas(value) + '</span>' +
+        '<span class="text-muted font-size-sm font-weight-bold">' + item + ' ' + numberWithCommas(value) + '</span>' +
         '</div>' +
         '<div class="progress progress-xs w-100">' +
         '<div class="progress-bar ' + format_progress_bar(pecentage) + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' +

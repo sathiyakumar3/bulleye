@@ -42,7 +42,7 @@ function build_category_widget(cat, value, total) {
     var myvar = '<tr>' +
         '    <td class="pl-0" style="min-width: 260px">' + icon_nd_name(get_cat_ic(cat), cat) +
         '    </td>' +
-        '    <td>' + percentage_form(value, total,'Rs') +
+        '    <td>' + percentage_form(value, total, 'Rs') +
         '    </td>' +
         '    <td class="text-right pr-0">' +
         dummy_button() +
@@ -57,7 +57,7 @@ function build_user_widget(user, value, total, user_profile) {
         '<td></td>' +
         '<td>' + payment_status_fomt('dummy', 'Paid', value, 'dummy') +
         ' </td>' +
-        '<td class="text-right">' + percentage_form(value, total,'Rs') +
+        '<td class="text-right">' + percentage_form(value, total, 'Rs') +
         '</td>' +
         '<td class="text-right pr-0">' + dummy_button() +
         ' </td>' +
@@ -1222,10 +1222,10 @@ jQuery(document).ready(function() {
     var wallet_id = global_data[0];
     var wallet_name = global_data[1];
     var wallet_description = global_data[4];
-  
+
     cat2combo(wallet_id);
 
-    document.getElementById("t_wallet_name").innerText = wallet_name;
+    document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
     document.getElementById("t_wallet_id").innerText = wallet_id;
     document.getElementById("wallet_title").innerText = wallet_description;
     document.getElementById("wallet_init").innerText = name_intials(wallet_name);
