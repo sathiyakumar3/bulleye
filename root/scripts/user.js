@@ -534,25 +534,13 @@ function image_add(url) {
                         primary_wallet: docid
                     }
 
-                    updateoptdata(user_Ref, user, data).then(function(finalResult) {
+                    update_primary_wall(data).then(function(docid) {
+
                         get_user(user_local);
-                        Swal.fire(
-                            'Congratulations!',
-                            'You just added your first wallet!',
-                            'success'
-                        );
                     }).catch((error) => {
                         console.log(error);
                     });
-
-
-
-
-                    get_user(user_local);
-
-
-
-
+                    
                 }).catch((error) => {
                     console.log(error);
                 });

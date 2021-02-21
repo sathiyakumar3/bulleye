@@ -168,6 +168,10 @@ function pin_wall() {
     var data = {
         primary_wallet: wallet_id
     }
+    update_primary_wall(data);
+}
+
+function update_primary_wall(data){
     updateoptdata(user_Ref, user_id, data).then(function(finalResult) {
         get_user(user_local);
         Swal.fire(
