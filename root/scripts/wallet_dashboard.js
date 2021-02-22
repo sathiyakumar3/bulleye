@@ -445,7 +445,7 @@ var start_app = function() {
                                             not_paid_sum = not_paid_sum + Number(REC_amount);
                                         }
 
-                                        
+
 
                                         if (REC_repeated != 'Once') {
                                             if (REC_type == 'Expense') {
@@ -463,7 +463,7 @@ var start_app = function() {
                                             }
                                             up_counter++;
                                         } else {
-                                            if (REC_type == 'Expense') {                                             
+                                            if (REC_type == 'Expense') {
                                                 on_sum_expense2 = on_sum_expense2 + Number(REC_amount);
                                                 if (REC_payment == 'Not Paid') {
                                                     up_e_flag = true;
@@ -505,8 +505,7 @@ var start_app = function() {
                             d_re_income.push(re_sum_income2);
                             d_re_expense.push(re_sum_expense2);
 
-                            console.log(on_sum_income2);
-                            console.log(on_sum_expense2);
+
 
                             d_on_income.push(on_sum_income2);
                             d_on_expense.push(on_sum_expense2);

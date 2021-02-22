@@ -81,8 +81,10 @@ function sendtoupdate(description, category, amount, timestamp, type, payment, u
 }
 
 
-function edit_entry_modal(description, category, amount, timestamp, type, payment) {
+function edit_entry_modal(description, category, amount, timestamp, type, payment, repeat) {
+
     $('#edit_incex_form_modal').modal('toggle');
+    document.getElementById('example-number-input2').value = 1;
     $('#edit_cat_selec').selectpicker('val', category);
     document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = description;
     document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = amount;
@@ -108,7 +110,7 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
     $('#kt_datetimepicker_10').datetimepicker('clear');
     $('#kt_datetimepicker_10').datetimepicker('destroy');
     $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(timestamp), format: 'MM/DD/YYYY hh:mm:ss A', disable: true });
-
+    document.getElementById('repeat_selection').value = repeat;
 
     document.getElementById('title_33').innerText = "Edit Entry"
 }
@@ -581,8 +583,8 @@ function delete_button1(timestamp) {
         '    </a>';
 }
 
-function edit_button3(payment, description, type, category, amount, timestamp) {
-    return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3" onclick="edit_entry_modal(\'' + description + '\', \'' + category + '\', \'' + amount + '\', \'' + timestamp + '\', \'' + type + '\', \'' + payment + '\')">' +
+function edit_button3(payment, description, type, category, amount, timestamp, user, repeat) {
+    return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3" onclick="edit_entry_modal(\'' + description + '\', \'' + category + '\', \'' + amount + '\', \'' + timestamp + '\', \'' + type + '\', \'' + payment + '\', \'' + repeat + '\')">' +
         '        <span class="svg-icon svg-icon-md svg-icon-primary">' +
         '            <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Write.svg-->' +
         '            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +

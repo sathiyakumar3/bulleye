@@ -209,7 +209,7 @@ var start_app = function() {
         cb(start, end, '');
 
     }
-
+    var old_month = "";
     var initialze_table = function(tabler) {
         var options = {
             data: {
@@ -246,16 +246,50 @@ var start_app = function() {
                 });
             },
             pagination: false,
+            rowGroup: {
+                dataSrc: 4,
+            },
             rows: {
                 afterTemplate: function(row, data, index) {
-                    /* 
-                                        if (7 == data['RecordID']) {
-                                            $('td:eq(4)', row).html('<tr class="group"><td colspan="10">' + 'Monday!' + '</td></tr>');
-                                            console.log(row + " : " + index);
-                                            $(row).eq(index).before(
-                                                '<tr class="group"><td colspan="10">' + 'fdg' + '</td></tr>',
-                                            );
-                                        } */
+
+                    /*  if (7 == data['RecordID']) {
+                        $('td:eq(4)', row).html('<tr class="group"><td colspan="10">' + 'Monday!' + '</td></tr>');
+                        console.log(row + " : " + index);
+                        $(row).before(
+                            '<tr class="group"><td colspan="10">' + 'Hey' + '</td></tr>',
+                        );
+
+                    }
+
+                    if (7 == data['RecordID']) {
+                        $('td:eq(4)', row).html('<tr class="group"><td colspan="10">' + 'Monday!' + '</td></tr>');
+                        console.log(row + " : " + index);
+                        $(row).before(
+                            '<tr class="group"><td colspan="10">' + 'Hey' + '</td></tr>',
+                        );
+
+                    }
+ */
+
+
+
+
+
+
+
+
+
+                    if (monthts(data['Timestamp']) != old_month) {
+                        old_month = monthts(data['Timestamp']);
+                        console.log(old_month);
+                        $(row).before(
+
+                            '<div class="d-flex align-items-center flex-wrap mr-2"><span class="label label-xl label-primary label-pill label-inline mr-2">' +
+                            old_month + '</span>' +
+                            '</div>'
+                        );
+                    }
+
                 }
             },
             // columns definition
@@ -271,7 +305,7 @@ var start_app = function() {
                 }, {
                     field: 'User',
                     title: 'User',
-                    width: 175,
+                    width: 185,
                     sortable: true,
 
                     template: function(row) {
@@ -289,12 +323,12 @@ var start_app = function() {
                 }, {
                     field: 'Category',
                     title: 'Category',
-                    width: 200,
 
+                    width: 250,
                     sortable: true,
                     template: function(row) {
 
-                        return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Category, row.Description);
+                        return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category);
                     },
                 }, {
                     field: 'Description',
@@ -311,7 +345,7 @@ var start_app = function() {
                 }, {
                     field: 'Repeated',
                     title: 'Repeated',
-                    width: 100,
+
 
                     sortable: true,
                     template: function(row) {
@@ -352,7 +386,7 @@ var start_app = function() {
 
                         var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated);
                         var delete_button = delete_button1(row.Timestamp);
-                        var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp);
+                        var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated);
                         return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>';
                     },
                 }
