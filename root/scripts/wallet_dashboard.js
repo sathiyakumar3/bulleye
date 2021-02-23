@@ -300,6 +300,7 @@ function paid_format(flag, html_tag) {
 
 var start_app = function() {
     var read_data = function(from, to, first_time) {
+
         selected_start = from;
         selected_end = to;
         var d_netincome = [];
@@ -521,7 +522,9 @@ var start_app = function() {
 
 
                                 var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
+
                                 document.getElementById("sum_earnings_m").innerHTML = currency + numberWithCommas(sum_income);
+
                                 document.getElementById("sum_expenses_m").innerHTML = currency + numberWithCommas(sum_expense);
 
                                 if ((sum_income - sum_expense) < 0) {
@@ -1227,15 +1230,25 @@ jQuery(document).ready(function() {
     var wallet_id = global_data[0];
     var wallet_name = global_data[1];
     var wallet_description = global_data[4];
-
+    var wallet_type = global_data[3];
+    var wallet_owner = global_data[5];
+    var wallet_location = global_data[6];
     cat2combo(wallet_id);
+    var user_Ref = db.collection("users");
+    getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
+        var user_name = finalResult.name;
+        document.getElementById("owrner_fp").innerText = user_name;
+    }).catch((error) => {
+        console.log(error);
+    });
 
+    document.getElementById("location_fp").innerText = wallet_location;
     document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
     document.getElementById("t_wallet_id").innerText = wallet_id;
     document.getElementById("wallet_title").innerText = wallet_description;
     document.getElementById("wallet_init").innerText = name_intials(wallet_name);
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
-    var wallet_type = global_data[3];
+
     document.getElementById("t_wallet_type").innerText = wallet_type;
     start_app.init();
 });

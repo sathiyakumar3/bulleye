@@ -63,6 +63,8 @@ function load_navi() {
                         var wallet_name = doc.data().name;
                         var wallet_type = doc.data().type;
                         var wallet_description = doc.data().description;
+                        var wallet_owner = doc.data().owner;
+                        var wallet_location = doc.data().location;
                         var promises_users = [];
                         var user_list = doc.data().users;
                         const get_users = new Promise((resolve, reject) => {
@@ -95,7 +97,9 @@ function load_navi() {
                                 wallet_id: wallet_id,
                                 wallet_name: wallet_name,
                                 wallet_type: wallet_type,
-                                wallet_description: wallet_description
+                                wallet_description: wallet_description,
+                                wallet_location: wallet_location,
+                                wallet_owner: wallet_owner
                             }
                             resolve(tabl);
                         });
@@ -221,7 +225,11 @@ function generate_navi(data, p_wallet) {
         var wallet_type = data[i]['wallet_type'];
         var users_size = data[i]['users_size'];
         var wallet_description = data[i]['wallet_description'];
-        var month_data = wallet_id + "," + wallet_name + "," + user_local.uid + "," + wallet_type + "," + wallet_description;
+        var wallet_owner = data[i]['wallet_owner'];
+        var wallet_location = data[i]['wallet_location'];
+
+
+        var month_data = wallet_id + "," + wallet_name + "," + user_local.uid + "," + wallet_type + "," + wallet_description + "," + wallet_owner + "," + wallet_location;
 
         if (wallet_id != p_wallet) {
             var my_wallet = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
@@ -452,7 +460,7 @@ function image_add(url) {
                         })
                     }
                 }
-            ).on('core.form.valid', function() {            
+            ).on('core.form.valid', function() {
                 $('#add_new_wallet').modal('toggle');
                 var name = document.getElementById('add_new_wallet_form').querySelector('[name="ad_wal_name"]').value;
                 var description = document.getElementById('add_new_wallet_form').querySelector('[name="ad_wal_desc"]').value;
@@ -540,7 +548,7 @@ function image_add(url) {
                     }).catch((error) => {
                         console.log(error);
                     });
-                    
+
                 }).catch((error) => {
                     console.log(error);
                 });
