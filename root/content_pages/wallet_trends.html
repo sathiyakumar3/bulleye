@@ -28,13 +28,6 @@
     <div class="container">
         <!--begin::Card-->
 
-        <div class="card card-custom gutter-b" id="kt_page_stretched_card">
-            <div class="row">
-                <div class="card-body">
-                    <div id="kt_main_chart_trends"></div>
-                </div>
-            </div>
-        </div>
 
         <div class="row">
 
@@ -130,7 +123,11 @@
 
                         <!--end::Items-->
                         <!--begin::Action-->
-                        <a href="#" class="btn btn-success font-weight-bolder font-size-sm" data-toggle="modal" data-target="#detailed_cat">More Info</a>
+                        <a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select data daterange" data-placement="top">
+                            <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
+                            <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Jan 30</span>
+                        </a>
+
                         <!--end::Action-->
                     </div>
                     <!--end::Body-->
@@ -138,6 +135,14 @@
                 <!--end::Tiles Widget 15-->
 
                 <!--end::Charts Widget 3-->
+            </div>
+        </div>
+
+        <div class="card card-custom gutter-b" id="kt_page_stretched_card">
+            <div class="row">
+                <div class="card-body">
+                    <div id="kt_main_chart_trends"></div>
+                </div>
             </div>
         </div>
         <!--end::Card-->

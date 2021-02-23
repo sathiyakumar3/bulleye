@@ -40,7 +40,7 @@ function process_row(obj, html, total, user_profile, sel) {
 
 function build_category_widget(cat, value, total) {
     var myvar = '<tr>' +
-        '    <td class="pl-0" style="min-width: 260px">' + icon_nd_name(get_cat_ic(cat), cat) +
+        '    <td class="pl-0" style="min-width: 150px">' + icon_nd_name(get_cat_ic(cat), cat) +
         '    </td>' +
         '    <td>' + percentage_form(value, total, 'Rs') +
         '    </td>' +
