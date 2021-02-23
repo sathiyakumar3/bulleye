@@ -10,13 +10,13 @@
             <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
             <span class="text-muted font-weight-bold mr-4" id="t_wallet_type">---</span>
             <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-            <span class="text-muted font-weight-bold mr-4" id="t_wallet_id">---</span>
+            <span class="text-muted font-weight-bold mr-4" id="dummy">Helps to track all your expenses, sales and profits in detail to meet and outperform financial objectives.</span>
             <!--end::Actions-->
         </div>
         <!--end::Info-->
         <!--begin::Toolbar-->
         <div class="d-flex align-items-center">
-     
+
         </div>
         <!--end::Toolbar-->
     </div>
@@ -27,16 +27,124 @@
     <!--begin::Container-->
     <div class="container">
         <!--begin::Card-->
-        <div class="card card-custom card-stretch example example-compact" id="kt_page_stretched_card">
 
-            <div class="card-body">
-                <div id="kt_main_chart_trends"></div>
+        <div class="card card-custom gutter-b" id="kt_page_stretched_card">
+            <div class="row">
+                <div class="card-body">
+                    <div id="kt_main_chart_trends"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-8">
+                <!--begin::Charts Widget 4-->
+                <div class="card card-custom card-stretch gutter-b">
+                    <!--begin::Header-->
+                    <div class="card-header h-auto border-0">
+                        <div class="card-title py-5">
+                            <h3 class="card-label">
+                                <span class="d-block text-dark font-weight-bolder">Summary Charts</span>
+                                <span class="d-block text-muted mt-2 font-size-sm">High-level snapshot of your financial health.</span>
+                            </h3>
+                        </div>
+                        <div class="card-toolbar">
+                            <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                                <li class="nav-item">
+                                    <a class="nav-link py-2 px-4 active" data-toggle="tab" href="#k2t_tab_pane_1_1">Income & Expense</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link py-2 px-4" data-toggle="tab" href="#k2t_tab_pane_1_3">Income</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link py-2 px-4" data-toggle="tab" href="#k2t_tab_pane_1_4">Expense</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link py-2 px-4" data-toggle="tab" href="#k2t_tab_pane_1_2">Balance</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+
+                    <div class="card-body pt-2 pb-0 mt-n3">
+                        <div class="tab-content mt-5" id="myTabTables1">
+                            <!--begin::Tap pane-->
+                            <div class="tab-pane fade show active" id="k2t_tab_pane_1_1" role="tabpanel" aria-labelledby="k2t_tab_pane_1_1">
+                                <!--begin::Table-->
+                                <div id="kt_main_chart"></div>
+                                <!--end::Table-->
+                            </div>
+                            <!--end::Tap pane-->
+                            <!--begin::Tap pane-->
+                            <div class="tab-pane fade" id="k2t_tab_pane_1_2" role="tabpanel" aria-labelledby="k2t_tab_pane_1_2">
+                                <!--begin::Table-->
+                                <div id="kt_main_chart_2"></div>
+                                <!--end::Table-->
+                            </div>
+                            <div class="tab-pane fade" id="k2t_tab_pane_1_3" role="tabpanel" aria-labelledby="k2t_tab_pane_1_3">
+                                <!--begin::Table-->
+                                <div id="kt_main_chart_3"></div>
+                                <!--end::Table-->
+                            </div>
+                            <div class="tab-pane fade" id="k2t_tab_pane_1_4" role="tabpanel" aria-labelledby="k2t_tab_pane_1_4">
+                                <!--begin::Table-->
+                                <div id="kt_main_chart_4"></div>
+                                <!--end::Table-->
+                            </div>
+                            <!--end::Tap pane-->
+                            <!--begin::Tap pane-->
+
+                            <!--end::Tap pane-->
+                        </div>
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::Charts Widget 4-->
+            </div>
+            <div class="col-lg-4">
+                <!--begin::Charts Widget 3-->
+
+                <!--begin::Tiles Widget 15-->
+                <div class="card card-custom gutter-b card-stretch">
+                    <!--begin::Header-->
+                    <div class="card-header border-0 pt-5">
+                        <div class="card-title">
+                            <div class="card-label">
+                                <div class="font-weight-bolder">Categories</div>
+                                <div class="font-size-sm text-muted mt-2">7 or more</div>
+                            </div>
+                        </div>
+                        <div class="card-toolbar">
+
+                        </div>
+                    </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div id="kt_pie_chart_cat" class="d-flex justify-content-center"></div>
+                    <div class="card-body d-flex flex-column">
+                        <!--begin::Items-->
+
+                        <!--end::Items-->
+                        <!--begin::Action-->
+                        <a href="#" class="btn btn-success font-weight-bolder font-size-sm" data-toggle="modal" data-target="#detailed_cat">More Info</a>
+                        <!--end::Action-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::Tiles Widget 15-->
+
+                <!--end::Charts Widget 3-->
             </div>
         </div>
         <!--end::Card-->
     </div>
     <!--end::Container-->
 </div>
+
 <!--end::Entry-->
 
 

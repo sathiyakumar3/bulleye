@@ -1248,7 +1248,10 @@ jQuery(document).ready(function() {
     document.getElementById("wallet_title").innerText = wallet_description;
     document.getElementById("wallet_init").innerText = name_intials(wallet_name);
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+    document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
 
-    document.getElementById("t_wallet_type").innerText = wallet_type;
+
+
+
     start_app.init();
 });

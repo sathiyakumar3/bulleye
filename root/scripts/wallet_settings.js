@@ -171,7 +171,7 @@ function pin_wall() {
     update_primary_wall(data);
 }
 
-function update_primary_wall(data){
+function update_primary_wall(data) {
     updateoptdata(user_Ref, user_id, data).then(function(finalResult) {
         get_user(user_local);
         Swal.fire(
@@ -514,8 +514,56 @@ jQuery(document).ready(function() {
     var wallet_name = global_data[1];
     var wallet_type = global_data[3];
     document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
-    document.getElementById("t_wallet_id").innerText = wallet_id;
+    // document.getElementById("t_wallet_id").innerText = wallet_id;
     var wallet_type = global_data[3];
-    document.getElementById("t_wallet_type").innerText = wallet_type;
+    document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
+    document.getElementById("access_list").innerHTML = document.getElementById("access_list").innerHTML + build_access_control(wallet_type);
     start_app.init();
 });
+
+function build_access_control(type) {
+
+    if (type == 'Premium') {
+
+        var html_div = '<li class="nav-item mr-3">' +
+            '                            <a class="nav-link" data-toggle="tab" href="#kt_apps_projects_view_tab_3">' +
+            '                                <span class="nav-icon mr-2">' +
+            '                                    <span class="svg-icon mr-3">' +
+            '                                        <!--begin::Svg Icon | path:assets/media/svg/icons/Devices/Display1.svg-->' +
+            '                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+            '                                            <polygon points="0 0 24 0 24 24 0 24"/>' +
+            '                                            <path d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>' +
+            '                                            <path d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill="#000000" fill-rule="nonzero"/>' +
+            '                                        </g></svg>' +
+            '                                        <!--end::Svg Icon-->' +
+            '                                    </span>' +
+            '                                </span>' +
+            '                                <span class="nav-text font-weight-bold">Access Control</span>' +
+            '                            </a>' +
+            '                        </li>';
+
+
+        return html_div
+    }
+    if (type == 'Free') {
+
+
+        var html_div = '<li class="nav-item mr-3">' +
+            '                            <a class="nav-link" data-toggle="tab" onclick="access_restric_error()">' +
+            '                                <span class="nav-icon mr-2">' +
+            '                                    <span class="svg-icon mr-3">' +
+            '                                        <!--begin::Svg Icon | path:assets/media/svg/icons/Devices/Display1.svg-->' +
+            '                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">        <mask fill="white">            <use xlink:href="#path-1"></use>        </mask>        <g></g>        <path d="M7,10 L7,8 C7,5.23857625 9.23857625,3 12,3 C14.7614237,3 17,5.23857625 17,8 L17,10 L18,10 C19.1045695,10 20,10.8954305 20,12 L20,18 C20,19.1045695 19.1045695,20 18,20 L6,20 C4.8954305,20 4,19.1045695 4,18 L4,12 C4,10.8954305 4.8954305,10 6,10 L7,10 Z M12,5 C10.3431458,5 9,6.34314575 9,8 L9,10 L15,10 L15,8 C15,6.34314575 13.6568542,5 12,5 Z" fill="#000000"></path>    </g></svg>' +
+            '                                        <!--end::Svg Icon-->' +
+            '                                    </span>' +
+            '                                </span>' +
+            '                                <span class="nav-text font-weight-bold">Access Control</span>&nbsp;&nbsp;' +
+            '                                <span class="svg-icon svg-icon-danger svg-icon-2x"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-02-01-052524/theme/html/demo1/dist/../src/media/svg/icons/General/Lock.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">        <mask fill="white">            <use xlink:href="#path-1"></use>        </mask>        <g></g>        <path d="M7,10 L7,8 C7,5.23857625 9.23857625,3 12,3 C14.7614237,3 17,5.23857625 17,8 L17,10 L18,10 C19.1045695,10 20,10.8954305 20,12 L20,18 C20,19.1045695 19.1045695,20 18,20 L6,20 C4.8954305,20 4,19.1045695 4,18 L4,12 C4,10.8954305 4.8954305,10 6,10 L7,10 Z M12,5 C10.3431458,5 9,6.34314575 9,8 L9,10 L15,10 L15,8 C15,6.34314575 13.6568542,5 12,5 Z" fill="#000000"></path>    </g></svg><!--end::Svg Icon--></span>' +
+            '                            </a>' +
+            '                        </li>';
+
+
+        return html_div
+    }
+
+}

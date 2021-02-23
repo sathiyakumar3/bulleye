@@ -229,7 +229,7 @@ var start_app = function() {
             },
             // column sorting
             sortable: true,
-  
+
             pagination: false,
             rowGroup: {
                 dataSrc: 4,
@@ -264,19 +264,19 @@ var start_app = function() {
 
 
 
-         
 
-if (monthts(data['Timestamp']) != old_month) {
-    old_month = monthts(data['Timestamp']);
-    console.log(old_month);
-    $(row).before(
 
-        '<span class="label label-xl  my-3 label-primary label-pill label-inline mr-2">' +
-        old_month + '</span>' +
-        ''+ '<div class="separator separator-dashed"></div>'
-    );
+                    if (monthts(data['Timestamp']) != old_month) {
+                        old_month = monthts(data['Timestamp']);
+                        console.log(old_month);
+                        $(row).before(
 
-}
+                            '<span class="label label-xl  my-3 label-primary label-pill label-inline mr-2">' +
+                            old_month + '</span>' +
+                            '' + '<div class="separator separator-dashed"></div>'
+                        );
+
+                    }
 
                 }
             },
@@ -369,6 +369,7 @@ if (monthts(data['Timestamp']) != old_month) {
                     title: 'Actions',
                     sortable: false,
                     textAlign: 'center',
+                    overflow: false,
                     autoHide: false,
                     template: function(row) {; // code block
 
@@ -466,10 +467,10 @@ jQuery(document).ready(function() {
     var wallet_name = global_data[1];
     cat2combo(wallet_id);
     document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
-    document.getElementById("t_wallet_id").innerText = wallet_id;
+    //  document.getElementById("t_wallet_id").innerText = wallet_id;
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     var wallet_type = global_data[3];
-    document.getElementById("t_wallet_type").innerText = wallet_type;
+    document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
     start_app.init();
 });
 

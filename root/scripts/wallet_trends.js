@@ -766,10 +766,10 @@ jQuery(document).ready(function() {
 
 
     document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
-    document.getElementById("t_wallet_id").innerText = wallet_id;
+    //  document.getElementById("t_wallet_id").innerText = wallet_id;
     // document.getElementById("wallet_title").innerText = wallet_name;
     var wallet_type = global_data[3];
-    document.getElementById("t_wallet_type").innerText = wallet_type;
+    document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     start_app.init();
 });

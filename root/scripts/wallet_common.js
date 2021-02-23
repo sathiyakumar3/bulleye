@@ -32,6 +32,15 @@ function myselected() {
     document.getElementById('selected_repeated').innerText = text;
 }
 
+function access_restric_error() {
+
+    Swal.fire({
+        icon: 'error',
+        title: 'Access Restricted',
+        html: 'Not available for ' + form_wal_type('Free'),
+    })
+}
+
 function myselected3() {
     var category = document.getElementById('edit_cat_selec').value;
     document.getElementById('sel_icon_add').innerHTML = '<svg><use xlink:href="#' + get_cat_ic(category) + '"></use></svg>';
@@ -460,6 +469,7 @@ function icon_nd_name(icon, name) {
 }
 
 
+
 function icon_nd_name_nd_description(icon, name, description) {
     var html_div =
         '<div class="d-flex align-items-center">' +
@@ -476,6 +486,18 @@ function icon_nd_name_nd_description(icon, name, description) {
         '</div></div>';
     return html_div;
 }
+
+function form_wal_type(wallet_type) {
+    var html_div = "";
+    if (wallet_type == 'Free') {
+        html_div = '<span class="label label-lg label-danger label-pill label-inline mr-2">Personal Use</span>'
+    }
+    if (wallet_type == 'Premium') {
+        html_div = '<span class="label label-lg label-success label-pill label-inline mr-2">Business Use</span>'
+    }
+    return html_div
+}
+
 
 
 function icon_nd_photo_name_email(photo, username, email) {
