@@ -229,22 +229,7 @@ var start_app = function() {
             },
             // column sorting
             sortable: true,
-            drawCallback: function(settings) {
-                var api = this.api();
-                var rows = api.rows({ page: 'current' }).nodes();
-                var last = null;
-
-                api.column(4, { page: 'current' }).data().each(function(group, i) {
-                    console.log(last);
-                    console.log(1)
-                    if (last !== group) {
-                        $(rows).eq(i).before(
-                            '<tr class="group"><td colspan="10">' + group + '</td></tr>',
-                        );
-                        last = group;
-                    }
-                });
-            },
+  
             pagination: false,
             rowGroup: {
                 dataSrc: 4,
@@ -279,16 +264,19 @@ var start_app = function() {
 
 
 
-                    if (monthts(data['Timestamp']) != old_month) {
-                        old_month = monthts(data['Timestamp']);
-                        console.log(old_month);
-                        $(row).before(
+         
 
-                            '<div class="d-flex align-items-center flex-wrap mr-2"><span class="label label-xl label-primary label-pill label-inline mr-2">' +
-                            old_month + '</span>' +
-                            '</div>'
-                        );
-                    }
+if (monthts(data['Timestamp']) != old_month) {
+    old_month = monthts(data['Timestamp']);
+    console.log(old_month);
+    $(row).before(
+
+        '<span class="label label-xl  my-3 label-primary label-pill label-inline mr-2">' +
+        old_month + '</span>' +
+        ''+ '<div class="separator separator-dashed"></div>'
+    );
+
+}
 
                 }
             },
