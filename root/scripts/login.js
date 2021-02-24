@@ -4,6 +4,33 @@
 var KTLogin = function() {
     var _buttonSpinnerClasses = 'spinner spinner-right spinner-white pr-15';
 
+    var restore_credentials = function() {
+        var email = getCookie('em');
+        var ps = getCookie('ps');
+        var rm = getCookie('rm');
+
+        if (rm) {
+            if (email != '' && ps != '') {
+                document.getElementById("username").value = email;
+                document.getElementById("password").value = ps;
+
+            }
+            document.getElementById("rememberme").checked = true;
+        } else {
+            document.getElementById("rememberme").checked = false;
+        }
+
+        const checkbox = document.getElementById('rememberme')
+
+        checkbox.addEventListener('change', (event) => {
+            if (!event.currentTarget.checked) {
+                eraseCookie('rm');
+                eraseCookie('em');
+                eraseCookie('pw');
+            }
+        })
+
+    }
     var _handleFormSignin = function() {
         var form = KTUtil.getById('kt_login_singin_form');
         var formSubmitUrl = KTUtil.attr(form, 'action');
@@ -54,6 +81,13 @@ var KTLogin = function() {
                  */
                 var email = form.querySelector('[name="username"]').value;
                 var password = form.querySelector('[name="password"]').value;
+                var rememberme = document.getElementById("rememberme").checked
+                if (rememberme) {
+                    setCookie('em', email);
+
+                    setCookie('ps', password)
+                    setCookie('rm', rememberme)
+                }
 
                 firebase.auth().signInWithEmailAndPassword(email, password)
                     .then((userCredential) => {
@@ -273,6 +307,15 @@ var KTLogin = function() {
                                 message: 'A Name is required'
                             }
                         }
+                    },
+                    su_contactno: {
+                        validators: {
+                            integer: {
+                                message: 'The value is not a valid integer number',
+                                // The default separators
+
+                            }
+                        }
                     }
                 },
                 plugins: {
@@ -305,7 +348,8 @@ var KTLogin = function() {
                 validator.validate().then(function(status) {
                     if (status == 'Valid') {
                         wizard.goTo(wizard.getNewStep());
-                        KTUtil.getById("sum_email").value = form.querySelector('[name="su_email"]').value.toLowerCase();
+                        KTUtil.getById("sum_email").innerText = form.querySelector('[name="su_email"]').value.toLowerCase();
+                        console.log("is hter");
                         KTUtil.getById("sum_password").value = form.querySelector('[name="su_password"]').value;
                         KTUtil.getById("sum_name").innerHTML = form.querySelector('[name="su_name"]').value;
                         KTUtil.getById("sum_gender").innerHTML = form.querySelector('[name="su_gender"]').value;
@@ -358,20 +402,7 @@ var KTLogin = function() {
                     var su_gender = form.querySelector('[name="su_gender"]').value;
                     var su_contactno = form.querySelector('[name="su_contactno"]').value;
                     var su_country = form.querySelector('[name="su_country"]').value;
-                    create_account(su_email, su_password, su_name, su_gender, su_contactno, su_country);
-
-
-
-
-
-
-
-                    //    form.submit(); // Submit form
-
-
-
-
-
+                    create_account(su_email, su_password, su_name, su_gender, su_contactno, su_country); //    form.submit(); // Submit form
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been submitted!.",
@@ -390,12 +421,14 @@ var KTLogin = function() {
     // Public Functions
     return {
         init: function() {
+            restore_credentials();
             _handleFormSignin();
             _handleFormForgot();
             _handleFormSignup();
         }
     };
 }();
+
 
 function create_account(su_email, su_password, su_name, su_gender, su_contactno, su_country) {
 

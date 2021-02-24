@@ -1,25 +1,14 @@
 <!DOCTYPE html>
-<!--
-Template Name: Metronic - Bootstrap 4 HTML, React, Angular 11 & VueJS Admin Dashboard Theme
-Author: KeenThemes
-Website: http://www.keenthemes.com/
-Contact: support@keenthemes.com
-Follow: www.twitter.com/keenthemes
-Dribbble: www.dribbble.com/keenthemes
-Like: www.facebook.com/keenthemes
-Purchase: https://1.envato.market/EA4JP
-Renew Support: https://1.envato.market/EA4JP
-License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
--->
+
+
 <html lang="en">
-<!--begin::Head-->
 
 
 <head>
     <base href="../../../../">
     <meta charset="utf-8" />
     <title>Sign In | Admininate</title>
-    <meta name="description" content="Singin page example" />
+    <meta name="description" content="Get your finance together." />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="canonical" href="https://keenthemes.com/metronic" />
     <!--begin::Fonts-->
@@ -93,22 +82,33 @@ License: You must have a valid license purchased only from themeforest(the above
                             <div class="pb-5 pb-lg-15">
                                 <h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Sign In</h3>
                                 <div class="text-muted font-weight-bold font-size-h4">New Here?
-                                    <a href="custom/pages/login/signup.html" class="text-primary font-weight-bolder">Create Account</a></div>
+                                    <a href="signup.html" class="text-primary font-weight-bolder">Create Account</a></div>
                             </div>
                             <!--begin::Title-->
                             <!--begin::Form group-->
                             <div class="form-group">
                                 <label class="font-size-h6 font-weight-bolder text-dark">Your Email</label>
-                                <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text" name="username" autocomplete="off" />
+                                <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text" name="username" id="username" autocomplete="off" />
                             </div>
                             <!--end::Form group-->
                             <!--begin::Form group-->
                             <div class="form-group">
                                 <div class="d-flex justify-content-between mt-n5">
                                     <label class="font-size-h6 font-weight-bolder text-dark pt-5">Your Password</label>
-                                    <a href="custom/pages/login/forgot.html" class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5">Forgot Password ?</a>
+                                    <a href="forgot.html" class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5">Forgot Password ?</a>
                                 </div>
-                                <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="password" name="password" autocomplete="off" />
+                                <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="password" id="password" name="password" autocomplete="off" />
+                            </div>
+                            <div class="form-group">
+
+                                <div class="checkbox-inline">
+                                    <label class="checkbox checkbox-lg">
+                                    <input type="checkbox" checked="checked" name="rememberme" id="rememberme">
+                                    <span></span>Remember Me</label>
+
+
+                                </div>
+                                <span class="form-text text-muted">Makes things easier next time you login.</span>
                             </div>
                             <!--end::Form group-->
                             <!--begin::Action-->
@@ -150,9 +150,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <!--end::Login-->
     </div>
     <!--end::Main-->
-    <script>
-        var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";
-    </script>
+
     <!--begin::Global Config(global config for global JS scripts)-->
     <script>
         var KTAppSettings = {
@@ -219,9 +217,8 @@ License: You must have a valid license purchased only from themeforest(the above
     <script src="assets/plugins/global/plugins.bundle.js"></script>
     <script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
     <script src="assets/js/scripts.bundle.js"></script>
-    <!--end::Global Theme Bundle-->
-    <!--begin::Page Scripts(used by this page)-->
-    <script src="assets/js/pages/custom/login/login.js"></script>
+    <script src="scripts/cookies.js"></script>
+    <script src="scripts/login.js"></script>
     <!--end::Page Scripts-->
 </body>
 <!--end::Body-->

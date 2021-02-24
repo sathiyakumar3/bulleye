@@ -131,7 +131,7 @@ function build_trend(month_data, type) {
         return html_div
     }
     if (type == 'Free') {
-        var myvar = '<span class="svg-icon svg-icon-danger svg-icon-2x">' + '<svg><use xlink:href="#locked"></use></svg></span>';
+        var myvar = '<span class="svg-icon menu-icon svg-icon-danger">' + '<svg><use xlink:href="#locked"></use></svg></span>';
         var html_div = '<li class="menu-item" aria-haspopup="true">' +
             '<a class="menu-link" onclick="access_restric_error()">' +
             '<span class="svg-icon menu-icon">' +
@@ -224,6 +224,9 @@ function generate_navi(data, p_wallet) {
                 '<svg><use xlink:href="#sidemenu"></use></svg>' +
                 '            </span>' +
                 '        <span class="menu-text">' + wallet_name + '</span>' +
+                '<span class="menu-label">' +
+
+                '</span>' +
                 '        <i class="menu-arrow"></i>' +
                 '    </a>' +
                 '    <div class="menu-submenu">' +

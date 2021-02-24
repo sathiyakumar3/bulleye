@@ -18,7 +18,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <base href="../../../../">
     <meta charset="utf-8" />
     <title>Sign Up | Adminiate</title>
-    <meta name="description" content="Singin page example" />
+    <meta name="description" content="Get your finance together." />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="canonical" href="https://keenthemes.com/metronic" />
     <!--begin::Fonts-->
@@ -144,7 +144,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <div class="pb-10 pb-lg-12">
                                     <h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Create Account</h3>
                                     <div class="text-muted font-weight-bold font-size-h4">Already have an Account ?
-                                        <a href="custom/pages/login/signin.html" class="text-primary font-weight-bolder">Sign In</a></div>
+                                        <a href="signin.html" class="text-primary font-weight-bolder">Sign In</a></div>
                                 </div>
                                 <!--begin::Title-->
                                 <!--begin::Form Group-->
@@ -167,7 +167,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <div class="pt-lg-0 pt-5 pb-15">
                                     <h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Other Details</h3>
                                     <div class="text-muted font-weight-bold font-size-h4">Already have an Account ?
-                                        <a href="custom/pages/login/signin.html" class="text-primary font-weight-bolder">Sign In</a></div>
+                                        <a href="signin.html" class="text-primary font-weight-bolder">Sign In</a></div>
                                 </div>
                                 <!--begin::Title-->
                                 <!--begin::Row-->
@@ -502,11 +502,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </div>
                                 <!--end::Section-->
                                 <!--begin::Section-->
-                                <h4 class="font-weight-bolder mb-3">Support Channels:</h4>
-                                <div class="text-dark-50 font-weight-bold line-height-lg mb-8">
-                                    <div>Overnight Delivery with Regular Packaging</div>
-                                    <div>Preferred Morning (8:00AM - 11:00AM) Delivery</div>
-                                </div>
+
                                 <!--end::Section-->
                             </div>
                             <!--end: Wizard Step 5-->
@@ -576,10 +572,8 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
         <!--end::Login-->
     </div>
-    <!--end::Main-->
-    <script>
-        var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";
-    </script>
+
+
     <!--begin::Global Config(global config for global JS scripts)-->
     <script>
         var KTAppSettings = {
@@ -648,7 +642,12 @@ License: You must have a valid license purchased only from themeforest(the above
     <script src="assets/js/scripts.bundle.js"></script>
     <!--end::Global Theme Bundle-->
     <!--begin::Page Scripts(used by this page)-->
-    <script src="assets/js/pages/custom/login/login.js"></script>
+    <script src="scripts/login.js"></script>
+    <script>
+        $(document).on("keydown", "form", function(event) {
+            return event.key != "Enter";
+        });
+    </script>
     <!--end::Page Scripts-->
 </body>
 <!--end::Body-->
