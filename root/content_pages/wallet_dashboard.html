@@ -101,127 +101,162 @@
                 </div>
             </div>
         </div>
-        <div class=row>
-            <div class=col-lg-8>
-                <div class="card card-custom card-stretch gutter-b">
-                    <div class="card-header border-0 py-5">
-                        <h3 class="card-title align-items-start flex-column"><span class="card-label font-weight-bolder text-dark">Recurring vs Occational Transactions</span> <span class="text-muted mt-3 font-weight-bold font-size-sm">How much can you take forward?</span></h3>
-                        <div class=card-toolbar><a href=# class="btn btn-success font-weight-bolder font-size-sm"><span class="svg-icon svg-icon-md svg-icon-white"><svg xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink width=24px height=24px viewbox="0 0 24 24" version=1.1><g stroke=none stroke-width=1 fill=none fill-rule=evenodd><polygon points="0 0 24 0 24 24 0 24"></polygon><path d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" fill=#000000 fill-rule=nonzero opacity=0.3></path><path d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill=#000000 fill-rule=nonzero></path></g></svg></span>Add New Member</a></div>
-                    </div>
-                    <div class="card-body pt-0 pb-3">
-                        <div class=table-responsive>
-                            <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
-                                <thead>
-                                    <tr class=text-uppercase>
-                                        <th style="min-width: 80px" class=pl-7><span class=text-dark-75>Transactions</span></th>
-                                        <th style="min-width: 100px">Income</th>
-                                        <th style="min-width: 100px">Expense</th>
-                                        <th style="min-width: 100px">Net</th>
-                                        <th style="min-width: 150px">Percentage</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="pl-0 py-0">
-                                            <div class="d-flex align-items-center">
-                                                <div class="symbol symbol-50 flex-shrink-0 mr-4">
-                                                    <div class=symbol-label style="background-image: url('assets/media/svg/misc/009-hot-air-balloon.svg')"></div>
-                                                </div>
-                                                <div><a href=# class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">All Paid</a> <span class="text-muted font-weight-bold d-block" id=up_entires></span></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=up_income>---</span> <span class="text-muted font-weight-bold" id=up_i_flag>---</span></td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=up_expense>---</span> <span class="text-muted font-weight-bold" id=up_e_flag>---</span></td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=up_net>---</span> <span class="text-muted font-weight-bold">Rejected</span></td>
-                                        <td>
-                                            <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                <div class="d-flex flex-column w-100 mr-2">
-                                                    <div class="d-flex align-items-center justify-content-between mb-2"><span class="text-muted mr-2 font-size-sm font-weight-bold" id=up_pecent>0%</span> <span class="text-muted font-size-sm font-weight-bold">of Total</span></div>
-                                                    <div class="progress progress-xs w-100">
-                                                        <div class=progress-bar role=progressbar style="width: 0%" aria-valuenow=50 aria-valuemin=0 aria-valuemax=100 id=up_pecent_bar></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pl-0 py-8">
-                                            <div class="d-flex align-items-center">
-                                                <div class="symbol symbol-50 flex-shrink-0 mr-4">
-                                                    <div class=symbol-label style="background-image: url('assets/media/svg/misc/003-puzzle.svg')"></div>
-                                                </div>
-                                                <div><a href=# class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Recurring</a> <span class="text-muted font-weight-bold d-block" id=p_entires>---</span></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=p_income>---</span> <span class="text-muted font-weight-bold" id=p_i_flag>Paid</span></td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=p_expense>---</span> <span class="text-muted font-weight-bold" id=p_e_flag>Paid</span></td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=p_net>---</span> <span class="text-muted font-weight-bold">Paid</span></td>
-                                        <td>
-                                            <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                <div class="d-flex flex-column w-100 mr-2">
-                                                    <div class="d-flex align-items-center justify-content-between mb-2"><span class="text-muted mr-2 font-size-sm font-weight-bold" id=p_pecent>0%</span> <span class="text-muted font-size-sm font-weight-bold">of Total</span></div>
-                                                    <div class="progress progress-xs w-100">
-                                                        <div class="progress-bar bg-danger" role=progressbar style="width: 0%" aria-valuenow=50 aria-valuemin=0 aria-valuemax=100 id=p_pecent_bar></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
 
-                                    <tr>
-                                        <td class="pl-0 py-8">
-                                            <div class="d-flex align-items-center">
-                                                <div class="symbol symbol-50 flex-shrink-0 mr-4">
-                                                    <div class=symbol-label style="background-image: url('assets/media/svg/misc/003-puzzle.svg')"></div>
-                                                </div>
-                                                <div><a href=# class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Other</a> <span class="text-muted font-weight-bold d-block" id=p_entires>---</span></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=p_income>---</span> <span class="text-muted font-weight-bold" id=p_i_flag>Paid</span></td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=p_expense>---</span> <span class="text-muted font-weight-bold" id=p_e_flag>Paid</span></td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=p_net>---</span> <span class="text-muted font-weight-bold">Paid</span></td>
-                                        <td>
-                                            <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                <div class="d-flex flex-column w-100 mr-2">
-                                                    <div class="d-flex align-items-center justify-content-between mb-2"><span class="text-muted mr-2 font-size-sm font-weight-bold" id=p_pecent>0%</span> <span class="text-muted font-size-sm font-weight-bold">of Total</span></div>
-                                                    <div class="progress progress-xs w-100">
-                                                        <div class="progress-bar bg-danger" role=progressbar style="width: 0%" aria-valuenow=50 aria-valuemin=0 aria-valuemax=100 id=p_pecent_bar></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pl-0 py-8">
-                                            <div class="d-flex align-items-center">
-                                                <div class="symbol symbol-50 flex-shrink-0 mr-4">
-                                                    <div class=symbol-label style="background-image: url('assets/media/svg/misc/003-puzzle.svg')"></div>
-                                                </div>
-                                                <div><a href=# class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Total</a> <span class="text-muted font-weight-bold d-block" id=p_entires>---</span></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=p_income>---</span> <span class="text-muted font-weight-bold" id=p_i_flag>Paid</span></td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=p_expense>---</span> <span class="text-muted font-weight-bold" id=p_e_flag>Paid</span></td>
-                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=p_net>---</span> <span class="text-muted font-weight-bold">Paid</span></td>
-                                        <td>
-                                            <div class="d-flex align-items-center flex-lg-fill mr-5 my-1">
-                                                <div class="d-flex flex-column w-100 mr-2">
-                                                    <div class="d-flex align-items-center justify-content-between mb-2"><span class="text-muted mr-2 font-size-sm font-weight-bold" id=p_pecent>0%</span> <span class="text-muted font-size-sm font-weight-bold">of Total</span></div>
-                                                    <div class="progress progress-xs w-100">
-                                                        <div class="progress-bar bg-danger" role=progressbar style="width: 0%" aria-valuenow=50 aria-valuemin=0 aria-valuemax=100 id=p_pecent_bar></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
 
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+        <div class="card card-custom gutter-b">
+            <div class="card-header border-0 py-5">
+                <h3 class="card-title align-items-start flex-column"><span class="card-label font-weight-bolder text-dark">Wallet Summary</span> <span class="text-muted mt-3 font-weight-bold font-size-sm">How much can you take forward?</span></h3>
+                <div class=card-toolbar><a href=# class="btn btn-success btn-md font-weight-bold mr-2" data-toggle=modal data-target=#not_paid_modal>Not Paid Entries</a> </div>
             </div>
-            <div class=col-lg-4>
+            <div class="card-body pt-0 pb-3">
+                <div class=table-responsive>
+                    <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
+                        <thead>
+                            <tr class=text-uppercase>
+                                <th style="min-width: 150px" class=pl-7><span class=text-dark-75>Transactions</span></th>
+                                <th style="min-width: 100px">Includes</th>
+                                <th style="min-width: 100px;text-align: center">Income</th>
+                                <th style="min-width: 100px;text-align: center">Expense</th>
+                                <th style="min-width: 100px;text-align: center">Net</th>
+                                <th style="min-width: 100px;">Verdict</th>
+                                <th>Percentage</th>
+                                <th>Info</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="pl-0 py-8">
+                                    <div class="d-flex align-items-center">
+                                        <div class="symbol symbol-50 flex-shrink-0 mr-4">
+                                            <span class="symbol-label">
+                                                <span class="svg-icon svg-icon-2x svg-icon-success">
+                                                <svg><use xlink:href="#box"></use></svg>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div><a href=# class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Current</a> <span class="text-muted font-weight-bold d-block">Transactions</span></div>
+                                    </div>
+                                </td>
+                                <td><span class="text-muted font-weight-500">Paid Only</span></td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=current_income>---</span></td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=current_expense>---</span> </td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=current_net>---</span></td>
+                                <td>
+                                    <span id="cur_pl"></span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column w-100 mr-2" id="cur_progress">
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-center font-weight-normal">Based on paid transactions only, indicates <br>  how much you should have now</span> &nbsp; &nbsp; <span class="label label-md label-info label-pill label-inline mr-2">Check?</span>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td class="pl-0 py-8">
+                                    <div class="d-flex align-items-center">
+                                        <div class="symbol symbol-50 flex-shrink-0 mr-4">
+                                            <span class="symbol-label">
+                                                <span class="svg-icon svg-icon-2x svg-icon-success">
+                                                <svg><use xlink:href="#users"></use></svg>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div><a href=# class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Recurring</a> <span class="text-muted font-weight-bold d-block" id=p_entires>Transactions</span></div>
+                                    </div>
+                                </td>
+                                <td class="text-center"><span class="text-muted font-weight-500">Paid & Not Paid</span></td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=rec_income>---</span> </td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=rec_expense>---</span> </td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=rec_net>---</span> </td>
+                                <td>
+                                    <span id="rec_pl"></span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column w-100 mr-2" id="rec_progress">
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-center font-weight-normal ">The remaining sum from the liabilities.<br>
+                                        Available for non-recurring transactions.</span>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="pl-0 py-8">
+                                    <div class="d-flex align-items-center">
+                                        <div class="symbol symbol-50 flex-shrink-0 mr-4">
+                                            <span class="symbol-label">
+                                                <span class="svg-icon svg-icon-2x svg-icon-success">
+                                                <svg><use xlink:href="#foursquare"></use></svg>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div><a href=# class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Non-Recurring</a> <span class="text-muted font-weight-bold d-block" id=p_entires>Transactions</span></div>
+                                    </div>
+                                </td>
+                                <td class="text-center"><span class="text-muted font-weight-500">Paid & Not Paid</span></td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=non_income>---</span> </td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=non_expense>---</span> </td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=non_net>---</span> </td>
+                                <td>
+                                    <span id="non_pl"></span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column w-100 mr-2" id="non_progress">
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-center font-weight-normal">Balance after liabilities and your other <br>
+                                        transactions, indicates Final Profit.</span>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td class="pl-0 py-8">
+                                    <div class="d-flex align-items-center">
+                                        <div class="symbol symbol-50 flex-shrink-0 mr-4">
+                                            <span class="symbol-label">
+                                                <span class="svg-icon svg-icon-2x svg-icon-success">
+                                                <svg><use xlink:href="#star"></use></svg>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div><a href=# class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Total</a> <span class="text-muted font-weight-bold d-block" id=p_entires>Transactions</span></div>
+                                    </div>
+                                </td>
+                                <td class="text-center"><span class="text-muted font-weight-500">Paid & Not Paid</span></td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=fin_income>---</span> </td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=fin_expense>---</span> </td>
+                                <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id=fin_net>---</span></td>
+                                <td><span id="fin_pl"></span></td>
+                                <td>
+                                    <div class="d-flex flex-column w-100 mr-2" id="total_progress">
+
+                                    </div>
+                                </td>
+                                <br>
+                                <td>
+                                    <span class="text-center font-weight-normal  ">Balance after all the transactions.<br>
+                                        Taken Forward.</span>
+                                </td>
+                </div>
+                </td>
+                </tr>
+
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--      <div class=col-lg-4>
                 <div class="card card-custom gutter-b wave wave-animate-slower" style="height: 200px">
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex align-items-center justify-content-between flex-grow-1">
@@ -242,77 +277,75 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class=row>
-            <div class=col-xl-6>
-                <div class="card card-custom card-stretch gutter-bs">
-                    <div class="card-header border-0 pt-5">
-                        <h3 class="card-title align-items-start flex-column"><span class="card-label font-weight-bolder text-dark">Finance Distributions</span> <span class="text-muted mt-3 font-weight-bold font-size-sm">More than er0+ new members</span></h3>
-                        <div class=card-toolbar>
-                            <ul class="nav nav-pills nav-pills-sm nav-dark-75">
-                                <li class=nav-item><a class="nav-link py-2 px-4 active" data-toggle=tab href=#kt_tab_pane_1_1>Income</a></li>
-                                <li class=nav-item><a class="nav-link py-2 px-4" data-toggle=tab href=#kt_tab_pane_1_2>Expense</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card-body pt-2 pb-0 mt-n3">
-                        <div class="tab-content mt-5" id=myTabTables1>
-                            <div class="tab-pane fade show active" id=kt_tab_pane_1_1 role=tabpanel aria-labelledby=kt_tab_pane_1_1>
-                                <div class=table-responsive>
-                                    <table class="table table-borderless table-vertical-center">
-                                        <tbody id=testtt></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id=kt_tab_pane_1_2 role=tabpanel aria-labelledby=kt_tab_pane_1_2>
-                                <div class=table-responsive>
-                                    <table class="table table-borderless table-vertical-center">
-                                        <tbody id=testtt2></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+            </div> -->
+
+    <div class=row>
+        <div class=col-xl-6>
+            <div class="card card-custom card-stretch gutter-bs">
+                <div class="card-header border-0 pt-5">
+                    <h3 class="card-title align-items-start flex-column"><span class="card-label font-weight-bolder text-dark">Finance Distributions</span> <span class="text-muted mt-3 font-weight-bold font-size-sm">As per Category</span></h3>
+                    <div class=card-toolbar>
+                        <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                            <li class=nav-item><a class="nav-link py-2 px-4 active" data-toggle=tab href=#kt_tab_pane_1_1>Income</a></li>
+                            <li class=nav-item><a class="nav-link py-2 px-4" data-toggle=tab href=#kt_tab_pane_1_2>Expense</a></li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-            <div class=col-xl-6>
-                <div class="card card-custom card-stretch gutter-b">
-                    <div class="card-header border-0 pt-5">
-                        <h3 class="card-title align-items-start flex-column"><span class="card-label font-weight-bolder text-dark">Individual Contributions</span> <span class="text-muted mt-3 font-weight-bold font-size-sm">More than 400+ new members</span></h3>
-                    </div>
-                    <div class="card-body pt-2 pb-0 mt-n3">
-                        <div class="tab-content mt-5" id=myTabTables6>
-                            <div class="tab-pane fade show active" id=kt_tab_pane_6_1 role=tabpanel aria-labelledby=kt_tab_pane_6_1>
-                                <div class=table-responsive>
-                                    <table class="table table-borderless table-vertical-center">
-                                        <tbody id=testtt3></tbody>
-                                    </table>
-                                </div>
+                <div class="card-body pt-2 pb-0 mt-n3">
+                    <div class="tab-content mt-5" id=myTabTables1>
+                        <div class="tab-pane fade show active" id=kt_tab_pane_1_1 role=tabpanel aria-labelledby=kt_tab_pane_1_1>
+                            <div class=table-responsive>
+                                <table class="table table-borderless table-vertical-center">
+                                    <tbody id=testtt></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id=kt_tab_pane_1_2 role=tabpanel aria-labelledby=kt_tab_pane_1_2>
+                            <div class=table-responsive>
+                                <table class="table table-borderless table-vertical-center">
+                                    <tbody id=testtt2></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        &nbsp; &nbsp;
-        <div class=row>
-            <div class=col-xl-4 id=tips_board>
-                <div class="card card-custom wave wave-animate-slower mb-8 mb-lg-0">
-                    <div class="card-header h-auto py-3 border-0">
-                        <div class=card-title>
-                            <h3 class="card-label text-danger">Important Notice</h3>
-                        </div>
-                        <div class=card-toolbar><span class="label font-weight-bold label label-inline label-light-danger">Now</span></div>
+        <div class=col-xl-6>
+            <div class="card card-custom card-stretch gutter-bs">
+                <div class="card-header border-0 pt-5">
+                    <h3 class="card-title align-items-start flex-column"><span class="card-label font-weight-bolder text-dark">Individual Contributions</span> <span class="text-muted mt-3 font-weight-bold font-size-sm">As per users</span></h3>
+                    <div class=card-toolbar>
+                        <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                            <li class=nav-item><a class="nav-link py-2 px-4 active" data-toggle=tab href=#kt_tab_pane_1_1>Income</a></li>
+                            <li class=nav-item><a class="nav-link py-2 px-4" data-toggle=tab href=#kt_tab_pane_1_2>Expense</a></li>
+                        </ul>
                     </div>
-                    <div class="card-body pt-2">
-                        <p class=text-dark-50 id=not_paid_text>---</p>
-                        <div class=mt-5><a href=# class="btn btn-success btn-sm font-weight-bold mr-2" data-toggle=modal data-target=#not_paid_modal>Set up</a> <a class="btn btn-primary btn-sm font-weight-bold mr-2" onclick=enable_tips()>Dismiss</a></div>
+                </div>
+                <div class="card-body pt-2 pb-0 mt-n3">
+                    <div class="tab-content mt-5" id=myTabTables1>
+                        <div class="tab-pane fade show active" id=kt_tab_pane_1_1 role=tabpanel aria-labelledby=kt_tab_pane_1_1>
+                            <div class=table-responsive>
+                                <table class="table table-borderless table-vertical-center">
+                                    <tbody id=testtt3></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id=kt_tab_pane_1_2 role=tabpanel aria-labelledby=kt_tab_pane_1_2>
+                            <div class=table-responsive>
+                                <table class="table table-borderless table-vertical-center">
+                                    <tbody id=testtt4></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+</div>
 </div>
 <div class="modal fade" id=not_paid_modal tabindex=-1 role=dialog aria-hidden=true>
     <div class="modal-dialog modal-lg modal-dialog-centered" role=document>
@@ -334,7 +367,9 @@
                                     <th style="min-width: 75px">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id=table_23></tbody>
+                            <tbody id=table_23>
+
+                            </tbody>
                         </table>
                     </div>
                 </div>

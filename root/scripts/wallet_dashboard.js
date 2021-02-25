@@ -70,24 +70,13 @@ function build_table(user, obj) {
     switch (obj[user]['Payment']) {
         case 'Paid':
             var myvar2 = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="update_entry(\'' + obj[user]['Description'] + '\', \'' + obj[user]['Category'] + '\', \'' + obj[user]['Amount'] + '\', \'' + obj[user]['Timestamp'] + '\', \'' + obj[user]['Type'] + '\', \'' + 'Not Paid' + '\', \'' + obj[user]['user'] + '\', \'' + obj[user]['Repeated'] + '\');update_tabler(\'' + obj[user]['Timestamp'] + '\', \'' + 'Not Paid' + '\')">' +
-                '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Error-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                '        <rect x="0" y="0" width="24" height="24"/>' +
-                '        <path d="M12.0355339,10.6213203 L14.863961,7.79289322 C15.2544853,7.40236893 15.8876503,7.40236893 16.2781746,7.79289322 C16.6686989,8.18341751 16.6686989,8.81658249 16.2781746,9.20710678 L13.4497475,12.0355339 L16.2781746,14.863961 C16.6686989,15.2544853 16.6686989,15.8876503 16.2781746,16.2781746 C15.8876503,16.6686989 15.2544853,16.6686989 14.863961,16.2781746 L12.0355339,13.4497475 L9.20710678,16.2781746 C8.81658249,16.6686989 8.18341751,16.6686989 7.79289322,16.2781746 C7.40236893,15.8876503 7.40236893,15.2544853 7.79289322,14.863961 L10.6213203,12.0355339 L7.79289322,9.20710678 C7.40236893,8.81658249 7.40236893,8.18341751 7.79289322,7.79289322 C8.18341751,7.40236893 8.81658249,7.40236893 9.20710678,7.79289322 L12.0355339,10.6213203 Z" fill="#000000"/>' +
-                '    </g>' +
-                '</svg><!--end::Svg Icon--></span>' +
+                '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Error-circle.svg--> <svg><use xlink:href="#cross"></use></svg></span>' +
                 '</a>';
             break;
         case 'Not Paid':
 
             var myvar2 = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="update_entry(\'' + obj[user]['Description'] + '\', \'' + obj[user]['Category'] + '\', \'' + obj[user]['Amount'] + '\', \'' + obj[user]['Timestamp'] + '\', \'' + obj[user]['Type'] + '\', \'' + 'Paid' + '\', \'' + obj[user]['user'] + '\', \'' + obj[user]['Repeated'] + '\');update_tabler(\'' + obj[user]['Timestamp'] + '\', \'' + 'Paid' + '\')">' +
-                '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Done-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                '        <rect x="0" y="0" width="24" height="24"/>' +
-
-                '        <path d="M16.7689447,7.81768175 C17.1457787,7.41393107 17.7785676,7.39211077 18.1823183,7.76894473 C18.5860689,8.1457787 18.6078892,8.77856757 18.2310553,9.18231825 L11.2310553,16.6823183 C10.8654446,17.0740439 10.2560456,17.107974 9.84920863,16.7592566 L6.34920863,13.7592566 C5.92988278,13.3998345 5.88132125,12.7685345 6.2407434,12.3492086 C6.60016555,11.9298828 7.23146553,11.8813212 7.65079137,12.2407434 L10.4229928,14.616916 L16.7689447,7.81768175 Z" fill="#000000" fill-rule="nonzero"/>' +
-                '    </g>' +
-                '</svg><!--end::Svg Icon--></span>' +
+                '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Done-circle.svg--> <svg><use xlink:href="#tick"></use></svg></span>' +
                 '</a>';
             break;
         default:
@@ -121,158 +110,7 @@ function remove_not_paid(array) {
     return obj;
 }
 
-function enable_tips() {
 
-    document.getElementById("tips_board").style.display = "none";
-}
-
-function enable_tips2() {
-    tips_enabled = true;
-    var expression = 1;
-    var default_message = '<div class="card card-custom wave wave-animate-slow wave-primary mb-8 mb-lg-0">' +
-        '											<div class="card-body">' +
-        '												<div class="d-flex align-items-center p-5">' +
-        '													<div class="mr-6">' +
-        '														<span class="svg-icon svg-icon-primary svg-icon-4x">' +
-        '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Home/Mirror.svg-->' +
-        '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-        '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-        '																	<rect x="0" y="0" width="24" height="24"></rect>' +
-        '																	<path d="M13,17.0484323 L13,18 L14,18 C15.1045695,18 16,18.8954305 16,20 L8,20 C8,18.8954305 8.8954305,18 10,18 L11,18 L11,17.0482312 C6.89844817,16.5925472 3.58685702,13.3691811 3.07555009,9.22038742 C3.00799634,8.67224972 3.3975866,8.17313318 3.94572429,8.10557943 C4.49386199,8.03802567 4.99297853,8.42761593 5.06053229,8.97575363 C5.4896663,12.4577884 8.46049164,15.1035129 12.0008191,15.1035129 C15.577644,15.1035129 18.5681939,12.4043008 18.9524872,8.87772126 C19.0123158,8.32868667 19.505897,7.93210686 20.0549316,7.99193546 C20.6039661,8.05176407 21.000546,8.54534521 20.9407173,9.09437981 C20.4824216,13.3000638 17.1471597,16.5885839 13,17.0484323 Z" fill="#000000" fill-rule="nonzero"></path>' +
-        '																	<path d="M12,14 C8.6862915,14 6,11.3137085 6,8 C6,4.6862915 8.6862915,2 12,2 C15.3137085,2 18,4.6862915 18,8 C18,11.3137085 15.3137085,14 12,14 Z M8.81595773,7.80077353 C8.79067542,7.43921955 8.47708263,7.16661749 8.11552864,7.19189981 C7.75397465,7.21718213 7.4813726,7.53077492 7.50665492,7.89232891 C7.62279197,9.55316612 8.39667037,10.8635466 9.79502238,11.7671393 C10.099435,11.9638458 10.5056723,11.8765328 10.7023788,11.5721203 C10.8990854,11.2677077 10.8117724,10.8614704 10.5073598,10.6647638 C9.4559885,9.98538454 8.90327706,9.04949813 8.81595773,7.80077353 Z" fill="#000000" opacity="0.3"></path>' +
-        '																</g>' +
-        '															</svg>' +
-        '															<!--end::Svg Icon-->' +
-        '														</span>' +
-        '													</div>' +
-        '													<div class="d-flex flex-column">' +
-        '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">Get Started</a>' +
-        '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>' +
-        '													</div>' +
-        '												</div>' +
-        '											</div>' +
-        '										</div>';
-    // document.getElementById("tips_board").innerHTML = default_message;
-    var myvar = '';
-    setInterval(function() {
-
-        switch (expression) {
-            case 1:
-                myvar = '<div class="card card-custom wave wave-animate-fast wave-success">' +
-                    '											<div class="card-body">' +
-                    '												<div class="d-flex align-items-center p-5">' +
-                    '													<div class="mr-6">' +
-                    '														<span class="svg-icon svg-icon-success svg-icon-4x">' +
-                    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Design/Sketch.svg-->' +
-                    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                    '																	<rect x="0" y="0" width="24" height="24"></rect>' +
-                    '																	<polygon fill="#000000" opacity="0.3" points="5 3 19 3 23 8 1 8"></polygon>' +
-                    '																	<polygon fill="#000000" points="23 8 12 20 1 8"></polygon>' +
-                    '																</g>' +
-                    '															</svg>' +
-                    '															<!--end::Svg Icon-->' +
-                    '														</span>' +
-                    '													</div>' +
-                    '													<div class="d-flex flex-column">' +
-                    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">User Guide</a>' +
-                    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>' +
-                    '													</div>' +
-                    '												</div>' +
-                    '											</div>' +
-                    '										</div>';
-
-                expression++;
-                break;
-            case 2:
-
-                myvar = '<div class="card card-custom wave wave-animate-slow mb-8 mb-lg-0">' +
-                    '											<div class="card-body">' +
-                    '												<div class="d-flex align-items-center p-5">' +
-                    '													<div class="mr-6">' +
-                    '														<span class="svg-icon svg-icon-warning svg-icon-4x">' +
-                    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Shopping/Chart-bar1.svg-->' +
-                    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                    '																	<rect x="0" y="0" width="24" height="24"></rect>' +
-                    '																	<rect fill="#000000" opacity="0.3" x="12" y="4" width="3" height="13" rx="1.5"></rect>' +
-                    '																	<rect fill="#000000" opacity="0.3" x="7" y="9" width="3" height="8" rx="1.5"></rect>' +
-                    '																	<path d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z" fill="#000000" fill-rule="nonzero"></path>' +
-                    '																	<rect fill="#000000" opacity="0.3" x="17" y="11" width="3" height="6" rx="1.5"></rect>' +
-                    '																</g>' +
-                    '															</svg>' +
-                    '															<!--end::Svg Icon-->' +
-                    '														</span>' +
-                    '													</div>' +
-                    '													<div class="d-flex flex-column">' +
-                    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">Get Started</a>' +
-                    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>' +
-                    '													</div>' +
-                    '												</div>' +
-                    '											</div>' +
-                    '										</div>';
-
-                expression++;
-                break;
-
-            case 3:
-
-                var myvar = '<div class="card card-custom wave wave-animate-slower mb-8 mb-lg-0">' +
-                    '											<div class="card-body">' +
-                    '												<div class="d-flex align-items-center p-5">' +
-                    '													<div class="mr-6">' +
-                    '														<span class="svg-icon svg-icon-success svg-icon-4x">' +
-                    '															<!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Shopping/Settings.svg-->' +
-                    '															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                    '																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                    '																	<rect opacity="0.200000003" x="0" y="0" width="24" height="24"></rect>' +
-                    '																	<path d="M4.5,7 L9.5,7 C10.3284271,7 11,7.67157288 11,8.5 C11,9.32842712 10.3284271,10 9.5,10 L4.5,10 C3.67157288,10 3,9.32842712 3,8.5 C3,7.67157288 3.67157288,7 4.5,7 Z M13.5,15 L18.5,15 C19.3284271,15 20,15.6715729 20,16.5 C20,17.3284271 19.3284271,18 18.5,18 L13.5,18 C12.6715729,18 12,17.3284271 12,16.5 C12,15.6715729 12.6715729,15 13.5,15 Z" fill="#000000" opacity="0.3"></path>' +
-                    '																	<path d="M17,11 C15.3431458,11 14,9.65685425 14,8 C14,6.34314575 15.3431458,5 17,5 C18.6568542,5 20,6.34314575 20,8 C20,9.65685425 18.6568542,11 17,11 Z M6,19 C4.34314575,19 3,17.6568542 3,16 C3,14.3431458 4.34314575,13 6,13 C7.65685425,13 9,14.3431458 9,16 C9,17.6568542 7.65685425,19 6,19 Z" fill="#000000"></path>' +
-                    '																</g>' +
-                    '															</svg>' +
-                    '															<!--end::Svg Icon-->' +
-                    '														</span>' +
-                    '													</div>' +
-                    '													<div class="d-flex flex-column">' +
-                    '														<a href="#" class="text-dark text-hover-primary font-weight-bold font-size-h4 mb-3">Tutorials</a>' +
-                    '														<div class="text-dark-75">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy since the 1500s.</div>' +
-                    '													</div>' +
-                    '												</div>' +
-                    '											</div>' +
-                    '										</div>';
-                expression++;
-                break;
-            case 4:
-
-                myvar = default_message;
-                expression = 1;
-                break;
-
-            default:
-                expression = 1;
-                // code block
-        }
-
-        //    document.getElementById("tips_board").innerHTML = myvar;
-    }, 10 * 1000);
-
-}
-
-
-
-function data_for_pie(data) {
-    var data_set = [];
-    var cat_set = [];
-
-    Object.keys(data).sort().map(function(key, index) {
-        data_set.push(data[key]);
-        cat_set.push(key);
-
-    });
-
-    return [data_set, cat_set]
-
-}
 
 function update_tabler(timestamp, payment) {
     Object.keys(tabler).sort().map(function(key, index) {
@@ -286,76 +124,51 @@ function update_tabler(timestamp, payment) {
     start_app.refresh();
 }
 
-function paid_format(flag, html_tag) {
-    var text = "";
-    if (flag) {
-        text = "Not Paid*";
+
+function profit_loss_format(value) {
+    if (value > 0) {
+        return '<span class="label label-md label-primary label-pill label-inline mr-2">Profit</span>'
     } else {
-        text = "Paid"
-    };
-    document.getElementById(html_tag).innerText = text;
-    document.getElementById(html_tag).className = format_payment(text) + " font-weight-bold";
+        return '<span class="label label-md label-danger label-pill label-inline mr-2">Loss</span>'
+    }
 
 }
+
+
+
 
 var start_app = function() {
     var read_data = function(from, to, first_time) {
 
         selected_start = from;
         selected_end = to;
-        var d_netincome = [];
-        var d_income = [];
-        var d_expense = [];
-        var d_re_income = [];
-        var d_re_expense = [];
 
-        var d_on_income = [];
-        var d_on_expense = [];
-        var data4 = [];
-        var data5 = [];
-
-        var cat = [];
-        var cat_b = [];
-        var cat_2 = [];
-        var cat_3 = [];
         var user_profile = [];
         var user_sum = 0;
         var counter = 0;
         var sum_expense = 0;
         var sum_income = 0;
-        var re_sum_expense = 0;
-        var re_sum_income = 0;
+
         var not_paid_sum = 0;
         var first_day = "";
         var last_day = "";
         var promises = [];
         var net_pec = 0;
-        var rc_net_pec = 0;
 
-        var p_i_flag = false;
-        var p_e_flag = false;
-        var up_i_flag = false;
-        var up_e_flag = false;
-        var p_counter = 0;
-        var up_counter = 0;
 
         wallet_Ref.orderBy("last_updated").get()
             .then((querySnapshot) => {
                 var items_counter = 0;
                 querySnapshot.forEach((doc) => {
                     var items = querySnapshot.size;
-                    var sum_income2 = 0;
-                    var sum_expense2 = 0;
+
 
                     wallet_Ref.doc(doc.id).onSnapshot(function(doc) {
                         items_counter++;
                         var arr = doc.data();
-                        var rec_name = doc.id;
+
                         delete arr["last_updated"];
-                        var re_sum_expense2 = 0;
-                        var re_sum_income2 = 0;
-                        var on_sum_expense2 = 0;
-                        var on_sum_income2 = 0;
+
                         Object.keys(arr).sort().map(function(key, index) {
 
                             var today = new Date(key).getTime();
@@ -411,7 +224,6 @@ var start_app = function() {
                                         var REC_user_name = values[1]['user_name'];
                                         var REC_user_photo = values[0]['photo_url'];
 
-
                                         if (!user_profile.hasOwnProperty([user_id])) {
                                             user_profile = {
                                                 [user_id]: {
@@ -422,64 +234,6 @@ var start_app = function() {
                                             }
                                             user_sum++;
                                         }
-
-
-                                        if (!cat_b.hasOwnProperty([REC_category])) {
-                                            cat_b[REC_category] = 0;
-                                        }
-                                        if (!cat_3.hasOwnProperty([REC_user])) {
-                                            cat_3[REC_user] = 0;
-                                        }
-
-                                        if (REC_payment == 'Paid') {
-                                            if (REC_type == 'Expense') {
-                                                sum_expense = sum_expense + Number(REC_amount);
-                                                sum_expense2 = sum_expense2 + Number(REC_amount);
-                                                cat_b[REC_category] = Number(cat_b[REC_category]) + Number(REC_amount);
-                                                cat_3[REC_user] = Number(cat_3[REC_user]) + Number(REC_amount);
-                                            } else {
-                                                sum_income = sum_income + Number(REC_amount);
-                                                sum_income2 = sum_income2 + Number(REC_amount);
-                                                cat_2[REC_category] = Number(cat_b[REC_category]) + Number(REC_amount);
-                                            }
-                                        } else {
-                                            not_paid_sum = not_paid_sum + Number(REC_amount);
-                                        }
-
-
-
-                                        if (REC_repeated != 'Once') {
-                                            if (REC_type == 'Expense') {
-                                                re_sum_expense = re_sum_expense + Number(REC_amount);
-                                                re_sum_expense2 = re_sum_expense2 + Number(REC_amount);
-                                                if (REC_payment == 'Not Paid') {
-                                                    p_e_flag = true;
-                                                }
-                                            } else {
-                                                re_sum_income = re_sum_income + Number(REC_amount);
-                                                re_sum_income2 = re_sum_income2 + Number(REC_amount);
-                                                if (REC_payment == 'Not Paid') {
-                                                    p_i_flag = true;
-                                                }
-                                            }
-                                            up_counter++;
-                                        } else {
-                                            if (REC_type == 'Expense') {
-                                                on_sum_expense2 = on_sum_expense2 + Number(REC_amount);
-                                                if (REC_payment == 'Not Paid') {
-                                                    up_e_flag = true;
-                                                }
-                                            } else {
-                                                on_sum_income2 = on_sum_income2 + Number(REC_amount);
-                                                if (REC_payment == 'Not Paid') {
-                                                    up_i_flag = true;
-                                                }
-                                            }
-                                            p_counter++;
-                                        }
-
-
-
                                         var datetime = REC_timestamp;
                                         if (first_day == "" || datetime < first_day) {
                                             first_day = REC_timestamp;
@@ -498,33 +252,13 @@ var start_app = function() {
                         });
 
                         Promise.all(promises).then((values) => {
-                            d_income.push(sum_income2);
-                            d_expense.push(sum_expense2);
-                            d_netincome.push(sum_income2 - sum_expense2);
-
-
-                            d_re_income.push(re_sum_income2);
-                            d_re_expense.push(re_sum_expense2);
-
-
-
-                            d_on_income.push(on_sum_income2);
-                            d_on_expense.push(on_sum_expense2);
-
-
-
-                            cat.push(rec_name);
-
-
-
 
                             if (items_counter == items) {
-
-
+                                tabler = $.extend(tabler, values);
+                                sum_income = data_process(tabler, { 'Payment': 'Paid', 'Type': 'Income' });
+                                sum_expense = data_process(tabler, { 'Payment': 'Paid', 'Type': 'Expense' });
                                 var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
-
                                 document.getElementById("sum_earnings_m").innerHTML = currency + numberWithCommas(sum_income);
-
                                 document.getElementById("sum_expenses_m").innerHTML = currency + numberWithCommas(sum_expense);
 
                                 if ((sum_income - sum_expense) < 0) {
@@ -544,91 +278,88 @@ var start_app = function() {
                                 }
 
 
-                                if (document.getElementById("not_paid_text") !== null) {
-                                    document.getElementById("not_paid_text").innerHTML = 'Please note that the dashboard is generated based on all the paid transactions only.<br>There is a sum of <b class="text-danger"> Rs ' + numberWithCommas(not_paid_sum) + '</b> yet to tbe paid.'
 
-                                }
 
                                 document.getElementById("net_percent").innerHTML = net_pec + " %";
                                 document.getElementById("net_percent_bar").style.width = net_pec + "%";
 
 
                                 document.getElementById("sum_net_m").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
-                                document.getElementById("number_items").innerText = counter + " Entries";
+                                document.getElementById("number_items").innerText = Object.keys(tabler).length + " Entries";
 
                                 document.getElementById("end_date").innerText = shortdateclean(first_day);
                                 document.getElementById("start_date").innerText = shortdateclean(last_day);
 
 
-                                process_row(cat_b, "testtt", sum_expense, user_profile, 1);
-                                process_row(cat_2, "testtt2", sum_income, user_profile, 1);
+
+                                process_row(chart_process(tabler, 'Category', { 'Type': 'Income' }), "testtt", sum_income, user_profile, 1);
+                                process_row(chart_process(tabler, 'Category', { 'Type': 'Expense' }), "testtt2", sum_expense, user_profile, 1);
+                                process_row(chart_process(tabler, 'user', { 'Type': 'Income' }), "testtt3", sum_income, user_profile, 2);
+                                process_row(chart_process(tabler, 'user', { 'Type': 'Expense' }), "testtt4", sum_expense, user_profile, 2);
+                                document.getElementById("image_list").innerHTML = user_circle_gen(user_profile);
+
+
                                 if (user_sum > 1) {
                                     document.getElementById("user_list_md").innerText = user_sum + " Users";
                                 } else {
                                     document.getElementById("user_list_md").innerText = user_sum + " User";
                                 }
 
-                                process_row(cat_3, "testtt3", sum_expense, user_profile, 2);
-                                document.getElementById("image_list").innerHTML = user_circle_gen(user_profile);
-                                var data66 = data_for_pie(cat_2);
-                                piechart_123(data66[0], data66[1]);
-                                tabler = $.extend(tabler, values);
+
+
+
+                                var current_income = data_process(tabler, { 'Payment': 'Paid', 'Type': 'Income' });
+                                set_sum('current_income', current_income);
+                                var current_expense = data_process(tabler, { 'Payment': 'Paid', 'Type': 'Expense' });
+                                set_sum('current_expense', current_expense);
+                                var current_net = current_income - current_expense;
+                                set_sum('current_net', current_net);
+                                document.getElementById("cur_progress").innerHTML = percentage_form(current_net, current_income, 'Rs');
+                                document.getElementById("cur_pl").innerHTML = profit_loss_format(current_net);
+
+                                var rec_income = data_process(tabler, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income' });
+                                set_sum('rec_income', rec_income);
+                                var rec_expense = data_process(tabler, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense' });
+                                set_sum('rec_expense', rec_expense);
+                                var rec_net = rec_income - rec_expense;
+                                set_sum('rec_net', rec_net);
+                                document.getElementById("rec_progress").innerHTML = percentage_form(rec_net, rec_income, 'Rs');
+                                document.getElementById("rec_pl").innerHTML = profit_loss_format(rec_net);
+
+                                var non_income = data_process(tabler, { 'Repeated': 'Once', 'Type': 'Income' });
+                                set_sum('non_income', non_income);
+                                var non_expense = data_process(tabler, { 'Repeated': 'Once', 'Type': 'Expense' });
+                                set_sum('non_expense', current_expense);
+                                var non_net = non_income - non_expense;
+                                set_sum('non_net', non_net);
+                                document.getElementById("non_progress").innerHTML = percentage_form(non_net, non_income, 'Rs');
+                                document.getElementById("non_pl").innerHTML = profit_loss_format(non_net);
+
+                                var fin_income = data_process(tabler, { 'Type': 'Income' });
+                                set_sum('fin_income', fin_income);
+                                var fin_expense = data_process(tabler, { 'Type': 'Expense' });
+                                set_sum('fin_expense', fin_expense);
+                                var fin_net = fin_income - fin_expense;
+                                set_sum('fin_net', fin_net);
+                                document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, 'Rs');
+                                document.getElementById("fin_pl").innerHTML = profit_loss_format(fin_net);
+
+
+
+
+
                                 tabler = remove_not_paid(tabler);
+                                console.log(tabler);
                                 process_row(tabler, "table_23", '', '', 3);
-
-
-
-                                document.getElementById("p_income").innerText = " Rs " + numberWithCommas(re_sum_income);
-                                document.getElementById("p_expense").innerText = " Rs " + numberWithCommas(re_sum_expense);
-                                document.getElementById("p_net").innerText = " Rs " + numberWithCommas(re_sum_income - re_sum_expense);
-
-                                document.getElementById("up_income").innerText = " Rs " + numberWithCommas(sum_income - re_sum_income);
-                                document.getElementById("up_expense").innerText = " Rs " + numberWithCommas(sum_expense - re_sum_expense);
-                                document.getElementById("up_net").innerText = " Rs " + numberWithCommas((sum_income - re_sum_income) - (sum_expense - re_sum_expense));
-                                var p_percentage = Math.round((re_sum_income - re_sum_expense) / (sum_income - sum_expense) * 100)
-
-                                document.getElementById("p_pecent_bar").style.width = p_percentage + "%";
-                                document.getElementById("up_pecent_bar").style.width = (100 - p_percentage) + "%";
-
-                                document.getElementById("p_pecent_bar").className = 'progress-bar ' + format_progress_bar(p_percentage);
-                                document.getElementById("up_pecent_bar").className = 'progress-bar ' + format_progress_bar(p_percentage - 100);
-
-
-
-                                document.getElementById("p_pecent").innerText = p_percentage + " %";
-                                document.getElementById("up_pecent").innerText = (100 - p_percentage) + " %";
-
-
-                                document.getElementById("p_entires").innerText = p_counter + ' entires';
-                                document.getElementById("up_entires").innerText = up_counter + ' entires';
-
-                                paid_format(p_i_flag, "p_i_flag");
-                                paid_format(p_e_flag, "p_e_flag");
-                                paid_format(up_i_flag, "up_i_flag");
-                                paid_format(up_e_flag, "up_e_flag");
 
                                 if (first_time) {
                                     to = new Date(last_day.getFullYear(), last_day.getMonth() + 1, 0);;
                                     _initDaterangepicker(first_day, to);
-                                    _init_main_chart_2(d_netincome, d_re_income, cat);
-                                    _init_main_chart_3(d_on_income, d_re_income, d_income, cat);
-                                    _init_main_chart_4(d_on_expense, d_re_expense, d_expense, cat);
-                                    _init_main_chart(d_income, d_expense, cat); // CORREC                                
-
-
                                     from = first_day;
-                                    //  console.log(new Date(last_day));
+
                                 }
 
-                                if (not_paid_sum == 0) {
-                                    // enable_tips();
-
-                                    document.getElementById("tips_board").style.display = "none";
-                                } else {
-                                    document.getElementById("tips_board").style.display = "block";
-                                }
                                 var today2 = new Date();
-
                                 var difference = today2 - from;
                                 var diff_days_1 = Math.ceil(difference / (1000 * 3600 * 24));
                                 var net_income_rate = (sum_income - sum_expense) / diff_days_1;
@@ -636,14 +367,12 @@ var start_app = function() {
                                 var diff_days_2 = Math.ceil(difference2 / (1000 * 3600 * 24));
                                 var net_income_pred = Math.round((diff_days_2 * net_income_rate) + (sum_income - sum_expense));
                                 document.getElementById("predict").innerText = " Rs " + numberWithCommas(net_income_pred);
-                                //  document.getElementById("range_id").innerText ="By "+ shortdateclean(to);
+
                                 var ac_percentage = Math.round(difference / (difference2 + difference) * 100);
 
                                 document.getElementById("pred_ac").innerText = ac_percentage + " %";
                                 document.getElementById("pred_ac_bar").className = 'progress-bar ' + format_progress_bar(ac_percentage);
-
                                 document.getElementById("pred_ac_bar").style.width = ac_percentage + "%";
-
 
                             }
                             resolve("sucess");
@@ -666,8 +395,6 @@ var start_app = function() {
         end = moment(end);
 
         var picker = $('#kt_dashboard_daterangepicker');
-        // var all_f = new Date('1/1/1900').getTime();
-        // var all_l = new Date('1/1/2100').getTime();
 
         function cb(start, end, label) {
             var title = '';
@@ -694,7 +421,6 @@ var start_app = function() {
                 read_data(start, end, false);
             }
 
-            document.getElementById("range_id").innerText = $('#kt_dashboard_daterangepicker_title').html() + " " + $('#kt_dashboard_daterangepicker_date').html();
 
         }
 
@@ -716,482 +442,11 @@ var start_app = function() {
                 'All time': [start, end]
             }
         }, cb);
-        //  console.log(start);
-        //  console.log(end);
-        //  console.log(start2);
-        //   console.log(end2);
+
         cb(start, end, '');
 
     }
-    var piechart_123 = function(data_set, cat_set) {
-        const primary = '#6993FF';
-        const success = '#1BC5BD';
-        const info = '#8950FC';
-        const warning = '#FFA800';
-        const danger = '#F64E60';
-        var options = {
-            series: data_set,
-            chart: {
-                type: 'pie',
-                width: '100%'
-            },
-            labels: cat_set,
-            responsive: [{
 
-                options: {
-
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }],
-            colors: [info, danger, warning, success, primary],
-            tooltip: {
-                style: {
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                },
-                y: {
-                    formatter: function(val) {
-                        return "Rs " + numberWithCommas(val);
-                    }
-                }
-            },
-            breakpoint: 480,
-            legend: {
-                show: true,
-                position: 'bottom',
-                horizontalAlign: 'center',
-            }
-        };
-
-
-        generate_chart("kt_pie_chart_cat", options);
-    }
-    var _init_main_chart_2 = function(data, data1, cat) {
-
-        var options = {
-            series: [{
-                name: 'Balance',
-                data: data
-            }, ],
-            chart: {
-                type: 'bar',
-                height: 350,
-                toolbar: {
-                    show: false
-                }
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: ['30%'],
-                    endingShape: 'rounded'
-                },
-            },
-            legend: {
-                show: false
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ['transparent']
-            },
-            xaxis: {
-                categories: cat,
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false
-                },
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            fill: {
-                opacity: 1
-            },
-            states: {
-                normal: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                hover: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                active: {
-                    allowMultipleDataPointsSelection: false,
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                }
-            },
-            tooltip: {
-                style: {
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                },
-                y: {
-                    formatter: function(val) {
-                        return "Rs " + numberWithCommas(val);
-                    }
-                }
-            },
-            colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['gray']['gray-300']],
-            grid: {
-                borderColor: KTApp.getSettings()['colors']['gray']['gray-200'],
-                strokeDashArray: 4,
-                yaxis: {
-                    lines: {
-                        show: true
-                    }
-                }
-            }
-        };
-        generate_chart("kt_main_chart_2", options)
-    }
-    var _init_main_chart_3 = function(data, data1, data2, cat) {
-
-        const primary = '#6993FF';
-        const success = '#1BC5BD';
-        const info = '#8950FC';
-        const warning = '#FFA800';
-        const danger = '#F64E60';
-
-        var options = {
-            series: [{
-                name: 'Occational',
-                type: 'column',
-                data: data
-            }, {
-                name: 'Recurring',
-                type: 'column',
-                data: data1
-            }],
-            stroke: {
-                show: true,
-                curve: 'smooth',
-                lineCap: 'butt',
-
-                width: 0.1,
-                dashArray: 0,
-            },
-            chart: {
-
-                height: 350,
-                stacked: true,
-                toolbar: {
-                    show: true
-                },
-                zoom: {
-                    enabled: true
-                }
-            },
-
-            colors: [success, primary, warning],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    legend: {
-                        position: 'bottom',
-                        offsetX: -10,
-                        offsetY: 0
-                    }
-                }
-            }],
-            plotOptions: {
-                bar: {
-                    borderRadius: 8,
-                    horizontal: false,
-                },
-            },
-            xaxis: {
-
-                categories: cat
-            },
-            legend: {
-                position: 'right',
-                offsetY: 40
-            },
-            dataLabels: {
-                enabled: true,
-                offsetY: -20,
-                style: {
-                    fontSize: '12px',
-                    colors: ["#304758"]
-                },
-                formatter: function(value, { seriesIndex, dataPointIndex, w }) {
-                    if (seriesIndex === ((w.config.series.length) - parseInt(1)))
-                        return "Rs " + numberWithCommas(w.globals.stackedSeriesTotals[dataPointIndex]);
-                    return "";
-                }
-            },
-            tooltip: {
-                style: {
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                },
-                y: {
-                    formatter: function(val) {
-                        return "Rs " + numberWithCommas(val);
-                    }
-                }
-            },
-            fill: {
-                opacity: 1
-            }
-        };
-
-
-
-
-
-        generate_chart("kt_main_chart_3", options)
-    }
-    var _init_main_chart_4 = function(data, data1, data2, cat) {
-
-        const primary = '#6993FF';
-        const success = '#1BC5BD';
-        const info = '#8950FC';
-        const warning = '#FFA800';
-        const danger = '#F64E60';
-
-        var options = {
-            series: [{
-                name: 'Occational',
-                type: 'column',
-                data: data
-            }, {
-                name: 'Recurring',
-                type: 'column',
-                data: data1
-            }],
-            stroke: {
-                show: true,
-                curve: 'smooth',
-                lineCap: 'butt',
-
-                width: 0.1,
-                dashArray: 0,
-            },
-            chart: {
-                height: 350,
-                stacked: true,
-                toolbar: {
-                    show: true
-                },
-                zoom: {
-                    enabled: true
-                }
-            },
-
-            colors: [success, primary, warning],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    legend: {
-                        position: 'bottom',
-                        offsetX: -10,
-                        offsetY: 0
-                    }
-                }
-            }],
-            plotOptions: {
-                bar: {
-                    borderRadius: 8,
-                    horizontal: false,
-                },
-            },
-            xaxis: {
-
-                categories: cat
-            },
-            legend: {
-                position: 'right',
-                offsetY: 40
-            },
-            dataLabels: {
-                enabled: true,
-                offsetY: -20,
-                style: {
-                    fontSize: '12px',
-                    colors: ["#304758"]
-                },
-                formatter: function(value, { seriesIndex, dataPointIndex, w }) {
-                    if (seriesIndex === ((w.config.series.length) - parseInt(1)))
-                        return "Rs " + numberWithCommas(w.globals.stackedSeriesTotals[dataPointIndex]);
-                    return "";
-                },
-            },
-            tooltip: {
-                style: {
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                },
-                y: {
-                    formatter: function(val) {
-                        return "Rs " + numberWithCommas(val);
-                    }
-                }
-            },
-            fill: {
-                opacity: 1
-            }
-        };
-
-
-
-
-
-        generate_chart("kt_main_chart_4", options)
-    }
-    var _init_main_chart = function(data1, data2, cat) {
-
-        var options = {
-            series: [{
-                name: 'Income',
-                data: data1
-            }, {
-                name: 'Expense',
-                data: data2
-            }],
-            chart: {
-                type: 'area',
-                height: 350,
-                toolbar: {
-                    show: false
-                }
-            },
-            plotOptions: {},
-            legend: {
-                show: false
-            },
-            dataLabels: {
-                enabled: false
-            },
-            fill: {
-                type: 'solid',
-                opacity: 1
-            },
-            stroke: {
-                curve: 'smooth'
-            },
-            xaxis: {
-                categories: cat,
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false
-                },
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                },
-                crosshairs: {
-                    position: 'front',
-                    stroke: {
-                        color: KTApp.getSettings()['colors']['theme']['light']['success'],
-                        width: 1,
-                        dashArray: 3
-                    }
-                },
-                tooltip: {
-                    enabled: true,
-                    formatter: undefined,
-                    offsetY: 0,
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    style: {
-                        colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                        fontSize: '12px',
-                        fontFamily: KTApp.getSettings()['font-family']
-                    }
-                }
-            },
-            states: {
-                normal: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                hover: {
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                },
-                active: {
-                    allowMultipleDataPointsSelection: false,
-                    filter: {
-                        type: 'none',
-                        value: 0
-                    }
-                }
-            },
-            tooltip: {
-                style: {
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                },
-                y: {
-                    formatter: function(val) {
-                        return "Rs " + numberWithCommas(val);
-                    }
-                }
-            },
-            colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['theme']['base']['warning']],
-            grid: {
-                borderColor: KTApp.getSettings()['colors']['gray']['gray-200'],
-                strokeDashArray: 4,
-                yaxis: {
-                    lines: {
-                        show: true
-                    }
-                }
-            },
-            markers: {
-                colors: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']],
-                strokeColor: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']],
-                strokeWidth: 3
-            }
-        };
-        generate_chart("kt_main_chart", options)
-
-    }
     var generate_chart = function(div_id, options) {
         var element = document.getElementById(div_id);
         if (!element) {
@@ -1214,7 +469,6 @@ var start_app = function() {
             selected_start = new Date('1/1/1900').getTime();
             selected_end = new Date('1/1/2100').getTime();
             read_data(selected_start, selected_end, true);
-
         },
         refresh: function() {
             read_data(selected_start, selected_end, false);

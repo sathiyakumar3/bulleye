@@ -236,36 +236,6 @@ var start_app = function() {
             },
             rows: {
                 afterTemplate: function(row, data, index) {
-
-                    /*  if (7 == data['RecordID']) {
-                        $('td:eq(4)', row).html('<tr class="group"><td colspan="10">' + 'Monday!' + '</td></tr>');
-                        console.log(row + " : " + index);
-                        $(row).before(
-                            '<tr class="group"><td colspan="10">' + 'Hey' + '</td></tr>',
-                        );
-
-                    }
-
-                    if (7 == data['RecordID']) {
-                        $('td:eq(4)', row).html('<tr class="group"><td colspan="10">' + 'Monday!' + '</td></tr>');
-                        console.log(row + " : " + index);
-                        $(row).before(
-                            '<tr class="group"><td colspan="10">' + 'Hey' + '</td></tr>',
-                        );
-
-                    }
- */
-
-
-
-
-
-
-
-
-
-
-
                     if (monthts(data['Timestamp']) != old_month) {
                         old_month = monthts(data['Timestamp']);
                         console.log(old_month);
@@ -275,9 +245,7 @@ var start_app = function() {
                             old_month + '</span>' +
                             '' + '<div class="separator separator-dashed"></div>'
                         );
-
                     }
-
                 }
             },
             // columns definition
@@ -297,16 +265,7 @@ var start_app = function() {
                     sortable: true,
 
                     template: function(row) {
-                        /*        get_user_info(row.user).then((function(doc) { // console.log(doc);\
-                                   console.log(row.user);
-                                   console.log(doc);
-                                   return doc;
-
-                               })).catch((error) => {
-                                   console.error(error);
-                               }); */
                         return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email);
-
                     }
                 }, {
                     field: 'Category',

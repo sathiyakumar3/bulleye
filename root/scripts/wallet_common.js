@@ -319,17 +319,18 @@ function format_payment(pay) {
 }
 
 function format_progress_bar(pecentage) {
-    var state = 'bg-info';
+
     if (pecentage > 75) {
-        state = 'bg-error';
+        return 'bg-danger';
     } else if (pecentage > 50) {
-        state = 'bg-warning';
+        return 'bg-warning';
     } else if (pecentage > 25) {
-        state = 'bg-success';
+        return 'bg-primary';
     } else {
-        state = 'bg-info';
+        return 'bg-success';
     }
-    return state
+
+
 }
 
 
@@ -396,6 +397,43 @@ function user_circle_gen(user_profile) {
         html_div = html_div + myvar;
     });
     return html_div
+}
+
+function data_process(data, find) {
+    var sum = 0;
+    Object.keys(data).sort().map(function(key, index) {
+
+        var check = 0;
+        Object.keys(find).sort().map(function(key2, index2) {
+            if (find[key2].includes(data[key][key2])) {
+                check++;
+            }
+        });
+        if (check == Object.keys(find).length) {
+            sum = Number(data[key]['Amount']) + sum;
+        }
+    });
+    return sum
+}
+
+function chart_process(data, find, search, ) {
+    var chart = [];
+    Object.keys(data).sort().map(function(key, index) {
+
+
+        Object.keys(search).sort().map(function(key2, index2) {
+            if (search[key2].includes(data[key][key2])) {
+
+                if (!chart.hasOwnProperty([data[key][find]])) {
+                    chart[data[key][find]] = 0;
+                } else {
+                    chart[data[key][find]] = Number(data[key]['Amount']) + chart[data[key][find]]
+                }
+            }
+        });
+
+    });
+    return chart
 }
 
 
@@ -530,11 +568,23 @@ function payment_status_fomt(type, payment, amount, int_type) {
 
 }
 
+
+function set_sum(html_div, sum) {
+    document.getElementById(html_div).innerText = " Rs " + numberWithCommas(sum);
+}
+
 function percentage_form(value, total, item) {
+
     var pecentage = Math.round((value / total) * 100);
+    if (pecentage > 100) {
+
+        var pc = '<span class="text-danger mr-2 font-size-sm font-weight-bold"> - ' + (pecentage - 100) + '%</span>';
+    } else {
+        var pc = '<span class="text-muted mr-2 font-size-sm font-weight-bold">' + pecentage + '%</span>';
+    }
     var html_div = '<div class="d-flex flex-column w-100 mr-2">' +
         '<div class="d-flex align-items-center justify-content-between mb-2">' +
-        '<span class="text-muted mr-2 font-size-sm font-weight-bold">' + pecentage + '%</span>' +
+        pc +
         '<span class="text-muted font-size-sm font-weight-bold">' + item + ' ' + numberWithCommas(value) + '</span>' +
         '</div>' +
         '<div class="progress progress-xs w-100">' +
@@ -542,6 +592,17 @@ function percentage_form(value, total, item) {
         '</div>' +
         '</div>';
     return html_div
+}
+
+function paid_format(flag, html_tag) {
+    var text = "";
+    if (flag) {
+        text = "Not Paid*";
+    } else {
+        text = "Paid"
+    };
+    document.getElementById(html_tag).innerText = text;
+    document.getElementById(html_tag).className = format_payment(text) + " font-weight-bold";
 }
 
 function dummy_button() {
