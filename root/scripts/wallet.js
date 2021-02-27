@@ -4,149 +4,57 @@
 var datatable = "";
 
 var wallet_Ref = "";
-var selected_start;
-var selected_end;
+var wallet_id = "";
 var datetime_loaded = false;
 
 
 
 var start_app = function() {
-    var read_data2 = function(from, to, first_time) {
-        selected_start = from;
-        selected_end = to;
-        var first_day = "";
-        var last_day = "";
-        var promises = [];
-        var tabler = [];
-        var user_sum = 0;
-        var user_profile = [];
-        var counter = 0;
-        var sum_expense = 0;
-        var sum_income = 0;
-        wallet_Ref.orderBy("last_updated").get()
-            .then((querySnapshot) => {
-                var items_counter = 0;
-                querySnapshot.forEach((doc) => {
-                    var items = querySnapshot.size;
-                    wallet_Ref.doc(doc.id).onSnapshot(function(doc) {
-                        items_counter++;
-                        var arr = doc.data();
-                        delete arr["last_updated"];
 
-                        Object.keys(arr).sort().map(function(key, index) {
-                            var today = new Date(key).getTime();
-                            if (today >= from && today <= to) {
-                                const promises8 = new Promise((resolve, reject) => {
-                                    counter++;
-                                    var user_id = arr[key].user;
-                                    var user_Ref = db.collection("users");
+    var run_wallet = function(first_time, tabler) {
 
-                                    const user_image_prom = new Promise((resolve, reject) => {
-                                        get_user_icon(user_id).then((url) => {
-                                            resolve({ photo_url: url });
-                                        }).catch((error) => {
-                                            resolve({ photo_url: 'none' });
-                                        });
-                                    });
-
-                                    const user_details_prom = new Promise((resolve, reject) => {
-                                        getoptdata(user_Ref, user_id).then(function(finalResult) {
-                                            var user_email = finalResult.email;
-                                            var user_name = finalResult.name;
-                                            resolve({ user_email, user_name });
-                                        }).catch((error) => {
-                                            console.log(error);
-                                            reject(error);
-                                        });
-                                    });
-
-                                    const wallet_details_prom = new Promise((resolve, reject) => {
-                                        resolve({
-                                            RecordID: counter,
-                                            user: arr[key].user,
-                                            Description: arr[key].Description,
-                                            Category: arr[key].Category,
-                                            Type: arr[key].Type,
-                                            Amount: arr[key].Amount,
-                                            Payment: arr[key].Payment,
-                                            Repeated: arr[key].Repeated,
-                                            Timestamp: new Date(key),
-                                        });
-                                    });
-
-                                    Promise.all([user_image_prom, user_details_prom, wallet_details_prom]).then((values) => {
-                                        var datetime = values[2]['Timestamp'];
-                                        if (first_day == "" || datetime < first_day) {
-                                            first_day = datetime;
-                                        }
-                                        if (last_day == "" || datetime > last_day) {
-                                            last_day = datetime;
-                                        }
-
-                                        if (values[2]['Payment'] == 'Paid') {
-                                            if (values[2]['Type'] == 'Expense') {
-                                                sum_expense = sum_expense + Number(values[2]['Amount']);
-                                            } else {
-                                                sum_income = sum_income + Number(values[2]['Amount']);
-                                            }
-                                        }
-                                        if (!user_profile.hasOwnProperty([user_id])) {
-                                            user_profile = {
-                                                [user_id]: {
-                                                    user_name: values[1]['user_email'],
-                                                    user_email: values[1]['user_email'],
-                                                    photo_url: values[0]['photo_url'],
-                                                }
-                                            }
-                                            user_sum++;
-                                        }
-                                        resolve($.extend(values[0], values[1], values[2]));
-
-                                    });
-
-                                });
-                                promises.push(promises8);
-                            }
-                        });
-
-                        Promise.all(promises).then((values) => {
-                            if (items_counter == items) {
-                                document.getElementById("number_items_2").innerText = counter + " Entries";
-                                var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
-                                document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
-                                document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
-                                if ((sum_income - sum_expense) < 0) {
-                                    document.getElementById("sum_net").classList.add("text-danger");
-                                } else {
-                                    document.getElementById("sum_net").classList.add("text-success");
-                                }
-                                if (user_sum > 1) {
-                                    document.getElementById("user_list_2").innerText = user_sum + " Users";
-                                } else {
-                                    document.getElementById("user_list_2").innerText = user_sum + " User";
-                                }
-                                document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
-                                document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
-
-                                tabler = $.extend(tabler, values);
-
-                                initialze_table(sort_obj(tabler, 'Timestamp'));
-                                // process_row(tabler);
-                                if (first_time) {
-                                    _initDaterangepicker(first_day, last_day);
-                                }
-                            }
-                            resolve("sucess");
-                        });
+        var first_day = date_process(tabler)[0];
+        var last_day = date_process(tabler)[1];
+        var user_profile = user_process(tabler);
+        var user_sum = Object.keys(user_profile).length;
+        var counter = Object.keys(tabler).length;
+        var sum_income = data_process(tabler, { 'Payment': 'Paid', 'Type': 'Income' });
+        var sum_expense = data_process(tabler, { 'Payment': 'Paid', 'Type': 'Expense' });
+        document.getElementById("number_items_2").innerText = counter + " Entries";
+        var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
+        document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
+        document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
+        if ((sum_income - sum_expense) < 0) {
+            document.getElementById("sum_net").classList.add("text-danger");
+        } else {
+            document.getElementById("sum_net").classList.add("text-success");
+        }
+        if (user_sum > 1) {
+            document.getElementById("user_list_2").innerText = user_sum + " Users";
+        } else {
+            document.getElementById("user_list_2").innerText = user_sum + " User";
+        }
+        document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
+        document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
 
 
-                    });
-                });
 
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-            });
+        initialze_table(sort_obj(tabler, 'Timestamp'));
+        if (first_time) {
+            _initDaterangepicker(first_day, last_day);
+        }
+    }
+    var read_data = function(from, to, first_time) {
+
+
+        get_wallet_data(wallet_id, from, to).then(function(finalResult) {
+
+
+            run_wallet(first_time, finalResult);
+
+        }).catch((error) => {
+            console.log(error);
+        });
     };
 
 
@@ -182,7 +90,7 @@ var start_app = function() {
             if (datetime_loaded == false) {
                 datetime_loaded = true;
             } else {
-                read_data2(start, end, false);
+                read_data(start, end, false);
             }
 
 
@@ -238,7 +146,7 @@ var start_app = function() {
                 afterTemplate: function(row, data, index) {
                     if (monthts(data['Timestamp']) != old_month) {
                         old_month = monthts(data['Timestamp']);
-                        console.log(old_month);
+
                         $(row).before(
 
                             '<span class="label label-xl  my-3 label-primary label-pill label-inline mr-2">' +
@@ -407,13 +315,13 @@ var start_app = function() {
 
     return {
         init: function() {
-            selected_start = new Date('1/1/1900').getTime();
-            selected_end = new Date('1/1/2100').getTime();
-            read_data2(selected_start, selected_end, true);
+            var selected_start = new Date('1/1/1900').getTime();
+            var selected_end = new Date('1/1/2100').getTime();
+            read_data(selected_start, selected_end, true);
 
         },
         refresh: function() {
-            read_data2(selected_start, selected_end, false);
+            read_data(selected_start, selected_end, false);
         },
 
     };
@@ -422,7 +330,7 @@ var start_app = function() {
 
 
 jQuery(document).ready(function() {
-    var wallet_id = global_data[0];
+    wallet_id = global_data[0];
     var wallet_name = global_data[1];
     cat2combo(wallet_id);
     document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
