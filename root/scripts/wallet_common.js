@@ -15,7 +15,7 @@ var generate_chart = function(div_id, options) {
 }
 
 
-function myselected() {
+function selected_repeat() {
     var selected_repeated = document.getElementById('repeat_selection').value;
     var text = "";
     switch (selected_repeated) {
@@ -58,7 +58,7 @@ function access_restric_error() {
     })
 }
 
-function myselected3() {
+function selected_category() {
     var category = document.getElementById('edit_cat_selec').value;
     document.getElementById('sel_icon_add').innerHTML = '<svg><use xlink:href="#' + get_cat_ic(category) + '"></use></svg>';
 }
@@ -278,77 +278,6 @@ function get_cat_icon(opt) {
     return myvar;
 }
 
-function getrandomstate() {
-    var stateNo = KTUtil.getRandomInt(0, 7);
-    var states = [
-        'success',
-        'primary',
-        'danger',
-        'success',
-        'warning',
-        'dark',
-        'primary',
-        'info'
-    ];
-
-    return states[stateNo];
-}
-
-function format_repeat(freq) {
-    switch (freq) {
-        case 'Monthly':
-            return '<span class="label label-lg font-weight-bold label-light-success label-inline">Monthly</span>';
-            break;
-        case 'Weekly':
-            return '<span class="label label-lg font-weight-bold label-light-danger label-inline">Weekly</span>';
-            break;
-        case 'Daily':
-            return '<span class="label label-lg font-weight-bold label-light-primary label-inline">Daily</span>';
-            break;
-        case 'Yearly':
-            return '<span class="label label-lg font-weight-bold label-light-success label-inline">Yearly</span>';
-            break;
-        case 'Quaterly':
-            return '<span class="label label-lg font-weight-bold label-light-info label-inline">Quaterly</span>';
-            break;
-        case 'Once':
-            return '<span class="label label-lg font-weight-bold label-light-danger label-inline">Once</span>';
-            break;
-        case 'On Hold':
-            return '<span class="label label-lg font-weight-bold label-light-warning label-inline">On Hold</span>';
-            break;
-        default:
-            return '<span class="label label-lg font-weight-bold label-light-danger label-inline">Once</span>';
-    }
-}
-
-function format_payment(pay) {
-    switch (pay) {
-        case 'Paid':
-            return 'text-success';
-            break;
-        case 'Not Paid':
-            return 'text-danger';
-            break;
-        default:
-            return 'text-danger';
-    }
-}
-
-function format_progress_bar(pecentage) {
-
-    if (pecentage > 75) {
-        return 'bg-danger';
-    } else if (pecentage > 50) {
-        return 'bg-warning';
-    } else if (pecentage > 25) {
-        return 'bg-primary';
-    } else {
-        return 'bg-success';
-    }
-
-
-}
 
 
 function sort_obj(obj, key) {
@@ -359,9 +288,6 @@ function sort_obj(obj, key) {
     });
     return obj;
 }
-
-var cat_icon_list = {};
-var newar = [];
 
 function sortOn(property) {
     return function(a, b) {
@@ -375,16 +301,16 @@ function sortOn(property) {
     }
 }
 
-function cat2combo(wallet_id) {
+var cat_icon_list = {};
+var newar = [];
 
+function cat2combo(wallet_id) {
     document.getElementById("edit_cat_selec").innerHTML = "";
     var wallet_base_Ref = db.collection("wallets");
     var select = document.getElementById('edit_cat_selec');
     getoptdata(wallet_base_Ref, wallet_id).then((function(doc) {
         cat_icon_list = doc.categories;
-
         cat_icon_list.sort(sortOn("name"));
-
         for (let i = 0; i < cat_icon_list.length; i++) {
             newar[cat_icon_list[i]['name']] = cat_icon_list[i];
             var opt = document.createElement('option');
@@ -405,16 +331,7 @@ function get_cat_ic(name) {
     }
 }
 
-function user_circle_gen(user_profile) {
-    var html_div = "";
-    Object.keys(user_profile).sort().map(function(key, index) {
-        var myvar = '<div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="' + user_profile[key]['user_name'] + '">' +
-            '<img alt="Pic" src="' + user_profile[key]['photo_url'] + '">' +
-            '</div>';
-        html_div = html_div + myvar;
-    });
-    return html_div
-}
+
 
 function data_process(data, find) {
     var sum = 0;

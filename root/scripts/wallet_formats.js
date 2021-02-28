@@ -10,6 +10,89 @@ function profit_loss_format(value) {
 
 }
 
+function format_repeat(freq) {
+    switch (freq) {
+        case 'Monthly':
+            return '<span class="label label-lg font-weight-bold label-light-success label-inline">Monthly</span>';
+            break;
+        case 'Weekly':
+            return '<span class="label label-lg font-weight-bold label-light-danger label-inline">Weekly</span>';
+            break;
+        case 'Daily':
+            return '<span class="label label-lg font-weight-bold label-light-primary label-inline">Daily</span>';
+            break;
+        case 'Yearly':
+            return '<span class="label label-lg font-weight-bold label-light-success label-inline">Yearly</span>';
+            break;
+        case 'Quaterly':
+            return '<span class="label label-lg font-weight-bold label-light-info label-inline">Quaterly</span>';
+            break;
+        case 'Once':
+            return '<span class="label label-lg font-weight-bold label-light-danger label-inline">Once</span>';
+            break;
+        case 'On Hold':
+            return '<span class="label label-lg font-weight-bold label-light-warning label-inline">On Hold</span>';
+            break;
+        default:
+            return '<span class="label label-lg font-weight-bold label-light-danger label-inline">Once</span>';
+    }
+}
+
+function format_payment(pay) {
+    switch (pay) {
+        case 'Paid':
+            return 'text-success';
+            break;
+        case 'Not Paid':
+            return 'text-danger';
+            break;
+        default:
+            return 'text-danger';
+    }
+}
+
+function format_progress_bar(pecentage) {
+
+    if (pecentage > 75) {
+        return 'bg-danger';
+    } else if (pecentage > 50) {
+        return 'bg-warning';
+    } else if (pecentage > 25) {
+        return 'bg-primary';
+    } else {
+        return 'bg-success';
+    }
+
+
+}
+
+function getrandomstate() {
+    var stateNo = KTUtil.getRandomInt(0, 7);
+    var states = [
+        'success',
+        'primary',
+        'danger',
+        'success',
+        'warning',
+        'dark',
+        'primary',
+        'info'
+    ];
+
+    return states[stateNo];
+}
+
+function user_circle_gen(user_profile) {
+    var html_div = "";
+    Object.keys(user_profile).sort().map(function(key, index) {
+        var myvar = '<div class="symbol symbol-30 symbol-circle" data-toggle="tooltip" title="" data-original-title="' + user_profile[key]['user_name'] + '">' +
+            '<img alt="Pic" src="' + user_profile[key]['photo_url'] + '">' +
+            '</div>';
+        html_div = html_div + myvar;
+    });
+    return html_div
+}
+
 function get_user_info(user_id) {
     return new Promise(function(resolve, reject) {
         var user_Ref = db.collection("users");

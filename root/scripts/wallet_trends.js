@@ -1,9 +1,8 @@
 "use strict";
 
 var wallet_Ref = '';
-
-
 var wallet_id = "";
+
 var datetime_loaded = false;
 
 
