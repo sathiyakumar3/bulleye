@@ -63,40 +63,7 @@ function selected_category() {
     document.getElementById('sel_icon_add').innerHTML = '<svg><use xlink:href="#' + get_cat_ic(category) + '"></use></svg>';
 }
 
-function update_entry(description, category, amount, timestamp2, type, payment, user, repeat) {
-    return new Promise(function(resolve, reject) {
-        var timestamp = new Date(timestamp2);
-        var value = {
-            [timestamp]: {
-                "user": user,
-                "Description": description,
-                "Category": category,
-                "Type": type,
-                "Payment": payment,
-                "Amount": amount,
-                "Repeated": repeat,
-            },
-            last_updated: timestamp
-        };
 
-        var entry_id = monthts(timestamp);
-        updateoptdata(wallet_Ref, entry_id, value).then(function() {
-
-            resolve('sucess');
-        }).catch((error) => {
-            console.log(error);
-            console.log(error.code);
-            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') {
-                setoptdata(wallet_Ref, entry_id, value).then(function() {
-
-                    resolve('sucess');
-                }).catch((error) => {
-                    reject(error);
-                });
-            }
-        });
-    });
-}
 
 function sendtoupdate(description, category, amount, timestamp, type, payment, user_id, repeat) {
     update_entry(description, category, amount, timestamp, type, payment, user_id, repeat).then(function() {
@@ -141,21 +108,6 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
     document.getElementById('title_33').innerText = "Edit Entry"
 }
 
-function add_entry_modal() {
-    $('#edit_incex_form_modal').modal('toggle');
-    $('#edit_cat_selec').selectpicker('refresh');
-
-    document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = "";
-    document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = "";
-    document.getElementById("expense_radio").checked = true;
-    document.getElementById("paid_radio").checked = true;
-    $('#kt_datetimepicker_10').datetimepicker('clear');
-    $('#kt_datetimepicker_10').datetimepicker('destroy');
-    // 02 / 21 / 2021 10: 37 AM
-
-    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), format: 'MM/DD/YYYY hh:mm:ss A', enable: true });
-    document.getElementById('title_33').innerText = "Add to Wallet"
-}
 
 function name_intials(str) {
     var acronym;
@@ -304,24 +256,6 @@ function sortOn(property) {
 var cat_icon_list = {};
 var newar = [];
 
-function cat2combo(wallet_id) {
-    document.getElementById("edit_cat_selec").innerHTML = "";
-    var wallet_base_Ref = db.collection("wallets");
-    var select = document.getElementById('edit_cat_selec');
-    getoptdata(wallet_base_Ref, wallet_id).then((function(doc) {
-        cat_icon_list = doc.categories;
-        cat_icon_list.sort(sortOn("name"));
-        for (let i = 0; i < cat_icon_list.length; i++) {
-            newar[cat_icon_list[i]['name']] = cat_icon_list[i];
-            var opt = document.createElement('option');
-            opt.value = cat_icon_list[i]['name'];
-            opt.innerHTML = cat_icon_list[i]['name'];
-            select.appendChild(opt);
-        }
-    })).catch((error) => {
-        console.error(error);
-    });
-}
 
 function get_cat_ic(name) {
     if (newar.hasOwnProperty(name)) {
@@ -332,6 +266,9 @@ function get_cat_ic(name) {
 }
 
 
+
+
+/////////////////////////////////////
 
 function data_process(data, find) {
     var sum = 0;
@@ -410,15 +347,45 @@ function date_process(data) {
         if (last_day == "" || datetime > last_day) {
             last_day = datetime;
         }
-
-
-
     });
 
     var results = [first_day, last_day];
     return results;
 }
 
+function date_filter(data, to, from) {
+
+
+
+    data = sort_obj(data, 'Timestamp');
+    var new_data = [];
+
+    Object.keys(data).sort().map(function(key, index) {
+        var datetime = data[key]['Timestamp']
+        if (datetime < to && datetime > from) {
+            new_data.push(data[key]);
+
+        }
+
+    });
+
+    return new_data;
+}
+
+function delete_item(data, item) {
+
+    data = sort_obj(data, 'Timestamp');
+    var new_data = [];
+    Object.keys(data).sort().map(function(key, index) {
+
+        var datetime = new Date(data[key]['Timestamp']);
+        item = new Date(item);
+        if (moment(item) - moment(datetime) != 0) {
+            new_data.push(data[key]);
+        }
+    });
+    return new_data;
+}
 
 
 function chart_process(data, find, search, ) {
@@ -474,4 +441,56 @@ function extract_data(data) {
         chart.push(data[key]);
     });
     return chart
+}
+
+
+function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp) {
+
+    const user_image_prom = new Promise((resolve, reject) => {
+        get_user_icon(user_id).then((url) => {
+            resolve({ photo_url: url });
+        }).catch((error) => {
+            resolve({ photo_url: 'none' });
+        });
+    });
+
+    const user_details_prom = new Promise((resolve, reject) => {
+        getoptdata(user_Ref, user_id).then(function(finalResult) {
+            var user_email = finalResult.email;
+            var user_name = finalResult.name;
+            resolve({ user_email, user_name });
+        }).catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+    return new Promise(function(resolve, reject) {
+        return Promise.all([user_image_prom, user_details_prom]).then((values) => {
+            var counter = Object.keys(local_data).length + 1;
+            var doc_id = monthts(timestamp);
+            var data = {
+                    RecordID: counter,
+                    user: user_id,
+                    Description: description,
+                    Category: category,
+                    Type: type,
+                    Payment: payment,
+                    Amount: amount,
+                    Repeated: selected_repeated,
+                    user_name: values[1]['user_name'],
+                    user_email: values[1]['user_email'],
+                    photo_url: values[0]['photo_url'],
+                    Timestamp: new Date(timestamp),
+                    doc_id: doc_id
+                }
+                // console.log(data);
+
+            resolve(data);
+
+
+        }).catch((error) => {
+            console.log("Error getting documents: ", error);
+            reject(error);
+        });
+    });
 }

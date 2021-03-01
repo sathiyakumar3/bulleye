@@ -5,7 +5,8 @@ var wallet_Ref = '';
 
 var wallet_id = "";
 var datetime_loaded = false;
-
+var selected_start = new Date('1/1/1900').getTime();
+var selected_end = new Date('1/1/2100').getTime();
 
 
 
@@ -245,10 +246,10 @@ var start_app = function() {
     }
 
 
-    var read_data = function(from, to, first_time) {
+    var read_data = function(from, to, first_time, force) {
 
 
-        get_wallet_data(wallet_id, from, to).then(function(finalResult) {
+        get_wallet_data(wallet_id, from, to, force).then(function(finalResult) {
 
             run_dashboard(first_time, finalResult);
 
@@ -322,12 +323,11 @@ var start_app = function() {
 
     return {
         init: function() {
-            var selected_start = new Date('1/1/1900').getTime();
-            var selected_end = new Date('1/1/2100').getTime();
-            read_data(selected_start, selected_end, true);
+
+            read_data(selected_start, selected_end, true, false);
         },
         refresh: function() {
-            read_data(selected_start, selected_end, false);
+            read_data(selected_start, selected_end, false, true);
         },
 
     };
@@ -343,7 +343,7 @@ jQuery(document).ready(function() {
     var wallet_type = global_data[3];
     var wallet_owner = global_data[5];
     var wallet_location = global_data[6];
-    cat2combo(wallet_id);
+
     var user_Ref = db.collection("users");
     getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
         var user_name = finalResult.name;

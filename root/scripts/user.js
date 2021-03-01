@@ -521,94 +521,12 @@ function image_add(url) {
 
 
 
-        var edit_entry_From_validation = function() {
-            FormValidation.formValidation(
-                document.getElementById('edit_incex_form'), {
-                    fields: {
-                        form_catergory_2: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'Category is requried.'
-                                }
-                            }
-                        },
-                        form_description_2: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'A description is required.'
-                                },
-                            }
-                        },
 
-                        form_amount_2: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'An Amount is required.'
-                                },
-                            }
-                        },
-                        repeat_numbrs: {
-                            validators: {
-                                between: {
-                                    min: 0,
-                                    max: 30,
-                                    message: 'The number must be between 0 and 30'
-                                }
-                            }
-                        }
-
-                    },
-
-                    plugins: {
-                        trigger: new FormValidation.plugins.Trigger(),
-                        submitButton: new FormValidation.plugins.SubmitButton(),
-                        bootstrap: new FormValidation.plugins.Bootstrap({
-                            eleInvalidClass: '',
-                            eleValidClass: '',
-                        })
-                    }
-                }
-            ).on('core.form.valid', function() {
-                $('#edit_incex_form_modal').modal('toggle');
-                var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;
-                var description = document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value;
-                var amount = document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value;
-                var type = $('input[name="form_radios11_2"]:checked').val();
-                var payment = $('input[name="radios11_2"]:checked').val();
-                var user_id = document.getElementById("front_page_user_id").value;
-                var given_date = $("#kt_datetimepicker_10").find("input").val();
-                var timestamp = new Date(given_date);
-                var selected_repeated = document.getElementById('repeat_selection').value;
-                var num_of_repeat = document.getElementById('example-number-input2').value;
-
-                for (i = 0; i < num_of_repeat; i++) {
-                    update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated).then(function() {}).catch((error) => {
-                        console.log(error);
-                    });
-                    switch (selected_repeated) {
-                        case 'Monthly':
-                            timestamp.setMonth(timestamp.getMonth() + 1);
-                            break;
-                        case 'Weekly':
-                            timestamp.setDate(timestamp.getDate() + 7);
-                            break;
-                        case 'Daily':
-                            timestamp.setDate(timestamp.getDate() + 1);
-                            break;
-                        default:
-
-                    }
-                    if (i == (num_of_repeat - 1)) {
-                        start_app.refresh();
-                    }
-                }
-            });
-        }
         return {
             // public functions
             init: function() {
                 start_app_main();
-                edit_entry_From_validation();
+
                 add_new_wallet_From_validation();
             }
         };

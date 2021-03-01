@@ -267,13 +267,13 @@ var last_from = "";
 var last_to = "";
 var last_result = "";
 
-function get_wallet_data(wallet_id, from, to) {
+function get_wallet_data(wallet_id, from, to, force) {
     //  console.log(wallet_id + " - " + from + " - " + to);
     return new Promise(function(resolve, reject) {
 
         var wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
 
-        if ((wallet_id != last_wallet_id) || (from != last_from) || (to !== last_to)) {
+        if ((wallet_id != last_wallet_id) || (from != last_from) || (to !== last_to) || force) {
 
 
 
@@ -287,8 +287,9 @@ function get_wallet_data(wallet_id, from, to) {
                 .then((querySnapshot) => {
                     var items_counter = 0;
                     querySnapshot.forEach((doc) => {
+
                         var items = querySnapshot.size;
-                        wallet_Ref.doc(doc.id).onSnapshot(function(doc) {
+                        wallet_Ref.doc(doc.id).get().then((doc) => {
                             items_counter++;
                             var arr = doc.data();
                             delete arr["last_updated"];
@@ -343,7 +344,6 @@ function get_wallet_data(wallet_id, from, to) {
                                             if (last_day == "" || datetime > last_day) {
                                                 last_day = datetime;
                                             }
-
 
                                             if (!user_profile.hasOwnProperty([user_id])) {
                                                 user_profile = {
