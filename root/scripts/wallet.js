@@ -1,22 +1,14 @@
 "use strict";
-// Class definition
-
 var datatable = "";
-
 var wallet_Ref = "";
 var wallet_id = "";
 var datetime_loaded = false;
-
 var selected_start = new Date('1/1/1900').getTime();
 var selected_end = new Date('1/1/2100').getTime();
 var local_data;
-
-
 var start_app = function() {
-
     var run_wallet = function() {
         var data = date_filter(local_data, selected_end, selected_start);
-
         var user_profile = user_process(data);
         var user_sum = Object.keys(user_profile).length;
         var counter = Object.keys(data).length;
@@ -26,333 +18,99 @@ var start_app = function() {
         var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
         document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
         document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
-        if ((sum_income - sum_expense) < 0) {
-            document.getElementById("sum_net").classList.add("text-danger");
-        } else {
-            document.getElementById("sum_net").classList.add("text-success");
-        }
-        if (user_sum > 1) {
-            document.getElementById("user_list_2").innerText = user_sum + " Users";
-        } else {
-            document.getElementById("user_list_2").innerText = user_sum + " User";
-        }
+        if ((sum_income - sum_expense) < 0) { document.getElementById("sum_net").classList.add("text-danger"); } else { document.getElementById("sum_net").classList.add("text-success"); }
+        if (user_sum > 1) { document.getElementById("user_list_2").innerText = user_sum + " Users"; } else { document.getElementById("user_list_2").innerText = user_sum + " User"; }
         document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
-
-
-
+        data - check_RecordID(data);
         initialze_table(sort_obj(data, 'Timestamp'));
-
     }
-
-
-
     var read_data = function(from, to, first_time, force) {
-
-
         get_wallet_data(wallet_id, from, to, force).then(function(result) {
             selected_start = date_process(result)[0];
             selected_end = date_process(result)[1];
             local_data = result;
-
             run_wallet();
-
-            if (first_time) {
-                _initDaterangepicker();
-            }
-
-
-        }).catch((error) => {
-            console.log(error);
-        });
+            if (first_time) { _initDaterangepicker(); }
+        }).catch((error) => { console.log(error); });
     };
-
-
     var _initDaterangepicker = function() {
-        if ($('#kt_dashboard_daterangepicker').length == 0) {
-            return;
-        }
-
+        if ($('#kt_dashboard_daterangepicker').length == 0) { return; }
         selected_start = moment(selected_start);
         selected_end = moment(selected_end);
-
         var picker = $('#kt_dashboard_daterangepicker');
-
 
         function cb(start, end, label) {
             var title = '';
             var range = '';
-
             if ((end - start) < 100 || label == 'Today') {
                 title = 'Today:';
                 range = start.format('MMM D');
-
             } else if (label == 'Yesterday') {
                 title = 'Yesterday:';
                 range = start.format('MMM D');
-            } else {
-                range = start.format('MMM D') + ' - ' + end.format('MMM D');
-            }
+            } else { range = start.format('MMM D') + ' - ' + end.format('MMM D'); }
             $('#kt_dashboard_daterangepicker_date').html(range);
             $('#kt_dashboard_daterangepicker_title').html(title);
-            if (datetime_loaded == false) {
-                datetime_loaded = true;
-            } else {
+            if (datetime_loaded == false) { datetime_loaded = true; } else {
                 run_wallet(end, start);
                 selected_start = start;
                 selected_end = end;
-                //    read_data(start, end, false);
             }
         }
-
-
-        picker.daterangepicker({
-            direction: KTUtil.isRTL(),
-            startDate: selected_start,
-            endDate: selected_end,
-            opens: 'left',
-            applyClass: 'btn-primary',
-            cancelClass: 'btn-light-primary',
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'All time': [selected_start, selected_end]
-            }
-        }, cb);
+        picker.daterangepicker({ direction: KTUtil.isRTL(), startDate: selected_start, endDate: selected_end, opens: 'left', applyClass: 'btn-primary', cancelClass: 'btn-light-primary', ranges: { 'Today': [moment(), moment()], 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')], 'Last 7 Days': [moment().subtract(6, 'days'), moment()], 'Last 30 Days': [moment().subtract(29, 'days'), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')], 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 'All time': [selected_start, selected_end] } }, cb);
         cb(selected_start, selected_end, '');
-
     }
     var old_month = "";
     var initialze_table = function(tabler) {
-
         var options = {
-            data: {
-                type: 'local',
-                source: tabler,
-                serverPaging: false,
-                serverFiltering: true,
-                serverSorting: true,
-            },
+            data: { type: 'local', source: tabler, serverPaging: false, serverFiltering: true, serverSorting: true, },
             destroy: true,
             info: false,
-
-            layout: {
-                scroll: false, // enable/disable datatable scroll both horizontal and
-                footer: false, // display/hide footer
-
-            },
-            // column sorting
+            layout: { scroll: false, footer: false, },
             sortable: true,
-
             pagination: false,
-            rowGroup: {
-                dataSrc: 4,
-            },
+            rowGroup: { dataSrc: 4, },
             rows: {
                 afterTemplate: function(row, data, index) {
                     if (monthts(data['Timestamp']) != old_month) {
                         old_month = monthts(data['Timestamp']);
-
-                        $(row).before(
-
-                            '<span class="label label-xl  my-3 label-primary label-pill label-inline mr-2">' +
-                            old_month + '</span>' +
-                            '' + '<div class="separator separator-dashed"></div>'
-                        );
+                        $(row).before('<span class="label label-xl  my-3 label-primary label-pill label-inline mr-2">' +
+                            old_month + '</span>' + '' + '<div class="separator separator-dashed"></div>');
                     }
                 }
             },
-            // columns definition
-            columns: [{
-                    field: 'RecordID',
-                    title: '#',
-                    sortable: false,
-                    width: 20,
-                    selector: {
-                        class: ''
-                    },
-                    textAlign: 'center',
-                }, {
-                    field: 'User',
-                    title: 'User',
-                    width: 185,
-                    sortable: true,
-
-                    template: function(row) {
-                        return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email);
-                    }
-                }, {
-                    field: 'Category',
-                    title: 'Category',
-
-                    width: 250,
-                    sortable: true,
-                    template: function(row) {
-
-                        return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category);
-                    },
-                }, {
-                    field: 'Description',
-                    title: 'Date & Time',
-                    textAlign: 'center',
-                    autoHide: false,
-                    width: 100,
-                    sortable: true,
-                    template: function(row) {
-
-                        var myvar = dnt4table(row.Timestamp);
-                        return myvar;
-                    },
-                }, {
-                    field: 'Repeated',
-                    title: 'Repeated',
-
-
-                    sortable: true,
-                    template: function(row) {
-                        return format_repeat(row.Repeated);
-                    },
-                },
-
-                {
-                    field: 'Type2',
-                    title: 'Income',
-                    textAlign: 'center',
-                    width: 100,
-                    autoHide: false,
-                    sortable: true,
-                    template: function(row) {
-                        return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income')
-                    },
-                },
-
-                {
-                    field: 'Type',
-                    title: 'Expense',
-                    width: 100,
-                    textAlign: 'center',
-                    autoHide: false,
-                    sortable: true,
-                    template: function(row) {
-                        return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense')
-
-                    },
-                }, {
-                    field: 'Actions',
-                    title: 'Actions',
-                    sortable: false,
-                    textAlign: 'center',
-                    overflow: false,
-                    autoHide: false,
-                    template: function(row) {; // code block
-
-                        var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated);
-                        var delete_button = delete_button1(row.Timestamp);
-                        var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID);
-                        return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>';
-                    },
-                }
-            ],
-            extensions: {
-                // boolean or object (extension options)
-                checkbox: true,
-
-            },
-            search: {
-                input: $('#kt_datatable_search_query_2'),
-                key: 'generalSearch'
-            },
-
+            columns: [{ field: 'RecordID', title: '#', sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', }, { field: 'User', title: 'User', width: 185, sortable: true, template: function(row) { return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email); } }, { field: 'Category', title: 'Category', width: 250, sortable: true, template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); }, }, { field: 'Description', title: 'Date & Time', textAlign: 'center', autoHide: false, width: 100, sortable: true, template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; }, }, { field: 'Repeated', title: 'Repeated', sortable: true, template: function(row) { return format_repeat(row.Repeated); }, }, { field: 'Type2', title: 'Income', textAlign: 'center', width: 100, autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income') }, }, { field: 'Type', title: 'Expense', width: 100, textAlign: 'center', autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense') }, }, { field: 'Actions', title: 'Actions', sortable: false, textAlign: 'center', overflow: false, autoHide: false, template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; }, }],
+            extensions: { checkbox: true, },
+            search: { input: $('#kt_datatable_search_query_2'), key: 'generalSearch' },
         }
-
         if (datatable != "") {
             $('#kt_datatable_fetch_display_2').innerHTML = '';
             $('#kt_datatable_group_action_form_2').collapse('hide');
             $('#kt_datatable_selected_records_2').html(0);
             $('#kt_datatable_2').KTDatatable().destroy();
         }
-
         datatable = $('#kt_datatable_2').KTDatatable(options);
 
         $('#kt_datatable_search_status_2').on('change', function() {
-            datatable.search($(this).val().toLowerCase(), 'Status');
+            datatable.search($(this).val(), 'Payment');
+            console.log($(this).val())
         });
-
         $('#kt_datatable_search_type_2').on('change', function() {
-            datatable.search($(this).val().toLowerCase(), 'Type');
+            datatable.search(format_repeat($(this).val()), 'Repeated');
+            console.log(format_repeat($(this).val()))
         });
-
         $('#kt_datatable_search_status_2, #kt_datatable_search_type_2').selectpicker();
 
-        datatable.on(
-            'datatable-on-click-checkbox',
-            function(e) {
-                var ids = datatable.checkbox().getSelectedId();
-                var count = ids.length;
-
-                $('#kt_datatable_selected_records_2').html(count);
-
-                if (count > 0) {
-                    $('#kt_datatable_group_action_form_2').collapse('show');
-                } else {
-                    $('#kt_datatable_group_action_form_2').collapse('hide');
-                }
-            });
+        datatable.on('datatable-on-click-checkbox', function(e) {
+            var ids = datatable.checkbox().getSelectedId();
+            var count = ids.length;
+            $('#kt_datatable_selected_records_2').html(count);
+            if (count > 0) { $('#kt_datatable_group_action_form_2').collapse('show'); } else { $('#kt_datatable_group_action_form_2').collapse('hide'); }
+        });
     }
-
-
     var edit_entry_From_validation = function() {
-        FormValidation.formValidation(
-            document.getElementById('edit_incex_form'), {
-                fields: {
-                    form_catergory_2: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Category is requried.'
-                            }
-                        }
-                    },
-                    form_description_2: {
-                        validators: {
-                            notEmpty: {
-                                message: 'A description is required.'
-                            },
-                        }
-                    },
-
-                    form_amount_2: {
-                        validators: {
-                            notEmpty: {
-                                message: 'An Amount is required.'
-                            },
-                        }
-                    },
-                    repeat_numbrs: {
-                        validators: {
-                            between: {
-                                min: 0,
-                                max: 30,
-                                message: 'The number must be between 0 and 30'
-                            }
-                        }
-                    }
-
-                },
-
-                plugins: {
-                    trigger: new FormValidation.plugins.Trigger(),
-                    submitButton: new FormValidation.plugins.SubmitButton(),
-                    bootstrap: new FormValidation.plugins.Bootstrap({
-                        eleInvalidClass: '',
-                        eleValidClass: '',
-                    })
-                }
-            }
-        ).on('core.form.valid', function() {
+        FormValidation.formValidation(document.getElementById('edit_incex_form'), { fields: { form_catergory_2: { validators: { notEmpty: { message: 'Category is requried.' } } }, form_description_2: { validators: { notEmpty: { message: 'A description is required.' }, } }, form_amount_2: { validators: { notEmpty: { message: 'An Amount is required.' }, } }, repeat_numbrs: { validators: { between: { min: 0, max: 30, message: 'The number must be between 0 and 30' } } } }, plugins: { trigger: new FormValidation.plugins.Trigger(), submitButton: new FormValidation.plugins.SubmitButton(), bootstrap: new FormValidation.plugins.Bootstrap({ eleInvalidClass: '', eleValidClass: '', }) } }).on('core.form.valid', function() {
             $('#edit_incex_form_modal').modal('toggle');
             var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;
             var description = document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value;
@@ -366,12 +124,7 @@ var start_app = function() {
             var num_of_repeat = document.getElementById('example-number-input2').value;
             var RecordID = document.getElementById('record_id').value;
             for (var i = 0; i < num_of_repeat; i++) {
-                update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated, num_of_repeat, i, RecordID).then(function() {
-
-
-                }).catch((error) => {
-                    console.log(error);
-                });
+                update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated, num_of_repeat, i, RecordID).then(function() {}).catch((error) => { console.log(error); });
                 switch (selected_repeated) {
                     case 'Monthly':
                         timestamp.setMonth(timestamp.getMonth() + 1);
@@ -383,56 +136,29 @@ var start_app = function() {
                         timestamp.setDate(timestamp.getDate() + 1);
                         break;
                     default:
-
                 }
-
-
             }
         });
     }
-
     return {
         init: function() {
             edit_entry_From_validation();
             read_data(selected_start, selected_end, true, false);
-            $('#kt_datatable_fetch_modal_2').on('show.bs.modal', function(e) {
-                var ids = datatable.checkbox().getSelectedId();
-                var c = document.createDocumentFragment();
-                for (var i = 0; i < ids.length; i++) {
-                    var li = document.createElement('li');
-                    li.setAttribute('data-id', ids[i]);
-                    li.innerHTML = 'Selected record ID: ' + ids[i];
-                    c.appendChild(li);
-                }
-                $('#kt_datatable_fetch_display_2').append(c);
-            }).on('hide.bs.modal', function(e) {
-                $('#kt_datatable_fetch_display_2').empty();
-            });
 
         },
-        refresh: function() {
-            // read_data(selected_start, selected_end, false, true);
-            run_wallet();
-        },
-
+        refresh: function() { run_wallet(); },
     };
 }();
-
-
-
 jQuery(document).ready(function() {
     wallet_id = global_data[0];
     var wallet_name = global_data[1];
     cat2combo(wallet_id);
     document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
-    //  document.getElementById("t_wallet_id").innerText = wallet_id;
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     var wallet_type = global_data[3];
     document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
     start_app.init();
 });
-
-
 
 function add_entry_modal() {
     $('#edit_incex_form_modal').modal('toggle');
@@ -451,7 +177,6 @@ function add_entry_modal() {
 function edit_entry_modal(description, category, amount, timestamp, type, payment, repeat, RecordID) {
     console.log(RecordID);
     document.getElementById('record_id').value = RecordID;
-
     $('#edit_incex_form_modal').modal('toggle');
     document.getElementById('example-number-input2').value = 1;
     $('#edit_cat_selec').selectpicker('val', category);
@@ -466,7 +191,6 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
             break;
         default:
     }
-
     switch (payment) {
         case 'Not Paid':
             document.getElementById("not_paid_radio").checked = true;
@@ -480,94 +204,41 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
     $('#kt_datetimepicker_10').datetimepicker('destroy');
     $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(timestamp), format: 'MM/DD/YYYY hh:mm:ss A', disable: true });
     document.getElementById('repeat_selection').value = repeat;
-
     document.getElementById('title_33').innerText = "Edit Entry"
 }
 
 function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i, RecordID) {
-
-
-
     var timestamp = new Date(timestamp2);
     let myPromise = new Promise(function(resolve, reject) {
-
-
         var value = {
-            [timestamp]: {
-                "user": user,
-                "Description": description,
-                "Category": category,
-                "Type": type,
-                "Payment": payment,
-                "Amount": amount,
-                "Repeated": repeat,
-            },
+            [timestamp]: { "user": user, "Description": description, "Category": category, "Type": type, "Payment": payment, "Amount": amount, "Repeated": repeat, },
             last_updated: timestamp
         };
         var entry_id = monthts(timestamp);
-
-        updateoptdata(wallet_Ref, entry_id, value).then(function() {
-            resolve('sucess');
-
-        }).catch((error) => {
+        updateoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
             console.log(error);
             console.log(error.code);
-            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') {
-                setoptdata(wallet_Ref, entry_id, value).then(function() {
-                    resolve('sucess');
-                }).catch((error) => {
-                    reject(error);
-                });
-            }
+            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { setoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => { reject(error); }); }
         });
-
-
     });
-
     return new Promise(function(resolve, reject) {
-
-        myPromise.then(
-            function(value) {
-                console.log('sucess');
-                add_to_local_table(user, description, category, type, payment, amount, repeat, timestamp, RecordID).then(function(data) {
-                    local_data = delete_item(local_data, timestamp);
-                    local_data.push(data);
-                    swalfire(i, num_of_repeat);
-                    if (i == (num_of_repeat - 1)) {
-                        //  local_data = check_RecordID(local_data);
-                        start_app.refresh();
-                    }
-                    resolve('sucess');
-                }).catch((error) => {
-                    console.log("Error getting documents: ", error);
-                    reject(error);
-                });
-
-            },
-            function(error) {
+        myPromise.then(function(value) {
+            console.log('sucess');
+            add_to_local_table(user, description, category, type, payment, amount, repeat, timestamp, RecordID).then(function(data) {
+                local_data = delete_item(local_data, timestamp);
+                local_data.push(data);
+                swalfire(i, num_of_repeat);
+                if (i == (num_of_repeat - 1)) { start_app.refresh(); }
+                resolve('sucess');
+            }).catch((error) => {
+                console.log("Error getting documents: ", error);
                 reject(error);
-            }
-        );
-
+            });
+        }, function(error) { reject(error); });
     });
-
 }
 
-function entry_delete(timestamp, num_of_repeat, i) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            del(timestamp, num_of_repeat, i);
-        }
-    })
-}
+function entry_delete(timestamp, num_of_repeat, i) { Swal.fire({ title: 'Are you sure?', text: "You won't be able to revert this!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' }).then((result) => { if (result.isConfirmed) { del(timestamp, num_of_repeat, i); } }) }
 
 function cat2combo(wallet_id) {
     document.getElementById("edit_cat_selec").innerHTML = "";
@@ -583,31 +254,18 @@ function cat2combo(wallet_id) {
             opt.innerHTML = cat_icon_list[i]['name'];
             select.appendChild(opt);
         }
-    })).catch((error) => {
-        console.error(error);
-    });
+    })).catch((error) => { console.error(error); });
 }
 
 function delete_selected() {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You are about to delete the selected.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Delete!'
-    }).then((result) => {
+    Swal.fire({ title: 'Are you sure?', text: "You are about to delete the selected.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Delete!' }).then((result) => {
         if (result.isConfirmed) {
             var ids = datatable.checkbox().getSelectedId();
             for (var i = 0; i < ids.length; i++) {
-                var data = datatable.dataSet[ids[i] - 2];;
+                var data = datatable.dataSet[ids[i] - 1];;
                 console.log(data);
                 var timestamp = data.Timestamp;
-                del(timestamp, ids.length, i).then(function() {}).catch((error) => {
-                    console.log(error);
-                })
-
+                del(timestamp, ids.length, i).then(function() {}).catch((error) => { console.log(error); })
             }
         }
     })
@@ -618,38 +276,30 @@ function del(timestamp, num_of_repeat, i) {
         let myPromise = new Promise(function(resolve, reject) {
             timestamp = new Date(timestamp);
             var entry_id = monthts(timestamp);
-            deloptfeild(wallet_Ref, entry_id, timestamp).then(function() {
-                resolve("success");
-
-            }).catch((error) => {
+            deloptfeild(wallet_Ref, entry_id, timestamp).then(function() { resolve("success"); }).catch((error) => {
                 console.log("Error getting documents: ", error);
                 reject(error);
             });
         });
-        myPromise.then(
-            function(value) {
-                console.log('yea?');
-                local_data = delete_item(local_data, timestamp);
-                console.log(i + " : " + num_of_repeat);
-                swalfire(i, num_of_repeat);
-                if (i == (num_of_repeat - 1)) {
-                    local_data = check_RecordID(local_data);
-                    start_app.refresh();
-                    console.log('REFresh');
-                }
-                resolve('succeess');
-            },
-            function(error) {
-                reject(error);
+        myPromise.then(function(value) {
+
+            local_data = delete_item(local_data, timestamp);
+            console.log(i + " : " + num_of_repeat);
+            swalfire(i, num_of_repeat);
+            if (i == (num_of_repeat - 1)) {
+
+                console.log('REFresh');
+                start_app.refresh();
             }
-        );
+            resolve('succeess');
+        }, function(error) { reject(error); });
     });
 }
 
 function update_selected(update) {
     var ids = datatable.checkbox().getSelectedId();
     for (var i = 0; i < ids.length; i++) {
-        var data = datatable.dataSet[ids[i] - 2];
+        var data = datatable.dataSet[ids[i] - 1];
         var description = data.Description;
         var category = data.Category;
         var amount = data.Amount;
@@ -673,14 +323,6 @@ function update_selected(update) {
                 break;
             default:
         }
-
-        update_entry(description, category, amount, timestamp, type, payment, user, repeat, ids.length, i, ids[i]).then(function() {
-
-        }).catch((error) => {
-            console.log(error);
-        });
-
-
+        update_entry(description, category, amount, timestamp, type, payment, user, repeat, ids.length, i, ids[i]).then(function() {}).catch((error) => { console.log(error); });
     }
-
 };
