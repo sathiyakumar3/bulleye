@@ -219,6 +219,7 @@ function payment_status_fomt(type, payment, amount, int_type) {
 }
 
 
+
 function set_sum(html_div, sum) {
     document.getElementById(html_div).innerText = " Rs " + numberWithCommas(sum);
 }
@@ -275,7 +276,7 @@ function paid_nt_paid_button(payment, description, type, category, amount, times
     switch (payment) {
         case 'Paid':
             var pay = 'Not Paid';
-            return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + description + '\', \'' + category + '\', \'' + amount + '\', \'' + timestamp + '\', \'' + type + '\', \'' + pay + '\', \'' + user + '\', \'' + repeat + '\')">' +
+            return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="update_entry(\'' + description + '\', \'' + category + '\', \'' + amount + '\', \'' + timestamp + '\', \'' + type + '\', \'' + pay + '\', \'' + user + '\', \'' + repeat + '\', \'' + 1 + '\', \'' + 0 + '\')">' +
                 '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Error-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
                 '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
                 '        <rect x="0" y="0" width="24" height="24"/>' +
@@ -286,7 +287,7 @@ function paid_nt_paid_button(payment, description, type, category, amount, times
             break;
         case 'Not Paid':
             var pay = 'Paid';
-            return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="sendtoupdate(\'' + description + '\', \'' + category + '\', \'' + amount + '\', \'' + timestamp + '\', \'' + type + '\', \'' + pay + '\', \'' + user + '\', \'' + repeat + '\')">' +
+            return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="update_entry(\'' + description + '\', \'' + category + '\', \'' + amount + '\', \'' + timestamp + '\', \'' + type + '\', \'' + pay + '\', \'' + user + '\', \'' + repeat + '\', \'' + 1 + '\', \'' + 0 + '\')">' +
                 '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Code\Done-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
                 '    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
                 '        <rect x="0" y="0" width="24" height="24"/>' +
@@ -301,7 +302,7 @@ function paid_nt_paid_button(payment, description, type, category, amount, times
 }
 
 function delete_button1(timestamp) {
-    return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="entry_delete(\'' + timestamp + '\')">' +
+    return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="entry_delete(\'' + timestamp + '\', ' + 1 + ', ' + 0 + ')">' +
         '        <span class="svg-icon svg-icon-md svg-icon-primary">' +
         '            <!--begin::Svg Icon | path:assets/media/svg/icons/General/Trash.svg-->' +
         '            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -316,8 +317,8 @@ function delete_button1(timestamp) {
         '    </a>';
 }
 
-function edit_button3(payment, description, type, category, amount, timestamp, user, repeat) {
-    return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3" onclick="edit_entry_modal(\'' + description + '\', \'' + category + '\', \'' + amount + '\', \'' + timestamp + '\', \'' + type + '\', \'' + payment + '\', \'' + repeat + '\')">' +
+function edit_button3(payment, description, type, category, amount, timestamp, user, repeat, RecordID) {
+    return '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3" onclick="edit_entry_modal(\'' + description + '\', \'' + category + '\', \'' + amount + '\', \'' + timestamp + '\', \'' + type + '\', \'' + payment + '\', \'' + repeat + '\', \'' + RecordID + '\')">' +
         '        <span class="svg-icon svg-icon-md svg-icon-primary">' +
         '            <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Write.svg-->' +
         '            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -330,4 +331,23 @@ function edit_button3(payment, description, type, category, amount, timestamp, u
         '            <!--end::Svg Icon-->' +
         '        </span>' +
         '    </a>';
+}
+
+
+
+function swalfire(i, num_of_repeat) {
+    if (Swal.isVisible()) {
+        document.getElementById('progres_par').innerHTML = percentage_form(i, num_of_repeat - 1, 'Items');
+    } else {
+        Swal.fire({
+            title: 'Please Wait',
+            html: '<div id=\"progres_par\" >' + percentage_form(0, 0 - 1, 'Items') + '</div>',
+            showConfirmButton: false,
+        });
+    }
+    if (i == (num_of_repeat - 1)) {
+
+        Swal.fire({ showConfirmButton: false, }).close();
+
+    }
 }

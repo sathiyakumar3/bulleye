@@ -74,39 +74,7 @@ function sendtoupdate(description, category, amount, timestamp, type, payment, u
 }
 
 
-function edit_entry_modal(description, category, amount, timestamp, type, payment, repeat) {
 
-    $('#edit_incex_form_modal').modal('toggle');
-    document.getElementById('example-number-input2').value = 1;
-    $('#edit_cat_selec').selectpicker('val', category);
-    document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = description;
-    document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = amount;
-    switch (type) {
-        case 'Expense':
-            document.getElementById("expense_radio").checked = true;
-            break;
-        case 'Income':
-            document.getElementById("income_radio").checked = true;
-            break;
-        default:
-    }
-
-    switch (payment) {
-        case 'Not Paid':
-            document.getElementById("not_paid_radio").checked = true;
-            break;
-        case 'Paid':
-            document.getElementById("paid_radio").checked = true;
-            break;
-        default:
-    }
-    $('#kt_datetimepicker_10').datetimepicker('clear');
-    $('#kt_datetimepicker_10').datetimepicker('destroy');
-    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(timestamp), format: 'MM/DD/YYYY hh:mm:ss A', disable: true });
-    document.getElementById('repeat_selection').value = repeat;
-
-    document.getElementById('title_33').innerText = "Edit Entry"
-}
 
 
 function name_intials(str) {
@@ -387,6 +355,20 @@ function delete_item(data, item) {
     return new_data;
 }
 
+function check_RecordID(data) {
+
+    data = sort_obj(data, 'Timestamp');
+    var new_data = [];
+    var counter = 0;
+    Object.keys(data).sort().map(function(key, index) {
+        counter++;
+        new_data.push(data[key]);
+        new_data[key]['RecordID'] = counter;
+    });
+    return new_data;
+}
+
+
 
 function chart_process(data, find, search, ) {
     var chart = [];
@@ -407,6 +389,8 @@ function chart_process(data, find, search, ) {
     });
     return chart
 }
+
+
 
 function chart_subraction(data, data1) {
     var result = [];
@@ -444,8 +428,10 @@ function extract_data(data) {
 }
 
 
-function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp) {
-
+function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp, RecordID) {
+    if (RecordID == '') {
+        RecordID = Object.keys(local_data).length + 1;
+    }
     const user_image_prom = new Promise((resolve, reject) => {
         get_user_icon(user_id).then((url) => {
             resolve({ photo_url: url });
@@ -466,10 +452,10 @@ function add_to_local_table(user_id, description, category, type, payment, amoun
     });
     return new Promise(function(resolve, reject) {
         return Promise.all([user_image_prom, user_details_prom]).then((values) => {
-            var counter = Object.keys(local_data).length + 1;
+
             var doc_id = monthts(timestamp);
             var data = {
-                    RecordID: counter,
+                    RecordID: RecordID,
                     user: user_id,
                     Description: description,
                     Category: category,
