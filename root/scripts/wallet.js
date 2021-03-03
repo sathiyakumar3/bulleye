@@ -6,8 +6,10 @@ var datetime_loaded = false;
 var selected_start = new Date('1/1/1900').getTime();
 var selected_end = new Date('1/1/2100').getTime();
 var local_data;
+var table_data;
 var start_app = function() {
     var run_wallet = function() {
+
         var data = date_filter(local_data, selected_end, selected_start);
         var user_profile = user_process(data);
         var user_sum = Object.keys(user_profile).length;
@@ -22,16 +24,16 @@ var start_app = function() {
         if (user_sum > 1) { document.getElementById("user_list_2").innerText = user_sum + " Users"; } else { document.getElementById("user_list_2").innerText = user_sum + " User"; }
         document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
-        data - check_RecordID(data);
-        initialze_table(sort_obj(data, 'Timestamp'));
+        table_data = check_RecordID(data);
+        initialze_table();
     }
-    var read_data = function(from, to, first_time, force) {
-        get_wallet_data(wallet_id, from, to, force).then(function(result) {
-            selected_start = date_process(result)[0];
-            selected_end = date_process(result)[1];
+    var read_data = function() {
+        get_wallet_data(wallet_id).then(function(result) {
             local_data = result;
-            run_wallet();
-            if (first_time) { _initDaterangepicker(); }
+            var outcome = date_process(result);
+            selected_start = outcome[0].setHours(0, 0, 0, 0);
+            selected_end = outcome[1].setHours(23, 59, 59, 999);
+            _initDaterangepicker();
         }).catch((error) => { console.log(error); });
     };
     var _initDaterangepicker = function() {
@@ -52,25 +54,25 @@ var start_app = function() {
             } else { range = start.format('MMM D') + ' - ' + end.format('MMM D'); }
             $('#kt_dashboard_daterangepicker_date').html(range);
             $('#kt_dashboard_daterangepicker_title').html(title);
-            if (datetime_loaded == false) { datetime_loaded = true; } else {
-                run_wallet(end, start);
-                selected_start = start;
-                selected_end = end;
-            }
+
+            selected_start = start;
+            selected_end = end;
+            run_wallet();
         }
         picker.daterangepicker({ direction: KTUtil.isRTL(), startDate: selected_start, endDate: selected_end, opens: 'left', applyClass: 'btn-primary', cancelClass: 'btn-light-primary', ranges: { 'Today': [moment(), moment()], 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')], 'Last 7 Days': [moment().subtract(6, 'days'), moment()], 'Last 30 Days': [moment().subtract(29, 'days'), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')], 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 'All time': [selected_start, selected_end] } }, cb);
         cb(selected_start, selected_end, '');
     }
     var old_month = "";
-    var initialze_table = function(tabler) {
+    var initialze_table = function() {
+
         var options = {
-            data: { type: 'local', source: tabler, serverPaging: false, serverFiltering: true, serverSorting: true, },
+            data: { type: 'local', source: table_data, serverPaging: false, serverFiltering: true, },
             destroy: true,
             info: false,
             layout: { scroll: false, footer: false, },
-            sortable: true,
+
             pagination: false,
-            rowGroup: { dataSrc: 4, },
+
             rows: {
                 afterTemplate: function(row, data, index) {
                     if (monthts(data['Timestamp']) != old_month) {
@@ -80,11 +82,16 @@ var start_app = function() {
                     }
                 }
             },
-            columns: [{ field: 'RecordID', title: '#', sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', }, { field: 'User', title: 'User', width: 185, sortable: true, template: function(row) { return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email); } }, { field: 'Category', title: 'Category', width: 250, sortable: true, template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); }, }, { field: 'Description', title: 'Date & Time', textAlign: 'center', autoHide: false, width: 100, sortable: true, template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; }, }, { field: 'Repeated', title: 'Repeated', sortable: true, template: function(row) { return format_repeat(row.Repeated); }, }, { field: 'Type2', title: 'Income', textAlign: 'center', width: 100, autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income') }, }, { field: 'Type', title: 'Expense', width: 100, textAlign: 'center', autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense') }, }, { field: 'Actions', title: 'Actions', sortable: false, textAlign: 'center', overflow: false, autoHide: false, template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; }, }],
+            columns: [{ field: 'test', title: '', width: 20, sortable: true, template: function(row) { return row.RecordID } }, { field: 'RecordID', title: '#', sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', },
+                { field: 'User', title: 'User', width: 185, sortable: true, template: function(row) { return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email); } },
+
+                { field: 'Category', title: 'Category', width: 250, sortable: true, template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); }, }, { field: 'Description', title: 'Date & Time', textAlign: 'center', autoHide: false, width: 100, sortable: true, template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; }, }, { field: 'Repeated', title: 'Repeated', sortable: true, template: function(row) { return format_repeat(row.Repeated); }, }, { field: 'Type2', title: 'Income', textAlign: 'center', width: 100, autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income') }, }, { field: 'Type', title: 'Expense', width: 100, textAlign: 'center', autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense') }, }, { field: 'Actions', title: 'Actions', sortable: false, textAlign: 'center', overflow: false, autoHide: false, template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; }, }
+            ],
             extensions: { checkbox: true, },
             search: { input: $('#kt_datatable_search_query_2'), key: 'generalSearch' },
         }
         if (datatable != "") {
+            $('#kt_datatable_2').KTDatatable().empty();
             $('#kt_datatable_fetch_display_2').innerHTML = '';
             $('#kt_datatable_group_action_form_2').collapse('hide');
             $('#kt_datatable_selected_records_2').html(0);
@@ -143,10 +150,13 @@ var start_app = function() {
     return {
         init: function() {
             edit_entry_From_validation();
-            read_data(selected_start, selected_end, true, false);
+            read_data();
 
         },
-        refresh: function() { run_wallet(); },
+        refresh: function() {
+
+            read_data();
+        },
     };
 }();
 jQuery(document).ready(function() {
@@ -208,6 +218,7 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
 }
 
 function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i, RecordID) {
+
     var timestamp = new Date(timestamp2);
     let myPromise = new Promise(function(resolve, reject) {
         var value = {
@@ -215,6 +226,7 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
             last_updated: timestamp
         };
         var entry_id = monthts(timestamp);
+
         updateoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
             console.log(error);
             console.log(error.code);
@@ -223,22 +235,18 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
     });
     return new Promise(function(resolve, reject) {
         myPromise.then(function(value) {
-            console.log('sucess');
-            add_to_local_table(user, description, category, type, payment, amount, repeat, timestamp, RecordID).then(function(data) {
-                local_data = delete_item(local_data, timestamp);
-                local_data.push(data);
-                swalfire(i, num_of_repeat);
-                if (i == (num_of_repeat - 1)) { start_app.refresh(); }
-                resolve('sucess');
-            }).catch((error) => {
-                console.log("Error getting documents: ", error);
-                reject(error);
-            });
+            swalfire(i, num_of_repeat);
+            if (i == (num_of_repeat - 1)) {
+                start_app.refresh();
+            }
+            resolve('sucess');
         }, function(error) { reject(error); });
     });
 }
 
-function entry_delete(timestamp, num_of_repeat, i) { Swal.fire({ title: 'Are you sure?', text: "You won't be able to revert this!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' }).then((result) => { if (result.isConfirmed) { del(timestamp, num_of_repeat, i); } }) }
+function entry_delete(timestamp, num_of_repeat, i) {
+    Swal.fire({ title: 'Are you sure?', text: "You won't be able to revert this!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' }).then((result) => { if (result.isConfirmed) { del(timestamp, num_of_repeat, i); } })
+}
 
 function cat2combo(wallet_id) {
     document.getElementById("edit_cat_selec").innerHTML = "";
@@ -262,8 +270,7 @@ function delete_selected() {
         if (result.isConfirmed) {
             var ids = datatable.checkbox().getSelectedId();
             for (var i = 0; i < ids.length; i++) {
-                var data = datatable.dataSet[ids[i] - 1];;
-                console.log(data);
+                var data = table_data[ids[i] - 1];
                 var timestamp = data.Timestamp;
                 del(timestamp, ids.length, i).then(function() {}).catch((error) => { console.log(error); })
             }
@@ -282,12 +289,8 @@ function del(timestamp, num_of_repeat, i) {
             });
         });
         myPromise.then(function(value) {
-
-            local_data = delete_item(local_data, timestamp);
-            console.log(i + " : " + num_of_repeat);
             swalfire(i, num_of_repeat);
             if (i == (num_of_repeat - 1)) {
-
                 console.log('REFresh');
                 start_app.refresh();
             }
@@ -298,8 +301,10 @@ function del(timestamp, num_of_repeat, i) {
 
 function update_selected(update) {
     var ids = datatable.checkbox().getSelectedId();
+
     for (var i = 0; i < ids.length; i++) {
-        var data = datatable.dataSet[ids[i] - 1];
+        var data = table_data[ids[i] - 1];
+
         var description = data.Description;
         var category = data.Category;
         var amount = data.Amount;

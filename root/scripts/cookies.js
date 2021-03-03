@@ -263,140 +263,119 @@ function deltoptarray(docRef, id, arrayname, item, data) {
 }
 
 var last_wallet_id = "";
-var last_from = "";
-var last_to = "";
 var last_result = "";
 
-function get_wallet_data(wallet_id, from, to, force) {
-    //  console.log(wallet_id + " - " + from + " - " + to);
-    return new Promise(function(resolve, reject) {
+function get_wallet_data(wallet_id) {
 
+    return new Promise(function(resolve, reject) {
         var wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
 
-        if ((wallet_id != last_wallet_id) || (from != last_from) || (to !== last_to) || force) {
+        var promises = [];
+        var tabler = [];
+        var user_profile = [];
+        var counter = 0;
+        wallet_Ref.orderBy("last_updated").get()
+            .then((querySnapshot) => {
+                var items_counter = 0;
+                querySnapshot.forEach((doc) => {
 
+                    var items = querySnapshot.size;
+                    wallet_Ref.doc(doc.id).get().then((doc) => {
+                        items_counter++;
+                        var arr = doc.data();
+                        delete arr["last_updated"];
+                        var rec_name = doc.id;
+                        Object.keys(arr).sort().map(function(key, index) {
+                            const promises8 = new Promise((resolve, reject) => {
+                                counter++;
+                                var user_id = arr[key].user;
+                                var user_Ref = db.collection("users");
 
-
-            var first_day = "";
-            var last_day = "";
-            var promises = [];
-            var tabler = [];
-            var user_profile = [];
-            var counter = 0;
-            wallet_Ref.orderBy("last_updated").get()
-                .then((querySnapshot) => {
-                    var items_counter = 0;
-                    querySnapshot.forEach((doc) => {
-
-                        var items = querySnapshot.size;
-                        wallet_Ref.doc(doc.id).get().then((doc) => {
-                            items_counter++;
-                            var arr = doc.data();
-                            delete arr["last_updated"];
-                            var rec_name = doc.id;
-                            Object.keys(arr).sort().map(function(key, index) {
-                                var today = new Date(key).getTime();
-                                if (today >= from && today <= to) {
-                                    const promises8 = new Promise((resolve, reject) => {
-                                        counter++;
-                                        var user_id = arr[key].user;
-                                        var user_Ref = db.collection("users");
-
-                                        const user_image_prom = new Promise((resolve, reject) => {
-                                            get_user_icon(user_id).then((url) => {
-                                                resolve({ photo_url: url });
-                                            }).catch((error) => {
-                                                resolve({ photo_url: 'none' });
-                                            });
-                                        });
-
-                                        const user_details_prom = new Promise((resolve, reject) => {
-                                            getoptdata(user_Ref, user_id).then(function(finalResult) {
-                                                var user_email = finalResult.email;
-                                                var user_name = finalResult.name;
-                                                resolve({ user_email, user_name });
-                                            }).catch((error) => {
-                                                console.log(error);
-                                                reject(error);
-                                            });
-                                        });
-
-                                        const wallet_details_prom = new Promise((resolve, reject) => {
-                                            resolve({
-                                                RecordID: counter,
-                                                user: arr[key].user,
-                                                Description: arr[key].Description,
-                                                Category: arr[key].Category,
-                                                Type: arr[key].Type,
-                                                Amount: arr[key].Amount,
-                                                Payment: arr[key].Payment,
-                                                Repeated: arr[key].Repeated,
-                                                Timestamp: new Date(key),
-                                                doc_id: rec_name,
-                                            });
-                                        });
-
-                                        Promise.all([user_image_prom, user_details_prom, wallet_details_prom]).then((values) => {
-                                            var datetime = values[2]['Timestamp'];
-                                            if (first_day == "" || datetime < first_day) {
-                                                first_day = datetime;
-                                            }
-                                            if (last_day == "" || datetime > last_day) {
-                                                last_day = datetime;
-                                            }
-
-                                            if (!user_profile.hasOwnProperty([user_id])) {
-                                                user_profile = {
-                                                    [user_id]: {
-                                                        user_name: values[1]['user_email'],
-                                                        user_email: values[1]['user_email'],
-                                                        photo_url: values[0]['photo_url'],
-                                                    }
-                                                }
-
-                                            }
-                                            resolve($.extend(values[0], values[1], values[2]));
-
-                                        }).catch((error) => {
-                                            console.log("Error getting documents: ", error);
-                                            reject(error);
-                                        });
-
+                                const user_image_prom = new Promise((resolve, reject) => {
+                                    get_user_icon(user_id).then((url) => {
+                                        resolve({ photo_url: url });
+                                    }).catch((error) => {
+                                        resolve({ photo_url: 'none' });
                                     });
-                                    promises.push(promises8);
+                                });
 
-                                }
+                                const user_details_prom = new Promise((resolve, reject) => {
+                                    getoptdata(user_Ref, user_id).then(function(finalResult) {
+                                        var user_email = finalResult.email;
+                                        var user_name = finalResult.name;
+                                        resolve({ user_email, user_name });
+                                    }).catch((error) => {
+                                        console.log(error);
+                                        reject(error);
+                                    });
+                                });
+
+                                const wallet_details_prom = new Promise((resolve, reject) => {
+                                    resolve({
+                                        //   RecordID: counter,
+                                        user: arr[key].user,
+                                        Description: arr[key].Description,
+                                        Category: arr[key].Category,
+                                        Type: arr[key].Type,
+                                        Amount: arr[key].Amount,
+                                        Payment: arr[key].Payment,
+                                        Repeated: arr[key].Repeated,
+                                        Timestamp: new Date(key),
+                                        doc_id: rec_name,
+                                    });
+                                });
+
+                                Promise.all([user_image_prom, user_details_prom, wallet_details_prom]).then((values) => {
+                                    if (!user_profile.hasOwnProperty([user_id])) {
+                                        user_profile = {
+                                            [user_id]: {
+                                                user_name: values[1]['user_email'],
+                                                user_email: values[1]['user_email'],
+                                                photo_url: values[0]['photo_url'],
+                                            }
+                                        }
+
+                                    }
+                                    resolve($.extend(values[0], values[1], values[2]));
+
+                                }).catch((error) => {
+                                    console.log("Error getting documents: ", error);
+                                    reject(error);
+                                });
+
                             });
-
-                            Promise.all(promises).then((values) => {
-                                if (items_counter == items) {
-                                    tabler = $.extend(tabler, values);
-                                    last_result = tabler;
-                                    last_to = to;
-                                    last_wallet_id = wallet_id;
-                                    last_from = from;
-                                    resolve(tabler);
-                                }
-
-
-                            }).catch((error) => {
-                                console.log("Error getting documents: ", error);
-                                reject(error);
-                            });
+                            promises.push(promises8);
 
 
                         });
+
+                        Promise.all(promises).then((values) => {
+                            if (items_counter == items) {
+                                tabler = $.extend(tabler, values);
+                                last_result = tabler;
+
+                                last_wallet_id = wallet_id;
+
+
+                                resolve(tabler);
+                            }
+
+
+                        }).catch((error) => {
+                            console.log("Error getting documents: ", error);
+                            reject(error);
+                        });
+
+
                     });
-
-                })
-                .catch((error) => {
-                    console.log("Error getting documents: ", error);
-                    reject(error);
                 });
-        } else {
 
-            resolve(last_result);
-        }
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+                reject(error);
+            });
+
     });
 
 };

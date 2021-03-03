@@ -61,7 +61,14 @@ function name_intials(str) {
     return acronym;
 }
 
-function sort_obj(obj, key) { obj.sort(function(a, b) { var c = new Date(a[key]); var d = new Date(b[key]); return c - d; }); return obj; }
+function sort_obj(obj, key) {
+    obj.sort(function(a, b) {
+        var c = new Date(a[key]);
+        var d = new Date(b[key]);
+        return c - d;
+    });
+    return obj;
+}
 
 function sortOn(property) { return function(a, b) { if (a[property] < b[property]) { return -1; } else if (a[property] > b[property]) { return 1; } else { return 0; } } }
 var cat_icon_list = {};
@@ -112,25 +119,28 @@ function date_process(data) {
     var last_day = "";
     Object.keys(data).sort().map(function(key, index) {
         var datetime = data[key]['Timestamp']
-        if (first_day == "" || datetime < first_day) { first_day = datetime; }
-        if (last_day == "" || datetime > last_day) { last_day = datetime; }
+        if (first_day == "" || datetime < first_day) { first_day = datetime }
+        if (last_day == "" || datetime > last_day) { last_day = datetime }
     });
     var results = [first_day, last_day];
     return results;
 }
 
 function date_filter(data, to, from) {
+    to = new Date(to);
+    from = new Date(from);
     data = sort_obj(data, 'Timestamp');
     var new_data = [];
     Object.keys(data).sort().map(function(key, index) {
-        var datetime = data[key]['Timestamp']
-        if (datetime < to && datetime > from) { new_data.push(data[key]); }
+        var datetime = data[key]['Timestamp'];
+        if (datetime < to && datetime > from) {
+            new_data.push(data[key]);
+        }
     });
     return new_data;
 }
 
 function delete_item(data, item) {
-    data = sort_obj(data, 'Timestamp');
     var new_data = [];
     Object.keys(data).sort().map(function(key, index) {
         var datetime = new Date(data[key]['Timestamp']);
@@ -140,10 +150,30 @@ function delete_item(data, item) {
     return new_data;
 }
 
+function set_item(data, item, new_d) {
+    var new_data = [];
+    if (item == '') {
+        data.push(new_d);
+    } else {
+        data[item] = new_d;
+    }
+    /*   Object.keys(data).sort().map(function(key, index) {
+          var datetime = new Date(data[key]['Timestamp']);
+          item = new Date(item);
+          if (moment(item) - moment(datetime) == 0) {
+              new_data.push(new_d);
+          } else {
+              new_data.push(data[key]);
+          }
+      }); */
+    return data;
+}
+
+
 function check_RecordID(data) {
     data = sort_obj(data, 'Timestamp');
     var counter = 0;
-    Object.keys(data).sort().map(function(key, index) {
+    Object.keys(data).map(function(key, index) {
         counter++;
         data[key]['RecordID'] = counter;
     });

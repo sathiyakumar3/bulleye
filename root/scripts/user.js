@@ -237,7 +237,7 @@ function generate_navi(data, p_wallet) {
                 '</li>';
             navi = my_wallet + navi;
         } else {
-            load_page('content_pages/wallet_dashboard.html', month_data);
+            load_page('content_pages/wallet.html', month_data);
             starting = build_site(month_data, users_size, users_list, wallet_type) +
                 '<li class="menu-section">' +
                 '<h4 class="menu-text">Secondary Wallets</h4>' +

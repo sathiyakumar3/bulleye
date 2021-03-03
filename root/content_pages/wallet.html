@@ -23,10 +23,14 @@
                             <span class="label pulse pulse-muted">
                             <span id="kt_datatable_selected_records_2" class="label label-lg font-weight-bolder label-rounded label-muted">3</span><span class="pulse-ring"></span></span>
                         </div>
-                        <div class="btn-group" hidden>
-                            <button type="button" class="btn  btn-light-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-                            <div class="dropdown-menu">
-
+                        <div class="btn-group show" hidden>
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Secondary</button>
+                            <div class="dropdown-menu show" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
                             </div>
                         </div>
                         <div class="dropdown mr-2">
@@ -70,6 +74,7 @@
             </a>
             <!--end::Daterange-->
             <a class="btn btn-light-success font-weight-bold  mr-2" onclick="add_entry_modal()">Add Entry</a>
+            <a class="btn btn-light-success font-weight-bold  mr-2" onclick="start_app.init()">Refresh</a>
 
 
 
@@ -413,3 +418,4 @@
 <!--begin::Sueader-->
 
 <script src="scripts/wallet.js"></script>
+<script src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.2.2"></script>

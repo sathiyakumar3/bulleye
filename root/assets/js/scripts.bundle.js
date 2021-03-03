@@ -5538,7 +5538,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
                 if (!Plugin.isLocked()) {
                     Plugin.redraw.call();
                     // check if its not a subtable and has autoHide option enabled
-                    if (!Plugin.isSubtable() && Plugin.getOption('rows.autoHide') === true) {
+                    if (Plugin.getOption('rows.autoHide') === true) {
                         Plugin.autoHide();
                     }
                     // reset row
@@ -7465,11 +7465,11 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
                 var isLocked = Plugin.lockEnabledColumns();
                 return isLocked.left.length > 0 || isLocked.right.length > 0;
             },
-
-            isSubtable: function() {
-                return util.hasClass(datatable.wrap[0], pfx + 'datatable-subtable') || false;
-            },
-
+            /* 
+                        isSubtable: function() {
+                            return util.hasClass(datatable.wrap[0], pfx + 'datatable-subtable') || false;
+                        },
+             */
             /**
              * Get total extra space of an element for width calculation,
              * including padding, margin, border
