@@ -11,6 +11,7 @@ var start_app = function() {
     var run_wallet = function() {
 
         var data = date_filter(local_data, selected_end, selected_start);
+        data = sort_obj(data, 'Timestamp');
         var user_profile = user_process(data);
         var user_sum = Object.keys(user_profile).length;
         var counter = Object.keys(data).length;
@@ -70,14 +71,12 @@ var start_app = function() {
             destroy: true,
             info: false,
             layout: { scroll: false, footer: false, },
-
             pagination: false,
-
             rows: {
                 afterTemplate: function(row, data, index) {
                     if (monthts(data['Timestamp']) != old_month) {
                         old_month = monthts(data['Timestamp']);
-                        $(row).before('<span class="label label-xl  my-3 label-primary label-pill label-inline mr-2">' +
+                        $(row).before('<span class="label label-xl  my-2 label-primary label-pill label-inline ">' +
                             old_month + '</span>' + '' + '<div class="separator separator-dashed"></div>');
                     }
                 }
@@ -85,7 +84,7 @@ var start_app = function() {
             columns: [{ field: 'test', title: '', width: 20, sortable: true, template: function(row) { return row.RecordID } }, { field: 'RecordID', title: '#', sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', },
                 { field: 'User', title: 'User', width: 185, sortable: true, template: function(row) { return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email); } },
 
-                { field: 'Category', title: 'Category', width: 250, sortable: true, template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); }, }, { field: 'Description', title: 'Date & Time', textAlign: 'center', autoHide: false, width: 100, sortable: true, template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; }, }, { field: 'Repeated', title: 'Repeated', sortable: true, template: function(row) { return format_repeat(row.Repeated); }, }, { field: 'Type2', title: 'Income', textAlign: 'center', width: 100, autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income') }, }, { field: 'Type', title: 'Expense', width: 100, textAlign: 'center', autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense') }, }, { field: 'Actions', title: 'Actions', sortable: false, textAlign: 'center', overflow: false, autoHide: false, template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; }, }
+                { field: 'Category', title: 'Category & Description', sortable: true, width: 250, template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); }, }, { field: 'Description', title: 'Date & Time', textAlign: 'center', autoHide: false, width: 100, sortable: true, template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; }, }, { field: 'Repeated', title: 'Repeated', sortable: true, template: function(row) { return format_repeat(row.Repeated); }, }, { field: 'Type2', title: 'Income', textAlign: 'center', width: 100, autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income') }, }, { field: 'Type', title: 'Expense', width: 100, textAlign: 'center', autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense') }, }, { field: 'Actions', title: 'Actions', sortable: false, textAlign: 'center', overflow: false, autoHide: false, template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; }, }
             ],
             extensions: { checkbox: true, },
             search: { input: $('#kt_datatable_search_query_2'), key: 'generalSearch' },

@@ -78,7 +78,7 @@ function get_cat_ic(name) { if (newar.hasOwnProperty(name)) { return newar[name]
 
 function data_process(data, find) {
     var sum = 0;
-    Object.keys(data).sort().map(function(key, index) {
+    Object.keys(data).map(function(key, index) {
         var check = 0;
         Object.keys(find).sort().map(function(key2, index2) { if (find[key2].includes(data[key][key2])) { check++; } });
         if (check == Object.keys(find).length) { sum = Number(data[key]['Amount']) + sum; }
@@ -89,7 +89,7 @@ function data_process(data, find) {
 function cat_process(data) {
     data = sort_obj(data, 'Timestamp');
     var cat = [];
-    Object.keys(data).sort().map(function(key, index) {
+    Object.keys(data).map(function(key, index) {
         c
         var mts = monthts(data[key]['Timestamp']);
         if (!cat.includes(mts)) { cat.push(mts); }
@@ -99,7 +99,7 @@ function cat_process(data) {
 
 function user_process(data) {
     var user_profile = [];
-    Object.keys(data).sort().map(function(key, index) {
+    Object.keys(data).map(function(key, index) {
         var REC_user = data[key]['user'];
         var REC_user_email = data[key]['user_email'];
         var REC_user_name = data[key]['user_name'];
@@ -117,7 +117,7 @@ function date_process(data) {
     data = sort_obj(data, 'Timestamp');
     var first_day = "";
     var last_day = "";
-    Object.keys(data).sort().map(function(key, index) {
+    Object.keys(data).map(function(key, index) {
         var datetime = data[key]['Timestamp']
         if (first_day == "" || datetime < first_day) { first_day = datetime }
         if (last_day == "" || datetime > last_day) { last_day = datetime }
@@ -129,9 +129,9 @@ function date_process(data) {
 function date_filter(data, to, from) {
     to = new Date(to);
     from = new Date(from);
-    data = sort_obj(data, 'Timestamp');
+
     var new_data = [];
-    Object.keys(data).sort().map(function(key, index) {
+    Object.keys(data).map(function(key, index) {
         var datetime = data[key]['Timestamp'];
         if (datetime < to && datetime > from) {
             new_data.push(data[key]);
@@ -142,7 +142,7 @@ function date_filter(data, to, from) {
 
 function delete_item(data, item) {
     var new_data = [];
-    Object.keys(data).sort().map(function(key, index) {
+    Object.keys(data).map(function(key, index) {
         var datetime = new Date(data[key]['Timestamp']);
         item = new Date(item);
         if (moment(item) - moment(datetime) != 0) { new_data.push(data[key]); }
@@ -171,7 +171,7 @@ function set_item(data, item, new_d) {
 
 
 function check_RecordID(data) {
-    data = sort_obj(data, 'Timestamp');
+
     var counter = 0;
     Object.keys(data).map(function(key, index) {
         counter++;

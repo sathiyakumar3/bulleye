@@ -20,7 +20,9 @@ function shorttime(d) {
     return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 }
 
-
+function shortdatetimeclean(d) {
+    return ("0" + d.getDate()).slice(-2) + " " + monthNames[d.getMonth()] + " , " + shorttime(d);
+}
 
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
