@@ -88,25 +88,10 @@
                         </div>
                         <div class="table-responsive">
                             <br>
-                            <div class="separator separator-solid my-2"></div>
+
 
                             <table class="table table-head-custom table-vertical-center">
-                                <thead>
-                                    <tr class="text-uppercase">
-                                        <th style="min-width: 150px"><span class="text-dark-75">Transactions</span></th>
-                                        <th style="min-width: 100px"><span class="text-dark-75">Includes</span></th>
-                                        <th style="min-width: 100px;text-align: center"><span class="text-dark-75">Income</span></th>
-                                        <th style="min-width: 100px;text-align: center"><span class="text-dark-75">Expense</span></th>
-                                        <th style="min-width: 100px;text-align: center"><span class="text-dark-75">Net</span></th>
-                                        <th style="min-width: 100px;"><span class="text-dark-75">Verdict</span></th>
-                                        <th>Percentage</th>
-                                        <th class="text-right">
 
-
-
-                                        </th>
-                                    </tr>
-                                </thead>
                                 <tbody>
 
                                     <tr id='trans_1' class="collapse pl-0">
@@ -129,7 +114,7 @@
                                         <td>
                                             <div class="d-flex flex-column w-100 mr-2" id="cur_progress"></div>
                                         </td>
-                                        <td><span class="text-center font-weight-normal">Based on paid transactions only, indicates<br>
+                                        <td><span class="text-center font-weight-normal">Indicates<br>
                           how much you should have now</span> &nbsp; &nbsp; <span class="label label-md label-info label-pill label-inline mr-2">Check?</span></td>
                                     </tr>
                                     <tr id='trans_2' class="collapse pl-0">
@@ -178,8 +163,9 @@
                                         <td><span class="text-center font-weight-normal">Balance after liabilities and your other<br>
                           transactions, indicates Final Profit.</span></td>
                                     </tr>
-                                    <tr class="pl-0">
+                                    <tr>
                                         <td class="">
+                                            <p></p>
                                             <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-40 flex-shrink-0 mr-4">
                                                     <span class="symbol-label"><span class="svg-icon svg-icon-2x svg-icon-success"><svg>
@@ -190,16 +176,57 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center"><span class="text-muted font-weight-500">Paid & Not Paid</span></td>
-                                        <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id="fin_income">---</span></td>
-                                        <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id="fin_expense">---</span></td>
-                                        <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id="fin_net">---</span></td>
-                                        <td><span id="fin_pl"></span></td>
+                                        <td class="text-center">
+                                            <p></p><span class="text-muted font-weight-500">Paid & Not Paid</span></td>
+                                        <td class="text-center">
+                                            <p></p>
+                                            <div class="d-flex align-items-center flex-lg-fill mr-5 ">
+                                                <span class="mr-4">
+                                              <i class="flaticon-piggy-bank icon-2x text-dark font-weight-bold"></i>
+                                              </span>
+                                                <div class="d-flex flex-column text-dark-75">
+
+                                                    <span class="font-weight-bolder text-dark font-size-h5" id="fin_income">
+                                                 <span class="text-dark font-weight-bold">Rs</span>-</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <p></p>
+                                            <div class="d-flex align-items-center flex-lg-fill mr-5 ">
+                                                <span class="mr-4">
+                  <i class="flaticon-confetti icon-2x text-dark font-weight-bold"></i>
+                  </span>
+                                                <div class="d-flex flex-column text-dark-75">
+
+                                                    <span class="font-weight-bolder text-dark  font-size-h5" id="fin_expense">
+                     <span class="text-dark font-weight-bold" id>Rs </span>-</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <p></p>
+                                            <div class="d-flex align-items-center flex-lg-fill mr-5 ">
+                                                <span class="mr-4">
+                                              <i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
+                                              </span>
+                                                <div class="d-flex flex-column text-white-75 text-danger">
+
+                                                    <span class="font-weight-bolder text-dark font-size-h5" id="fin_net">
+                                                 <span class="text-dark font-weight-bold">Rs </span>-</span>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>
+                                            <p></p><span id="fin_pl"></span></td>
+                                        <td>
+                                            <p></p>
                                             <div class="d-flex flex-column w-100 mr-2" id="total_progress"></div>
                                         </td>
-                                        <td><span class="text-center font-weight-normal">Balance after all the transactions.<br>
-                          Taken Forward.</span></td>
+                                        <td>
+                                            <p></p><span class="text-center font-weight-normal">Balance after all the transactions.<br>
+                          Taken Forward.</span>
+                                        </td>
                                         <!--   <div class="card card-custom gutter-b">
                       <div class="card-header border-0 py-5">
                           <h3 class="card-title align-items-start flex-column"><span class="card-label font-weight-bolder text-dark">Wallet Summary</span> <span class="text-muted mt-3 font-weight-bold font-size-sm">How much can you take forward?</span></h3>
@@ -297,8 +324,10 @@
                   </div>
               </div> -->
                                     </tr>
+
                                 </tbody>
                             </table>
+                            <div class="separator separator-solid my-2"></div>
                         </div>
                     </div>
                 </div>
