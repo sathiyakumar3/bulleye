@@ -5,15 +5,7 @@ var datetime_loaded = false;
 var selected_start = new Date('1/1/1900').getTime();
 var selected_end = new Date('1/1/2100').getTime();
 
-function data_for_pie(data) {
-    var data_set = [];
-    var cat_set = [];
-    Object.keys(data).sort().map(function(key, index) {
-        data_set.push(data[key]);
-        cat_set.push(key);
-    });
-    return [data_set, cat_set];
-}
+
 var start_app = function() {
     var run_trends = function(first_time, tabler) {
         var first_day = date_process(tabler)[0];
@@ -157,13 +149,3 @@ jQuery(document).ready(function() {
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     start_app.init();
 });
-
-function data_for_pie(data) {
-    var data_set = [];
-    var cat_set = [];
-    Object.keys(data).sort().map(function(key, index) {
-        data_set.push(data[key]);
-        cat_set.push(key);
-    });
-    return [data_set, cat_set]
-}

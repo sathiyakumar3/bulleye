@@ -28,8 +28,8 @@ var start_app = function() {
         table_data = check_RecordID(data);
         initialze_table();
     }
-    var read_data = function() {
-        get_wallet_data(wallet_id).then(function(result) {
+    var read_data = function(force_flag) {
+        get_wallet_data(wallet_id, force_flag).then(function(result) {
             local_data = result;
             var outcome = date_process(result);
             selected_start = outcome[0].setHours(0, 0, 0, 0);
@@ -128,9 +128,9 @@ var start_app = function() {
             var timestamp = new Date(given_date);
             var selected_repeated = document.getElementById('repeat_selection').value;
             var num_of_repeat = document.getElementById('example-number-input2').value;
-            var RecordID = document.getElementById('record_id').value;
+
             for (var i = 0; i < num_of_repeat; i++) {
-                update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated, num_of_repeat, i, RecordID).then(function() {}).catch((error) => { console.log(error); });
+                update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated, num_of_repeat, i).then(function() {}).catch((error) => { console.log(error); });
                 switch (selected_repeated) {
                     case 'Monthly':
                         timestamp.setMonth(timestamp.getMonth() + 1);
@@ -149,12 +149,12 @@ var start_app = function() {
     return {
         init: function() {
             edit_entry_From_validation();
-            read_data();
+            read_data(false);
 
         },
         refresh: function() {
 
-            read_data();
+            read_data(true);
         },
     };
 }();
@@ -169,19 +169,7 @@ jQuery(document).ready(function() {
     start_app.init();
 });
 
-function add_entry_modal() {
-    $('#edit_incex_form_modal').modal('toggle');
-    $('#edit_cat_selec').selectpicker('refresh');
-    document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = "";
-    document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = "";
-    document.getElementById("expense_radio").checked = true;
-    document.getElementById("paid_radio").checked = true;
-    $('#kt_datetimepicker_10').datetimepicker('clear');
-    $('#kt_datetimepicker_10').datetimepicker('destroy');
-    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), format: 'MM/DD/YYYY hh:mm:ss A', enable: true });
-    document.getElementById('title_33').innerText = "Add to Wallet";
-    document.getElementById('record_id').value = '';
-}
+
 
 function edit_entry_modal(description, category, amount, timestamp, type, payment, repeat, RecordID) {
     console.log(RecordID);
@@ -216,53 +204,12 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
     document.getElementById('title_33').innerText = "Edit Entry"
 }
 
-function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i, RecordID) {
 
-    var timestamp = new Date(timestamp2);
-    let myPromise = new Promise(function(resolve, reject) {
-        var value = {
-            [timestamp]: { "user": user, "Description": description, "Category": category, "Type": type, "Payment": payment, "Amount": amount, "Repeated": repeat, },
-            last_updated: timestamp
-        };
-        var entry_id = monthts(timestamp);
-
-        updateoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
-            console.log(error);
-            console.log(error.code);
-            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { setoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => { reject(error); }); }
-        });
-    });
-    return new Promise(function(resolve, reject) {
-        myPromise.then(function(value) {
-            swalfire(i, num_of_repeat);
-            if (i == (num_of_repeat - 1)) {
-                start_app.refresh();
-            }
-            resolve('sucess');
-        }, function(error) { reject(error); });
-    });
-}
 
 function entry_delete(timestamp, num_of_repeat, i) {
     Swal.fire({ title: 'Are you sure?', text: "You won't be able to revert this!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' }).then((result) => { if (result.isConfirmed) { del(timestamp, num_of_repeat, i); } })
 }
 
-function cat2combo(wallet_id) {
-    document.getElementById("edit_cat_selec").innerHTML = "";
-    var wallet_base_Ref = db.collection("wallets");
-    var select = document.getElementById('edit_cat_selec');
-    getoptdata(wallet_base_Ref, wallet_id).then((function(doc) {
-        cat_icon_list = doc.categories;
-        cat_icon_list.sort(sortOn("name"));
-        for (let i = 0; i < cat_icon_list.length; i++) {
-            newar[cat_icon_list[i]['name']] = cat_icon_list[i];
-            var opt = document.createElement('option');
-            opt.value = cat_icon_list[i]['name'];
-            opt.innerHTML = cat_icon_list[i]['name'];
-            select.appendChild(opt);
-        }
-    })).catch((error) => { console.error(error); });
-}
 
 function delete_selected() {
     Swal.fire({ title: 'Are you sure?', text: "You are about to delete the selected.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Delete!' }).then((result) => {
@@ -327,6 +274,64 @@ function update_selected(update) {
                 break;
             default:
         }
-        update_entry(description, category, amount, timestamp, type, payment, user, repeat, ids.length, i, ids[i]).then(function() {}).catch((error) => { console.log(error); });
+        update_entry(description, category, amount, timestamp, type, payment, user, repeat, ids.length, i).then(function() {}).catch((error) => { console.log(error); });
     }
 };
+
+function cat2combo(wallet_id) {
+    document.getElementById("edit_cat_selec").innerHTML = "";
+    var wallet_base_Ref = db.collection("wallets");
+    var select = document.getElementById('edit_cat_selec');
+    getoptdata(wallet_base_Ref, wallet_id).then((function(doc) {
+        cat_icon_list = doc.categories;
+        cat_icon_list.sort(sortOn("name"));
+        for (let i = 0; i < cat_icon_list.length; i++) {
+            newar[cat_icon_list[i]['name']] = cat_icon_list[i];
+            var opt = document.createElement('option');
+            opt.value = cat_icon_list[i]['name'];
+            opt.innerHTML = cat_icon_list[i]['name'];
+            select.appendChild(opt);
+        }
+    })).catch((error) => { console.error(error); });
+}
+
+function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
+
+    var timestamp = new Date(timestamp2);
+    let myPromise = new Promise(function(resolve, reject) {
+        var value = {
+            [timestamp]: { "user": user, "Description": description, "Category": category, "Type": type, "Payment": payment, "Amount": amount, "Repeated": repeat, },
+            last_updated: timestamp
+        };
+        var entry_id = monthts(timestamp);
+
+        updateoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
+            console.log(error);
+            console.log(error.code);
+            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { setoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => { reject(error); }); }
+        });
+    });
+    return new Promise(function(resolve, reject) {
+        myPromise.then(function(value) {
+            swalfire(i, num_of_repeat);
+            if (i == (num_of_repeat - 1)) {
+                start_app.refresh();
+            }
+            resolve('sucess');
+        }, function(error) { reject(error); });
+    });
+}
+
+function add_entry_modal() {
+    $('#edit_incex_form_modal').modal('toggle');
+    $('#edit_cat_selec').selectpicker('refresh');
+    document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = "";
+    document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = "";
+    document.getElementById("expense_radio").checked = true;
+    document.getElementById("paid_radio").checked = true;
+    $('#kt_datetimepicker_10').datetimepicker('clear');
+    $('#kt_datetimepicker_10').datetimepicker('destroy');
+    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), format: 'MM/DD/YYYY hh:mm:ss A', enable: true });
+    document.getElementById('title_33').innerText = "Add to Wallet";
+    document.getElementById('record_id').value = '';
+}

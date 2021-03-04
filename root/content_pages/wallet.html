@@ -69,7 +69,7 @@
             </a>
             <!--end::Daterange-->
             <a class="btn btn-light-success font-weight-bold  mr-2" onclick="add_entry_modal()">Add Entry</a>
-            <a class="btn btn-light-success font-weight-bold  mr-2" onclick="start_app.init()">Refresh</a>
+            <a class="btn btn-light-success font-weight-bold  mr-2" onclick="start_app.refresh()">Refresh</a>
         </div>
         <!--end::Toolbar-->
     </div>
@@ -175,7 +175,10 @@
 </div>
 
 
-<!--end::Chat Panel-->
+
+</div>
+</div>
+<!--end::Entry-->
 <div class="modal fade" id="edit_incex_form_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -334,9 +337,6 @@
         </div>
     </div>
 </div>
-</div>
-</div>
-<!--end::Entry-->
 <!--begin::Sueader-->
 <script src="scripts/wallet.js"></script>
 <script src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.2.2"></script>

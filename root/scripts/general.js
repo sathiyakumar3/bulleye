@@ -8,6 +8,7 @@ function shortdate(d) {
 }
 
 function shortdateclean(d) {
+
     return ("0" + d.getDate()).slice(-2) + " " + monthNames[d.getMonth()] + " , " +
         d.getFullYear();
 }

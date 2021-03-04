@@ -265,117 +265,123 @@ function deltoptarray(docRef, id, arrayname, item, data) {
 var last_wallet_id = "";
 var last_result = "";
 
-function get_wallet_data(wallet_id) {
+function get_wallet_data(wallet_id, force_flag) {
 
     return new Promise(function(resolve, reject) {
-        var wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+        if (last_wallet_id != wallet_id || force_flag) {
+            console.log("sending new data");
+            var wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
 
-        var promises = [];
-        var tabler = [];
-        var user_profile = [];
-        var counter = 0;
-        wallet_Ref.orderBy("last_updated").get()
-            .then((querySnapshot) => {
-                var items_counter = 0;
-                querySnapshot.forEach((doc) => {
+            var promises = [];
+            var tabler = [];
+            var user_profile = [];
+            var counter = 0;
+            wallet_Ref.orderBy("last_updated").get()
+                .then((querySnapshot) => {
+                    var items_counter = 0;
+                    querySnapshot.forEach((doc) => {
 
-                    var items = querySnapshot.size;
-                    wallet_Ref.doc(doc.id).get().then((doc) => {
-                        items_counter++;
-                        var arr = doc.data();
-                        delete arr["last_updated"];
-                        var rec_name = doc.id;
-                        Object.keys(arr).sort().map(function(key, index) {
-                            const promises8 = new Promise((resolve, reject) => {
-                                counter++;
-                                var user_id = arr[key].user;
-                                var user_Ref = db.collection("users");
+                        var items = querySnapshot.size;
+                        wallet_Ref.doc(doc.id).get().then((doc) => {
+                            items_counter++;
+                            var arr = doc.data();
+                            delete arr["last_updated"];
+                            var rec_name = doc.id;
+                            Object.keys(arr).sort().map(function(key, index) {
+                                const promises8 = new Promise((resolve, reject) => {
+                                    counter++;
+                                    var user_id = arr[key].user;
+                                    var user_Ref = db.collection("users");
 
-                                const user_image_prom = new Promise((resolve, reject) => {
-                                    get_user_icon(user_id).then((url) => {
-                                        resolve({ photo_url: url });
-                                    }).catch((error) => {
-                                        resolve({ photo_url: 'none' });
+                                    const user_image_prom = new Promise((resolve, reject) => {
+                                        get_user_icon(user_id).then((url) => {
+                                            resolve({ photo_url: url });
+                                        }).catch((error) => {
+                                            resolve({ photo_url: 'none' });
+                                        });
                                     });
-                                });
 
-                                const user_details_prom = new Promise((resolve, reject) => {
-                                    getoptdata(user_Ref, user_id).then(function(finalResult) {
-                                        var user_email = finalResult.email;
-                                        var user_name = finalResult.name;
-                                        resolve({ user_email, user_name });
+                                    const user_details_prom = new Promise((resolve, reject) => {
+                                        getoptdata(user_Ref, user_id).then(function(finalResult) {
+                                            var user_email = finalResult.email;
+                                            var user_name = finalResult.name;
+                                            resolve({ user_email, user_name });
+                                        }).catch((error) => {
+                                            console.log(error);
+                                            reject(error);
+                                        });
+                                    });
+
+                                    const wallet_details_prom = new Promise((resolve, reject) => {
+                                        resolve({
+                                            //   RecordID: counter,
+                                            user: arr[key].user,
+                                            Description: arr[key].Description,
+                                            Category: arr[key].Category,
+                                            Type: arr[key].Type,
+                                            Amount: arr[key].Amount,
+                                            Payment: arr[key].Payment,
+                                            Repeated: arr[key].Repeated,
+                                            Timestamp: new Date(key),
+                                            doc_id: rec_name,
+                                        });
+                                    });
+
+                                    Promise.all([user_image_prom, user_details_prom, wallet_details_prom]).then((values) => {
+                                        if (!user_profile.hasOwnProperty([user_id])) {
+                                            user_profile = {
+                                                [user_id]: {
+                                                    user_name: values[1]['user_email'],
+                                                    user_email: values[1]['user_email'],
+                                                    photo_url: values[0]['photo_url'],
+                                                }
+                                            }
+
+                                        }
+                                        resolve($.extend(values[0], values[1], values[2]));
+
                                     }).catch((error) => {
-                                        console.log(error);
+                                        console.log("Error getting documents: ", error);
                                         reject(error);
                                     });
+
                                 });
+                                promises.push(promises8);
 
-                                const wallet_details_prom = new Promise((resolve, reject) => {
-                                    resolve({
-                                        //   RecordID: counter,
-                                        user: arr[key].user,
-                                        Description: arr[key].Description,
-                                        Category: arr[key].Category,
-                                        Type: arr[key].Type,
-                                        Amount: arr[key].Amount,
-                                        Payment: arr[key].Payment,
-                                        Repeated: arr[key].Repeated,
-                                        Timestamp: new Date(key),
-                                        doc_id: rec_name,
-                                    });
-                                });
-
-                                Promise.all([user_image_prom, user_details_prom, wallet_details_prom]).then((values) => {
-                                    if (!user_profile.hasOwnProperty([user_id])) {
-                                        user_profile = {
-                                            [user_id]: {
-                                                user_name: values[1]['user_email'],
-                                                user_email: values[1]['user_email'],
-                                                photo_url: values[0]['photo_url'],
-                                            }
-                                        }
-
-                                    }
-                                    resolve($.extend(values[0], values[1], values[2]));
-
-                                }).catch((error) => {
-                                    console.log("Error getting documents: ", error);
-                                    reject(error);
-                                });
 
                             });
-                            promises.push(promises8);
+
+                            Promise.all(promises).then((values) => {
+                                if (items_counter == items) {
+                                    tabler = $.extend(tabler, values);
+                                    last_result = tabler;
+
+                                    last_wallet_id = wallet_id;
+
+
+                                    resolve(tabler);
+                                }
+
+
+                            }).catch((error) => {
+                                console.log("Error getting documents: ", error);
+                                reject(error);
+                            });
 
 
                         });
-
-                        Promise.all(promises).then((values) => {
-                            if (items_counter == items) {
-                                tabler = $.extend(tabler, values);
-                                last_result = tabler;
-
-                                last_wallet_id = wallet_id;
-
-
-                                resolve(tabler);
-                            }
-
-
-                        }).catch((error) => {
-                            console.log("Error getting documents: ", error);
-                            reject(error);
-                        });
-
-
                     });
+
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                    reject(error);
                 });
-
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-                reject(error);
-            });
-
+        } else {
+            console.log("sending old data");
+            resolve(last_result);
+        }
     });
+
 
 };

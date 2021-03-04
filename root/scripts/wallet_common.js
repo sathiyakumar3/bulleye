@@ -206,6 +206,16 @@ function extract_data(data) {
     return chart
 }
 
+function data_for_pie(data) {
+    var data_set = [];
+    var cat_set = [];
+    Object.keys(data).sort().map(function(key, index) {
+        data_set.push(data[key]);
+        cat_set.push(key);
+    });
+    return [data_set, cat_set];
+}
+
 function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp, RecordID) {
     if (RecordID == '') { RecordID = Object.keys(local_data).length + 1; }
     const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }).catch((error) => { resolve({ photo_url: 'none' }); }); });
