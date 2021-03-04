@@ -107,10 +107,10 @@ var start_app = function() {
         document.getElementById("sum_net_m").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("number_items").innerText = Object.keys(data).length + " Entries";
 
-        /*    process_row(chart_process(data, 'Category', { 'Type': 'Income' }), "testtt", sum_income, user_profile, 1);
-           process_row(chart_process(data, 'Category', { 'Type': 'Expense' }), "testtt2", sum_expense, user_profile, 1);
-           process_row(chart_process(data, 'user', { 'Type': 'Income' }), "testtt3", sum_income, user_profile, 2);
-           process_row(chart_process(data, 'user', { 'Type': 'Expense' }), "testtt4", sum_expense, user_profile, 2); */
+        process_row(chart_process(data, 'Category', { 'Type': 'Income' }), "testtt", sum_income, user_profile, 1);
+        process_row(chart_process(data, 'Category', { 'Type': 'Expense' }), "testtt2", sum_expense, user_profile, 1);
+        process_row(chart_process(data, 'user', { 'Type': 'Income' }), "testtt3", sum_income, user_profile, 2);
+        process_row(chart_process(data, 'user', { 'Type': 'Expense' }), "testtt4", sum_expense, user_profile, 2);
         document.getElementById("image_list").innerHTML = user_circle_gen(user_profile);
         if (user_sum > 1) { document.getElementById("user_list_md").innerText = user_sum + " Users"; } else { document.getElementById("user_list_md").innerText = user_sum + " User"; }
         var current_income = data_process(data, { 'Payment': 'Paid', 'Type': 'Income' });
@@ -155,7 +155,7 @@ var start_app = function() {
 
         var data = sort_obj(local_data, 'Timestamp');
         var cat = cat_process(data);
-        // var label = monthts(first_day) + " - " + monthts(last_day);
+        // var label = monthts(selected_start) + " - " + monthts(sele);
         var d_income = chart_process(data, 'doc_id', { 'Type': 'Income' });
         var d_expense = chart_process(data, 'doc_id', { 'Type': 'Expense' });
         var d_netincome = chart_subraction(d_income, d_expense);
@@ -168,7 +168,7 @@ var start_app = function() {
         _init_main_chart_3(d_on_income, d_re_income, cat);
         _init_main_chart_4(d_on_expense, d_re_expense, cat);
         _init_main_chart(d_income, d_expense, cat);
-        //      _initTilesWidget20(d_income, d_expense, d_netincome, label, cat);
+        _initTilesWidget20(d_income, d_expense, d_netincome, cat);
 
     }
     var read_data = function(force_flag) {
@@ -213,7 +213,7 @@ var start_app = function() {
         picker.daterangepicker({ direction: KTUtil.isRTL(), startDate: selected_start, endDate: selected_end, opens: 'left', applyClass: 'btn-primary', cancelClass: 'btn-light-primary', ranges: { 'Today': [moment(), moment()], 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')], 'Last 7 Days': [moment().subtract(6, 'days'), moment()], 'Last 30 Days': [moment().subtract(29, 'days'), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')], 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 'All time': [selected_start, selected_end] } }, cb);
         cb(selected_start, selected_end, '');
     }
-    var _initTilesWidget20 = function(data, data1, data2, label, cat) {
+    var _initTilesWidget20 = function(data, data1, data2, cat) {
         const primary = '#6993FF';
         const success = '#1BC5BD';
         const info = '#8950FC';

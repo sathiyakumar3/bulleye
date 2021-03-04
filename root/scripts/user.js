@@ -170,7 +170,8 @@ function build_site(month_data, users_size, users_list, type) {
         '</span>' +
         '<span class="menu-text">Work Sheet</span>' +
         '</a>' +
-        '</li>' + build_trend(month_data, type) +
+        '</li>' +
+        //build_trend(month_data, type) +
         '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
         '<a href="javascript:;" class="menu-link menu-toggle">' +
         '<span class="svg-icon menu-icon">' +

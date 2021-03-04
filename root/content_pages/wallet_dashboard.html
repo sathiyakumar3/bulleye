@@ -62,13 +62,26 @@
                                                 </div><span class="btn btn-sm btn-text btn-light-primary text-uppercase font-weight-bold" id="start_date">-- --- , ----</span>
                                             </div>
                                         </div>
-                                        <div class="flex-grow-1 flex-shrink-0 w-150px w-xl-300px mt-4 mt-sm-0">
+                                        <div class="flex-grow-1 flex-shrink-0 w-150px w-xl-300px mt-4 mt-sm-0 mr-10">
                                             <span class="font-weight-bold" id="net_percent_title">Progress</span>
                                             <div class="progress progress-xs mt-2 mb-2">
                                                 <div class="progress-bar bg-success" role="progressbar" style="width: 0%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="net_percent_bar"></div>
                                             </div><span class="font-weight-bolder text-dark" id="net_percent">0%</span>
                                         </div>
-
+                                        <div class="btn btn-icon btn-clean btn-dropdown btn-md mr-1 pulse pulse-primary" onclick="expand_shrink()">
+                                            <span class="svg-icon svg-icon-md svg-icon-primary" id="expandicon">
+                                                <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Code/Compiling.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <polygon points="0 0 24 0 24 24 0 24"/>
+                                                        <path d="M8.2928955,3.20710089 C7.90237121,2.8165766 7.90237121,2.18341162 8.2928955,1.79288733 C8.6834198,1.40236304 9.31658478,1.40236304 9.70710907,1.79288733 L15.7071091,7.79288733 C16.085688,8.17146626 16.0989336,8.7810527 15.7371564,9.17571874 L10.2371564,15.1757187 C9.86396402,15.5828377 9.23139665,15.6103407 8.82427766,15.2371482 C8.41715867,14.8639558 8.38965574,14.2313885 8.76284815,13.8242695 L13.6158645,8.53006986 L8.2928955,3.20710089 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000003, 8.499997) scale(-1, -1) rotate(-90.000000) translate(-12.000003, -8.499997) "/>
+                                                        <path d="M6.70710678,19.2071045 C6.31658249,19.5976288 5.68341751,19.5976288 5.29289322,19.2071045 C4.90236893,18.8165802 4.90236893,18.1834152 5.29289322,17.7928909 L11.2928932,11.7928909 C11.6714722,11.414312 12.2810586,11.4010664 12.6757246,11.7628436 L18.6757246,17.2628436 C19.0828436,17.636036 19.1103465,18.2686034 18.7371541,18.6757223 C18.3639617,19.0828413 17.7313944,19.1103443 17.3242754,18.7371519 L12.0300757,13.8841355 L6.70710678,19.2071045 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" transform="translate(12.000003, 15.499997) scale(-1, -1) rotate(-360.000000) translate(-12.000003, -15.499997) "/>
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="pulse-ring"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +90,7 @@
                             <br>
                             <div class="separator separator-solid my-2"></div>
 
-                            <table class="table table-head-custom table-borderless table-vertical-center">
+                            <table class="table table-head-custom table-vertical-center">
                                 <thead>
                                     <tr class="text-uppercase">
                                         <th style="min-width: 150px"><span class="text-dark-75">Transactions</span></th>
@@ -87,28 +100,16 @@
                                         <th style="min-width: 100px;text-align: center"><span class="text-dark-75">Net</span></th>
                                         <th style="min-width: 100px;"><span class="text-dark-75">Verdict</span></th>
                                         <th>Percentage</th>
-                                        <th class="text-right" onclick="expand_shrink()">
-                                            <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1 pulse pulse-primary">
-                                                <span class="svg-icon svg-icon-xl svg-icon-primary" id="expandicon">
-                                                    <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Code/Compiling.svg-->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <polygon points="0 0 24 0 24 24 0 24"/>
-                                                            <path d="M8.2928955,3.20710089 C7.90237121,2.8165766 7.90237121,2.18341162 8.2928955,1.79288733 C8.6834198,1.40236304 9.31658478,1.40236304 9.70710907,1.79288733 L15.7071091,7.79288733 C16.085688,8.17146626 16.0989336,8.7810527 15.7371564,9.17571874 L10.2371564,15.1757187 C9.86396402,15.5828377 9.23139665,15.6103407 8.82427766,15.2371482 C8.41715867,14.8639558 8.38965574,14.2313885 8.76284815,13.8242695 L13.6158645,8.53006986 L8.2928955,3.20710089 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000003, 8.499997) scale(-1, -1) rotate(-90.000000) translate(-12.000003, -8.499997) "/>
-                                                            <path d="M6.70710678,19.2071045 C6.31658249,19.5976288 5.68341751,19.5976288 5.29289322,19.2071045 C4.90236893,18.8165802 4.90236893,18.1834152 5.29289322,17.7928909 L11.2928932,11.7928909 C11.6714722,11.414312 12.2810586,11.4010664 12.6757246,11.7628436 L18.6757246,17.2628436 C19.0828436,17.636036 19.1103465,18.2686034 18.7371541,18.6757223 C18.3639617,19.0828413 17.7313944,19.1103443 17.3242754,18.7371519 L12.0300757,13.8841355 L6.70710678,19.2071045 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" transform="translate(12.000003, 15.499997) scale(-1, -1) rotate(-360.000000) translate(-12.000003, -15.499997) "/>
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                                <span class="pulse-ring"></span>
-                                            </div>
+                                        <th class="text-right">
+
 
 
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr id='trans_1' class="collapse">
+
+                                    <tr id='trans_1' class="collapse pl-0">
                                         <td class="">
                                             <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-40 flex-shrink-0 mr-4">
@@ -131,7 +132,7 @@
                                         <td><span class="text-center font-weight-normal">Based on paid transactions only, indicates<br>
                           how much you should have now</span> &nbsp; &nbsp; <span class="label label-md label-info label-pill label-inline mr-2">Check?</span></td>
                                     </tr>
-                                    <tr id='trans_2' class="collapse">
+                                    <tr id='trans_2' class="collapse pl-0">
                                         <td class="">
                                             <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-40 flex-shrink-0 mr-4">
@@ -154,7 +155,7 @@
                                         <td><span class="text-center font-weight-normal">The remaining sum from the liabilities.<br>
                           Available for non-recurring transactions.</span></td>
                                     </tr>
-                                    <tr id='trans_3' class="collapse">
+                                    <tr id='trans_3' class="collapse pl-0">
                                         <td class="">
                                             <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-40 flex-shrink-0 mr-4">
@@ -177,7 +178,7 @@
                                         <td><span class="text-center font-weight-normal">Balance after liabilities and your other<br>
                           transactions, indicates Final Profit.</span></td>
                                     </tr>
-                                    <tr>
+                                    <tr class="pl-0">
                                         <td class="">
                                             <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-40 flex-shrink-0 mr-4">
@@ -389,11 +390,11 @@
                         <div class="card-toolbar">
                             <ul class="nav nav-pills nav-pills-sm nav-dark-75">
                                 <li class="nav-item">
-                                    <a class="nav-link py-2 px-4 active" data-toggle="tab" href="#k2t_tab_pane_3_1">Income & Expense</a>
+                                    <a class="nav-link py-2 px-4 active" data-toggle="tab" href="#k2t_tab_pane_3_1">Income</a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link py-2 px-4" data-toggle="tab" href="#k2t_tab_pane_3_3">Income</a>
+                                    <a class="nav-link py-2 px-4" data-toggle="tab" href="#k2t_tab_pane_3_3">Expense</a>
                                 </li>
 
                             </ul>
@@ -424,10 +425,7 @@
 
                         <!--end::Items-->
                         <!--begin::Action-->
-                        <a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select data daterange" data-placement="top">
-                            <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
-                            <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Jan 30</span>
-                        </a>
+                        <a href="#" data-toggle="modal" data-target="#detailed_cat" class="btn btn-success btn-shadow-hover font-weight-bolder w-100 py-3">More Details</a>
 
                         <!--end::Action-->
                     </div>
@@ -438,13 +436,7 @@
                 <!--end::Charts Widget 3-->
             </div>
         </div>
-
-
-    </div>
-</div>
-<div class="modal fade" id="detailed_cat" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="row" hidden>
             <div class="card card-custom gutter-b">
                 <div class="card-body">
                     <div class="d-flex align-items-center flex-wrap">
@@ -479,6 +471,43 @@
                     </div>
                 </div>
             </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="detailed_cat" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="card card-custom card-stretch gutter-bs">
+                <div class="card-header border-0 pt-5">
+                    <h3 class="card-title align-items-start flex-column"><span class="card-label font-weight-bolder text-dark">Finance Distributions</span> <span class="text-muted mt-3 font-weight-bold font-size-sm">As per Category</span></h3>
+                    <div class=card-toolbar>
+                        <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                            <li class=nav-item><a class="nav-link py-2 px-4 active" data-toggle=tab href=#kt_tab_pane_1_1>Income</a></li>
+                            <li class=nav-item><a class="nav-link py-2 px-4" data-toggle=tab href=#kt_tab_pane_1_2>Expense</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body pt-2 pb-0 mt-n3">
+                    <div class="tab-content mt-5" id=myTabTables1>
+                        <div class="tab-pane fade show active" id=kt_tab_pane_1_1 role=tabpanel aria-labelledby=kt_tab_pane_1_1>
+                            <div class=table-responsive>
+                                <table class="table table-borderless table-vertical-center">
+                                    <tbody id=testtt></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id=kt_tab_pane_1_2 role=tabpanel aria-labelledby=kt_tab_pane_1_2>
+                            <div class=table-responsive>
+                                <table class="table table-borderless table-vertical-center">
+                                    <tbody id=testtt2></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
@@ -488,6 +517,35 @@
 <div class="modal fade" id="detailed_users" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
+            <div class="card card-custom card-stretch gutter-bs">
+                <div class="card-header border-0 pt-5">
+                    <h3 class="card-title align-items-start flex-column"><span class="card-label font-weight-bolder text-dark">Individual Contributions</span> <span class="text-muted mt-3 font-weight-bold font-size-sm">As per users</span></h3>
+                    <div class=card-toolbar>
+                        <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                            <li class=nav-item><a class="nav-link py-2 px-4 active" data-toggle=tab href=#kt_tab_pane_1_1>Income</a></li>
+                            <li class=nav-item><a class="nav-link py-2 px-4" data-toggle=tab href=#kt_tab_pane_1_2>Expense</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body pt-2 pb-0 mt-n3">
+                    <div class="tab-content mt-5" id=myTabTables1>
+                        <div class="tab-pane fade show active" id=kt_tab_pane_1_1 role=tabpanel aria-labelledby=kt_tab_pane_1_1>
+                            <div class=table-responsive>
+                                <table class="table table-borderless table-vertical-center">
+                                    <tbody id=testtt3></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id=kt_tab_pane_1_2 role=tabpanel aria-labelledby=kt_tab_pane_1_2>
+                            <div class=table-responsive>
+                                <table class="table table-borderless table-vertical-center">
+                                    <tbody id=testtt4></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
