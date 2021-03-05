@@ -4,4 +4,5 @@ div.sticky {
     bottom: 0;
     background-color: #1e1e2d;
     border-radius: 5px;
+    opacity: 0.60;
 }

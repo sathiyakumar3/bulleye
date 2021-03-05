@@ -63,11 +63,15 @@
                     </div>
                 </div>
             </a>
-            <a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select data daterange" data-placement="top">
+            <span class=" text-primary font-weight-bold mr-4" id="instructions">Select Range here -></span>
+            <a href="#" class="btn btn-sm btn-light font-weight-bold mr-5 " id="kt_dashboard_daterangepicker">
                 <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
                 <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Jan 30</span>
+
             </a>
+
             <!--end::Daterange-->
+
             <a class="btn btn-light-success font-weight-bold  mr-2" onclick="add_entry_modal()">Add Entry</a>
             <a class="btn btn-light-success font-weight-bold  mr-2" onclick="start_app.refresh()">Refresh</a>
         </div>
@@ -245,23 +249,24 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row mb-6">
+                        <label class="col-form-label text-right col-lg-3 col-sm-12">Amount</label>
+                        <div class="col-lg-9 col-md-9 col-sm-12">
+                            <div class="input-group input-group-solid">
+                                <div class="input-group-prepend">
+                                    <span class="form-control  form-control-lg">Rs</span>
+                                </div>
+                                <input type="number" value="1" id="example-number-input4" class="form-control  form-control-lg" placeholder="Amount" name="form_amount_2">
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-form-label text-right col-lg-3 col-sm-12">Description</label>
                         <div class="col-lg-9 col-md-9 col-sm-12">
                             <input type="text" class="form-control form-control-solid  form-control-lg" maxlength="20" placeholder="Description" type="text" name="form_description_2" value="">
                         </div>
                     </div>
-                    <div class="form-group row mb-6">
-                        <label class="col-form-label text-right col-lg-3 col-sm-12">Amount</label>
-                        <div class="col-lg-9 col-md-9 col-sm-12">
-                            <div class="input-group input-group-solid">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Rs</span>
-                                </div>
-                                <input type="number" value="1" id="example-number-input4" class="form-control  form-control-lg" placeholder="Amount" name="form_amount_2">
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="form-group row">
                         <label class="col-form-label text-right col-lg-3 col-sm-12">Type</label>
                         <div class="col-9 col-form-label">
@@ -340,3 +345,6 @@
 <!--begin::Sueader-->
 <script src="scripts/wallet.js"></script>
 <script src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.2.2"></script>
+<script>
+    $("#instructions").delay(3200).fadeOut(300);
+</script>

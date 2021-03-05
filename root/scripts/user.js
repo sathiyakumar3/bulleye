@@ -179,7 +179,7 @@ function build_site(month_data, users_size, users_list, type) {
         '</span>' +
         '<span class="menu-text">Users</span>' +
         '<span class="menu-label">' +
-        '<span class="label label-rounded label-primary">' + users_size + '</span>' +
+        '<span class="label label-rounded label-success">' + users_size + '</span>' +
         '</span>' +
         '<i class="menu-arrow"></i>' +
         '</a>' +
@@ -239,7 +239,10 @@ function generate_navi(data, p_wallet) {
             navi = my_wallet + navi;
         } else {
             load_page('content_pages/wallet_dashboard.html', month_data);
-            starting = build_site(month_data, users_size, users_list, wallet_type) +
+            starting = '<li class="menu-section">' +
+                '<h4 class="menu-text text-white">' + wallet_name + '</h4>' +
+                '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
+                '</li>' + build_site(month_data, users_size, users_list, wallet_type) +
                 '<li class="menu-section">' +
                 '<h4 class="menu-text">Secondary Wallets</h4>' +
                 '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +

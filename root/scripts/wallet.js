@@ -34,6 +34,8 @@ var start_app = function() {
             var outcome = date_process(result);
             selected_start = outcome[0].setHours(0, 0, 0, 0);
             selected_end = outcome[1].setHours(23, 59, 59, 999);
+            console.log(selected_start);
+            console.log(new Date(selected_end));
             _initDaterangepicker();
         }).catch((error) => { console.log(error); });
     };
@@ -79,9 +81,10 @@ var start_app = function() {
                         $(row).before('<span class="label label-xl  my-2 label-primary label-pill label-inline ">' +
                             old_month + '</span>' + '' + '<div class="separator separator-dashed"></div>');
                     }
-                }
+                },
+
             },
-            columns: [{ field: 'test', title: '', width: 20, sortable: true, template: function(row) { return row.RecordID } }, { field: 'RecordID', title: '#', sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', },
+            columns: [{ field: 'test', title: '', width: 20, sortable: true, template: function(row) { return row.RecordID } }, { field: 'RecordID', sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', },
                 { field: 'User', title: 'User', width: 185, sortable: true, template: function(row) { return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email); } },
 
                 { field: 'Category', title: 'Category & Description', sortable: true, width: 250, template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); }, }, { field: 'Description', title: 'Date & Time', textAlign: 'center', autoHide: false, width: 100, sortable: true, template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; }, }, { field: 'Repeated', title: 'Repeated', sortable: true, template: function(row) { return format_repeat(row.Repeated); }, }, { field: 'Type2', title: 'Income', textAlign: 'center', width: 100, autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income') }, }, { field: 'Type', title: 'Expense', width: 100, textAlign: 'center', autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense') }, }, { field: 'Actions', title: 'Actions', sortable: false, textAlign: 'center', overflow: false, autoHide: false, template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; }, }
@@ -335,3 +338,8 @@ function add_entry_modal() {
     document.getElementById('title_33').innerText = "Add to Wallet";
     document.getElementById('record_id').value = '';
 }
+
+
+$(function() {
+    $('[data-toggle="popover"]').popover()
+})
