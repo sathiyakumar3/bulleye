@@ -87,10 +87,9 @@ function data_process(data, find) {
 }
 
 function cat_process(data) {
-    data = sort_obj(data, 'Timestamp');
+  data = sort_obj(data, 'Timestamp');
     var cat = [];
-    Object.keys(data).map(function(key, index) {
-        c
+    Object.keys(data).map(function(key, index) {        
         var mts = monthts(data[key]['Timestamp']);
         if (!cat.includes(mts)) { cat.push(mts); }
     });
@@ -133,7 +132,7 @@ function date_filter(data, to, from) {
     var new_data = [];
     Object.keys(data).map(function(key, index) {
         var datetime = data[key]['Timestamp'];
-        if (datetime < to && datetime > from) {
+        if (datetime <= to && datetime >= from) {
             new_data.push(data[key]);
         }
     });
@@ -181,10 +180,15 @@ function check_RecordID(data) {
 }
 
 function chart_process(data, find, search, ) {
+        data = sort_obj(data, 'Timestamp');
     var chart = [];
-    Object.keys(data).sort().map(function(key, index) { Object.keys(search).sort().map(function(key2, index2) { if (search[key2].includes(data[key][key2])) { if (!chart.hasOwnProperty([data[key][find]])) { chart[data[key][find]] = 0; } else { chart[data[key][find]] = Number(data[key]['Amount']) + chart[data[key][find]] } } }); });
+    Object.keys(data).map(function(key, index) { Object.keys(search).sort().map(function(key2, index2) { if (search[key2].includes(data[key][key2])) { 
+        if (!chart.hasOwnProperty([data[key][find]])) { chart[data[key][find]] = 0; } else 
+    { 
+        chart[data[key][find]] = Number(data[key]['Amount']) + chart[data[key][find]] } } }); });
     return chart
 }
+
 
 function chart_subraction(data, data1) {
     var result = [];
@@ -200,11 +204,19 @@ function chart_subraction(data, data1) {
     return result
 }
 
-function extract_data(data) {
+function extract_data(cat,data) {
     var chart = [];
-    Object.keys(data).sort().map(function(key, index) { chart.push(data[key]); });
-    return chart
+/*     Object.keys(data).sort().map(function(key, index) { chart.push(data[key]); });
+    return chart */
+    
+    for (var i = 0; i < cat.length; i++) {
+   
+        chart.push(data[cat[i]]);
+      }
+      return chart
 }
+
+
 
 function data_for_pie(data) {
     var data_set = [];
@@ -216,27 +228,3 @@ function data_for_pie(data) {
     return [data_set, cat_set];
 }
 
-function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp, RecordID) {
-    if (RecordID == '') { RecordID = Object.keys(local_data).length + 1; }
-    const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }).catch((error) => { resolve({ photo_url: 'none' }); }); });
-    const user_details_prom = new Promise((resolve, reject) => {
-        getoptdata(user_Ref, user_id).then(function(finalResult) {
-            var user_email = finalResult.email;
-            var user_name = finalResult.name;
-            resolve({ user_email, user_name });
-        }).catch((error) => {
-            console.log(error);
-            reject(error);
-        });
-    });
-    return new Promise(function(resolve, reject) {
-        return Promise.all([user_image_prom, user_details_prom]).then((values) => {
-            var doc_id = monthts(timestamp);
-            var data = { RecordID: RecordID, user: user_id, Description: description, Category: category, Type: type, Payment: payment, Amount: amount, Repeated: selected_repeated, user_name: values[1]['user_name'], user_email: values[1]['user_email'], photo_url: values[0]['photo_url'], Timestamp: new Date(timestamp), doc_id: doc_id }
-            resolve(data);
-        }).catch((error) => {
-            console.log("Error getting documents: ", error);
-            reject(error);
-        });
-    });
-}

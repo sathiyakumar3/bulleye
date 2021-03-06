@@ -32,10 +32,11 @@ var start_app = function() {
         get_wallet_data(wallet_id, force_flag).then(function(result) {
             local_data = result;
             var outcome = date_process(result);
-            selected_start = outcome[0].setHours(0, 0, 0, 0);
-            selected_end = outcome[1].setHours(23, 59, 59, 999);
-            console.log(selected_start);
-            console.log(new Date(selected_end));
+            selected_start = outcome[0];
+            selected_end = outcome[1];
+         /*    selected_start =selected_start.setHours(0, 0, 0, 0);
+            selected_end = selected_end.setHours(23, 59, 59, 999); */
+
             _initDaterangepicker();
         }).catch((error) => { console.log(error); });
     };
@@ -338,8 +339,3 @@ function add_entry_modal() {
     document.getElementById('title_33').innerText = "Add to Wallet";
     document.getElementById('record_id').value = '';
 }
-
-
-$(function() {
-    $('[data-toggle="popover"]').popover()
-})

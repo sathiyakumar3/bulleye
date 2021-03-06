@@ -1,3 +1,5 @@
+
+
 function setCookie(cookieName, cookieValue) {
     var d = new Date();
     d.setTime(d.getTime() + 2 * 24 * 60 * 60 * 1000);
@@ -265,7 +267,8 @@ function deltoptarray(docRef, id, arrayname, item, data) {
 var last_wallet_id = "";
 var last_result = "";
 
-function get_wallet_data(wallet_id, force_flag) {
+
+/* function get_wallet_data3(wallet_id, force_flag) {
 
     return new Promise(function(resolve, reject) {
         if (last_wallet_id != wallet_id || force_flag) {
@@ -274,104 +277,45 @@ function get_wallet_data(wallet_id, force_flag) {
 
             var promises = [];
             var tabler = [];
-            var user_profile = [];
-            var counter = 0;
+     
             wallet_Ref.orderBy("last_updated").get()
-                .then((querySnapshot) => {
-                    var items_counter = 0;
+                .then((querySnapshot) => {               
                     querySnapshot.forEach((doc) => {
-
-                        var items = querySnapshot.size;
-                        wallet_Ref.doc(doc.id).get().then((doc) => {
-                            items_counter++;
-                            var arr = doc.data();
-                            delete arr["last_updated"];
-                            var rec_name = doc.id;
-                            Object.keys(arr).sort().map(function(key, index) {
-                                const promises8 = new Promise((resolve, reject) => {
-                                    counter++;
-                                    var user_id = arr[key].user;
-                                    var user_Ref = db.collection("users");
-
-                                    const user_image_prom = new Promise((resolve, reject) => {
-                                        get_user_icon(user_id).then((url) => {
-                                            resolve({ photo_url: url });
-                                        }).catch((error) => {
-                                            resolve({ photo_url: 'none' });
+              
+                        getoptdata(wallet_Ref, doc.id).then(function(data) {                  
+                            var arr = data
+                            delete arr["last_updated"];                        
+                            Object.keys(arr).map(function(key, index) {  
+                                const promises8 = new Promise((resolve, reject) => {                       
+                                    var user_id = arr[key].user;                                                                              
+                                        add_to_local_table(user_id, arr[key].Description, arr[key].Category,  arr[key].Type,  arr[key].Payment, arr[key].Amount,  arr[key].Repeated,  new Date(key)).then(function(result) {
+                                          resolve(result);
+                                        }).catch((error) => { console.log(error);
                                         });
                                     });
-
-                                    const user_details_prom = new Promise((resolve, reject) => {
-                                        getoptdata(user_Ref, user_id).then(function(finalResult) {
-                                            var user_email = finalResult.email;
-                                            var user_name = finalResult.name;
-                                            resolve({ user_email, user_name });
-                                        }).catch((error) => {
-                                            console.log(error);
-                                            reject(error);
-                                        });
-                                    });
-
-                                    const wallet_details_prom = new Promise((resolve, reject) => {
-                                        resolve({
-                                            //   RecordID: counter,
-                                            user: arr[key].user,
-                                            Description: arr[key].Description,
-                                            Category: arr[key].Category,
-                                            Type: arr[key].Type,
-                                            Amount: arr[key].Amount,
-                                            Payment: arr[key].Payment,
-                                            Repeated: arr[key].Repeated,
-                                            Timestamp: new Date(key),
-                                            doc_id: rec_name,
-                                        });
-                                    });
-
-                                    Promise.all([user_image_prom, user_details_prom, wallet_details_prom]).then((values) => {
-                                        if (!user_profile.hasOwnProperty([user_id])) {
-                                            user_profile = {
-                                                [user_id]: {
-                                                    user_name: values[1]['user_email'],
-                                                    user_email: values[1]['user_email'],
-                                                    photo_url: values[0]['photo_url'],
-                                                }
-                                            }
-
-                                        }
-                                        resolve($.extend(values[0], values[1], values[2]));
-
-                                    }).catch((error) => {
-                                        console.log("Error getting documents: ", error);
-                                        reject(error);
-                                    });
-
-                                });
-                                promises.push(promises8);
+                                    promises.push(promises8);
 
 
-                            });
-
-                            Promise.all(promises).then((values) => {
-                                if (items_counter == items) {
-                                    tabler = $.extend(tabler, values);
-                                    last_result = tabler;
-
-                                    last_wallet_id = wallet_id;
-
-
-                                    resolve(tabler);
-                                }
-
-
-                            }).catch((error) => {
-                                console.log("Error getting documents: ", error);
-                                reject(error);
-                            });
-
-
+                                   
+                            });  
+                          
+                                         
+                        }).catch((error) => {
+                            console.log("Error getting documents: ", error);
+                            reject(error);
                         });
                     });
+                    Promise.all(promises).then((values) => {                             
+                        tabler = $.extend(tabler, values);
+                        console.log(tabler);
+                        last_result = tabler;
+                        last_wallet_id = wallet_id;                                            
+                        resolve(tabler);
 
+                }).catch((error) => {
+                    console.log("Error getting documents: ", error);
+                    reject(error);
+                });                    
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
@@ -384,4 +328,71 @@ function get_wallet_data(wallet_id, force_flag) {
     });
 
 
-};
+}; */
+function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp) {
+ 
+    const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }).catch((error) => { resolve({ photo_url: 'none' }); }); });
+    const user_details_prom = new Promise((resolve, reject) => {
+        getoptdata(user_Ref, user_id).then(function(finalResult) {
+            var user_email = finalResult.email;
+            var user_name = finalResult.name;
+            resolve({ user_email, user_name });
+        }).catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+    return new Promise(function(resolve, reject) {
+        return Promise.all([user_image_prom, user_details_prom]).then((values) => {
+            var doc_id = monthts(timestamp);
+            var data = { user: user_id, Description: description, Category: category, Type: type, Payment: payment, Amount: amount, Repeated: selected_repeated, user_name: values[1]['user_name'], user_email: values[1]['user_email'], photo_url: values[0]['photo_url'], Timestamp: new Date(timestamp), doc_id: doc_id }
+            resolve(data);
+        }).catch((error) => {
+            console.log("Error getting documents: ", error);
+            reject(error);
+        });
+    });
+}
+
+async function get_wallet_data(wallet_id,force_flag){
+    if (last_wallet_id != wallet_id || force_flag) {
+        console.log("sending new data");
+    let entries = await  db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated").get();
+    var data =[];
+let all_wallet_doc_promise = [];
+entries.forEach((entry_doc) => {
+
+    let entry_id = entry_doc.id
+    
+    let each_wallet_subdoc_promise = db.collection("wallets").doc(wallet_id).collection('entries').doc(entry_id).get().then((entries) => {
+        let getSubProjectsPromises = [];
+
+            var arr = entries.data();
+            delete arr["last_updated"];                        
+            Object.keys(arr).map(function(key, index) {  
+                const each_entry_promise = new Promise((resolve, reject) => {                       
+                    var user_id = arr[key].user;                                                                              
+                        add_to_local_table(user_id, arr[key].Description, arr[key].Category,  arr[key].Type,  arr[key].Payment, arr[key].Amount,  arr[key].Repeated,  new Date(key)).then(function(result) {
+                        data.push(result); 
+                          resolve(result);
+                        }).catch((error) => { console.log(error);
+                        });
+                    });
+                    getSubProjectsPromises.push(each_entry_promise);
+            }); 
+        return Promise.all(getSubProjectsPromises);
+    });
+    all_wallet_doc_promise.push(each_wallet_subdoc_promise);
+});
+return await Promise.all(all_wallet_doc_promise).then((subProjectSnapshots) => {
+  
+    last_result = data;
+    last_wallet_id = wallet_id;    
+ 
+    return data    
+});
+    }else{
+        console.log("sending old data");
+        return last_result   
+    }
+}
