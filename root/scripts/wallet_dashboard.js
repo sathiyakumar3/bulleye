@@ -107,11 +107,11 @@ var start_app = function() {
         document.getElementById("net_percent_bar").style.width = net_pec + "%";
         document.getElementById("sum_net_m").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("number_items").innerText = Object.keys(data).length + " Entries";
-
-        process_row(chart_process(data, 'Category', { 'Type': 'Income' }), "testtt", sum_income, user_profile, 1);
-        process_row(chart_process(data, 'Category', { 'Type': 'Expense' }), "testtt2", sum_expense, user_profile, 1);
-        process_row(chart_process(data, 'user', { 'Type': 'Income' }), "testtt3", sum_income, user_profile, 2);
-        process_row(chart_process(data, 'user', { 'Type': 'Expense' }), "testtt4", sum_expense, user_profile, 2);
+ 
+       process_row(get_available_data(data, 'Category', { 'Type': 'Income' }), "testtt", sum_income, user_profile, 1);
+      process_row(get_available_data(data, 'Category', { 'Type': 'Expense' }), "testtt2", sum_expense, user_profile, 1);
+        process_row(get_available_data(data, 'user', { 'Type': 'Income' }), "testtt3", sum_income, user_profile, 2);
+     process_row(get_available_data(data, 'user', { 'Type': 'Expense' }), "testtt4", sum_expense, user_profile, 2);
 
         document.getElementById("image_list").innerHTML = user_circle_gen(user_profile);
         if (user_sum > 1) { document.getElementById("user_list_md").innerText = user_sum + " Users"; } else { document.getElementById("user_list_md").innerText = user_sum + " User"; }
@@ -147,31 +147,33 @@ var start_app = function() {
         set_sum('fin_net', fin_net);
         document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, 'Rs');
         document.getElementById("fin_pl").innerHTML = profit_loss_format(fin_net);
-        var data66 = data_for_pie(chart_process(data, 'Category', { 'Type': 'Income' }));
+   var data66 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Income' }));
         piechart_123(data66[0], data66[1], "kt_pie_chart_cat");
-        var data77 = data_for_pie(chart_process(data, 'Category', { 'Type': 'Expense' }));
-        piechart_123(data77[0], data77[1], "kt_pie_chart_cat_e");
+        var data77 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Expense' }));
+        piechart_123(data77[0], data77[1], "kt_pie_chart_cat_e"); 
 
     }
     var run_trends = function() {
 
         var data = sort_obj(local_data, 'Timestamp');
         var cat = cat_process(data);
+        
         console.log(data);
         // var label = monthts(selected_start) + " - " + monthts(sele);
-        var d_income = chart_process(data, 'doc_id', { 'Type': 'Income' });
-        var d_expense = chart_process(data, 'doc_id', { 'Type': ['Expense'] });
-        var d_netincome = chart_subraction(d_income, d_expense);
-        var d_re_income = chart_process(data, 'doc_id', { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income' });
-        var d_re_expense = chart_process(data, 'doc_id', { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense' });
-        var d_on_income = chart_process(data, 'doc_id', { 'Type': 'Income','Repeated': 'Once'  });
-        var d_on_expense = chart_process(data, 'doc_id', { 'Type': 'Expense', 'Repeated': 'Once'});
-     
+     var d_income = get_data(data,  { 'Type': ['Income'] },cat);
+     var d_expense = get_data(data, { 'Type': ['Expense'] },cat);
+     var d_netincome = chart_subraction(d_income, d_expense);
+        var d_re_income = get_data(data,  { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income' },cat);
+   var d_re_expense = get_data(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense' },cat);
+     var d_on_income = get_data(data,{ 'Repeated': ['Once'] ,'Type': 'Income' },cat);
+    var d_on_expense = get_data(data,{ 'Repeated': ['Once'] ,'Type': 'Expense' },cat);
+     console.log(d_on_income);
+     console.log(d_re_income);
        
-        _init_main_chart_3(d_on_income, d_re_income, cat);
-        _init_main_chart_4(d_on_expense, d_re_expense, cat);
-        _init_main_chart(d_income, d_expense, cat);
-        _initTilesWidget20(d_income, d_expense, d_netincome, cat);
+     _init_main_chart_3(d_on_income, d_re_income, cat);
+     _init_main_chart_4(d_on_expense, d_re_expense, cat);
+     _init_main_chart(d_income, d_expense, cat);
+       _initTilesWidget20(d_income, d_expense, d_netincome, cat); 
 
     }
     var read_data = function(force_flag) {
@@ -223,7 +225,7 @@ var start_app = function() {
         const info = '#8950FC';
         const warning = '#FFA800';
         const danger = '#F64E60';
-        var options = { series: [{ name: 'Income', type: 'column', data: extract_data(cat,data) }, { name: 'Expense', type: 'column', data: extract_data(cat,data1) }, { name: 'Net', type: 'line', data: extract_data(cat,data2) }], chart: { height: '350px', type: 'line', stacked: false }, dataLabels: { enabled: false }, stroke: { width: [1, 1, 4] }, xaxis: { categories: cat, }, yaxis: [{ axisTicks: { show: true, }, axisBorder: { show: true, color: primary }, labels: { style: { colors: primary, } }, title: { text: "Income", style: { color: primary, } }, tooltip: { enabled: true } }, { seriesName: 'Income', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: success }, labels: { style: { colors: success, } }, title: { text: "Expense", style: { color: success, } }, }, { seriesName: 'Net Revenue', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: warning }, labels: { style: { colors: warning, }, }, title: { text: "Revenue", style: { color: warning, } } }, ], tooltip: { fixed: { enabled: true, position: 'topLeft', offsetY: 30, offsetX: 60 }, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } } }, legend: { horizontalAlign: 'left', offsetX: 40 } };
+        var options = { series: [{ name: 'Income', type: 'column', data: data }, { name: 'Expense', type: 'column', data: data1 }, { name: 'Net', type: 'line', data: data2 }], chart: { height: '350px', type: 'line', stacked: false }, dataLabels: { enabled: false }, stroke: { width: [1, 1, 4] }, xaxis: { categories: cat, }, yaxis: [{ axisTicks: { show: true, }, axisBorder: { show: true, color: primary }, labels: { style: { colors: primary, } }, title: { text: "Income", style: { color: primary, } }, tooltip: { enabled: true } }, { seriesName: 'Income', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: success }, labels: { style: { colors: success, } }, title: { text: "Expense", style: { color: success, } }, }, { seriesName: 'Net Revenue', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: warning }, labels: { style: { colors: warning, }, }, title: { text: "Revenue", style: { color: warning, } } }, ], tooltip: { fixed: { enabled: true, position: 'topLeft', offsetY: 30, offsetX: 60 }, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } } }, legend: { horizontalAlign: 'left', offsetX: 40 } };
         generate_chart("kt_main_chart_trends", options);
     }
     var piechart_123 = function(data_set, cat_set, html_div) {
@@ -242,7 +244,7 @@ var start_app = function() {
         const warning = '#FFA800';
         const danger = '#F64E60';
         var options = {
-            series: [{ name: 'Non-Recurring', type: 'column', data: extract_data(cat,data) }, { name: 'Recurring', type: 'column', data: extract_data(cat,data1) }],
+            series: [{ name: 'Other', type: 'column', data: data }, { name: 'Recurring', type: 'column', data: data1 }],
             stroke: { show: true, curve: 'smooth', lineCap: 'butt', width: 0.1, dashArray: 0, },
             chart: { height: 350, stacked: true, toolbar: { show: true }, zoom: { enabled: true } },
             colors: [success, primary, warning],
@@ -272,7 +274,7 @@ var start_app = function() {
         const warning = '#FFA800';
         const danger = '#F64E60';
         var options = {
-            series: [{ name: 'Non-Recurring', type: 'column', data: extract_data(cat,data) }, { name: 'Recurring', type: 'column', data: extract_data(cat,data1) }],
+            series: [{ name: 'Other', type: 'column', data: data }, { name: 'Recurring', type: 'column', data: data1 }],
             stroke: { show: true, curve: 'smooth', lineCap: 'butt', width: 0.1, dashArray: 0, },
             chart: { height: 350, stacked: true, toolbar: { show: true }, zoom: { enabled: true } },
             colors: [success, primary, warning],
@@ -296,7 +298,7 @@ var start_app = function() {
         generate_chart("kt_main_chart_4", options)
     }
     var _init_main_chart = function(data1, data2, cat) {
-        var options = { series: [{ name: 'Income', data: extract_data(cat,data1) }, { name: 'Expense', data: extract_data(cat,data2) }], chart: { type: 'area', height: 350, toolbar: { show: false } }, plotOptions: {}, legend: { show: false }, dataLabels: { enabled: false }, fill: { type: 'solid', opacity: 1 }, stroke: { curve: 'smooth' }, xaxis: { categories: cat, axisBorder: { show: false, }, axisTicks: { show: false }, labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } }, crosshairs: { position: 'front', stroke: { color: KTApp.getSettings()['colors']['theme']['light']['success'], width: 1, dashArray: 3 } }, tooltip: { enabled: true, formatter: undefined, offsetY: 0, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } }, yaxis: { labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } }, states: { normal: { filter: { type: 'none', value: 0 } }, hover: { filter: { type: 'none', value: 0 } }, active: { allowMultipleDataPointsSelection: false, filter: { type: 'none', value: 0 } } }, tooltip: { style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } } }, colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['theme']['base']['warning']], grid: { borderColor: KTApp.getSettings()['colors']['gray']['gray-200'], strokeDashArray: 4, yaxis: { lines: { show: true } } }, markers: { colors: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeColor: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeWidth: 3 } };
+        var options = { series: [{ name: 'Income', data: data1 }, { name: 'Expense', data: data2 }], chart: { type: 'area', height: 350, toolbar: { show: false } }, plotOptions: {}, legend: { show: false }, dataLabels: { enabled: false }, fill: { type: 'solid', opacity: 1 }, stroke: { curve: 'smooth' }, xaxis: { categories: cat, axisBorder: { show: false, }, axisTicks: { show: false }, labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } }, crosshairs: { position: 'front', stroke: { color: KTApp.getSettings()['colors']['theme']['light']['success'], width: 1, dashArray: 3 } }, tooltip: { enabled: true, formatter: undefined, offsetY: 0, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } }, yaxis: { labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } }, states: { normal: { filter: { type: 'none', value: 0 } }, hover: { filter: { type: 'none', value: 0 } }, active: { allowMultipleDataPointsSelection: false, filter: { type: 'none', value: 0 } } }, tooltip: { style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } } }, colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['theme']['base']['warning']], grid: { borderColor: KTApp.getSettings()['colors']['gray']['gray-200'], strokeDashArray: 4, yaxis: { lines: { show: true } } }, markers: { colors: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeColor: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeWidth: 3 } };
         generate_chart("kt_main_chart", options)
     }
 
