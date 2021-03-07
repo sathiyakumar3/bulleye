@@ -259,7 +259,25 @@ function generate_navi(data, p_wallet) {
         '<h4 class="menu-text">Others</h4>' +
         '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
         '</li><li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
-        '<a class="menu-link" onclick="load_page(\'content_pages/content_2.html\')">' +
+        '<a class="menu-link" onclick="just_load_page(\'content_pages/feedback.html\')">' +
+        '<span class="svg-icon menu-icon">' +
+        '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
+        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+        '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
+        '        <rect x="0" y="0" width="24" height="24"/>'+
+        '        <path d="M8,4 L21,4 C21.5522847,4 22,4.44771525 22,5 L22,16 C22,18.209139 20.209139,20 18,20 L11,20 C8.790861,20 7,18.209139 7,16 L7,5 C7,4.44771525 7.44771525,4 8,4 Z" fill="#000000" opacity="0.3"/>'+
+        '        <path d="M7,7 L7,9 L5,9 C4.44771525,9 4,9.44771525 4,10 L4,12 C4,12.5522847 4.44771525,13 5,13 L7,13 L7,15 L5,15 C3.34314575,15 2,13.6568542 2,12 L2,10 C2,8.34314575 3.34314575,7 5,7 L7,7 Z" fill="#000000" fill-rule="nonzero"/>'+
+        '        <rect fill="#000000" opacity="0.3" x="18" y="7" width="2" height="8" rx="1"/>'+
+        '    </g>'+            
+        
+        '</svg>' +
+        '<!--end::Svg Icon-->' +
+        '</span>' +
+        '<span class="menu-text">About Us</span>' +
+        '</a>' +
+        '</li>'+
+        '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+        '<a class="menu-link" onclick="just_load_page(\'content_pages/feedback.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -271,9 +289,9 @@ function generate_navi(data, p_wallet) {
         '</svg>' +
         '<!--end::Svg Icon-->' +
         '</span>' +
-        '<span class="menu-text">About Us</span>' +
+        '<span class="menu-text">Feedback</span>' +
         '</a>' +
-        '</li>';
+        '</li>'
 
     document.getElementById("list_navi").innerHTML = starting + navi + ending
 

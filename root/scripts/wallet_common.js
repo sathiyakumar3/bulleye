@@ -179,7 +179,7 @@ function check_RecordID(data) {
     return data;
 }
 function get_available_data(data, find, search) {
-    data = sort_obj(data, 'Timestamp');
+  //  data = sort_obj(data, 'Timestamp');
     var chart = [];
     var size = Object.keys(search).length;
     Object.keys(data).map(function (key, index) {
@@ -205,7 +205,7 @@ function get_available_data(data, find, search) {
     return chart
 }
 function get_data(data, search,cat) {
-    data = sort_obj(data, 'Timestamp');
+  //  data = sort_obj(data, 'Timestamp');
     var chart = chart_reset(cat);
     var size = Object.keys(search).length;
     Object.keys(data).map(function (key, index) {
@@ -225,6 +225,7 @@ function get_data(data, search,cat) {
     return extract_data(cat,chart)
 }
 
+
 function chart_reset(cat) {
     var data = [];
     for (var i = 0; i < cat.length; i++) {
@@ -239,7 +240,7 @@ function chart_subraction(data, data1) {
     if (Object.keys(data).length > Object.keys(data1).length) { chart = data; } else { chart = data1; }
     var val1 = 0;
     var val2 = 0;
-    Object.keys(chart).sort().map(function (key, index) {
+    Object.keys(chart).map(function (key, index) {
         if (data.hasOwnProperty(key)) { val1 = data[key]; } else { val1 = 0; }
         if (data1.hasOwnProperty(key)) { val2 = data1[key]; } else { val2 = 0; }
         result[key] = val1 - val2;
@@ -249,22 +250,27 @@ function chart_subraction(data, data1) {
 
 function extract_data(cat, data) {
     var chart = [];
-    /*     Object.keys(data).sort().map(function(key, index) { chart.push(data[key]); });
-        return chart */
-
     for (var i = 0; i < cat.length; i++) {
-
         chart.push(data[cat[i]]);
     }
     return chart
 }
 
 
+function extract_net_data(data) {
+    var chart = [];
+    var sum =0;
+    for (var i = 0; i < data.length; i++) {
+        var sum =data[i]+sum;
+        chart.push(sum);
+    }
+    return chart
+}
 
 function data_for_pie(data) {
     var data_set = [];
     var cat_set = [];
-    Object.keys(data).sort().map(function (key, index) {
+    Object.keys(data).map(function (key, index) {
         data_set.push(data[key]);
         cat_set.push(key);
     });
