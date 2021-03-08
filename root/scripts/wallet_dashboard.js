@@ -6,7 +6,8 @@ var selected_start = new Date('1/1/1900').getTime();
 var selected_end = new Date('1/1/2100').getTime();
 var local_data;
 
-var flag_expand = true; 
+var flag_expand = true;
+
 function expand_shrink() {
 
 
@@ -31,12 +32,15 @@ function expand_shrink() {
         $('#trans_1').collapse("show");
         $('#trans_2').collapse("show");
         $('#trans_3').collapse("show");
+        $('#trans_4').collapse("show");
+
         flag_expand = false;
     } else {
         document.getElementById("expandicon").innerHTML = myvar2;
         $('#trans_1').collapse("hide");
         $('#trans_2').collapse("hide");
         $('#trans_3').collapse("hide");
+        $('#trans_4').collapse("hide");
         flag_expand = true;
     }
 
@@ -48,7 +52,7 @@ function expand_shrink() {
 
 var start_app = function() {
     var run_dashboard = function() {
-        var data = date_filter(local_data, selected_end, selected_start); 
+        var data = date_filter(local_data, selected_end, selected_start);
         var user_profile = user_process(data);
         var user_sum = Object.keys(user_profile).length;
         var net_pec = 0;
@@ -76,7 +80,7 @@ var start_app = function() {
         document.getElementById("net_percent_bar").style.width = net_pec + "%";
         document.getElementById("sum_net_m").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("number_items").innerText = Object.keys(data).length + " Entries";
- 
+
 
         document.getElementById("image_list").innerHTML = user_circle_gen(user_profile);
         if (user_sum > 1) { document.getElementById("user_list_md").innerText = user_sum + " Users"; } else { document.getElementById("user_list_md").innerText = user_sum + " User"; }
@@ -85,25 +89,27 @@ var start_app = function() {
         var current_expense = data_process(data, { 'Payment': 'Paid', 'Type': 'Expense' });
         set_sum('current_expense', current_expense);
         var current_net = current_income - current_expense;
-        document.getElementById("widget_cb").innerText = 'Rs ' +numberWithCommas(current_net);
+
+        document.getElementById("current_net2").innerText = current_net;
+        document.getElementById("widget_cb").innerText = 'Rs ' + numberWithCommas(current_net);
         set_sum('current_net', current_net);
         document.getElementById("cur_progress").innerHTML = percentage_form(current_net, current_income, 'Rs');
         document.getElementById("cur_pl").innerHTML = profit_loss_format(current_net);
-        var rec_income = data_process(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income' });
+        var rec_income = data_process(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income', 'Payment': 'Paid', });
         set_sum('rec_income', rec_income);
-        var rec_expense = data_process(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense' });
+        var rec_expense = data_process(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense', 'Payment': 'Paid', });
         set_sum('rec_expense', rec_expense);
         var rec_net = rec_income - rec_expense;
-        document.getElementById("widget_rb").innerText = 'Rs ' +numberWithCommas(rec_net);
+        document.getElementById("widget_rb").innerText = 'Rs ' + numberWithCommas(rec_net);
         set_sum('rec_net', rec_net);
         document.getElementById("rec_progress").innerHTML = percentage_form(rec_net, rec_income, 'Rs');
         document.getElementById("rec_pl").innerHTML = profit_loss_format(rec_net);
         var non_income = rec_net;
         set_sum('non_income', non_income);
-        var non_expense = data_process(data, { 'Repeated': 'Once', 'Type': 'Expense' });
+        var non_expense = data_process(data, { 'Repeated': 'Once', 'Type': 'Expense', 'Payment': 'Paid', });
         set_sum('non_expense', current_expense);
         var non_net = non_income - non_expense;
-        document.getElementById("widget_ob").innerText = 'Rs ' +numberWithCommas(non_net);
+        document.getElementById("widget_ob").innerText = 'Rs ' + numberWithCommas(non_net);
         set_sum('non_net', non_net);
         document.getElementById("non_progress").innerHTML = percentage_form(non_net, non_income, 'Rs');
         document.getElementById("non_pl").innerHTML = profit_loss_format(non_net);
@@ -112,18 +118,19 @@ var start_app = function() {
         var fin_expense = data_process(data, { 'Type': 'Expense' });
         set_sum('fin_expense', fin_expense);
         var fin_net = fin_income - fin_expense;
-        document.getElementById("widget_fb").innerText = 'Rs ' +numberWithCommas(fin_net);
+        document.getElementById("widget_fb").innerText = 'Rs ' + numberWithCommas(fin_net);
         set_sum('fin_net', fin_net);
         document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, 'Rs');
         document.getElementById("fin_pl").innerHTML = profit_loss_format(fin_net);
-   var data66 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Income' }));
+
+        var data66 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Income' }));
         piechart_123(data66[0], data66[1], "kt_pie_chart_cat");
         var data77 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Expense' }));
-        piechart_123(data77[0], data77[1], "kt_pie_chart_cat_e"); 
+        piechart_123(data77[0], data77[1], "kt_pie_chart_cat_e");
 
     }
-    var run_cat= function(){
-    
+    var run_cat = function() {
+
         var cat = cat_process(local_data);
         var wallet_base_Ref = db.collection("wallets");
         var series1 = [];
@@ -134,46 +141,135 @@ var start_app = function() {
             for (let i = 0; i < cat_icon_list.length; i++) {
                 newar[cat_icon_list[i]['name']] = cat_icon_list[i];
                 var name = cat_icon_list[i]['name'];
-                var da1 =  get_data(local_data,{ 'Category': name ,'Type': 'Income' },cat);
-                var da2 =  get_data(local_data,{ 'Category': name ,'Type': 'Expense' },cat);
-                series1.push({ name: name, type: 'column', data: da1 })
-                series2.push({ name: name, type: 'column', data: da2 })
+                const income_series_prom = new Promise((resolve, reject) => {
+                    get_data(local_data, { 'Category': name, 'Type': 'Income' }, cat).then(function(result) {
+                        resolve(result);
+                    }).catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    });
+                });
+                const expense_series_prom = new Promise((resolve, reject) => {
+                    get_data(local_data, { 'Category': name, 'Type': 'Expense' }, cat).then(function(result) {
+                        resolve(result);
+                    }).catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    });
+                });
+
+                Promise.all([income_series_prom, expense_series_prom]).then((values) => {
+                    series1.push({ name: name, type: 'column', data: values[0] })
+                    series2.push({ name: name, type: 'column', data: values[1] })
+                }).catch((error) => {
+                    console.log("Error getting documents: ", error);
+                    reject(error);
+                });
+
             }
         })).catch((error) => { console.error(error); });
-      
-     _init_main_chart_4( series1, cat,'kt_main_chart_cat_income',false);
-     _init_main_chart_4( series2, cat,'kt_main_chart_cat_expense',false);    
+
+        _init_main_chart_4(series1, cat, 'kt_main_chart_cat_income', false);
+        _init_main_chart_4(series2, cat, 'kt_main_chart_cat_expense', false);
     }
     var run_trends = function() {
-           
-        var cat = cat_process(local_data);    
-     var d_income = get_data(local_data,  { 'Type': ['Income'] },cat);
-     var d_expense = get_data(local_data, { 'Type': ['Expense'] },cat);
-     var d_netincome = chart_subraction(d_income, d_expense);
-        var d_re_income = get_data(local_data,  { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income' },cat);
-   var d_re_expense = get_data(local_data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense' },cat);
-     var d_on_income = get_data(local_data,{ 'Repeated': ['Once'] ,'Type': 'Income' },cat);
-    var d_on_expense = get_data(local_data,{ 'Repeated': ['Once'] ,'Type': 'Expense' },cat);   
-     _init_main_chart_4( [{ name: 'Other', type: 'column', data: d_on_income }, { name: 'Recurring', type: 'column', data: d_re_income }], cat,'kt_main_chart_3',true);
-     _init_main_chart_4( [{ name: 'Other', type: 'column', data: d_on_expense }, { name: 'Recurring', type: 'column', data: d_re_expense }], cat,'kt_main_chart_4',true);
-     _init_main_chart(extract_net_data(d_income), extract_net_data(d_expense), cat);
-       _initTilesWidget20(d_income, d_expense, extract_net_data(d_netincome), cat); 
+
+        var cat = cat_process(local_data);
+        const d_income_prom = new Promise((resolve, reject) => {
+            get_data(local_data, { 'Type': ['Income'] }, cat).then(function(result) {
+                resolve(result);
+            }).catch((error) => {
+                console.log(error);
+                reject(error);
+            });
+        });
+        const d_expense_prom = new Promise((resolve, reject) => {
+            get_data(local_data, { 'Type': ['Expense'] }, cat).then(function(result) {
+                resolve(result);
+            }).catch((error) => {
+                console.log(error);
+                reject(error);
+            });
+        });
+
+        const d_re_income_prom = new Promise((resolve, reject) => {
+            get_data(local_data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income' }, cat).then(function(result) {
+                resolve(result);
+            }).catch((error) => {
+                console.log(error);
+                reject(error);
+            });
+        });
+
+        const d_re_expense_prom = new Promise((resolve, reject) => {
+            get_data(local_data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense' }, cat).then(function(result) {
+                resolve(result);
+            }).catch((error) => {
+                console.log(error);
+                reject(error);
+            });
+        });
+
+        const d_on_income_prom = new Promise((resolve, reject) => {
+            get_data(local_data, { 'Repeated': ['Once'], 'Type': 'Income' }, cat).then(function(result) {
+                resolve(result);
+            }).catch((error) => {
+                console.log(error);
+                reject(error);
+            });
+        });
+
+        const d_on_expense_prom = new Promise((resolve, reject) => {
+            get_data(local_data, { 'Repeated': ['Once'], 'Type': 'Expense' }, cat).then(function(result) {
+                resolve(result);
+            }).catch((error) => {
+                console.log(error);
+                reject(error);
+            });
+        });
+
+        Promise.all([d_income_prom, d_expense_prom, d_re_income_prom, d_re_expense_prom, d_on_income_prom, d_on_expense_prom]).then((values) => {
+            var d_income = values[0];
+            var d_expense = values[1];
+            var d_netincome = chart_subraction(d_income, d_expense);
+            var d_re_income = values[2];
+            var d_re_expense = values[3];
+            var d_on_income = values[4];
+            var d_on_expense = values[5];
+            _init_main_chart_4([{ name: 'Other', type: 'column', data: d_on_income }, { name: 'Recurring', type: 'column', data: d_re_income }], cat, 'kt_main_chart_3', true);
+            _init_main_chart_4([{ name: 'Other', type: 'column', data: d_on_expense }, { name: 'Recurring', type: 'column', data: d_re_expense }], cat, 'kt_main_chart_4', true);
+            _init_main_chart(extract_net_data(d_income), extract_net_data(d_expense), cat);
+            _initTilesWidget20(d_income, d_expense, extract_net_data(d_netincome), cat);
+        }).catch((error) => {
+            console.log("Error getting documents: ", error);
+            reject(error);
+        });
+
+
+        /*         var d_income = get_data2(local_data, { 'Type': ['Income'] }, cat);
+                var d_expense = get_data2(local_data, { 'Type': ['Expense'] }, cat);
+                var d_netincome = chart_subraction(d_income, d_expense);
+                var d_re_income = get_data2(local_data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income' }, cat);
+                var d_re_expense = get_data2(local_data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense' }, cat);
+                var d_on_income = get_data2(local_data, { 'Repeated': ['Once'], 'Type': 'Income' }, cat);
+                var d_on_expense = get_data2(local_data, { 'Repeated': ['Once'], 'Type': 'Expense' }, cat); */
+
 
     }
     var read_data = function(force_flag) {
 
         get_wallet_data(wallet_id, force_flag).then(function(result) {
-     
+
             local_data = sort_obj(result, 'Timestamp');
-          
+
             var outcome = date_process(result);
-        selected_start = outcome[0];
-         selected_end = outcome[1];
-  
+            selected_start = outcome[0];
+            selected_end = outcome[1];
+
             _initDaterangepicker();
             run_trends();
         }).catch((error) => { console.log(error); });
-   
+
     };
 
 
@@ -225,7 +321,7 @@ var start_app = function() {
         generate_chart(html_div, options);
     }
 
-    var _init_main_chart_4 = function(series, cat,html_div,colours_flag) {
+    var _init_main_chart_4 = function(series, cat, html_div, colours_flag) {
         const primary = '#6993FF';
         const success = '#1BC5BD';
         const info = '#8950FC';
@@ -235,11 +331,11 @@ var start_app = function() {
             series: series,
             stroke: { show: true, curve: 'smooth', lineCap: 'butt', width: 0.1, dashArray: 0, },
             chart: { height: 350, stacked: true, toolbar: { show: false }, zoom: { enabled: true } },
-         
+
             responsive: [{ breakpoint: 480, options: { legend: { position: 'bottom', offsetX: -10, offsetY: 0 } } }],
             plotOptions: { bar: { borderRadius: 8, horizontal: false, }, },
             xaxis: { categories: cat },
-       
+
             dataLabels: {
                 enabled: true,
                 offsetY: -20,
@@ -250,13 +346,15 @@ var start_app = function() {
                     return "";
                 },
             },
-            tooltip: { style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] },
-             y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } } },
+            tooltip: {
+                style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] },
+                y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } }
+            },
             fill: { opacity: 1 }
         };
-      
-        if(colours_flag){
-           options['colors'] = [success, primary, warning,info];
+
+        if (colours_flag) {
+            options['colors'] = [success, primary, warning, info];
         }
         generate_chart(html_div, options)
     }
@@ -274,7 +372,7 @@ var start_app = function() {
             read_data(true);
         },
         cat: function() {
-          run_cat();
+            run_cat();
         },
     };
 }();
@@ -299,3 +397,29 @@ jQuery(document).ready(function() {
     document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
     start_app.init();
 });
+
+function check_balance() {
+    Swal.fire({
+        title: 'Enter Actual Balance: ',
+        input: 'number',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Check',
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+            return `${login}`
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            var balance = Number(document.getElementById('current_net2').innerText) - Number(`${result.value}`);
+            Swal.fire({
+                title: 'Difference',
+                text: balance
+            })
+        }
+    })
+}

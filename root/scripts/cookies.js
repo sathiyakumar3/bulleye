@@ -1,5 +1,3 @@
-
-
 function setCookie(cookieName, cookieValue) {
     var d = new Date();
     d.setTime(d.getTime() + 2 * 24 * 60 * 60 * 1000);
@@ -330,7 +328,7 @@ var last_result = "";
 
 }; */
 function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp) {
- 
+
     const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }).catch((error) => { resolve({ photo_url: 'none' }); }); });
     const user_details_prom = new Promise((resolve, reject) => {
         getoptdata(user_Ref, user_id).then(function(finalResult) {
@@ -354,45 +352,46 @@ function add_to_local_table(user_id, description, category, type, payment, amoun
     });
 }
 
-async function get_wallet_data(wallet_id,force_flag){
+async function get_wallet_data(wallet_id, force_flag) {
     if (last_wallet_id != wallet_id || force_flag) {
         console.log("sending new data");
-    let entries = await  db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated").get();
-    var data =[];
-let all_wallet_doc_promise = [];
-entries.forEach((entry_doc) => {
+        let entries = await db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated").get();
+        var data = [];
+        let all_wallet_doc_promise = [];
+        entries.forEach((entry_doc) => {
 
-    let entry_id = entry_doc.id
-    
-    let each_wallet_subdoc_promise = db.collection("wallets").doc(wallet_id).collection('entries').doc(entry_id).get().then((entries) => {
-        let getSubProjectsPromises = [];
+            let entry_id = entry_doc.id
 
-            var arr = entries.data();
-            delete arr["last_updated"];                        
-            Object.keys(arr).map(function(key, index) {  
-                const each_entry_promise = new Promise((resolve, reject) => {                       
-                    var user_id = arr[key].user;                                                                              
-                        add_to_local_table(user_id, arr[key].Description, arr[key].Category,  arr[key].Type,  arr[key].Payment, arr[key].Amount,  arr[key].Repeated,  new Date(key)).then(function(result) {
-                        data.push(result); 
-                          resolve(result);
-                        }).catch((error) => { console.log(error);
+            let each_wallet_subdoc_promise = db.collection("wallets").doc(wallet_id).collection('entries').doc(entry_id).get().then((entries) => {
+                let getSubProjectsPromises = [];
+
+                var arr = entries.data();
+                delete arr["last_updated"];
+                Object.keys(arr).map(function(key, index) {
+                    const each_entry_promise = new Promise((resolve, reject) => {
+                        var user_id = arr[key].user;
+                        add_to_local_table(user_id, arr[key].Description, arr[key].Category, arr[key].Type, arr[key].Payment, arr[key].Amount, arr[key].Repeated, new Date(key)).then(function(result) {
+                            data.push(result);
+                            resolve(result);
+                        }).catch((error) => {
+                            console.log(error);
                         });
                     });
                     getSubProjectsPromises.push(each_entry_promise);
-            }); 
-        return Promise.all(getSubProjectsPromises);
-    });
-    all_wallet_doc_promise.push(each_wallet_subdoc_promise);
-});
-return await Promise.all(all_wallet_doc_promise).then((subProjectSnapshots) => {
-  
-    last_result = data;
-    last_wallet_id = wallet_id;    
- 
-    return data    
-});
-    }else{
+                });
+                return Promise.all(getSubProjectsPromises);
+            });
+            all_wallet_doc_promise.push(each_wallet_subdoc_promise);
+        });
+        return await Promise.all(all_wallet_doc_promise).then((subProjectSnapshots) => {
+
+            last_result = data;
+            last_wallet_id = wallet_id;
+
+            return data
+        });
+    } else {
         console.log("sending old data");
-        return last_result   
+        return last_result
     }
 }
