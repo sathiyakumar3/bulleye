@@ -155,12 +155,12 @@ function build_trend(month_data, type) {
 }
 
 
-
 function build_site(month_data, users_size, users_list, type) {
+    
     var html_div = '<li class="menu-item menu-item-active" aria-haspopup="true">' +
         '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + month_data + '\')">' +
         '<span class="svg-icon menu-icon">' +
-        '<svg><use xlink:href="#display"></use></svg>' +
+        '<svg><use xlink:href="#pie_chart"></use></svg>' +
         '<!--end::Svg Icon-->' +
         '</span>' +
         '<span class="menu-text">Dashboard</span>' +
@@ -168,9 +168,9 @@ function build_site(month_data, users_size, users_list, type) {
         '</li>' + '<li class="menu-item" aria-haspopup="true">' +
         '<a class="menu-link" onclick="load_page(\'content_pages/wallet.html\',\'' + month_data + '\')">' +
         '<span class="svg-icon menu-icon">' +
-        '<svg><use xlink:href="#six_dots"></use></svg>' +
+        '<svg><use xlink:href="#cal"></use></svg>' +
         '</span>' +
-        '<span class="menu-text">Work Sheet</span>' +
+        '<span class="menu-text">Balance Sheet</span>' +
         '</a>' +
         '</li>' +
         //build_trend(month_data, type) +
@@ -208,7 +208,6 @@ function generate_navi(data, p_wallet) {
     var navi = "";
     for (let i = 0; i < data.length; i++) {
         var users_list = data[i]['users'];
-        var months_list = 123;
         var wallet_id = data[i]['wallet_id'];
         var wallet_name = data[i]['wallet_name'];
         var wallet_type = data[i]['wallet_type'];
@@ -217,7 +216,6 @@ function generate_navi(data, p_wallet) {
         var wallet_owner = data[i]['wallet_owner'];
         var wallet_location = data[i]['wallet_location'];
         var wallet_currency = data[i]['wallet_currency'];
-        console.log(wallet_currency);
 
         var month_data = wallet_id + "," + wallet_name + "," + user_local.uid + "," + wallet_type + "," + wallet_description + "," + wallet_owner + "," + wallet_location + ',' + wallet_currency;
 
@@ -333,6 +331,7 @@ function get_user(user) {
                     opacity: 1,
                 });
             } else {
+                KTApp.unblock('#kt_content');
                 generate_navi(data, finalResult.primary_wallet);
             }
 

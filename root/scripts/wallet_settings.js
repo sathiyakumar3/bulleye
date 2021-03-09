@@ -261,6 +261,7 @@ var start_app = function() {
 
             user_table = doc.users;
             cat_table = doc.categories;
+    
             refresh_cat_table();
             refresh_user_table();
         })).catch((error) => {

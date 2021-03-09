@@ -63,7 +63,7 @@ function get_user_info(user_id) {
                 var user_name = finalResult.name;
                 resolve({ user_email, user_name });
             }).catch((error) => {
-                console.log(error);
+               // console.log(error);
                 var user_email = 'Default';
                 var user_name = 'Adminiate'
                 resolve({ user_email, user_name });
@@ -81,7 +81,7 @@ function get_user_info(user_id) {
 
 function dnt4table(datetime) { var e = new Date(datetime); var html_div = '<span style="width: 110px;"><div class="font-weight-bolder text-primary mb-0">' + shortdate(e) + '</div><div class="text-muted">' + formatAMPM(e) + '</div></span>'; return html_div }
 
-function icon_nd_name(icon, name) { var html_div = '<div class="d-flex align-items-center">' + '<div class="symbol symbol-50 symbol-light mr-4">' + '<span class="symbol-label">' + '<span class="svg-icon svg-icon-2x svg-icon-success">' + '<svg><use xlink:href="#' + icon + '"></use></svg>' + '</span>' + '</span>' + '</div>' + ' <div>' + '<a href="#" class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">' + name + '</a>' + '</div>' + '</div>'; return html_div; }
+function icon_nd_name(icon, name) { var html_div = '<div class="d-flex align-items-center">' + '<div class="symbol symbol-40 symbol-light mr-4">' + '<span class="symbol-label">' + '<span class="svg-icon svg-icon-2x svg-icon-success">' + '<svg><use xlink:href="#' + icon + '"></use></svg>' + '</span>' + '</span>' + '</div>' + ' <div>' + '<a href="#" class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">' + name + '</a>' + '</div>' + '</div>'; return html_div; }
 
 function icon_nd_name_nd_description(icon, name, description) { var html_div = '<div class="d-flex align-items-center">' + '<div class="symbol symbol-40 symbol-light mr-4">' + '<span class="symbol-label">' + '<span class="svg-icon svg-icon-2x svg-icon-success">' + '<svg><use xlink:href="#' + icon + '"></use></svg>' + '</span>' + '</span>' + '</div>' + '<div class="ml-2">' + '<div class="text-dark-75 font-weight-bold line-height-sm">' + name + '</div>' + '<a href="#" class="font-size-sm text-dark-50 text-hover-primary">' + description + '</a>' + '</div></div>'; return html_div; }
 
