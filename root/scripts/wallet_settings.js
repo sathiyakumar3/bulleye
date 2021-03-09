@@ -531,7 +531,7 @@ jQuery(document).ready(function() {
     wallet_symbol = currency_convertor[wallet_currency];
 
     wallet_Ref = db.collection("wallets");
-    document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
+    document.getElementById("t_wallet_name").innerHTML = wallet_name;
     // document.getElementById("t_wallet_id").innerText = wallet_id;
     var wallet_currency = global_data[7];
     console.log(wallet_currency);

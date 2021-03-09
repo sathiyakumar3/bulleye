@@ -7,23 +7,60 @@ div.sticky {
     opacity: 0.60;
 }
 
-div.overlay {
-    position: fixed;
-    /* Sit on top of the page content */
-    display: block;
-    /* Hidden by default */
-    width: 100%;
-    /* Full width (cover the whole page) */
-    height: 100%;
-    /* Full height (cover the whole page) */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    /* Black background with opacity */
-    z-index: 123;
-    /* Specify a stack order in case you're using a different order for other elements */
-    cursor: pointer;
-    /* Add a pointer on hover */
+.animation-loading {
+    position: relative;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.animation-loading-line {
+    position: relative;
+    display: inline-block;
+    width: 6px;
+    height: 15px;
+    margin: 0 2px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    transform-origin: 50% 50%;
+    animation: loading 0.45s infinite ease-in alternate;
+}
+
+.animation-loading-line:nth-of-type(2) {
+    animation-delay: 0.1s;
+}
+
+.animation-loading-line:nth-of-type(3) {
+    animation-delay: 0.2s;
+}
+
+.animation-loading-line:nth-of-type(4) {
+    animation-delay: 0.3s;
+}
+
+.animation-loading-line:nth-of-type(5) {
+    animation-delay: 0.4s;
+}
+
+@-webkit-keyframes loading {
+    0% {
+        -webkit-transform: scaleY(1);
+    }
+    50% {
+        -webkit-transform: scaleY(1);
+    }
+    100% {
+        -webkit-transform: scaleY(3);
+    }
+}
+
+@keyframes loading {
+    0% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(1);
+    }
+    100% {
+        transform: scaleY(3);
+    }
 }

@@ -219,7 +219,7 @@ jQuery(document).ready(function() {
     cat2combo(wallet_id);
 
     document.getElementById("form_currency").innerText = wallet_symbol;
-    document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
+    document.getElementById("t_wallet_name").innerText = wallet_name;
 
     var wallet_type = global_data[3];
     document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
