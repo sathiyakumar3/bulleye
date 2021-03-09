@@ -1,10 +1,23 @@
 "use strict";
+var user_id;
 var wallet_Ref = '';
+var user_Ref = db.collection("users");
+
 var wallet_id = "";
+var wallet_name = '';
+var wallet_description = '';
+var wallet_type = '';
+var wallet_owner = '';
+var wallet_location = '';
+var wallet_currency = '';
+var wallet_symbol = '';
+
 var datetime_loaded = false;
 var selected_start = new Date('1/1/1900').getTime();
 var selected_end = new Date('1/1/2100').getTime();
 var local_data;
+
+
 
 var flag_expand = true;
 
@@ -55,76 +68,83 @@ var start_app = function() {
         var data = date_filter(local_data, selected_end, selected_start);
         var user_profile = user_process(data);
         var user_sum = Object.keys(user_profile).length;
-        var net_pec = 0;
-        var sum_income = data_process(data, { 'Payment': 'Paid', 'Type': 'Income' });
-        var sum_expense = data_process(data, { 'Payment': 'Paid', 'Type': 'Expense' });
-        var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
-        document.getElementById("sum_earnings_m").innerHTML = currency + numberWithCommas(sum_income);
-        document.getElementById("sum_expenses_m").innerHTML = currency + numberWithCommas(sum_expense);
-        if ((sum_income - sum_expense) < 0) {
+
+
+        //     var currency = '<span class="text-dark-50 font-weight-bold" id>'
+        //     wallet_symbol + ' </span>';
+        //      document.getElementById("sum_earnings_m").innerHTML = currency + numberWithCommas(sum_income);
+        //   document.getElementById("sum_expenses_m").innerHTML = currency + numberWithCommas(sum_expense);
+
+
+        // document.getElementById("sum_net_m").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
+        //  document.getElementById("number_items").innerText = Object.keys(data).length + " Entries";
+
+
+        /*         document.getElementById("image_list").innerHTML = user_circle_gen(user_profile);
+                if (user_sum > 1) { document.getElementById("user_list_md").innerText = user_sum + " Users"; } else { document.getElementById("user_list_md").innerText = user_sum + " User"; } */
+
+
+        var current_income = data_process(data, { 'Payment': 'Paid', 'Type': 'Income' });
+        set_sum('current_income', wallet_symbol, current_income);
+        var current_expense = data_process(data, { 'Payment': 'Paid', 'Type': 'Expense' });
+        set_sum('current_expense', wallet_symbol, current_expense);
+        var current_net = current_income - current_expense;
+        if ((current_income - current_expense) < 0) {
             document.getElementById("net_percent_title").innerText = "Have Spent Excess! "
             document.getElementById("sum_net_m").classList.remove("text-success");
             document.getElementById("sum_net_m").classList.add("text-danger");
             document.getElementById("net_percent_bar").classList.remove("bg-success");
             document.getElementById("net_percent_bar").classList.add("bg-warning");
-            net_pec = Math.round(((sum_expense - sum_income) / sum_expense) * 100);
+
         } else {
             document.getElementById("sum_net_m").classList.remove("text-danger");
             document.getElementById("sum_net_m").classList.add("text-success");
             document.getElementById("net_percent_bar").classList.remove("bg-warning");
             document.getElementById("net_percent_bar").classList.add("bg-success");
             document.getElementById("net_percent_title").innerText = "Saved!";
-            net_pec = Math.round(((sum_income - sum_expense) / sum_income) * 100);
+
         }
-        document.getElementById("net_percent").innerHTML = net_pec + " %";
-        document.getElementById("net_percent_bar").style.width = net_pec + "%";
-        document.getElementById("sum_net_m").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
-        document.getElementById("number_items").innerText = Object.keys(data).length + " Entries";
+        var net_perc = Math.round((Math.abs(current_net) / current_income) * 100);
+        document.getElementById("net_percent").innerHTML = net_perc + " %";
+        document.getElementById("net_percent_bar").style.width = net_perc + "%";
 
 
-        document.getElementById("image_list").innerHTML = user_circle_gen(user_profile);
-        if (user_sum > 1) { document.getElementById("user_list_md").innerText = user_sum + " Users"; } else { document.getElementById("user_list_md").innerText = user_sum + " User"; }
-        var current_income = data_process(data, { 'Payment': 'Paid', 'Type': 'Income' });
-        set_sum('current_income', current_income);
-        var current_expense = data_process(data, { 'Payment': 'Paid', 'Type': 'Expense' });
-        set_sum('current_expense', current_expense);
-        var current_net = current_income - current_expense;
 
         document.getElementById("current_net2").innerText = current_net;
-        document.getElementById("widget_cb").innerText = 'Rs ' + numberWithCommas(current_net);
-        set_sum('current_net', current_net);
-        document.getElementById("cur_progress").innerHTML = percentage_form(current_net, current_income, 'Rs');
+        document.getElementById("widget_cb").innerText = wallet_symbol + ' ' + numberWithCommas(current_net);
+        set_sum('current_net', wallet_symbol, current_net);
+        document.getElementById("cur_progress").innerHTML = percentage_form(current_net, current_income, wallet_symbol);
         document.getElementById("cur_pl").innerHTML = profit_loss_format(current_net);
         var rec_income = data_process(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income', 'Payment': 'Paid', });
-        set_sum('rec_income', rec_income);
+        set_sum('rec_income', wallet_symbol, rec_income);
         var rec_expense = data_process(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense', 'Payment': 'Paid', });
-        set_sum('rec_expense', rec_expense);
+        set_sum('rec_expense', wallet_symbol, rec_expense);
         var rec_net = rec_income - rec_expense;
-        document.getElementById("widget_rb").innerText = 'Rs ' + numberWithCommas(rec_net);
-        set_sum('rec_net', rec_net);
-        document.getElementById("rec_progress").innerHTML = percentage_form(rec_net, rec_income, 'Rs');
+        document.getElementById("widget_rb").innerText = wallet_symbol + ' ' + numberWithCommas(rec_net);
+        set_sum('rec_net', wallet_symbol, rec_net);
+        document.getElementById("rec_progress").innerHTML = percentage_form(rec_net, rec_income, wallet_symbol);
         document.getElementById("rec_pl").innerHTML = profit_loss_format(rec_net);
         var non_income = rec_net;
-        set_sum('non_income', non_income);
+        set_sum('non_income', wallet_symbol, non_income);
         var non_expense = data_process(data, { 'Repeated': 'Once', 'Type': 'Expense', 'Payment': 'Paid', });
-        set_sum('non_expense', current_expense);
+        set_sum('non_expense', wallet_symbol, current_expense);
         var non_net = non_income - non_expense;
-        document.getElementById("widget_ob").innerText = 'Rs ' + numberWithCommas(non_net);
-        set_sum('non_net', non_net);
-        document.getElementById("non_progress").innerHTML = percentage_form(non_net, non_income, 'Rs');
+        document.getElementById("widget_ob").innerText = wallet_symbol + ' ' + numberWithCommas(non_net);
+        set_sum('non_net', wallet_symbol, non_net);
+        document.getElementById("non_progress").innerHTML = percentage_form(non_net, non_income, wallet_symbol);
         document.getElementById("non_pl").innerHTML = profit_loss_format(non_net);
         var fin_income = data_process(data, { 'Type': 'Income' });
-        set_sum('fin_income', fin_income);
+        set_sum('fin_income', wallet_symbol, fin_income);
         var fin_expense = data_process(data, { 'Type': 'Expense' });
-        set_sum('fin_expense', fin_expense);
+        set_sum('fin_expense', wallet_symbol, fin_expense);
         var fin_net = fin_income - fin_expense;
-        document.getElementById("widget_fb").innerText = 'Rs ' + numberWithCommas(fin_net);
-        set_sum('fin_net', fin_net);
-        document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, 'Rs');
+        document.getElementById("widget_fb").innerText = wallet_symbol + ' ' + numberWithCommas(fin_net);
+        set_sum('fin_net', wallet_symbol, fin_net);
+        document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, wallet_symbol);
         document.getElementById("fin_pl").innerHTML = profit_loss_format(fin_net);
 
         var data66 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Income' }));
-        piechart_123(data66[0], data66[1], "kt_pie_chart_cat");
+        piechart_123(data66[0], data66[1], "kt_pie_chart_cat_i");
         var data77 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Expense' }));
         piechart_123(data77[0], data77[1], "kt_pie_chart_cat_e");
 
@@ -259,7 +279,6 @@ var start_app = function() {
     var read_data = function(force_flag) {
 
         get_wallet_data(wallet_id, force_flag).then(function(result) {
-
             local_data = sort_obj(result, 'Timestamp');
 
             var outcome = date_process(result);
@@ -308,7 +327,7 @@ var start_app = function() {
         const info = '#8950FC';
         const warning = '#FFA800';
         const danger = '#F64E60';
-        var options = { series: [{ name: 'Income', type: 'column', data: data }, { name: 'Expense', type: 'column', data: data1 }, { name: 'Net', type: 'line', data: data2 }], chart: { height: '350px', type: 'line', stacked: false }, dataLabels: { enabled: false }, stroke: { width: [1, 1, 4] }, xaxis: { categories: cat, }, yaxis: [{ axisTicks: { show: true, }, axisBorder: { show: true, color: primary }, labels: { style: { colors: primary, } }, title: { text: "Income", style: { color: primary, } }, tooltip: { enabled: true } }, { seriesName: 'Income', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: success }, labels: { style: { colors: success, } }, title: { text: "Expense", style: { color: success, } }, }, { seriesName: 'Net Revenue', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: warning }, labels: { style: { colors: warning, }, }, title: { text: "Revenue", style: { color: warning, } } }, ], tooltip: { fixed: { enabled: true, position: 'topLeft', offsetY: 30, offsetX: 60 }, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } } }, legend: { horizontalAlign: 'left', offsetX: 40 } };
+        var options = { series: [{ name: 'Income', type: 'column', data: data }, { name: 'Expense', type: 'column', data: data1 }, { name: 'Net', type: 'line', data: data2 }], chart: { height: '350px', type: 'line', stacked: false }, dataLabels: { enabled: false }, stroke: { width: [1, 1, 4] }, xaxis: { categories: cat, }, yaxis: [{ axisTicks: { show: true, }, axisBorder: { show: true, color: primary }, labels: { style: { colors: primary, } }, title: { text: "Income", style: { color: primary, } }, tooltip: { enabled: true } }, { seriesName: 'Income', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: success }, labels: { style: { colors: success, } }, title: { text: "Expense", style: { color: success, } }, }, { seriesName: 'Net Revenue', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: warning }, labels: { style: { colors: warning, }, }, title: { text: "Revenue", style: { color: warning, } } }, ], tooltip: { fixed: { enabled: true, position: 'topLeft', offsetY: 30, offsetX: 60 }, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return wallet_symbol + ' ' + numberWithCommas(val); } } }, legend: { horizontalAlign: 'left', offsetX: 40 } };
         generate_chart("kt_main_chart_trends", options);
     }
     var piechart_123 = function(data_set, cat_set, html_div) {
@@ -317,7 +336,7 @@ var start_app = function() {
         const info = '#8950FC';
         const warning = '#FFA800';
         const danger = '#F64E60';
-        var options = { series: data_set, chart: { type: 'pie', width: '100%' }, labels: cat_set, responsive: [{ options: { legend: { position: 'bottom' } } }], colors: [info, danger, warning, success, primary], tooltip: { style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } } }, breakpoint: 480, legend: { show: true, position: 'bottom', horizontalAlign: 'center', } };
+        var options = { series: data_set, chart: { type: 'pie', width: '100%' }, labels: cat_set, responsive: [{ options: { legend: { position: 'bottom' } } }], colors: [info, danger, warning, success, primary], tooltip: { style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return wallet_symbol + ' ' + numberWithCommas(val); } } }, breakpoint: 480, legend: { show: true, position: 'bottom', horizontalAlign: 'center', } };
         generate_chart(html_div, options);
     }
 
@@ -342,13 +361,13 @@ var start_app = function() {
                 style: { fontSize: '12px', colors: ["#304758"] },
                 formatter: function(value, { seriesIndex, dataPointIndex, w }) {
                     if (seriesIndex === ((w.config.series.length) - parseInt(1)))
-                        return "Rs " + numberWithCommas(w.globals.stackedSeriesTotals[dataPointIndex]);
+                        return wallet_symbol + ' ' + numberWithCommas(w.globals.stackedSeriesTotals[dataPointIndex]);
                     return "";
                 },
             },
             tooltip: {
                 style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] },
-                y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } }
+                y: { formatter: function(val) { return wallet_symbol + ' ' + numberWithCommas(val); } }
             },
             fill: { opacity: 1 }
         };
@@ -359,7 +378,30 @@ var start_app = function() {
         generate_chart(html_div, options)
     }
     var _init_main_chart = function(data1, data2, cat) {
-        var options = { series: [{ name: 'Income', data: data1 }, { name: 'Expense', data: data2 }], chart: { type: 'area', height: 350, toolbar: { show: false } }, plotOptions: {}, legend: { show: false }, dataLabels: { enabled: false }, fill: { type: 'solid', opacity: 1 }, stroke: { curve: 'smooth' }, xaxis: { categories: cat, axisBorder: { show: false, }, axisTicks: { show: false }, labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } }, crosshairs: { position: 'front', stroke: { color: KTApp.getSettings()['colors']['theme']['light']['success'], width: 1, dashArray: 3 } }, tooltip: { enabled: true, formatter: undefined, offsetY: 0, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } }, yaxis: { labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } }, states: { normal: { filter: { type: 'none', value: 0 } }, hover: { filter: { type: 'none', value: 0 } }, active: { allowMultipleDataPointsSelection: false, filter: { type: 'none', value: 0 } } }, tooltip: { style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return "Rs " + numberWithCommas(val); } } }, colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['theme']['base']['warning']], grid: { borderColor: KTApp.getSettings()['colors']['gray']['gray-200'], strokeDashArray: 4, yaxis: { lines: { show: true } } }, markers: { colors: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeColor: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeWidth: 3 } };
+        var options = {
+            series: [{ name: 'Income', data: data1 }, { name: 'Expense', data: data2 }],
+            chart: { type: 'area', height: 350, toolbar: { show: false } },
+            plotOptions: {},
+            legend: { show: false },
+            dataLabels: { enabled: false },
+            fill: { type: 'solid', opacity: 1 },
+            stroke: { curve: 'smooth' },
+            xaxis: { categories: cat, axisBorder: { show: false, }, axisTicks: { show: false }, labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } }, crosshairs: { position: 'front', stroke: { color: KTApp.getSettings()['colors']['theme']['light']['success'], width: 1, dashArray: 3 } }, tooltip: { enabled: true, formatter: undefined, offsetY: 0, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } },
+            yaxis: { labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } },
+            states: { normal: { filter: { type: 'none', value: 0 } }, hover: { filter: { type: 'none', value: 0 } }, active: { allowMultipleDataPointsSelection: false, filter: { type: 'none', value: 0 } } },
+            tooltip: {
+                style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] },
+                y: {
+                    formatter: function(val) {
+                        return wallet_symbol + ' ' +
+                            numberWithCommas(val);
+                    }
+                }
+            },
+            colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['theme']['base']['warning']],
+            grid: { borderColor: KTApp.getSettings()['colors']['gray']['gray-200'], strokeDashArray: 4, yaxis: { lines: { show: true } } },
+            markers: { colors: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeColor: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeWidth: 3 }
+        };
         generate_chart("kt_main_chart", options)
     }
 
@@ -378,22 +420,28 @@ var start_app = function() {
 }();
 jQuery(document).ready(function() {
     wallet_id = global_data[0];
-    var wallet_name = global_data[1];
-    var wallet_description = global_data[4];
-    var wallet_type = global_data[3];
-    var wallet_owner = global_data[5];
-    var wallet_location = global_data[6];
-    var user_Ref = db.collection("users");
+    wallet_name = global_data[1];
+    user_id = global_data[2];
+    wallet_type = global_data[3];
+    wallet_description = global_data[4];
+    wallet_owner = global_data[5];
+    wallet_location = global_data[6];
+    wallet_currency = global_data[7];
+    wallet_symbol = currency_convertor[wallet_currency];
+    wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+
+
     getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
         var user_name = finalResult.name;
         document.getElementById("owrner_fp").innerText = user_name;
     }).catch((error) => { console.log(error); });
+
     document.getElementById("location_fp").innerText = wallet_location;
     document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
     document.getElementById("t_wallet_id").innerText = wallet_id;
     document.getElementById("wallet_title").innerText = wallet_description;
-    document.getElementById("wallet_init").innerText = name_intials(wallet_name);
-    wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+    document.getElementById("wallet_init").innerText = wallet_symbol
+
     document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
     start_app.init();
 });

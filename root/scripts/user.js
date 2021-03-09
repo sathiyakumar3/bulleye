@@ -65,6 +65,7 @@ function load_navi() {
                         var wallet_description = doc.data().description;
                         var wallet_owner = doc.data().owner;
                         var wallet_location = doc.data().location;
+                        var wallet_currency = doc.data().currency;
                         var promises_users = [];
                         var user_list = doc.data().users;
                         const get_users = new Promise((resolve, reject) => {
@@ -99,7 +100,8 @@ function load_navi() {
                                 wallet_type: wallet_type,
                                 wallet_description: wallet_description,
                                 wallet_location: wallet_location,
-                                wallet_owner: wallet_owner
+                                wallet_owner: wallet_owner,
+                                wallet_currency: wallet_currency
                             }
                             resolve(tabl);
                         });
@@ -214,9 +216,10 @@ function generate_navi(data, p_wallet) {
         var wallet_description = data[i]['wallet_description'];
         var wallet_owner = data[i]['wallet_owner'];
         var wallet_location = data[i]['wallet_location'];
+        var wallet_currency = data[i]['wallet_currency'];
+        console.log(wallet_currency);
 
-
-        var month_data = wallet_id + "," + wallet_name + "," + user_local.uid + "," + wallet_type + "," + wallet_description + "," + wallet_owner + "," + wallet_location;
+        var month_data = wallet_id + "," + wallet_name + "," + user_local.uid + "," + wallet_type + "," + wallet_description + "," + wallet_owner + "," + wallet_location + ',' + wallet_currency;
 
         if (wallet_id != p_wallet) {
             var my_wallet = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
@@ -263,19 +266,19 @@ function generate_navi(data, p_wallet) {
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-        '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-        '        <rect x="0" y="0" width="24" height="24"/>'+
-        '        <path d="M8,4 L21,4 C21.5522847,4 22,4.44771525 22,5 L22,16 C22,18.209139 20.209139,20 18,20 L11,20 C8.790861,20 7,18.209139 7,16 L7,5 C7,4.44771525 7.44771525,4 8,4 Z" fill="#000000" opacity="0.3"/>'+
-        '        <path d="M7,7 L7,9 L5,9 C4.44771525,9 4,9.44771525 4,10 L4,12 C4,12.5522847 4.44771525,13 5,13 L7,13 L7,15 L5,15 C3.34314575,15 2,13.6568542 2,12 L2,10 C2,8.34314575 3.34314575,7 5,7 L7,7 Z" fill="#000000" fill-rule="nonzero"/>'+
-        '        <rect fill="#000000" opacity="0.3" x="18" y="7" width="2" height="8" rx="1"/>'+
-        '    </g>'+            
-        
+        '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+        '        <rect x="0" y="0" width="24" height="24"/>' +
+        '        <path d="M8,4 L21,4 C21.5522847,4 22,4.44771525 22,5 L22,16 C22,18.209139 20.209139,20 18,20 L11,20 C8.790861,20 7,18.209139 7,16 L7,5 C7,4.44771525 7.44771525,4 8,4 Z" fill="#000000" opacity="0.3"/>' +
+        '        <path d="M7,7 L7,9 L5,9 C4.44771525,9 4,9.44771525 4,10 L4,12 C4,12.5522847 4.44771525,13 5,13 L7,13 L7,15 L5,15 C3.34314575,15 2,13.6568542 2,12 L2,10 C2,8.34314575 3.34314575,7 5,7 L7,7 Z" fill="#000000" fill-rule="nonzero"/>' +
+        '        <rect fill="#000000" opacity="0.3" x="18" y="7" width="2" height="8" rx="1"/>' +
+        '    </g>' +
+
         '</svg>' +
         '<!--end::Svg Icon-->' +
         '</span>' +
         '<span class="menu-text">About Us</span>' +
         '</a>' +
-        '</li>'+
+        '</li>' +
         '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
         '<a class="menu-link" onclick="just_load_page(\'content_pages/feedback.html\')">' +
         '<span class="svg-icon menu-icon">' +
@@ -508,7 +511,8 @@ function image_add(url) {
                     created_by: 'Adminiate',
                     icon: 'shopping',
                     name: 'Shopping'
-                }]
+                }];
+                var currency = document.getElementById('add_new_wallet_form').querySelector('[name="currency"]').value;
                 var data = {
                     name: name,
                     description: description,
@@ -517,8 +521,10 @@ function image_add(url) {
                     type: type,
                     owner: user,
                     users: [user],
-                    categories: categories
+                    categories: categories,
+                    currency: currency
                 }
+
 
                 var wallet_Ref = db.collection("wallets")
                 addoptdata(wallet_Ref, data).then(function(docid) {
@@ -527,12 +533,13 @@ function image_add(url) {
                         primary_wallet: docid
                     }
 
-                    update_primary_wall(data).then(function(docid) {
-
+                    updateoptdata(user_Ref, user_local.uid, data).then(function(finalResult) {
                         get_user(user_local);
                     }).catch((error) => {
                         console.log(error);
                     });
+
+
 
                 }).catch((error) => {
                     console.log(error);

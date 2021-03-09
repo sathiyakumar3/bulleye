@@ -1,9 +1,18 @@
+var user_id;
 var wallet_Ref = "";
+var user_Ref = db.collection("users");
+
 var wallet_id = "";
+var wallet_name = '';
+var wallet_description = '';
+var wallet_type = '';
+var wallet_owner = '';
+var wallet_location = '';
+var wallet_currency = '';
+var wallet_symbol = '';
+
 var cat_table;
 var user_table;
-var user_id;
-var user_Ref = db.collection("users");
 
 function change_icon(d) {
 
@@ -168,10 +177,6 @@ function pin_wall() {
     var data = {
         primary_wallet: wallet_id
     }
-    update_primary_wall(data);
-}
-
-function update_primary_wall(data) {
     updateoptdata(user_Ref, user_id, data).then(function(finalResult) {
         get_user(user_local);
         Swal.fire(
@@ -182,7 +187,9 @@ function update_primary_wall(data) {
     }).catch((error) => {
         console.log(error);
     });
+
 }
+
 
 
 function del_cat(i) {
@@ -364,6 +371,10 @@ var start_app = function() {
             var location = document.getElementById('edit_wallet_form').querySelector('[name="ad_wal_loc"]').value;
             var type = $('input[name="wallet_form_type2"]:checked').val();
 
+
+            var currency = document.getElementById('edit_wallet_form').querySelector('[name="currency"]').value;
+
+
             console.log(type);
             var id2 = document.getElementById('edit_wallet_form').querySelector('[name="edit_id_form"]').value;
 
@@ -372,9 +383,10 @@ var start_app = function() {
                 description: description,
                 location: location,
                 type: type,
+                currency: currency
             }
             console.log(data);
-            var wallet_Ref = db.collection("wallets")
+
             updateoptdata(wallet_Ref, id2, data).then(function() {
                 get_user(user_local);
             }).catch((error) => {
@@ -509,13 +521,22 @@ var start_app = function() {
 
 jQuery(document).ready(function() {
     wallet_id = global_data[0];
-    wallet_Ref = db.collection("wallets");
+    wallet_name = global_data[1];
     user_id = global_data[2];
-    var wallet_name = global_data[1];
-    var wallet_type = global_data[3];
+    wallet_type = global_data[3];
+    wallet_description = global_data[4];
+    wallet_owner = global_data[5];
+    wallet_location = global_data[6];
+    wallet_currency = global_data[7];
+    wallet_symbol = currency_convertor[wallet_currency];
+
+    wallet_Ref = db.collection("wallets");
     document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
     // document.getElementById("t_wallet_id").innerText = wallet_id;
-    var wallet_type = global_data[3];
+    var wallet_currency = global_data[7];
+    console.log(wallet_currency);
+    $('#edit_cur_selec').selectpicker('val', wallet_currency);
+
     document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
     document.getElementById("access_list").innerHTML = document.getElementById("access_list").innerHTML + build_access_control(wallet_type);
     start_app.init();

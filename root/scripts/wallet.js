@@ -1,12 +1,24 @@
 "use strict";
-var datatable = "";
+var user_id;
 var wallet_Ref = "";
+var user_Ref = db.collection("users");
+
 var wallet_id = "";
+var wallet_name = '';
+var wallet_description = '';
+var wallet_type = '';
+var wallet_owner = '';
+var wallet_location = '';
+var wallet_currency = '';
+var wallet_symbol = '';
+
 var datetime_loaded = false;
 var selected_start = new Date('1/1/1900').getTime();
 var selected_end = new Date('1/1/2100').getTime();
 var local_data;
 var table_data;
+var datatable = "";
+
 var start_app = function() {
     var run_wallet = function() {
 
@@ -18,7 +30,7 @@ var start_app = function() {
         var sum_income = data_process(data, { 'Payment': 'Paid', 'Type': 'Income' });
         var sum_expense = data_process(data, { 'Payment': 'Paid', 'Type': 'Expense' });
         document.getElementById("number_items_2").innerText = counter + " Entries";
-        var currency = '<span class="text-dark-50 font-weight-bold" id>Rs </span>';
+        var currency = '<span class="text-dark-50 font-weight-bold" id>' + wallet_symbol + ' ' + ' </span>';
         document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
         document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
         if ((sum_income - sum_expense) < 0) { document.getElementById("sum_net").classList.add("text-danger"); } else { document.getElementById("sum_net").classList.add("text-success"); }
@@ -34,8 +46,8 @@ var start_app = function() {
             var outcome = date_process(result);
             selected_start = outcome[0];
             selected_end = outcome[1];
-         /*    selected_start =selected_start.setHours(0, 0, 0, 0);
-            selected_end = selected_end.setHours(23, 59, 59, 999); */
+            /*    selected_start =selected_start.setHours(0, 0, 0, 0);
+               selected_end = selected_end.setHours(23, 59, 59, 999); */
 
             _initDaterangepicker();
         }).catch((error) => { console.log(error); });
@@ -85,10 +97,71 @@ var start_app = function() {
                 },
 
             },
-            columns: [{ field: 'test', title: '', width: 20, sortable: true, template: function(row) { return row.RecordID } }, { field: 'RecordID', sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', },
-                { field: 'User', title: 'User', width: 185, sortable: true, template: function(row) { return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email); } },
+            columns: [{
+                    field: 'test',
+                    title: '',
+                    width: 20,
+                    sortable: true,
+                    template: function(row) { return row.RecordID }
+                },
+                { field: 'RecordID', sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', },
+                {
+                    field: 'User',
+                    title: 'User',
+                    width: 185,
+                    sortable: true,
+                    template: function(row) { return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email); }
+                },
+                {
+                    field: 'Category',
+                    title: 'Category & Description',
+                    sortable: true,
+                    width: 250,
+                    template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); },
+                },
+                {
+                    field: 'Description',
+                    title: 'Date & Time',
+                    textAlign: 'center',
+                    autoHide: false,
+                    width: 100,
+                    sortable: true,
+                    template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; },
+                }, {
+                    field: 'Repeated',
+                    title: 'Repeated',
+                    sortable: true,
+                    template: function(row) { return format_repeat(row.Repeated); },
+                },
 
-                { field: 'Category', title: 'Category & Description', sortable: true, width: 250, template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); }, }, { field: 'Description', title: 'Date & Time', textAlign: 'center', autoHide: false, width: 100, sortable: true, template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; }, }, { field: 'Repeated', title: 'Repeated', sortable: true, template: function(row) { return format_repeat(row.Repeated); }, }, { field: 'Type2', title: 'Income', textAlign: 'center', width: 100, autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income') }, }, { field: 'Type', title: 'Expense', width: 100, textAlign: 'center', autoHide: false, sortable: true, template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense') }, }, { field: 'Actions', title: 'Actions', sortable: false, textAlign: 'center', overflow: false, autoHide: false, template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; }, }
+                {
+                    field: 'Type2',
+                    title: 'Income',
+                    textAlign: 'center',
+                    width: 100,
+                    autoHide: false,
+                    sortable: true,
+                    template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income', wallet_symbol) },
+                },
+                {
+                    field: 'Type',
+                    title: 'Expense',
+                    width: 100,
+                    textAlign: 'center',
+                    autoHide: false,
+                    sortable: true,
+                    template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense', wallet_symbol) },
+                },
+
+                {
+                    field: 'Actions',
+                    title: 'Actions',
+                    sortable: false,
+                    textAlign: 'center',
+
+                    autoHide: false,
+                    template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; },
+                }
             ],
             extensions: { checkbox: true, },
             search: { input: $('#kt_datatable_search_query_2'), key: 'generalSearch' },
@@ -127,7 +200,7 @@ var start_app = function() {
             var amount = document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value;
             var type = $('input[name="form_radios11_2"]:checked').val();
             var payment = $('input[name="radios11_2"]:checked').val();
-            var user_id = document.getElementById("front_page_user_id").value;
+
             var given_date = $("#kt_datetimepicker_10").find("input").val();
             var timestamp = new Date(given_date);
             var selected_repeated = document.getElementById('repeat_selection').value;
@@ -164,10 +237,22 @@ var start_app = function() {
 }();
 jQuery(document).ready(function() {
     wallet_id = global_data[0];
-    var wallet_name = global_data[1];
-    cat2combo(wallet_id);
-    document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
+    wallet_name = global_data[1];
+    user_id = global_data[2];
+    wallet_type = global_data[3];
+    wallet_description = global_data[4];
+    wallet_owner = global_data[5];
+    wallet_location = global_data[6];
+    wallet_currency = global_data[7];
+
+    wallet_symbol = currency_convertor[wallet_currency];
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+
+    cat2combo(wallet_id);
+
+    document.getElementById("form_currency").innerText = wallet_symbol;
+    document.getElementById("t_wallet_name").innerText = wallet_name.toUpperCase();
+
     var wallet_type = global_data[3];
     document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
     start_app.init();
@@ -176,7 +261,7 @@ jQuery(document).ready(function() {
 
 
 function edit_entry_modal(description, category, amount, timestamp, type, payment, repeat, RecordID) {
-    console.log(RecordID);
+
     document.getElementById('record_id').value = RecordID;
     $('#edit_incex_form_modal').modal('toggle');
     document.getElementById('example-number-input2').value = 1;

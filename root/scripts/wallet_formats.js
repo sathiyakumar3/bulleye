@@ -100,9 +100,9 @@ function icon_nd_photo_name_email(photo, username, email) {
     return ('<div class="d-flex align-items-center">' + icon + ending);
 }
 
-function payment_status_fomt(type, payment, amount, int_type) { if (type == int_type) { return '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + "Rs" + ' ' + numberWithCommas(amount) + '</div><a class="' + format_payment(payment) + ' font-weight-bold">' + payment + '</a></div>'; } else { return "" } }
+function payment_status_fomt(type, payment, amount, int_type, currency) { if (type == int_type) { return '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + currency + ' ' + numberWithCommas(amount) + '</div><a class="' + format_payment(payment) + ' font-weight-bold">' + payment + '</a></div>'; } else { return "" } }
 
-function set_sum(html_div, sum) { document.getElementById(html_div).innerText = " Rs " + numberWithCommas(sum); }
+function set_sum(html_div, currency, sum) { document.getElementById(html_div).innerText = " " + currency + " " + numberWithCommas(sum); }
 
 function percentage_form(value, total, item) {
     if (value == 0) { var pecentage = 0; } else {

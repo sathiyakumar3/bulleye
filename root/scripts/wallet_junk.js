@@ -72,3 +72,53 @@ async function get_wallet_data(wallet_id, force_flag) {
         return last_result
     }
 }
+
+
+function get_wallet_data2(wallet_id, force_flag) {
+    if (last_wallet_id != wallet_id || force_flag) {
+        console.log("sending new data");
+        let entries = db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated");
+
+
+        var data = [];
+        let all_wallet_doc_promise = [];
+        entries.get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((entry_doc) => {
+
+                    let entry_id = entry_doc.id
+
+                    let each_wallet_subdoc_promise = db.collection("wallets").doc(wallet_id).collection('entries').doc(entry_id).get().then((entries) => {
+                        let getSubProjectsPromises = [];
+
+                        var arr = entries.data();
+                        delete arr["last_updated"];
+                        Object.keys(arr).map(function(key, index) {
+                            const each_entry_promise = new Promise((resolve, reject) => {
+                                var user_id = arr[key].user;
+                                add_to_local_table(user_id, arr[key].Description, arr[key].Category, arr[key].Type, arr[key].Payment, arr[key].Amount, arr[key].Repeated, new Date(key)).then(function(result) {
+                                    data.push(result);
+                                    resolve(result);
+                                }).catch((error) => {
+                                    console.log(error);
+                                });
+                            });
+                            getSubProjectsPromises.push(each_entry_promise);
+                        });
+                        return Promise.all(getSubProjectsPromises);
+                    });
+                    all_wallet_doc_promise.push(each_wallet_subdoc_promise);
+                });
+            });
+        return Promise.all(all_wallet_doc_promise).then((subProjectSnapshots) => {
+
+            last_result = data;
+            last_wallet_id = wallet_id;
+
+            return data
+        });
+    } else {
+        console.log("sending old data");
+        return last_result
+    }
+}

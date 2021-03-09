@@ -358,6 +358,7 @@ async function get_wallet_data(wallet_id, force_flag) {
         let entries = await db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated").get();
         var data = [];
         let all_wallet_doc_promise = [];
+
         entries.forEach((entry_doc) => {
 
             let entry_id = entry_doc.id
