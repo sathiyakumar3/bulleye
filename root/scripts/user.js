@@ -318,7 +318,25 @@ function get_user(user) {
             console.log(error);
         });
         load_navi().then(function(data) {
-            generate_navi(data, finalResult.primary_wallet);
+            var wal_siz = Object.keys(data).length;
+            console.log(wal_siz);
+            if (wal_siz <= 0) {
+                document.getElementById("list_navi").innerHTML = '<li class="menu-section">' +
+                    '<h4 class="menu-text">You have no wallets.</h4>' +
+                    '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
+                    '</li>';
+
+                var myvar = '<div class="col-lg-12"><div class="card card-custom p-6 mb-8 mb-lg-0"><div class="card-body"><div class="row"><div class="col-sm-7">  <img src="assets/media/logos/logo-4.png" class="max-h-70px" alt=""><h2 class="text-dark mb-4"><p></p><p></p>Welcome, It\'s fresh & empty!</h2><p class="text-dark-50 font-size-lg">You cant control what you cant measure.  </p></div><div class="col-sm-5 d-flex align-items-center justify-content-sm-end"><a  class="btn font-weight-bolder text-uppercase font-size-lg btn-success py-3 px-6" data-toggle="modal" data-target="#add_new_wallet">Crete your first Wallet</a></div></div></div></div></div>';
+                KTApp.block_null('#kt_content', {
+                    overlayColor: '#F3F6F9',
+                    message: myvar,
+                    opacity: 1,
+                });
+            } else {
+                generate_navi(data, finalResult.primary_wallet);
+            }
+
+
 
             if (data.length == 0) {
                 $('#add_new_wallet').modal('toggle');
@@ -547,7 +565,37 @@ function image_add(url) {
             });
         }
 
+        var edit_entry_From_validation = function() {
+            FormValidation.formValidation(document.getElementById('edit_incex_form'), { fields: { form_catergory_2: { validators: { notEmpty: { message: 'Category is requried.' } } }, form_description_2: { validators: { notEmpty: { message: 'A description is required.' }, } }, form_amount_2: { validators: { notEmpty: { message: 'An Amount is required.' }, } }, repeat_numbrs: { validators: { between: { min: 0, max: 30, message: 'The number must be between 0 and 30' } } } }, plugins: { trigger: new FormValidation.plugins.Trigger(), submitButton: new FormValidation.plugins.SubmitButton(), bootstrap: new FormValidation.plugins.Bootstrap({ eleInvalidClass: '', eleValidClass: '', }) } }).on('core.form.valid', function() {
+                $('#edit_incex_form_modal').modal('toggle');
+                var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;
+                var description = document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value;
+                var amount = document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value;
+                var type = $('input[name="form_radios11_2"]:checked').val();
+                var payment = $('input[name="radios11_2"]:checked').val();
 
+                var given_date = $("#kt_datetimepicker_10").find("input").val();
+                var timestamp = new Date(given_date);
+                var selected_repeated = document.getElementById('repeat_selection').value;
+                var num_of_repeat = document.getElementById('example-number-input2').value;
+
+                for (var i = 0; i < num_of_repeat; i++) {
+                    update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated, num_of_repeat, i).then(function() {}).catch((error) => { console.log(error); });
+                    switch (selected_repeated) {
+                        case 'Monthly':
+                            timestamp.setMonth(timestamp.getMonth() + 1);
+                            break;
+                        case 'Weekly':
+                            timestamp.setDate(timestamp.getDate() + 7);
+                            break;
+                        case 'Daily':
+                            timestamp.setDate(timestamp.getDate() + 1);
+                            break;
+                        default:
+                    }
+                }
+            });
+        }
 
 
 
@@ -555,7 +603,7 @@ function image_add(url) {
             // public functions
             init: function() {
                 start_app_main();
-
+                edit_entry_From_validation();
                 add_new_wallet_From_validation();
             }
         };

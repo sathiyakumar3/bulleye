@@ -192,42 +192,10 @@ var start_app = function() {
             if (count > 0) { $('#kt_datatable_group_action_form_2').collapse('show'); } else { $('#kt_datatable_group_action_form_2').collapse('hide'); }
         });
     }
-    var edit_entry_From_validation = function() {
-        FormValidation.formValidation(document.getElementById('edit_incex_form'), { fields: { form_catergory_2: { validators: { notEmpty: { message: 'Category is requried.' } } }, form_description_2: { validators: { notEmpty: { message: 'A description is required.' }, } }, form_amount_2: { validators: { notEmpty: { message: 'An Amount is required.' }, } }, repeat_numbrs: { validators: { between: { min: 0, max: 30, message: 'The number must be between 0 and 30' } } } }, plugins: { trigger: new FormValidation.plugins.Trigger(), submitButton: new FormValidation.plugins.SubmitButton(), bootstrap: new FormValidation.plugins.Bootstrap({ eleInvalidClass: '', eleValidClass: '', }) } }).on('core.form.valid', function() {
-            $('#edit_incex_form_modal').modal('toggle');
-            var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;
-            var description = document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value;
-            var amount = document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value;
-            var type = $('input[name="form_radios11_2"]:checked').val();
-            var payment = $('input[name="radios11_2"]:checked').val();
 
-            var given_date = $("#kt_datetimepicker_10").find("input").val();
-            var timestamp = new Date(given_date);
-            var selected_repeated = document.getElementById('repeat_selection').value;
-            var num_of_repeat = document.getElementById('example-number-input2').value;
-
-            for (var i = 0; i < num_of_repeat; i++) {
-                update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated, num_of_repeat, i).then(function() {}).catch((error) => { console.log(error); });
-                switch (selected_repeated) {
-                    case 'Monthly':
-                        timestamp.setMonth(timestamp.getMonth() + 1);
-                        break;
-                    case 'Weekly':
-                        timestamp.setDate(timestamp.getDate() + 7);
-                        break;
-                    case 'Daily':
-                        timestamp.setDate(timestamp.getDate() + 1);
-                        break;
-                    default:
-                }
-            }
-        });
-    }
     return {
         init: function() {
-            edit_entry_From_validation();
             read_data(false);
-
         },
         refresh: function() {
 
@@ -293,12 +261,9 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
     document.getElementById('title_33').innerText = "Edit Entry"
 }
 
-
-
 function entry_delete(timestamp, num_of_repeat, i) {
     Swal.fire({ title: 'Are you sure?', text: "You won't be able to revert this!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' }).then((result) => { if (result.isConfirmed) { del(timestamp, num_of_repeat, i); } })
 }
-
 
 function delete_selected() {
     Swal.fire({ title: 'Are you sure?', text: "You are about to delete the selected.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Delete!' }).then((result) => {
@@ -367,22 +332,6 @@ function update_selected(update) {
     }
 };
 
-function cat2combo(wallet_id) {
-    document.getElementById("edit_cat_selec").innerHTML = "";
-    var wallet_base_Ref = db.collection("wallets");
-    var select = document.getElementById('edit_cat_selec');
-    getoptdata(wallet_base_Ref, wallet_id).then((function(doc) {
-        cat_icon_list = doc.categories;
-        cat_icon_list.sort(sortOn("name"));
-        for (let i = 0; i < cat_icon_list.length; i++) {
-            newar[cat_icon_list[i]['name']] = cat_icon_list[i];
-            var opt = document.createElement('option');
-            opt.value = cat_icon_list[i]['name'];
-            opt.innerHTML = cat_icon_list[i]['name'];
-            select.appendChild(opt);
-        }
-    })).catch((error) => { console.error(error); });
-}
 
 function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
 
@@ -409,18 +358,4 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
             resolve('sucess');
         }, function(error) { reject(error); });
     });
-}
-
-function add_entry_modal() {
-    $('#edit_incex_form_modal').modal('toggle');
-    $('#edit_cat_selec').selectpicker('refresh');
-    document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = "";
-    document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = "";
-    document.getElementById("expense_radio").checked = true;
-    document.getElementById("paid_radio").checked = true;
-    $('#kt_datetimepicker_10').datetimepicker('clear');
-    $('#kt_datetimepicker_10').datetimepicker('destroy');
-    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), format: 'MM/DD/YYYY hh:mm:ss A', enable: true });
-    document.getElementById('title_33').innerText = "Add to Wallet";
-    document.getElementById('record_id').value = '';
 }

@@ -288,6 +288,80 @@ var KTApp = function() {
                 el.block(params);
             }
         },
+        block_null: function(target, options) {
+            var el = $(target);
+
+            options = $.extend(true, {
+                opacity: 0.05,
+                overlayColor: '#000000',
+                type: '',
+                size: '',
+                state: 'primary',
+                centerX: true,
+                centerY: true,
+                message: '',
+                shadow: true,
+                width: 'auto'
+            }, options);
+
+            var html;
+
+            var spinner = '';
+
+            if (options.message && options.message.length > 0) {
+                var classes = 'blockui ' + (options.shadow === false ? 'blockui' : '');
+
+                html = '<div class="' + classes + '"><span>' + options.message + '</span>' + spinner + '</div>';
+
+                var el = document.createElement('div');
+
+                $('body').prepend(el);
+                KTUtil.addClass(el, classes);
+                el.innerHTML = html;
+                options.width = KTUtil.actualWidth(el) + 10;
+                KTUtil.remove(el);
+
+                if (target == 'body') {
+                    html = '<div class="' + classes + '" style="margin-left:-' + (options.width / 2) + 'px;"><span>' + options.message + '</span><span>' + spinner + '</span></div>';
+                }
+            } else {
+                html = spinner;
+            }
+
+            var params = {
+                message: options.message,
+                centerY: options.centerY,
+                centerX: options.centerX,
+                css: {
+                    top: '30%',
+                    left: '50%',
+                    border: '0',
+                    padding: '0',
+                    backgroundColor: 'none',
+                    width: options.width
+                },
+                overlayCSS: {
+                    backgroundColor: options.overlayColor,
+                    opacity: options.opacity,
+                    cursor: 'wait',
+                    zIndex: (target == 'body' ? 1100 : 10)
+                },
+                onUnblock: function() {
+                    if (el && el[0]) {
+                        KTUtil.css(el[0], 'position', '');
+                        KTUtil.css(el[0], 'zoom', '');
+                    }
+                }
+            };
+
+            if (target == 'body') {
+                params.css.top = '50%';
+                $.blockUI(params);
+            } else {
+                var el = $(target);
+                el.block(params);
+            }
+        },
 
         unblock: function(target) {
             if (target && target != 'body') {

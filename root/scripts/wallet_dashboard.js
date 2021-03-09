@@ -66,8 +66,9 @@ function expand_shrink() {
 var start_app = function() {
     var run_dashboard = function() {
         var data = date_filter(local_data, selected_end, selected_start);
-        var user_profile = user_process(data);
-        var user_sum = Object.keys(user_profile).length;
+
+        // var user_profile = user_process(data);
+        // var user_sum = Object.keys(user_profile).length;
 
 
         //     var currency = '<span class="text-dark-50 font-weight-bold" id>'
@@ -147,6 +148,7 @@ var start_app = function() {
         piechart_123(data66[0], data66[1], "kt_pie_chart_cat_i");
         var data77 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Expense' }));
         piechart_123(data77[0], data77[1], "kt_pie_chart_cat_e");
+        KTApp.unblock('#kt_blockui_content');
 
     }
     var run_cat = function() {
@@ -280,13 +282,29 @@ var start_app = function() {
 
         get_wallet_data(wallet_id, force_flag).then(function(result) {
             local_data = sort_obj(result, 'Timestamp');
+            var entries_size = Object.keys(local_data).length;
+            console.log(Object.keys(local_data).length);
+            if (entries_size > 0) {
+                var outcome = date_process(result);
+                selected_start = outcome[0];
+                selected_end = outcome[1];
 
-            var outcome = date_process(result);
-            selected_start = outcome[0];
-            selected_end = outcome[1];
+                _initDaterangepicker();
+                run_trends();
+            } else {
+                KTApp.unblock('#kt_blockui_content');
 
-            _initDaterangepicker();
-            run_trends();
+
+                var myvar = '<div class="col-lg-12"><div class="card card-custom p-6 mb-8 mb-lg-0"><div class="card-body"><div class="row"><div class="col-sm-7">  <img src="assets/media/logos/logo-4.png" class="max-h-70px" alt=""><h2 class="text-dark mb-4"><p></p><p></p>Welcome, It\'s fresh & empty!</h2><p class="text-dark-50 font-size-lg">You cant control what you cant measure.  </p></div><div class="col-sm-5 d-flex align-items-center justify-content-sm-end"><a  class="btn font-weight-bolder text-uppercase font-size-lg btn-success py-3 px-6" onclick="add_entry_modal()">Add your first Entry</a></div></div></div></div></div>';
+                KTApp.block_null('#kt_blockui_content', {
+                    overlayColor: '#F3F6F9',
+                    message: myvar,
+                    opacity: 1,
+                });
+            }
+
+
+
         }).catch((error) => { console.log(error); });
 
     };
@@ -431,6 +449,14 @@ jQuery(document).ready(function() {
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
 
 
+    KTApp.block('#kt_blockui_content', {
+        overlayColor: '#1e1e2d',
+        state: 'primary',
+        message: 'Processing...'
+    });
+
+    cat2combo(wallet_id);
+    document.getElementById("form_currency").innerText = wallet_symbol;
     getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
         var user_name = finalResult.name;
         document.getElementById("owrner_fp").innerText = user_name;
@@ -470,4 +496,31 @@ function check_balance() {
             })
         }
     })
+}
+
+function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
+
+    var timestamp = new Date(timestamp2);
+    let myPromise = new Promise(function(resolve, reject) {
+        var value = {
+            [timestamp]: { "user": user, "Description": description, "Category": category, "Type": type, "Payment": payment, "Amount": amount, "Repeated": repeat, },
+            last_updated: timestamp
+        };
+        var entry_id = monthts(timestamp);
+
+        updateoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
+            console.log(error);
+            console.log(error.code);
+            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { setoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => { reject(error); }); }
+        });
+    });
+    return new Promise(function(resolve, reject) {
+        myPromise.then(function(value) {
+            swalfire(i, num_of_repeat);
+            if (i == (num_of_repeat - 1)) {
+                start_app.refresh();
+            }
+            resolve('sucess');
+        }, function(error) { reject(error); });
+    });
 }
