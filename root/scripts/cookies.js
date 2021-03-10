@@ -133,6 +133,7 @@ function get_user_icon(user_id) {
         if (user_icon_list.hasOwnProperty(user_id)) {
             var find = user_icon_list[user_id];
             data_comp('c');
+            console.log('reuse');
             resolve(find);
         } else {
             console.log("[I] - " + user_id);
@@ -327,28 +328,49 @@ var last_result = "";
 
 
 }; */
-function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp) {
+function add_to_local_table(user_id, data) {
     return new Promise(function(resolve, reject) {
-    const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }).catch((error) => { resolve({ photo_url: 'none' }); }); });
+        var user_name = '';
+        var user_email ='';
+        var photo_url= '';
+/*     const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { photo_url= url;
+        resolve('success'); }).catch((error) => {  photo_url= 'none';
+            resolve('success'); }); });
     const user_details_prom = new Promise((resolve, reject) => {
         getoptdata(user_Ref, user_id).then(function(finalResult) {
-            var user_email = finalResult.email;
-            var user_name = finalResult.name;
-            resolve({ user_email, user_name });
+            user_email = finalResult.email;
+            user_name = finalResult.name;
+            resolve('success');
         }).catch((error) => {
             console.log(error);
             reject(error);
         });
-    });
+    }); */
   
-         Promise.all([user_image_prom, user_details_prom]).then((values) => {
-            var doc_id = monthts(timestamp);
-            var data = { user: user_id, Description: description, Category: category, Type: type, Payment: payment, Amount: amount, Repeated: selected_repeated, user_name: values[1]['user_name'], user_email: values[1]['user_email'], photo_url: values[0]['photo_url'], Timestamp: new Date(timestamp), doc_id: doc_id }
-            resolve(data);
+    getoptdata(user_Ref, user_id).then(function(finalResult) {
+        user_email = finalResult.email;
+        user_name = finalResult.name;
+        get_user_icon(user_id).then((url) => { photo_url= url;
+            var data2 = { user_name: user_name, user_email: user_email, photo_url: photo_url}          
+            resolve(Object.assign(data,data2));
+             }).catch((error) => {  photo_url= 'none'; 
+             var data2 = { user_name: user_name, user_email: user_email, photo_url: photo_url}          
+             resolve(Object.assign(data,data2));
+               });
+    }).catch((error) => {
+         console.log(error);       
+    });
+
+
+
+       /*   Promise.all([user_image_prom, user_details_prom]).then((values) => {
+         
+            var data2 = { user_name: values[1]['user_name'], user_email: values[1]['user_email'], photo_url: values[0]['photo_url']}          
+            resolve(Object.assign(data,data2));
         }).catch((error) => {
             console.log("Error getting documents: ", error);
             reject(error);
-        });
+        }); */
     });
 }
 
@@ -358,8 +380,7 @@ async function get_wallet_data(wallet_id, force_flag) {
         let entries = await db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated").get();
         var data = [];
         let all_wallet_doc_promise = [];
-        entries.forEach((entry_doc) => {
-          
+        entries.forEach((entry_doc) => {          
                    
             let entry_id = entry_doc.id
 
@@ -370,12 +391,18 @@ async function get_wallet_data(wallet_id, force_flag) {
                 delete arr["last_updated"];
                 Object.keys(arr).map(function(key, index) {
                     const each_entry_promise = new Promise((resolve, reject) => {
+                        var timestamp = new Date(key)
                         var user_id = arr[key].user;
-                        add_to_local_table(user_id, arr[key].Description, arr[key].Category, arr[key].Type, arr[key].Payment, arr[key].Amount, arr[key].Repeated, new Date(key)).then(function(result) {
+                        var doc_id = monthts(timestamp);
+
+                   
+                        var data2 = { user: user_id, Description: arr[key].Description, Category: arr[key].Category, Type: arr[key].Type, Payment: arr[key].Payment, Amount: arr[key].Amount, Repeated: arr[key].Repeated,Timestamp: new Date(timestamp), doc_id: doc_id}
+                        add_to_local_table(user_id, data2).then(function(result) {
                             data.push(result);
                             console.log('[A] : '+result)
                             resolve(result);
                         }).catch((error) => {
+                            reject(error);
                             console.log(error);
                         });
                     });
@@ -396,4 +423,51 @@ async function get_wallet_data(wallet_id, force_flag) {
         console.log("sending old data");
         return last_result
     }
+}
+
+async function get_changes() {
+var data =[];
+        let feedbacks = await db.collection("feedbacks").get();
+                var counter = 1;               
+                var promises_wallet = [];
+
+                feedbacks.forEach((doc) => {
+                    const promise2 = new Promise((resolve, reject) => {
+                        var doc_id = doc.id;
+                        var created_on = doc.data().created_on;
+                        var last_updated = doc.data().last_updated;
+                        var message = doc.data().message;
+                        var status = doc.data().status;
+                        var user_id = doc.data().user_id;
+                        var comment = doc.data().comment;
+                        var data2 = {
+                            counter: counter++,
+                            doc_id: doc_id,
+                            created_on: created_on,
+                            last_updated: last_updated,
+                            message: message,
+                            status: status,
+                            comment: comment,                          
+                        }
+                        add_to_local_table(user_id, data2).then(function(result) {
+                            data.push(result);   
+                            console.log(result);                       
+                            resolve(result);
+                        }).catch((error) => {
+                            reject(error);
+                            console.log(error);
+                        });     
+                    });
+                    promises_wallet.push(promise2);
+            
+
+            })
+           
+
+            
+            return await Promise.all(promises_wallet).then((values) => {
+               console.log(data);
+                return data
+            });
+   
 }

@@ -5,76 +5,10 @@ var updates_data = [];
 var feedback_table = '';
 var updates = function() {
 
-    var get_changes = function() {
-            return new Promise(function(resolve, reject) {
-                db.collection("feedbacks").get()
-                    .then((querySnapshot) => {
-                        var counter = 1;
-                       
-                        var promises_wallet = [];
-                        querySnapshot.forEach((doc) => {
-                            const promise2 = new Promise((resolve, reject) => {
-                                var doc_id = doc.id;
-                                var created_on = doc.data().created_on;
-                                var last_updated = doc.data().last_updated;
 
-                                var message = doc.data().message;
-                                var status = doc.data().status;
-                                var user_id = doc.data().user_id;
-                                var comment = doc.data().comment;
-                                const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }).catch((error) => { resolve({ photo_url: 'none' }); }); });
-                                const user_details_prom = new Promise((resolve, reject) => {
-                                    getoptdata(user_Ref, user_id).then(function(finalResult) {
-                                        var user_email = finalResult.email;
-                                        var user_name = finalResult.name;
-                                        resolve({ user_email, user_name });
-                                    }).catch((error) => {
-                                        console.log(error);
-                                        reject(error);
-                                    });
-                                });
-
-                                Promise.all([user_image_prom, user_details_prom]).then((values) => {
-
-                                    var data = {
-                                        counter: counter++,
-                                        doc_id: doc_id,
-                                        created_on: created_on,
-                                        last_updated: last_updated,
-
-                                        message: message,
-                                        status: status,
-                                        comment: comment,
-                                        user_name: values[1]['user_name'],
-                                        user_email: values[1]['user_email'],
-                                        photo_url: values[0]['photo_url'],
-                                    }
-
-                                    resolve(data);
-                                }).catch((error) => {
-                                    console.log("Error getting documents: ", error);
-                                    reject(error);
-                                });
-
-
-
-
-                            });
-                            promises_wallet.push(promise2);
-                        });
-
-                        return Promise.all(promises_wallet).then((values) => {
-                            resolve(values);
-                        });
-                    })
-                    .catch((error) => {
-                        console.log("Error getting documents: ", error);
-                    });
-            });
-        }
   
     var init_table = function() {
-     
+        KTApp.unblock('#kt_blockui_content');
         if (feedback_table != "") {
             $('#kt_datatable').KTDatatable().empty();
             $('#kt_datatable').KTDatatable().destroy();
@@ -188,6 +122,7 @@ var updates = function() {
             ]
         });
     };
+  
 
 
     var add_new_feedback_From_validation = function() {
@@ -303,6 +238,13 @@ var updates = function() {
     return {
         // public functions
         init: function() {
+            KTApp.block('#kt_blockui_content', {
+                overlayColor: '#1e1e2d',
+                opacity: 0,
+                state: 'primary',
+                message: 'Fetching Feedbacks...'
+            });
+        
             read_feedbacks();
             add_new_feedback_From_validation();
             edit_feedback_From_validation();

@@ -122,3 +122,74 @@ function get_wallet_data2(wallet_id, force_flag) {
         return last_result
     }
 }
+
+async function get_wallet_data(wallet_id, force_flag) {
+    if (last_wallet_id != wallet_id || force_flag) {
+        console.log("sending new data");
+        let entries = await db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated").get();
+        var data = [];
+        let all_wallet_doc_promise = [];
+        entries.forEach((entry_doc) => {
+          
+                   
+            let entry_id = entry_doc.id
+
+            let each_wallet_subdoc_promise = db.collection("wallets").doc(wallet_id).collection('entries').doc(entry_id).get().then((entries) => {
+                let all_entries_doc_promise = [];
+
+                var arr = entries.data();
+                delete arr["last_updated"];
+                Object.keys(arr).map(function(key, index) {
+                    const each_entry_promise = new Promise((resolve, reject) => {
+                        var user_id = arr[key].user;
+                        add_to_local_table(user_id, arr[key].Description, arr[key].Category, arr[key].Type, arr[key].Payment, arr[key].Amount, arr[key].Repeated, new Date(key)).then(function(result) {
+                            data.push(result);
+                            console.log('[A] : '+result)
+                            resolve(result);
+                        }).catch((error) => {
+                            console.log(error);
+                        });
+                    });
+                    all_entries_doc_promise.push(each_entry_promise);
+                });
+                return Promise.all(all_entries_doc_promise);
+            });
+            all_wallet_doc_promise.push(each_wallet_subdoc_promise);
+        });
+        return await Promise.all(all_wallet_doc_promise).then((subProjectSnapshots) => {
+
+            last_result = data;
+            last_wallet_id = wallet_id;
+
+            return data
+        });
+    } else {
+        console.log("sending old data");
+        return last_result
+    }
+}
+
+function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp) {
+    return new Promise(function(resolve, reject) {
+    const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }).catch((error) => { resolve({ photo_url: 'none' }); }); });
+    const user_details_prom = new Promise((resolve, reject) => {
+        getoptdata(user_Ref, user_id).then(function(finalResult) {
+            var user_email = finalResult.email;
+            var user_name = finalResult.name;
+            resolve({ user_email, user_name });
+        }).catch((error) => {
+            console.log(error);
+            reject(error);
+        });
+    });
+  
+         Promise.all([user_image_prom, user_details_prom]).then((values) => {
+            var doc_id = monthts(timestamp);
+            var data = { user: user_id, Description: description, Category: category, Type: type, Payment: payment, Amount: amount, Repeated: selected_repeated, user_name: values[1]['user_name'], user_email: values[1]['user_email'], photo_url: values[0]['photo_url'], Timestamp: new Date(timestamp), doc_id: doc_id }
+            resolve(data);
+        }).catch((error) => {
+            console.log("Error getting documents: ", error);
+            reject(error);
+        });
+    });
+}

@@ -449,9 +449,9 @@ jQuery(document).ready(function() {
 
     KTApp.block('#kt_blockui_content', {
         overlayColor: '#1e1e2d',
-        opacity: 0.5,
+        opacity: 0.1,
         state: 'primary',
-        message: 'Processing...'
+        message: 'Fetching Entries...'
     });
 
     cat2combo(wallet_id);

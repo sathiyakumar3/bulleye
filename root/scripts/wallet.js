@@ -80,7 +80,7 @@ var start_app = function() {
     }
     var old_month = "";
     var initialze_table = function() {
-
+        KTApp.unblock('#kt_blockui_content');
         var options = {
             data: { type: 'local', source: table_data, serverPaging: false, serverFiltering: true, },
             destroy: true,
@@ -223,6 +223,12 @@ jQuery(document).ready(function() {
 
     var wallet_type = global_data[3];
     document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
+    KTApp.block('#kt_blockui_content', {
+        overlayColor: '#1e1e2d',
+        opacity: 0,
+        state: 'primary',
+        message: 'Fetching Entries...'
+    });
     start_app.init();
 });
 
