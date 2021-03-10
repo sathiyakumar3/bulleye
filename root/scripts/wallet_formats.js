@@ -49,6 +49,9 @@ function format_update_status(update) {
         case 'Declined':
             return '<span class="label label-lg font-weight-bold label-light-danger label-inline">Declined</span>';
             break;
+            case 'On Progress':
+                return '<span class="label label-lg font-weight-bold label-light-dark label-inline">On Progress</span>';
+                break;
         case 'Planned':
             return '<span class="label label-lg font-weight-bold label-light-primary label-inline">Planned</span>';
             break;

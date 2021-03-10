@@ -274,16 +274,6 @@ var start_app = function() {
             reject(error);
         });
 
-
-        /*         var d_income = get_data2(local_data, { 'Type': ['Income'] }, cat);
-                var d_expense = get_data2(local_data, { 'Type': ['Expense'] }, cat);
-                var d_netincome = chart_subraction(d_income, d_expense);
-                var d_re_income = get_data2(local_data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income' }, cat);
-                var d_re_expense = get_data2(local_data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense' }, cat);
-                var d_on_income = get_data2(local_data, { 'Repeated': ['Once'], 'Type': 'Income' }, cat);
-                var d_on_expense = get_data2(local_data, { 'Repeated': ['Once'], 'Type': 'Expense' }, cat); */
-
-
     }
     var read_data = function(force_flag) {
 

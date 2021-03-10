@@ -104,7 +104,7 @@ var start_app = function() {
                     sortable: true,
                     template: function(row) { return row.RecordID }
                 },
-                { field: 'RecordID', sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', },
+                { field: 'RecordID',      title: '',sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', },
                 {
                     field: 'User',
                     title: 'User',
@@ -123,7 +123,7 @@ var start_app = function() {
                     field: 'Timestamp',
                     title: 'Date & Time',
                     textAlign: 'center',
-                    autoHide: false,
+
                     width: 100,
                     sortable: true,
                     template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; },
@@ -140,7 +140,7 @@ var start_app = function() {
                     textAlign: 'center',
                     width: 100,
                     autoHide: false,
-                    sortable: true,
+               
                     template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income', wallet_symbol) },
                 },
                 {
@@ -149,7 +149,7 @@ var start_app = function() {
                     width: 100,
                     textAlign: 'center',
                     autoHide: false,
-                    sortable: true,
+   
                     template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense', wallet_symbol) },
                 },
 
@@ -159,7 +159,7 @@ var start_app = function() {
                     sortable: false,
                     textAlign: 'center',
 
-                    autoHide: false,
+                  
                     template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; },
                 }
             ],
