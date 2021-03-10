@@ -120,7 +120,7 @@ var start_app = function() {
                     template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); },
                 },
                 {
-                    field: 'Description',
+                    field: 'Timestamp',
                     title: 'Date & Time',
                     textAlign: 'center',
                     autoHide: false,

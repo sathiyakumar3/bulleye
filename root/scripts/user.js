@@ -156,7 +156,7 @@ function build_trend(month_data, type) {
 
 
 function build_site(month_data, users_size, users_list, type) {
-    
+
     var html_div = '<li class="menu-item menu-item-active" aria-haspopup="true">' +
         '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + month_data + '\')">' +
         '<span class="svg-icon menu-icon">' +
@@ -278,7 +278,7 @@ function generate_navi(data, p_wallet) {
         '</a>' +
         '</li>' +
         '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
-        '<a class="menu-link" onclick="just_load_page(\'content_pages/feedback.html\')">' +
+        '<a class="menu-link" onclick="just_load_page(\'content_pages/updates.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +

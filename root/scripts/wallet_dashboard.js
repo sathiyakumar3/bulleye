@@ -124,8 +124,8 @@ var start_app = function() {
         set_sum('rec_net', wallet_symbol, rec_net);
         document.getElementById("rec_progress").innerHTML = percentage_form(rec_net, rec_income, wallet_symbol);
         document.getElementById("rec_pl").innerHTML = profit_loss_format(rec_net);
-        var non_income = rec_net+data_process(data, { 'Repeated': 'Once', 'Type': 'Income', 'Payment': 'Paid', });  
-  
+        var non_income = rec_net + data_process(data, { 'Repeated': 'Once', 'Type': 'Income', 'Payment': 'Paid', });
+
         set_sum('non_income', wallet_symbol, non_income);
         var non_expense = data_process(data, { 'Repeated': 'Once', 'Type': 'Expense', 'Payment': 'Paid', });
         set_sum('non_expense', wallet_symbol, current_expense);
@@ -161,11 +161,11 @@ var start_app = function() {
             var cat_icon_list = doc.categories;
             cat_icon_list.sort(sortOn("name"));
             for (let i = 0; i < cat_icon_list.length; i++) {
-                newar[cat_icon_list[i]['name']] = cat_icon_list[i];            
+                newar[cat_icon_list[i]['name']] = cat_icon_list[i];
 
                 const income_series_prom = new Promise((resolve, reject) => {
                     get_data(local_data, { 'Category': cat_icon_list[i]['name'], 'Type': 'Income' }, cat).then(function(result) {
-             
+
                         resolve(result);
                     }).catch((error) => {
                         console.log(error);
@@ -174,7 +174,7 @@ var start_app = function() {
                 });
                 const expense_series_prom = new Promise((resolve, reject) => {
                     get_data(local_data, { 'Category': cat_icon_list[i]['name'], 'Type': 'Expense' }, cat).then(function(result) {
-             
+
                         resolve(result);
                     }).catch((error) => {
                         console.log(error);
@@ -183,7 +183,7 @@ var start_app = function() {
                 });
 
                 Promise.all([income_series_prom, expense_series_prom]).then((values) => {
-                  
+
                     series1.push({ name: cat_icon_list[i]['name'], type: 'column', data: values[0] })
                     series2.push({ name: cat_icon_list[i]['name'], type: 'column', data: values[1] })
                 }).catch((error) => {
@@ -193,9 +193,9 @@ var start_app = function() {
 
             }
         })).catch((error) => { console.error(error); });
-    
-            
-         console.log(cat);
+
+
+        console.log(cat);
 
         _init_main_chart_4(series1, cat, 'kt_main_chart_cat_income', false);
         _init_main_chart_4(series2, cat, 'kt_main_chart_cat_expense', false);
@@ -291,13 +291,13 @@ var start_app = function() {
 
             local_data = sort_obj(result, 'Timestamp');
             var entries_size = Object.keys(local_data).length;
-       
+
             if (entries_size > 0) {
                 var outcome = date_process(result);
                 selected_start = outcome[0];
                 selected_end = outcome[1];
 
-               
+
                 run_trends();
             } else {
                 KTApp.unblock('#kt_blockui_content');
@@ -459,6 +459,7 @@ jQuery(document).ready(function() {
 
     KTApp.block('#kt_blockui_content', {
         overlayColor: '#1e1e2d',
+        opacity: 0.5,
         state: 'primary',
         message: 'Processing...'
     });
