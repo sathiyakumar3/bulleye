@@ -133,7 +133,7 @@ function get_user_icon(user_id) {
         if (user_icon_list.hasOwnProperty(user_id)) {
             var find = user_icon_list[user_id];
             data_comp('c');
-            console.log('reuse');
+         
             resolve(find);
         } else {
             console.log("[I] - " + user_id);

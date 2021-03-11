@@ -282,7 +282,7 @@ function name_intials(str) {
         var matches = str.match(/\b(\w)/g);
         acronym = matches.join('').substring(0, 2)
     } else { acronym = str.substring(0, 2) }
-    return acronym;
+    return acronym.toUpperCase();
 }
 
 function sort_obj(obj, key) {

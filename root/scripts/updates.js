@@ -2,6 +2,7 @@
 // Class definition
 var user_Ref = db.collection("users");
 var updates_data = [];
+var feedback_Ref = db.collection("feedbacks");
 var feedback_table = '';
 var updates = function() {
 
@@ -166,7 +167,7 @@ var updates = function() {
 
             var feedback_Ref = db.collection("feedbacks")
             addoptdata(feedback_Ref, data).then(function(docid) {
-                
+                document.getElementById('add_new_feedback_form').reset();
                 Swal.fire({
                   icon: 'success',
                   title: 'Thank you!',
@@ -216,8 +217,12 @@ var updates = function() {
             }
 
 
-            var feedback_Ref = db.collection("feedbacks")
+
             updateoptdata(feedback_Ref,doc_id, data).then(function(docid) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Saved Successfully!',               
+                  })
                 updates.refresh();
             }).catch((error) => {
                 console.log(error);
@@ -269,4 +274,35 @@ function edit_form_modal(doc_id, status, comment) {
     document.getElementById('status_edit').value = status;
     document.getElementById('doc_id').value = doc_id;
     
+}
+
+function delete_feedback(){
+    $('#edit_request').modal('toggle');
+   var doc_id  =document.getElementById('doc_id').value;
+    deloptdoc(feedback_Ref,doc_id).then((function(data) { 
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted Successfully!',               
+                  })
+                  updates.refresh();
+            }
+          })
+
+
+
+     
+    })).catch((error) => {
+        console.error(error);
+    });
 }
