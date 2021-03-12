@@ -260,7 +260,7 @@ function generate_navi(data, p_wallet) {
         }
     }
 
-    var ending = '<li class="menu-section">' +
+    var add_new_wallet  = '<li class="menu-section">' +
         '<h4 class="menu-text">Others</h4>' +
         '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
         '</li><li class="menu-item menu-item" aria-haspopup="true"><a class="menu-link" data-toggle="modal" data-target="#add_new_wallet">' +
@@ -274,7 +274,9 @@ function generate_navi(data, p_wallet) {
         '<li class="menu-section">' +
         '<h4 class="menu-text">Others</h4>' +
         '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
-        '</li><li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+        '</li>';
+
+        var about = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
         '<a class="menu-link" onclick="just_load_page(\'content_pages/about_us.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
@@ -285,11 +287,12 @@ function generate_navi(data, p_wallet) {
         '    </g>'+  '</svg>' +
         '<!--end::Svg Icon-->' +
         '</span>' +
-        '<span class="menu-text">About Adminiate</span>' +
+        '<span class="menu-text">About</span>' +
         '</a>' +
-        '</li>' + 
-        '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
-        '<a class="menu-link" onclick="just_load_page(\'content_pages/updates.html\')">' +
+        '</li>';
+
+        var feedback = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+        '<a class="menu-link" onclick="just_load_page(\'content_pages/feedback.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -302,8 +305,8 @@ function generate_navi(data, p_wallet) {
         '</span>' +
         '<span class="menu-text">Feedback</span>' +
         '</a>' +
-        '</li>'+
-        '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+        '</li>';
+      var team =  '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
         '<a class="menu-link" onclick="just_load_page(\'content_pages/the_team.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
@@ -316,11 +319,12 @@ function generate_navi(data, p_wallet) {
         '    </g>' +  '</svg>' +
         '<!--end::Svg Icon-->' +
         '</span>' +
-        '<span class="menu-text">The Team</span>' +
+        '<span class="menu-text">Admin</span>' +
         '</a>' +
-        '</li>'       
+        '</li>';     
+          
         
-        +'<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+      var faq = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
         '<a class="menu-link" onclick="just_load_page(\'content_pages/faq.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
@@ -338,7 +342,7 @@ function generate_navi(data, p_wallet) {
         '</a>' +
         '</li>';
 
-    document.getElementById("list_navi").innerHTML = starting + navi + ending
+    document.getElementById("list_navi").innerHTML = starting + navi +add_new_wallet+ about+team+faq+feedback;
 
 
 }
@@ -382,9 +386,6 @@ function get_user(user) {
 
 
 
-            if (data.length == 0) {
-                $('#add_new_wallet').modal('toggle');
-            }
         }).catch((error) => {
             console.log(error);
         });

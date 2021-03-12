@@ -4,6 +4,38 @@ var user_Ref = db.collection("users");
 var updates_data = [];
 var feedback_Ref = db.collection("feedbacks");
 var feedback_table = '';
+
+function format_timeline(photo,name,message,date_time,status,comment){
+  
+  var html_div =  '<div class="timeline-item">'+
+'                                <div class="timeline-media">'+
+'                                    <img alt="Pic" src="' + photo + '">'+
+'                                </div>'+
+'                                <div class="timeline-content">'+
+'                                    <div class="d-flex align-items-center justify-content-between mb-3">'+
+'                                        <div class="mr-2">'+
+'                                            <a href="#" class="text-dark-75 text-hover-primary font-weight-bold">'+name+'</a>'+
+'                                            <span class="text-muted ml-2">'+shortdatetimeclean(new Date(date_time))+'</span>&nbsp;&nbsp;'+format_update_status(status)+
+'                                        </div>'+
+'                                      '+
+'                                    </div>'+
+'                                    <p class="p-0">'+message+'</p>'+
+'                                    <p class="p-0" Admin : >'+comment+'</p>'+
+
+'                                </div>'+
+'                            </div>'
+return html_div
+}
+
+function build_timeline(data) {
+   var html_div = '';
+    Object.keys(data).map(function(key, index) {
+    
+        html_div=format_timeline(data[key]['photo_url'],data[key]['user_name'],data[key]['message'],data[key]['last_updated'],data[key]['status'],data[key]['comment'])+html_div;
+     
+    });
+    return html_div;
+}
 var updates = function() {
 
 
@@ -65,9 +97,9 @@ var updates = function() {
                 }, {
                     field: 'User',
                     title: 'User',
-                    width: 185,
+                    width: 170,
                     sortable: true,
-                    template: function(row) { return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email); }
+                    template: function(row) { return photo_nd_name(row.photo_url, row.user_name); }
                 }, {
                     field: 'message',
                     title: 'Message',
@@ -232,7 +264,13 @@ var updates = function() {
 
     var read_feedbacks = function() {
         get_changes().then((function(data) { //
-            updates_data = data;
+          //  updates_data = data;
+            var sep_data = sep_completed(data);
+            updates_data = sep_data[0];
+            var only_com = sep_data[1];
+            
+            
+            document.getElementById('timeline_id').innerHTML =  build_timeline(only_com);
             document.getElementById('items_total').innerText = Object.keys(updates_data).length + " Items";
 
             init_table();

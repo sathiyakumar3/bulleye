@@ -188,19 +188,6 @@ currency_convertor = {
 }
 
 
-var chat_elements = [];
-var generate_chart = function(div_id, options) {
-    var element = document.getElementById(div_id);
-    if (!element) { return; }
-    var chart = new ApexCharts(element, options);
-    if (chat_elements.hasOwnProperty(div_id)) {
-        chat_elements[div_id].destroy();
-        chart.render();
-    } else {
-        chat_elements[div_id] = chart;
-        chart.render();
-    }
-}
 
 
 
@@ -426,14 +413,13 @@ function get_available_data(data, find, search) {
             }
         }
     });
-
+    console.log(chart)
     return chart
 }
 
 
 
-function get_data(data, search, cat) {
-    //  data = sort_obj(data, 'Timestamp');
+function get_data(data, search, cat) {   
     return new Promise(function(resolve, reject) {
         var chart = chart_reset(cat);
         var size = Object.keys(search).length;
@@ -503,4 +489,19 @@ function data_for_pie(data) {
         cat_set.push(key);
     });
     return [data_set, cat_set];
+}
+
+function sep_completed(data) {
+    var data_only_del = [];
+    var data_without_del = [];
+    Object.keys(data).map(function(key, index) {
+        if(data[key]['status']=='Delivered' || data[key]['status'] == 'Declined'){
+            data_only_del.push(data[key]);
+        }else{
+            data_without_del.push(data[key]);
+        }
+       
+     
+    });
+    return [data_without_del, data_only_del];
 }

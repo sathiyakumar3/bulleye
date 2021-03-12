@@ -57,10 +57,46 @@
     <!--begin::Container-->
     <div class="container" id="kt_blockui_content">
         <!--begin::Card-->
+        
         <div class="card card-custom gutter-b" >
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-label">Card Title</h3>
+                </div>
+                <div class="card-toolbar">
+                    <ul class="nav nav-bold nav-pills">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_7_1">Pending</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " data-toggle="tab" href="#kt_tab_pane_7_2">Update History</a>
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
             <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="kt_tab_pane_7_1" role="tabpanel" aria-labelledby="kt_tab_pane_7_1"> <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div></div>
+                    <div class="tab-pane fade" id="kt_tab_pane_7_2" role="tabpanel" aria-labelledby="kt_tab_pane_7_2"><div class="timeline timeline-3">
+                       
+                        <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
+								
+                            <div class="col-xl-12 col-xxl-7">
+                     <div class="d-flex flex-column flex-center">
+                      
+                        <div class="timeline-items" id="timeline_id">
+                          
+                        </div>
+                     </div>
+                          
+                            </div>
+                        </div>
+                    </div></div>
+                  
+                </div>
                 <!--begin: Datatable-->
-                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+               
                 <!--end: Datatable-->
             </div>
         </div>
@@ -201,8 +237,8 @@
     <!--end::Container-->
 </div>
 <!--end::Entry-->
-<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
-<script src="scripts/updates.js "></script>
+
+<script src="scripts/feedback.js "></script>
 <script>
   
     document.getElementById("kt_scrolltop").click();

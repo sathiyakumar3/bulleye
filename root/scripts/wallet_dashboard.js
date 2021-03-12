@@ -143,7 +143,7 @@ var start_app = function() {
         set_sum('fin_net', wallet_symbol, fin_net);
         document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, wallet_symbol);
         document.getElementById("fin_pl").innerHTML = profit_loss_format(fin_net);
-
+    
         var data66 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Income' }));
         piechart_123(data66[0], data66[1], "kt_pie_chart_cat_i");
         var data77 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Expense' }));
@@ -183,7 +183,7 @@ var start_app = function() {
                 });
 
                 Promise.all([income_series_prom, expense_series_prom]).then((values) => {
-
+                
                     series1.push({ name: cat_icon_list[i]['name'], type: 'column', data: values[0] })
                     series2.push({ name: cat_icon_list[i]['name'], type: 'column', data: values[1] })
                 }).catch((error) => {
@@ -195,7 +195,7 @@ var start_app = function() {
         })).catch((error) => { console.error(error); });
 
 
-        console.log(cat);
+        console.log(series1);   
 
         _init_main_chart_4(series1, cat, 'kt_main_chart_cat_income', false);
         _init_main_chart_4(series2, cat, 'kt_main_chart_cat_expense', false);
@@ -352,7 +352,8 @@ var start_app = function() {
         const info = '#8950FC';
         const warning = '#FFA800';
         const danger = '#F64E60';
-        var options = { series: data_set, chart: { type: 'pie', width: '100%' }, labels: cat_set, responsive: [{ options: { legend: { position: 'bottom' } } }], colors: [info, danger, warning, success, primary], tooltip: { style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return wallet_symbol + ' ' + numberWithCommas(val); } } }, breakpoint: 480, legend: { show: true, position: 'bottom', horizontalAlign: 'center', } };
+        var options = { series: data_set, chart: { type: 'pie', width: '100%' }, labels: cat_set, 
+        responsive: [{ options: { legend: { position: 'bottom' } } }], colors: [info, danger, warning, success, primary], tooltip: { style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return wallet_symbol + ' ' + numberWithCommas(val); } } }, breakpoint: 480, legend: { show: true, position: 'bottom', horizontalAlign: 'center', } };
         generate_chart(html_div, options);
     }
 
@@ -366,8 +367,15 @@ var start_app = function() {
             series: series,
             stroke: { show: true, curve: 'smooth', lineCap: 'butt', width: 0.1, dashArray: 0, },
             chart: { height: 350, stacked: true, toolbar: { show: false }, zoom: { enabled: true } },
-
-            responsive: [{ breakpoint: 480, options: { legend: { position: 'bottom', offsetX: -10, offsetY: 0 } } }],
+            legend: {
+                position: 'bottom', 
+                showForNullSeries: false,
+                showForZeroSeries: false,
+                offsetX: -10, offsetY: 0 
+              },
+            responsive: [{
+                 breakpoint: 480,
+               }],
             plotOptions: { bar: { borderRadius: 8, horizontal: false, }, },
             xaxis: { categories: cat },
 
@@ -381,9 +389,13 @@ var start_app = function() {
                     return "";
                 },
             },
-            tooltip: {
+            tooltip: {     
+        
                 style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] },
-                y: { formatter: function(val) { return wallet_symbol + ' ' + numberWithCommas(val); } }
+                y: { formatter: function(val) { 
+                    if(val!=0){
+                        return wallet_symbol + ' ' + numberWithCommas(val); }}
+                     }
             },
             fill: { opacity: 1 }
         };
@@ -449,7 +461,7 @@ jQuery(document).ready(function() {
 
     KTApp.block('#kt_blockui_content', {
         overlayColor: '#1e1e2d',
-        opacity: 0.1,
+        opacity: 0,
         state: 'primary',
         message: 'Fetching Entries...'
     });
@@ -523,4 +535,21 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
             resolve('sucess');
         }, function(error) { reject(error); });
     });
+}
+
+var chat_elements = [];
+var generate_chart = function(div_id, options) {
+ 
+    var element = document.getElementById(div_id);
+   
+    var chart = new ApexCharts(element, options);
+    if (chat_elements.hasOwnProperty(div_id)) {
+     
+        chat_elements[div_id].destroy();
+        chart.render();
+    } else {
+     
+        chat_elements[div_id] = chart;
+        chart.render();
+    }
 }

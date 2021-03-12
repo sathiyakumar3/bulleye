@@ -44,10 +44,8 @@ var KTLogin = function() {
                             validators: {
                                 notEmpty: {
                                     message: 'Email is required'
-                                },
-                                emailAddress: {
-                                    message: 'The value is not a valid email address'
                                 }
+                              
                             }
                         },
                         password: {

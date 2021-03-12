@@ -427,7 +427,7 @@ async function get_wallet_data(wallet_id, force_flag) {
 
 async function get_changes() {
 var data =[];
-        let feedbacks = await db.collection("feedbacks").get();
+        let feedbacks = await db.collection("feedbacks").orderBy("last_updated").get();
                 var counter = 1;               
                 var promises_wallet = [];
 
