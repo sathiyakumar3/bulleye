@@ -42,8 +42,14 @@
         <div class="d-flex align-items-center">
             <!--begin::Button-->
             <a href="#" class=""></a>
-            <!--end::Button-->
-            <!--begin::Button-->
+          
+                <span class="switch switch-lg switch-icon ml-2">
+                    <label>
+                        <input type="checkbox" name="select" id="enable_all">
+                        <span></span>
+                    </label>
+                </span>
+           
             <a data-toggle="modal" data-target="#add_new_request" class="btn btn-transparent-primary font-weight-bold ml-2">Add Feedback</a>
             <!--end::Button-->
 
@@ -59,46 +65,10 @@
         <!--begin::Card-->
         
         <div class="card card-custom gutter-b" >
-            <div class="card-header">
-                <div class="card-title">
-                    <h3 class="card-label">Card Title</h3>
-                </div>
-                <div class="card-toolbar">
-                    <ul class="nav nav-bold nav-pills">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#kt_tab_pane_7_1">Pending</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " data-toggle="tab" href="#kt_tab_pane_7_2">Update History</a>
-                        </li>
-                       
-                    </ul>
-                </div>
-            </div>
+          
             <div class="card-body">
-                <div class="tab-content">
-                    <div class="tab-pane fade active show" id="kt_tab_pane_7_1" role="tabpanel" aria-labelledby="kt_tab_pane_7_1"> <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div></div>
-                    <div class="tab-pane fade" id="kt_tab_pane_7_2" role="tabpanel" aria-labelledby="kt_tab_pane_7_2"><div class="timeline timeline-3">
-                       
-                        <div class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
-								
-                            <div class="col-xl-12 col-xxl-7">
-                     <div class="d-flex flex-column flex-center">
-                      
-                        <div class="timeline-items" id="timeline_id">
-                          
-                        </div>
-                     </div>
-                          
-                            </div>
-                        </div>
-                    </div></div>
-                  
-                </div>
-                <!--begin: Datatable-->
-               
-                <!--end: Datatable-->
-            </div>
+                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+        </div>
         </div>
         <!--end::Card-->
         <div class="modal fade" id="add_new_request" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeSm" aria-hidden="true">

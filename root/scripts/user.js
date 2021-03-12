@@ -319,7 +319,7 @@ function generate_navi(data, p_wallet) {
         '    </g>' +  '</svg>' +
         '<!--end::Svg Icon-->' +
         '</span>' +
-        '<span class="menu-text">Admin</span>' +
+        '<span class="menu-text">Developer</span>' +
         '</a>' +
         '</li>';     
           

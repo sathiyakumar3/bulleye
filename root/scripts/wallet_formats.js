@@ -151,7 +151,7 @@ function percentage_form(value, total, item) {
     }
     if (pecentage > 100) { var pc = '<span class="text-danger mr-2 font-size-sm font-weight-bold"> - ' + (pecentage - 100) + '%</span>'; } else { var pc = '<span class="text-muted mr-2 font-size-sm font-weight-bold">' + pecentage + '%</span>'; }
     var html_div = '<div class="d-flex flex-column w-100 mr-2">' + '<div class="d-flex align-items-center justify-content-between mb-2">' +
-        pc + '<span class="text-muted font-size-sm font-weight-bold">' + item + ' ' + numberWithCommas(value) + '</span>' + '</div>' + '<div class="progress progress-xs w-100">' + '<div class="progress-bar ' + format_progress_bar(pecentage) + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' + '</div>' + '</div>';
+        pc + '<span class="text-muted font-size-sm font-weight-bold">' + item + ' ' + numberWithCommas(total) + '</span>' + '</div>' + '<div class="progress progress-xs w-100">' + '<div class="progress-bar ' + format_progress_bar(pecentage) + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' + '</div>' + '</div>';
     return html_div
 }
 

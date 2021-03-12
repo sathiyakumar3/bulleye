@@ -413,7 +413,7 @@ function get_available_data(data, find, search) {
             }
         }
     });
-    console.log(chart)
+  
     return chart
 }
 
@@ -491,17 +491,3 @@ function data_for_pie(data) {
     return [data_set, cat_set];
 }
 
-function sep_completed(data) {
-    var data_only_del = [];
-    var data_without_del = [];
-    Object.keys(data).map(function(key, index) {
-        if(data[key]['status']=='Delivered' || data[key]['status'] == 'Declined'){
-            data_only_del.push(data[key]);
-        }else{
-            data_without_del.push(data[key]);
-        }
-       
-     
-    });
-    return [data_without_del, data_only_del];
-}

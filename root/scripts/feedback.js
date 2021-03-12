@@ -1,9 +1,10 @@
 "use strict";
 // Class definition
 var user_Ref = db.collection("users");
-var updates_data = [];
+
 var feedback_Ref = db.collection("feedbacks");
 var feedback_table = '';
+var sep_data =[];
 
 function format_timeline(photo,name,message,date_time,status,comment){
   
@@ -38,124 +39,111 @@ function build_timeline(data) {
 }
 var updates = function() {
 
-
-  
-    var init_table = function() {
-        KTApp.unblock('#kt_blockui_content');
+    var init_table = function(x,y) {
+      
         if (feedback_table != "") {
-            $('#kt_datatable').KTDatatable().empty();
-            $('#kt_datatable').KTDatatable().destroy();
+            $(x).KTDatatable().empty();     
+            $(x).KTDatatable().destroy();
         }
-        feedback_table = $('#kt_datatable').KTDatatable({
-
-            data: {
-                type: 'local',
-                source: updates_data,
-
-                serverFiltering: true,
-                serverSorting: true,
-            },
-            pagination: false,
-            // layout definition
-            layout: {
-                scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
-                footer: false, // display/hide footer
-            },
-
-            // column sorting
-            sortable: true,
-
-
-
-            search: {
-                input: $('#kt_subheader_search_form'),
-                delay: 400,
-                key: 'generalSearch'
-            },
-            /*        doc_id: doc_id,
-                   created_on: created_on,
-                   last_updated: last_updated,
-                   title: title,
-                   message: message,
-                   status: status,
-                   user_id: user_id,
-                   user_email: user_email,
-                   user_name: user_name */
-            // columns definition
-            columns: [{
-                    field: 'doc_id',
-                    title: '#',
-                    sortable: 'asc',
-                    width: 40,
-                    type: 'number',
-                    selector: false,
-                    textAlign: 'left',
-                    template: function(data) {
-                      
-                        return '<span class="font-weight-bolder">' + data.counter + '</span>';
-                    }
-                }, {
-                    field: 'User',
-                    title: 'User',
-                    width: 170,
-                    sortable: true,
-                    template: function(row) { return photo_nd_name(row.photo_url, row.user_name); }
-                }, {
-                    field: 'message',
-                    title: 'Message',
-                    width: 250,
-                    template: function(row) {
-                        return div_message(row.message);
-                    }
-                },
-                {
-                    field: 'created_on',
-                    title: 'Created On',
-                    textAlign: 'center',
-                    autoHide: false,
-                    width: 100,
-                    sortable: true,
-                    template: function(row) { var myvar = dnt4table(row.created_on); return myvar; },
-                }, {
-                    field: 'status',
-                    title: 'Status',
-                    width: 100,
-                    template: function(row) {
-                        return format_update_status(row.status);
-                    }
-                },
-                {
-                    field: 'last_updated',
-                    title: 'Last Updated',
-                    textAlign: 'center',
-                    autoHide: false,
-                    width: 100,
-                    sortable: true,
-                    template: function(row) { var myvar = dnt4table(row.last_updated); return myvar; },
-                },
-                {
-                    field: 'comment',
-                    title: 'Admin\'s Comment',
-                    textAlign: 'left',
-                    autoHide: false,
-                    width: 150,
-                    sortable: true,
-                    template: function(row) { return row.comment },
-                },
-
-                {
-                    field: 'Actions',
-                    title: ' ',
-                    textAlign: 'center',
-                    autoHide: false,
-                    width: 50,
-                    sortable: true,
-                    template: function(row) { return update_feedback(row.doc_id, row.status, row.comment) },
-                }
-            ]
-        });
-    };
+      
+        feedback_table = $(x).KTDatatable({
+ 
+             data: {
+                 type: 'local',
+                 source: y,
+ 
+                 serverFiltering: true,
+                 serverSorting: true,
+             },
+             pagination: false,
+             // layout definition
+             layout: {
+                 scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
+                 footer: false, // display/hide footer
+             },
+ 
+             // column sorting
+             sortable: true,
+ 
+ 
+ 
+          
+               columns: [{
+                     field: 'doc_id',
+                     title: '#',
+                     sortable: 'asc',
+                     width: 40,
+                     type: 'number',
+                   
+                     textAlign: 'left',
+                     template: function(data) {
+                       
+                         return '<span class="font-weight-bolder">' + data.counter + '</span>';
+                     }
+                 }, {
+                     field: 'User',
+                     title: 'User',
+                     width: 170,
+                     sortable: true,
+                     template: function(row) { return photo_nd_name(row.photo_url, row.user_name); }
+                 }, {
+                     field: 'message',
+                     title: 'Message',
+                     width: 250,
+                     template: function(row) {
+                         return div_message(row.message);
+                     }
+                 },
+                 {
+                     field: 'created_on',
+                     title: 'Created On',
+                     textAlign: 'center',
+                     autoHide: false,
+                     width: 100,
+                     sortable: true,
+                     template: function(row) { var myvar = dnt4table(row.created_on); return myvar; },
+                 }, {
+                     field: 'status',
+                     title: 'Status',
+                     width: 100,
+                     template: function(row) {
+                         return format_update_status(row.status);
+                     }
+                 },
+                 {
+                     field: 'last_updated',
+                     title: 'Last Updated',
+                     textAlign: 'center',
+                     autoHide: false,
+                     width: 100,
+                     sortable: true,
+                     template: function(row) { var myvar = dnt4table(row.last_updated); return myvar; },
+                 },
+                 {
+                     field: 'comment',
+                     title: 'Admin\'s Comment',
+                     textAlign: 'left',
+                     autoHide: false,
+                     width: 150,
+                     sortable: true,
+                     template: function(row) { return row.comment },
+                 },
+ 
+                 {
+                     field: 'Actions',
+                     title: ' ',
+                     textAlign: 'center',
+                     autoHide: false,
+                     width: 50,
+                     sortable: true,
+                     template: function(row) { return update_feedback(row.doc_id, row.status, row.comment) },
+                 }
+             ]
+         });
+     };
+   
   
+
 
 
     var add_new_feedback_From_validation = function() {
@@ -265,15 +253,13 @@ var updates = function() {
     var read_feedbacks = function() {
         get_changes().then((function(data) { //
           //  updates_data = data;
-            var sep_data = sep_completed(data);
-            updates_data = sep_data[0];
-            var only_com = sep_data[1];
-            
-            
-            document.getElementById('timeline_id').innerHTML =  build_timeline(only_com);
-            document.getElementById('items_total').innerText = Object.keys(updates_data).length + " Items";
+          document.getElementById('items_total').innerText = Object.keys(data).length + " Items";
+            sep_data = sep_completed(data);
 
-            init_table();
+         KTApp.unblock('#kt_blockui_content');
+     
+            updates.run1();
+           
         })).catch((error) => {
             console.error(error);
         });
@@ -297,6 +283,12 @@ var updates = function() {
 
             read_feedbacks();
         },
+        run1:function(){
+            init_table('#kt_datatable',sep_data[0]);
+        },
+        run2:function(){
+            init_table('#kt_datatable',sep_data[1]);
+        },
     };
 }();
 
@@ -314,6 +306,20 @@ function edit_form_modal(doc_id, status, comment) {
     
 }
 
+function sep_completed(data) {
+    var data_only_del = [];
+    var data_without_del = [];
+    Object.keys(data).map(function(key, index) {
+        if(data[key]['status']=='Delivered' || data[key]['status'] == 'Declined'){
+        
+        }else{
+            data_without_del.push(data[key]);
+        }
+        data_only_del.push(data[key]);
+     
+    });
+    return [data_without_del, data_only_del];
+}
 function delete_feedback(){
     $('#edit_request').modal('toggle');
    var doc_id  =document.getElementById('doc_id').value;
@@ -344,3 +350,14 @@ function delete_feedback(){
         console.error(error);
     });
 }
+
+$('#enable_all').change(function() {
+    if($(this).is(":checked")) {
+        updates.run2();
+        console.log("Checked");
+    }else{
+        updates.run1();
+        console.log(" NOT Checked");
+    }
+     
+});

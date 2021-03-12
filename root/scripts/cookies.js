@@ -1,3 +1,8 @@
+
+var local_cookie = [];
+function print_cooki(){
+    console.log(local_cookie);
+}
 function setCookie(cookieName, cookieValue) {
     var d = new Date();
     d.setTime(d.getTime() + 2 * 24 * 60 * 60 * 1000);
@@ -22,8 +27,26 @@ function getCookie(cookieName) {
     return "";
 }
 
+
 function eraseCookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+//////////////////////
+function setCookie_local(cookieName, cookieValue) {
+  local_cookie[cookieName]=cookieValue;
+}
+
+function getCookie_local(cookieName) {
+    if(local_cookie.hasOwnProperty(cookieName)){
+        return  local_cookie[cookieName];
+    }else{
+        return  ''
+    }   
+}
+
+
+function eraseCookie_local(name) {
+    delete arr[name];
 }
 var c = 0;
 var d = 0;
@@ -39,11 +62,11 @@ function data_comp(x) {
         default:
 
     }
-    document.getElementById("data_compressor").innerHTML = percentage_form(c, c + d, d + ' of ')
+    document.getElementById("data_compressor").innerHTML = percentage_form(d, c + d, d + ' of ')
 }
 
 function getoptdata(docRef, id) {
-    var find = getCookie(id);
+    var find = getCookie_local(id);
     return new Promise(function(resolve, reject) {
         if (find == "") {
             var results = "";
@@ -53,7 +76,7 @@ function getoptdata(docRef, id) {
                     console.log("[R] - " + docRef + " - " + id);
                     results = doc.data();
                     str = JSON.stringify(results);
-                    setCookie(id, str);
+                    setCookie_local(id, str);
                     resolve(results);
                 } else {
                     reject("Document doesn't exist.");
@@ -74,7 +97,8 @@ function addoptdata(docRef, data) {
         docRef.add(data)
             .then((doc) => {
                 var str = JSON.stringify(data);
-                setCookie(doc.id, str);
+                setCookie_local(doc.id, str);
+                data_comp('d');
                 console.log("Document written with ID: ", doc.id);
                 resolve(doc.id);
             })
@@ -88,17 +112,17 @@ function addoptdata(docRef, data) {
 
 
 function setoptdata(docRef, id, data) {
-    str = JSON.stringify(data);
-    setCookie(id, str);
+    var str = JSON.stringify(data);
+    setCookie_local(id, str);
     return new Promise(function(resolve, reject) {
         // Add a new document in collection "cities"
         docRef.doc(id).set(data)
             .then(function() {
+                data_comp('d');
                 console.log("[W] - " + docRef + " - " + id);
                 resolve("success");
             })
             .catch(function(error) {
-
                 reject(error);
             });
     });
@@ -106,13 +130,14 @@ function setoptdata(docRef, id, data) {
 
 
 function deloptfeild(docRef, id, field) {
-    var find = getCookie(id);
+    var find = getCookie_local(id);
     delete find[field];
-    setCookie(id, find);
+    setCookie_local(id, find);
     return new Promise(function(resolve, reject) {
         docRef.doc(id).update({
                 [field]: firebase.firestore.FieldValue.delete()
             }).then(function() {
+                data_comp('d');
                 console.log("[U] - " + docRef + " - " + id);
                 resolve("success");
             })
@@ -132,7 +157,6 @@ function get_user_icon(user_id) {
     return new Promise(function(resolve, reject) {
         if (user_icon_list.hasOwnProperty(user_id)) {
             var find = user_icon_list[user_id];
-            data_comp('c');
          
             resolve(find);
         } else {
@@ -140,7 +164,7 @@ function get_user_icon(user_id) {
 
             ref.getDownloadURL()
                 .then((url) => {
-                    data_comp('d');
+                
                     user_icon_list[user_id] = url;
                     resolve(url);
                 }).catch((error) => {
@@ -164,13 +188,14 @@ function updateoptdata(docRef, id, data) {
                     var str = JSON.stringify(obj);
                     setCookie(id, str); */
 
-        var find = getCookie(id);
+        var find = getCookie_local(id);
 
 
 
 
         docRef.doc(id).update(data)
             .then(function() {
+                data_comp('d');
                 if (find != '') {
                     find = JSON.parse(find);
                     var finalobj1 = {};
@@ -178,10 +203,10 @@ function updateoptdata(docRef, id, data) {
                     for (var _obj in data) finalobj1[_obj] = data[_obj];
                     find = finalobj1;
                     var str = JSON.stringify(find);
-                    setCookie(id, str);
+                    setCookie_local(id, str);
                 } else {
                     var str = JSON.stringify(data);
-                    setCookie(id, str);
+                    setCookie_local(id, str);
                 }
 
                 console.log("[U2] - " + docRef + " - " + id);
@@ -203,8 +228,9 @@ function deloptdoc(docRef, id) {
 
     return new Promise(function(resolve, reject) {
         docRef.doc(id).delete().then(function() {
+            data_comp('d');
                 console.log("[U] - " + docRef + " - " + id);
-                eraseCookie(id);
+                eraseCookie_local(id);
                 resolve("success");
             })
             .catch(function(error) {
@@ -222,11 +248,12 @@ function uptoptarray(docRef, id, arrayname, data) {
         docRef.doc(id).update({
                 [arrayname]: firebase.firestore.FieldValue.arrayUnion(data)
             }).then(function() {
-                var find = getCookie(id);
+                data_comp('d');
+                var find = getCookie_local(id);
                 find = JSON.parse(find);
                 find[[arrayname]].push(data);
                 var str = JSON.stringify(find);
-                setCookie(id, str);
+                setCookie_local(id, str);
                 console.log("[U] - " + docRef + " - " + id);
                 resolve("success");
             })
@@ -246,12 +273,13 @@ function deltoptarray(docRef, id, arrayname, item, data) {
         docRef.doc(id).update({
                 [arrayname]: firebase.firestore.FieldValue.arrayRemove(data[item])
             }).then(function() {
-                var find = getCookie(id);
+                data_comp('d');
+                var find = getCookie_local(id);
                 find = JSON.parse(find);
 
                 find[[arrayname]] = rmelearray(item, find[[arrayname]]);
                 var str = JSON.stringify(find);
-                setCookie(id, str);
+                setCookie_local(id, str);
 
                 console.log("[U] - " + docRef + " - " + id);
                 resolve("success");
@@ -267,85 +295,11 @@ var last_wallet_id = "";
 var last_result = "";
 
 
-/* function get_wallet_data3(wallet_id, force_flag) {
-
-    return new Promise(function(resolve, reject) {
-        if (last_wallet_id != wallet_id || force_flag) {
-            console.log("sending new data");
-            var wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
-
-            var promises = [];
-            var tabler = [];
-     
-            wallet_Ref.orderBy("last_updated").get()
-                .then((querySnapshot) => {               
-                    querySnapshot.forEach((doc) => {
-              
-                        getoptdata(wallet_Ref, doc.id).then(function(data) {                  
-                            var arr = data
-                            delete arr["last_updated"];                        
-                            Object.keys(arr).map(function(key, index) {  
-                                const promises8 = new Promise((resolve, reject) => {                       
-                                    var user_id = arr[key].user;                                                                              
-                                        add_to_local_table(user_id, arr[key].Description, arr[key].Category,  arr[key].Type,  arr[key].Payment, arr[key].Amount,  arr[key].Repeated,  new Date(key)).then(function(result) {
-                                          resolve(result);
-                                        }).catch((error) => { console.log(error);
-                                        });
-                                    });
-                                    promises.push(promises8);
-
-
-                                   
-                            });  
-                          
-                                         
-                        }).catch((error) => {
-                            console.log("Error getting documents: ", error);
-                            reject(error);
-                        });
-                    });
-                    Promise.all(promises).then((values) => {                             
-                        tabler = $.extend(tabler, values);
-                        console.log(tabler);
-                        last_result = tabler;
-                        last_wallet_id = wallet_id;                                            
-                        resolve(tabler);
-
-                }).catch((error) => {
-                    console.log("Error getting documents: ", error);
-                    reject(error);
-                });                    
-                })
-                .catch((error) => {
-                    console.log("Error getting documents: ", error);
-                    reject(error);
-                });
-        } else {
-            console.log("sending old data");
-            resolve(last_result);
-        }
-    });
-
-
-}; */
 function add_to_local_table(user_id, data) {
     return new Promise(function(resolve, reject) {
         var user_name = '';
         var user_email ='';
         var photo_url= '';
-/*     const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { photo_url= url;
-        resolve('success'); }).catch((error) => {  photo_url= 'none';
-            resolve('success'); }); });
-    const user_details_prom = new Promise((resolve, reject) => {
-        getoptdata(user_Ref, user_id).then(function(finalResult) {
-            user_email = finalResult.email;
-            user_name = finalResult.name;
-            resolve('success');
-        }).catch((error) => {
-            console.log(error);
-            reject(error);
-        });
-    }); */
   
     getoptdata(user_Ref, user_id).then(function(finalResult) {
         user_email = finalResult.email;
@@ -361,16 +315,6 @@ function add_to_local_table(user_id, data) {
          console.log(error);       
     });
 
-
-
-       /*   Promise.all([user_image_prom, user_details_prom]).then((values) => {
-         
-            var data2 = { user_name: values[1]['user_name'], user_email: values[1]['user_email'], photo_url: values[0]['photo_url']}          
-            resolve(Object.assign(data,data2));
-        }).catch((error) => {
-            console.log("Error getting documents: ", error);
-            reject(error);
-        }); */
     });
 }
 
@@ -381,13 +325,14 @@ async function get_wallet_data(wallet_id, force_flag) {
         var data = [];
         let all_wallet_doc_promise = [];
         entries.forEach((entry_doc) => {          
-                   
+            data_comp('d');
             let entry_id = entry_doc.id
-
-            let each_wallet_subdoc_promise = db.collection("wallets").doc(wallet_id).collection('entries').doc(entry_id).get().then((entries) => {
+            var wall_r =db.collection("wallets").doc(wallet_id).collection('entries');
+          
+            let each_wallet_subdoc_promise =   getoptdata(wall_r, entry_id).then(function(entries) {
                 let all_entries_doc_promise = [];
 
-                var arr = entries.data();
+                var arr = entries;
                 delete arr["last_updated"];
                 Object.keys(arr).map(function(key, index) {
                     const each_entry_promise = new Promise((resolve, reject) => {
@@ -432,6 +377,7 @@ var data =[];
                 var promises_wallet = [];
 
                 feedbacks.forEach((doc) => {
+                    data_comp('d');
                     const promise2 = new Promise((resolve, reject) => {
                         var doc_id = doc.id;
                         var created_on = doc.data().created_on;
@@ -450,8 +396,7 @@ var data =[];
                             comment: comment,                          
                         }
                         add_to_local_table(user_id, data2).then(function(result) {
-                            data.push(result);   
-                            console.log(result);                       
+                            data.push(result);                                                  
                             resolve(result);
                         }).catch((error) => {
                             reject(error);
@@ -466,7 +411,7 @@ var data =[];
 
             
             return await Promise.all(promises_wallet).then((values) => {
-               console.log(data);
+             
                 return data
             });
    
