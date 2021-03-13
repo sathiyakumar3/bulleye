@@ -269,17 +269,11 @@ function add_to_local_table(user_id, data) {
 async function get_wallet_data(wallet_id, force_flag) {
   if (last_wallet_id != wallet_id || force_flag) {
         console.log("sending new data");
-        let entries = await db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated").get();
-      
+        let entries = await db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated").get();      
         var data = [];
-      //  let all_wallet_doc_promise = [];
         let all_entries_doc_promise = [];
         entries.forEach((entry_doc) => {  
-          //  let entry_id = entry_doc.id
-         //   console.log(entry_doc.data());
-      //    var wall_r =db.collection("wallets").doc(wallet_id).collection('entries');          
-          //  let each_wallet_subdoc_promise =   getoptdata(wall_r, entry_id).then(function(entries) {
-              
+      
                 var arr = entry_doc.data();
                 delete arr["last_updated"];
                 Object.keys(arr).map(function(key, index) {
@@ -298,15 +292,11 @@ async function get_wallet_data(wallet_id, force_flag) {
                     });
                     all_entries_doc_promise.push(each_entry_promise);
                 });
-              //  return Promise.all(all_entries_doc_promise);
-          
-           // all_wallet_doc_promise.push(each_wallet_subdoc_promise);
+            
         });
         return await Promise.all(all_entries_doc_promise).then((subProjectSnapshots) => {
-
             last_result = data;
             last_wallet_id = wallet_id;
-
             return data
         });
     } else {
@@ -320,7 +310,6 @@ var data =[];
         let feedbacks = await db.collection("feedbacks").orderBy("last_updated").limit(50).get();
                 var counter = 1;               
                 var promises_wallet = [];
-
                 feedbacks.forEach((doc) => {
                     const promise2 = new Promise((resolve, reject) => {
                         var doc_id = doc.id;
@@ -352,6 +341,71 @@ var data =[];
             return await Promise.all(promises_wallet).then((values) => {
              
                 return data
-            });
-   
+            });   
+}
+
+
+
+
+async function load_navi(user_id) {
+                let wallet_list = await db.collection("wallets").where("users", "array-contains",user_id).limit(6).get();
+
+                var promises_wallet = [];
+                wallet_list.forEach((doc) => {
+                    const promise2 = new Promise((resolve, reject) => {
+                        var wallet_id = doc.id;
+                        var wallet_name = doc.data().name;
+                        var wallet_type = doc.data().type;
+                        var wallet_description = doc.data().description;
+                        var wallet_owner = doc.data().owner;
+                        var wallet_location = doc.data().location;
+                        var wallet_currency = doc.data().currency;
+                        var promises_users = [];
+                        var user_list = doc.data().users;
+                        const get_users = new Promise((resolve, reject) => {
+                            user_list.forEach(function(entry) {
+                                const promise = new Promise((resolve, reject) => {
+                                    getoptdata(user_Ref, entry).then(function(finalResult) {
+                                        menu_subitems(finalResult.name, entry).then((results) => {
+                                            resolve(results);
+                                        }).catch((error) => {
+                                            console.log(error);
+                                            reject(error);
+                                        });
+                                        //   resolve();
+                                    }).catch((error) => {
+                                        console.log(error);
+                                    });
+                                });
+                                promises_users.push(promise);
+                            });
+                            return Promise.all(promises_users).then((values) => {
+                                resolve(values);
+                            });
+                        });
+                        return Promise.all([get_users]).then((values) => {
+                            var n_size = user_list.length;
+                            var u = values.join('');
+                            var tabl = {
+                                users: u,
+                                users_size: n_size,
+                                wallet_id: wallet_id,
+                                wallet_name: wallet_name,
+                                wallet_type: wallet_type,
+                                wallet_description: wallet_description,
+                                wallet_location: wallet_location,
+                                wallet_owner: wallet_owner,
+                                wallet_currency: wallet_currency
+                            }
+                            resolve(tabl);
+                        });
+                    });
+                    promises_wallet.push(promise2);
+                });
+
+                return Promise.all(promises_wallet).then((values) => {
+                    return (values);
+                });
+          
+   // });
 }

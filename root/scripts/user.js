@@ -52,72 +52,6 @@ function get_user_profile(user) {
     });
 }
 
-function load_navi() {
-    return new Promise(function(resolve, reject) {
-        db.collection("wallets").where("users", "array-contains", user_local.uid).get()
-            .then((querySnapshot) => {
-                var promises_wallet = [];
-                querySnapshot.forEach((doc) => {
-                    const promise2 = new Promise((resolve, reject) => {
-                        var wallet_id = doc.id;
-                        var wallet_name = doc.data().name;
-                        var wallet_type = doc.data().type;
-                        var wallet_description = doc.data().description;
-                        var wallet_owner = doc.data().owner;
-                        var wallet_location = doc.data().location;
-                        var wallet_currency = doc.data().currency;
-                        var promises_users = [];
-                        var user_list = doc.data().users;
-                        const get_users = new Promise((resolve, reject) => {
-                            user_list.forEach(function(entry) {
-                                const promise = new Promise((resolve, reject) => {
-                                    getoptdata(user_Ref, entry).then(function(finalResult) {
-                                        menu_subitems(finalResult.name, entry).then((results) => {
-                                            resolve(results);
-                                        }).catch((error) => {
-                                            console.log(error);
-                                            reject(error);
-                                        });
-                                        //   resolve();
-                                    }).catch((error) => {
-                                        console.log(error);
-                                    });
-                                });
-                                promises_users.push(promise);
-                            });
-                            return Promise.all(promises_users).then((values) => {
-                                resolve(values);
-                            });
-                        });
-                        return Promise.all([get_users]).then((values) => {
-                            var n_size = user_list.length;
-                            var u = values.join('');
-                            var tabl = {
-                                users: u,
-                                users_size: n_size,
-                                wallet_id: wallet_id,
-                                wallet_name: wallet_name,
-                                wallet_type: wallet_type,
-                                wallet_description: wallet_description,
-                                wallet_location: wallet_location,
-                                wallet_owner: wallet_owner,
-                                wallet_currency: wallet_currency
-                            }
-                            resolve(tabl);
-                        });
-                    });
-                    promises_wallet.push(promise2);
-                });
-
-                return Promise.all(promises_wallet).then((values) => {
-                    resolve(values);
-                });
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-            });
-    });
-}
 
 function build_trend(month_data, type) {
 
@@ -263,7 +197,7 @@ function generate_navi(data, p_wallet) {
     var add_new_wallet  = '<li class="menu-section">' +
         '<h4 class="menu-text">Others</h4>' +
         '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
-        '</li><li class="menu-item menu-item" aria-haspopup="true"><a class="menu-link" data-toggle="modal" data-target="#add_new_wallet">' +
+        '</li><li class="menu-item" aria-haspopup="true"><a class="menu-link" data-toggle="modal" data-target="#add_new_wallet">' +
         '<span class="svg-icon menu-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
         '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
         '													<rect x="0" y="0" width="24" height="24"></rect>'+
@@ -276,7 +210,7 @@ function generate_navi(data, p_wallet) {
         '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
         '</li>';
 
-        var about = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+        var about = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
         '<a class="menu-link" onclick="just_load_page(\'content_pages/about_us.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
@@ -291,7 +225,7 @@ function generate_navi(data, p_wallet) {
         '</a>' +
         '</li>';
 
-        var feedback = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+        var feedback = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
         '<a class="menu-link" onclick="just_load_page(\'content_pages/feedback.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
@@ -306,7 +240,8 @@ function generate_navi(data, p_wallet) {
         '<span class="menu-text">Feedback</span>' +
         '</a>' +
         '</li>';
-      var team =  '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+    
+        var team = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
         '<a class="menu-link" onclick="just_load_page(\'content_pages/the_team.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
@@ -316,15 +251,16 @@ function generate_navi(data, p_wallet) {
         '        <path d="M8,4 L21,4 C21.5522847,4 22,4.44771525 22,5 L22,16 C22,18.209139 20.209139,20 18,20 L11,20 C8.790861,20 7,18.209139 7,16 L7,5 C7,4.44771525 7.44771525,4 8,4 Z" fill="#000000" opacity="0.3"/>' +
         '        <path d="M7,7 L7,9 L5,9 C4.44771525,9 4,9.44771525 4,10 L4,12 C4,12.5522847 4.44771525,13 5,13 L7,13 L7,15 L5,15 C3.34314575,15 2,13.6568542 2,12 L2,10 C2,8.34314575 3.34314575,7 5,7 L7,7 Z" fill="#000000" fill-rule="nonzero"/>' +
         '        <rect fill="#000000" opacity="0.3" x="18" y="7" width="2" height="8" rx="1"/>' +
-        '    </g>' +  '</svg>' +
+        '    </g>' +
+
+        '</svg>' +
         '<!--end::Svg Icon-->' +
         '</span>' +
         '<span class="menu-text">Developer</span>' +
         '</a>' +
-        '</li>';     
-          
+        '</li>';
         
-      var faq = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
+      var faq = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
         '<a class="menu-link" onclick="just_load_page(\'content_pages/faq.html\')">' +
         '<span class="svg-icon menu-icon">' +
         '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
@@ -364,9 +300,9 @@ function get_user(user) {
             image_add(error);
             console.log(error);
         });
-        load_navi().then(function(data) {
+        load_navi(user_local.uid).then(function(data) {
             var wal_siz = Object.keys(data).length;
-            console.log(wal_siz);
+
             if (wal_siz <= 0) {
                 document.getElementById("list_navi").innerHTML = '<li class="menu-section">' +
                     '<h4 class="menu-text">You have no wallets.</h4>' +
