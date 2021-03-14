@@ -11121,7 +11121,7 @@ var KTLayoutSearch = function() {
         KTUtil.removeClass(_target, _resultClass);
         _showProgress();
         _hideDropdown();
-
+ 
         setTimeout(function() {
             $.ajax({
                 url: HOST_URL + '/api/quick_search.php',

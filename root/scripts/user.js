@@ -40,9 +40,6 @@ function get_user_profile(user) {
         get_user_icon(user).then((url) => {
             document.getElementById("image_prof3").innerHTML = prof_pic(url);
 
-        }).catch((error) => {
-            document.getElementById("image_prof3").innerHTML = prof_pic(error);
-            console.log(error);
         });
 
 
@@ -121,7 +118,7 @@ function build_site(month_data, users_size, users_list, type) {
         '</a>' +
         '<div class="menu-submenu" kt-hidden-height="120" style="display: none; overflow: hidden;">' +
         '<i class="menu-arrow"></i>' +
-        '<ul class="menu-subnav">' + users_list.replace(/,/g, " ") +
+        '<ul class="menu-subnav">' + users_list +
         '</ul>' +
         '</div>' +
         '</li>' +
@@ -136,12 +133,125 @@ function build_site(month_data, users_size, users_list, type) {
     return html_div
 }
 
+function build_users(users_list){
+    return new Promise(function(resolve, reject) {
+    var promise_list = [];
+    var html_div ='';
+
+    Object.keys(users_list).map(function(key, index) { 
+      const promise = new Promise((resolve, reject) => {
+       menu_subitems(users_list[key]['user_name'], users_list[key]['user_id']).then((results) => {
+        html_div = results +html_div;
+        resolve("success");
+        }).catch((error) => {         
+            reject(error);
+        });
+    });
+    promise_list.push(promise);
+    });     
+
+
+   Promise.all(promise_list).then((subProjectSnapshots) => { 
+      
+    resolve(html_div);
+    }).catch((error) => {      
+        console.log(error);   
+        reject(error);
+    });
+});
+}
+
+
 function generate_navi(data, p_wallet) {
+    var add_new_wallet  = '<li class="menu-section">' +
+    '<h4 class="menu-text">Others</h4>' +
+    '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
+    '</li><li class="menu-item" aria-haspopup="true"><a class="menu-link" data-toggle="modal" data-target="#add_new_wallet">' +
+    '<span class="svg-icon menu-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+    '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
+    '													<rect x="0" y="0" width="24" height="24"></rect>'+
+    '													<path d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z" fill="#000000" opacity="0.3"></path>'+
+    '													<path d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z" fill="#000000"></path>'+
+    '												</g>'+
+    '</svg></span><span class="menu-text">Add New Wallet</span></a></li>' +
+    '<li class="menu-section">' +
+    '<h4 class="menu-text">Others</h4>' +
+    '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
+    '</li>';
+
+    var about = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
+    '<a class="menu-link" onclick="just_load_page(\'content_pages/about_us.html\')">' +
+    '<span class="svg-icon menu-icon">' +
+    '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
+    '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+    '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
+    '        <polygon points="0 0 24 0 24 24 0 24"/>'+
+    '        <path d="M12,18 L7.91561963,20.1472858 C7.42677504,20.4042866 6.82214789,20.2163401 6.56514708,19.7274955 C6.46280801,19.5328351 6.42749334,19.309867 6.46467018,19.0931094 L7.24471742,14.545085 L3.94038429,11.3241562 C3.54490071,10.938655 3.5368084,10.3055417 3.92230962,9.91005817 C4.07581822,9.75257453 4.27696063,9.65008735 4.49459766,9.61846284 L9.06107374,8.95491503 L11.1032639,4.81698575 C11.3476862,4.32173209 11.9473121,4.11839309 12.4425657,4.36281539 C12.6397783,4.46014562 12.7994058,4.61977315 12.8967361,4.81698575 L14.9389263,8.95491503 L19.5054023,9.61846284 C20.0519472,9.69788046 20.4306287,10.2053233 20.351211,10.7518682 C20.3195865,10.9695052 20.2170993,11.1706476 20.0596157,11.3241562 L16.7552826,14.545085 L17.5353298,19.0931094 C17.6286908,19.6374458 17.263103,20.1544017 16.7187666,20.2477627 C16.5020089,20.2849396 16.2790408,20.2496249 16.0843804,20.1472858 L12,18 Z" fill="#000000"/>'+
+    '    </g>'+  '</svg>' +
+    '<!--end::Svg Icon-->' +
+    '</span>' +
+    '<span class="menu-text">About</span>' +
+    '</a>' +
+    '</li>';
+
+    var feedback = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
+    '<a class="menu-link" onclick="just_load_page(\'content_pages/feedback.html\')">' +
+    '<span class="svg-icon menu-icon">' +
+    '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
+    '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+    '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
+    '        <polygon points="0 0 24 0 24 24 0 24"/>'+
+    '        <path d="M16.5,4.5 C14.8905,4.5 13.00825,6.32463215 12,7.5 C10.99175,6.32463215 9.1095,4.5 7.5,4.5 C4.651,4.5 3,6.72217984 3,9.55040872 C3,12.6834696 6,16 12,19.5 C18,16 21,12.75 21,9.75 C21,6.92177112 19.349,4.5 16.5,4.5 Z" fill="#000000" fill-rule="nonzero"/>'+
+    '    </g>'+
+    '</svg>' +
+    '<!--end::Svg Icon-->' +
+    '</span>' +
+    '<span class="menu-text">Feedback</span>' +
+    '</a>' +
+    '</li>';
+
+    var team = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
+    '<a class="menu-link" onclick="just_load_page(\'content_pages/the_team.html\')">' +
+    '<span class="svg-icon menu-icon">' +
+    '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
+    '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+    '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+    '        <rect x="0" y="0" width="24" height="24"/>' +
+    '        <path d="M8,4 L21,4 C21.5522847,4 22,4.44771525 22,5 L22,16 C22,18.209139 20.209139,20 18,20 L11,20 C8.790861,20 7,18.209139 7,16 L7,5 C7,4.44771525 7.44771525,4 8,4 Z" fill="#000000" opacity="0.3"/>' +
+    '        <path d="M7,7 L7,9 L5,9 C4.44771525,9 4,9.44771525 4,10 L4,12 C4,12.5522847 4.44771525,13 5,13 L7,13 L7,15 L5,15 C3.34314575,15 2,13.6568542 2,12 L2,10 C2,8.34314575 3.34314575,7 5,7 L7,7 Z" fill="#000000" fill-rule="nonzero"/>' +
+    '        <rect fill="#000000" opacity="0.3" x="18" y="7" width="2" height="8" rx="1"/>' +
+    '    </g>' +
+    '</svg>' +
+    '<!--end::Svg Icon-->' +
+    '</span>' +
+    '<span class="menu-text">Developer</span>' +
+    '</a>' +
+    '</li>';
+    
+  var faq = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
+    '<a class="menu-link" onclick="just_load_page(\'content_pages/faq.html\')">' +
+    '<span class="svg-icon menu-icon">' +
+    '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
+    '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+    '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
+    '        <rect x="0" y="0" width="24" height="24"/>'+
+    '        <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10"/>'+
+    '        <path d="M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M10.591,14.868 L10.591,13.209 L11.851,13.209 C13.447,13.209 14.602,11.991 14.602,10.395 C14.602,8.799 13.447,7.581 11.851,7.581 C10.234,7.581 9.121,8.799 9.121,10.395 L7.336,10.395 C7.336,7.875 9.31,5.922 11.851,5.922 C14.392,5.922 16.387,7.875 16.387,10.395 C16.387,12.915 14.392,14.868 11.851,14.868 L10.591,14.868 Z" fill="#000000"/>'+
+    '    </g>' +
+
+    '</svg>' +
+    '<!--end::Svg Icon-->' +
+    '</span>' +
+    '<span class="menu-text">FAQ</span>' +
+    '</a>' +
+    '</li>';
 
     var starting = "";
     var navi = "";
-    for (let i = 0; i < data.length; i++) {
-        var users_list = data[i]['users'];
+    var end = data.length;
+    for (let i = 0; i < end; i++) {       
+       build_users(data[i]['users']).then((results) => { 
+        var users_list = results;
         var wallet_id = data[i]['wallet_id'];
         var wallet_name = data[i]['wallet_name'];
         var wallet_type = data[i]['wallet_type'];
@@ -150,34 +260,28 @@ function generate_navi(data, p_wallet) {
         var wallet_owner = data[i]['wallet_owner'];
         var wallet_location = data[i]['wallet_location'];
         var wallet_currency = data[i]['wallet_currency'];
-
         var month_data = wallet_id + "," + wallet_name + "," + user_local.uid + "," + wallet_type + "," + wallet_description + "," + wallet_owner + "," + wallet_location + ',' + wallet_currency;
-
         if (wallet_id != p_wallet) {
             var my_wallet = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
-                '    <a href="javascript:;" class="menu-link menu-toggle">' +
-                '        <span class="svg-icon menu-icon">' +
+                '<a href="javascript:;" class="menu-link menu-toggle">' +
+                '<span class="svg-icon menu-icon">' +
                 '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
                 '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-                '        <rect x="0" y="0" width="24" height="24"/>'+
-                '        <path d="M3,4 L20,4 C20.5522847,4 21,4.44771525 21,5 L21,7 C21,7.55228475 20.5522847,8 20,8 L3,8 C2.44771525,8 2,7.55228475 2,7 L2,5 C2,4.44771525 2.44771525,4 3,4 Z M10,10 L20,10 C20.5522847,10 21,10.4477153 21,11 L21,13 C21,13.5522847 20.5522847,14 20,14 L10,14 C9.44771525,14 9,13.5522847 9,13 L9,11 C9,10.4477153 9.44771525,10 10,10 Z M10,16 L20,16 C20.5522847,16 21,16.4477153 21,17 L21,19 C21,19.5522847 20.5522847,20 20,20 L10,20 C9.44771525,20 9,19.5522847 9,19 L9,17 C9,16.4477153 9.44771525,16 10,16 Z" fill="#000000"/>'+
-                '        <rect fill="#000000" opacity="0.3" x="2" y="10" width="5" height="10" rx="1"/>'+
-                '    </g>'
-                    
-                 +
+                '<rect x="0" y="0" width="24" height="24"/>'+
+                '<path d="M3,4 L20,4 C20.5522847,4 21,4.44771525 21,5 L21,7 C21,7.55228475 20.5522847,8 20,8 L3,8 C2.44771525,8 2,7.55228475 2,7 L2,5 C2,4.44771525 2.44771525,4 3,4 Z M10,10 L20,10 C20.5522847,10 21,10.4477153 21,11 L21,13 C21,13.5522847 20.5522847,14 20,14 L10,14 C9.44771525,14 9,13.5522847 9,13 L9,11 C9,10.4477153 9.44771525,10 10,10 Z M10,16 L20,16 C20.5522847,16 21,16.4477153 21,17 L21,19 C21,19.5522847 20.5522847,20 20,20 L10,20 C9.44771525,20 9,19.5522847 9,19 L9,17 C9,16.4477153 9.44771525,16 10,16 Z" fill="#000000"/>'+
+                '<rect fill="#000000" opacity="0.3" x="2" y="10" width="5" height="10" rx="1"/>'+
+                '</g>'+
                 '</svg>' +
-                '            </span>' +
-                '        <span class="menu-text">' + wallet_name + '</span>' +
-                '<span class="menu-label">' +
-
                 '</span>' +
-                '        <i class="menu-arrow"></i>' +
-                '    </a>' +
-                '    <div class="menu-submenu">' +
-                '        <i class="menu-arrow"></i>' +
-                '        <ul class="menu-subnav">' + build_site(month_data, users_size, users_list, wallet_type) + '</ul>' +
-                '    </div>' +
-                '    ' +
+                '<span class="menu-text">' + wallet_name + '</span>' +
+                '<span class="menu-label">' +
+                '</span>' +
+                '<i class="menu-arrow"></i>' +
+                '</a>' +
+                '<div class="menu-submenu">' +
+                '<i class="menu-arrow"></i>' +
+                '<ul class="menu-subnav">' + build_site(month_data, users_size,users_list, wallet_type) + '</ul>' +
+                '</div>' +
                 '</li>';
             navi = my_wallet + navi;
         } else {
@@ -192,93 +296,17 @@ function generate_navi(data, p_wallet) {
                 '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
                 '</li>';
         }
+        if(end-1==i){
+            document.getElementById("list_navi").innerHTML = starting + navi +add_new_wallet+ about+team+faq+feedback;
+        }
+        
+    }).catch((error) => {      
+        console.log(error);   
+        reject(error);
+    });
     }
 
-    var add_new_wallet  = '<li class="menu-section">' +
-        '<h4 class="menu-text">Others</h4>' +
-        '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
-        '</li><li class="menu-item" aria-haspopup="true"><a class="menu-link" data-toggle="modal" data-target="#add_new_wallet">' +
-        '<span class="svg-icon menu-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-        '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-        '													<rect x="0" y="0" width="24" height="24"></rect>'+
-        '													<path d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z" fill="#000000" opacity="0.3"></path>'+
-        '													<path d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z" fill="#000000"></path>'+
-        '												</g>'+
-        '</svg></span><span class="menu-text">Add New Wallet</span></a></li>' +
-        '<li class="menu-section">' +
-        '<h4 class="menu-text">Others</h4>' +
-        '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
-        '</li>';
-
-        var about = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
-        '<a class="menu-link" onclick="just_load_page(\'content_pages/about_us.html\')">' +
-        '<span class="svg-icon menu-icon">' +
-        '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
-        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-        '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-        '        <polygon points="0 0 24 0 24 24 0 24"/>'+
-        '        <path d="M12,18 L7.91561963,20.1472858 C7.42677504,20.4042866 6.82214789,20.2163401 6.56514708,19.7274955 C6.46280801,19.5328351 6.42749334,19.309867 6.46467018,19.0931094 L7.24471742,14.545085 L3.94038429,11.3241562 C3.54490071,10.938655 3.5368084,10.3055417 3.92230962,9.91005817 C4.07581822,9.75257453 4.27696063,9.65008735 4.49459766,9.61846284 L9.06107374,8.95491503 L11.1032639,4.81698575 C11.3476862,4.32173209 11.9473121,4.11839309 12.4425657,4.36281539 C12.6397783,4.46014562 12.7994058,4.61977315 12.8967361,4.81698575 L14.9389263,8.95491503 L19.5054023,9.61846284 C20.0519472,9.69788046 20.4306287,10.2053233 20.351211,10.7518682 C20.3195865,10.9695052 20.2170993,11.1706476 20.0596157,11.3241562 L16.7552826,14.545085 L17.5353298,19.0931094 C17.6286908,19.6374458 17.263103,20.1544017 16.7187666,20.2477627 C16.5020089,20.2849396 16.2790408,20.2496249 16.0843804,20.1472858 L12,18 Z" fill="#000000"/>'+
-        '    </g>'+  '</svg>' +
-        '<!--end::Svg Icon-->' +
-        '</span>' +
-        '<span class="menu-text">About</span>' +
-        '</a>' +
-        '</li>';
-
-        var feedback = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
-        '<a class="menu-link" onclick="just_load_page(\'content_pages/feedback.html\')">' +
-        '<span class="svg-icon menu-icon">' +
-        '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
-        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-        '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-        '        <polygon points="0 0 24 0 24 24 0 24"/>'+
-        '        <path d="M16.5,4.5 C14.8905,4.5 13.00825,6.32463215 12,7.5 C10.99175,6.32463215 9.1095,4.5 7.5,4.5 C4.651,4.5 3,6.72217984 3,9.55040872 C3,12.6834696 6,16 12,19.5 C18,16 21,12.75 21,9.75 C21,6.92177112 19.349,4.5 16.5,4.5 Z" fill="#000000" fill-rule="nonzero"/>'+
-        '    </g>'+
-        '</svg>' +
-        '<!--end::Svg Icon-->' +
-        '</span>' +
-        '<span class="menu-text">Feedback</span>' +
-        '</a>' +
-        '</li>';
-    
-        var team = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
-        '<a class="menu-link" onclick="just_load_page(\'content_pages/the_team.html\')">' +
-        '<span class="svg-icon menu-icon">' +
-        '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
-        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-        '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-        '        <rect x="0" y="0" width="24" height="24"/>' +
-        '        <path d="M8,4 L21,4 C21.5522847,4 22,4.44771525 22,5 L22,16 C22,18.209139 20.209139,20 18,20 L11,20 C8.790861,20 7,18.209139 7,16 L7,5 C7,4.44771525 7.44771525,4 8,4 Z" fill="#000000" opacity="0.3"/>' +
-        '        <path d="M7,7 L7,9 L5,9 C4.44771525,9 4,9.44771525 4,10 L4,12 C4,12.5522847 4.44771525,13 5,13 L7,13 L7,15 L5,15 C3.34314575,15 2,13.6568542 2,12 L2,10 C2,8.34314575 3.34314575,7 5,7 L7,7 Z" fill="#000000" fill-rule="nonzero"/>' +
-        '        <rect fill="#000000" opacity="0.3" x="18" y="7" width="2" height="8" rx="1"/>' +
-        '    </g>' +
-
-        '</svg>' +
-        '<!--end::Svg Icon-->' +
-        '</span>' +
-        '<span class="menu-text">Developer</span>' +
-        '</a>' +
-        '</li>';
-        
-      var faq = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
-        '<a class="menu-link" onclick="just_load_page(\'content_pages/faq.html\')">' +
-        '<span class="svg-icon menu-icon">' +
-        '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
-        '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-        '<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
-        '        <rect x="0" y="0" width="24" height="24"/>'+
-        '        <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10"/>'+
-        '        <path d="M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M10.591,14.868 L10.591,13.209 L11.851,13.209 C13.447,13.209 14.602,11.991 14.602,10.395 C14.602,8.799 13.447,7.581 11.851,7.581 C10.234,7.581 9.121,8.799 9.121,10.395 L7.336,10.395 C7.336,7.875 9.31,5.922 11.851,5.922 C14.392,5.922 16.387,7.875 16.387,10.395 C16.387,12.915 14.392,14.868 11.851,14.868 L10.591,14.868 Z" fill="#000000"/>'+
-        '    </g>' +
-
-        '</svg>' +
-        '<!--end::Svg Icon-->' +
-        '</span>' +
-        '<span class="menu-text">FAQ</span>' +
-        '</a>' +
-        '</li>';
-
-    document.getElementById("list_navi").innerHTML = starting + navi +add_new_wallet+ about+team+faq+feedback;
+ 
 
 
 }
@@ -293,17 +321,28 @@ function get_user(user) {
         document.getElementById("front_page_name_2").innerHTML = finalResult.name;
         document.getElementById("front_page_email_1").innerHTML = finalResult.email;
         document.getElementById("ad_wal_loc_id").value = finalResult.name;
+        document.getElementById("conutry_t").innerHTML = finalResult.country;
 
-        get_user_icon(user_local.uid).then((url) => {
+
+        ///////////////// Form Inputs
+
+        document.getElementById('edit_user_form').querySelector('[name="edit_user_name"]').value = finalResult.name;
+        document.getElementById('edit_user_form').querySelector('[name="Email"]').value =finalResult.email;
+        document.getElementById('edit_user_form').querySelector('[name="ed_contactno"]').value =finalResult.contact_no;
+       document.getElementById('edit_user_form').querySelector('[name="ed_gender"]').value = finalResult.gender;     
+        $('#country22').selectpicker('val', finalResult.country);    
+        ////////////////
+
+        get_user_icon(user_local.uid).then((url) => {        
             image_add(url);
-        }).catch((error) => {
-            image_add(error);
-            console.log(error);
         });
         load_navi(user_local.uid).then(function(data) {
+  
             var wal_siz = Object.keys(data).length;
+            document.getElementById("wallet_no").innerHTML = "Total Wallets : " +'&nbsp;&nbsp;<span class="label label-lg label-success mr-2">'+wal_siz+'</span>';
 
             if (wal_siz <= 0) {
+              
                 document.getElementById("list_navi").innerHTML = '<li class="menu-section">' +
                     '<h4 class="menu-text">You have no wallets.</h4>' +
                     '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
@@ -315,6 +354,7 @@ function get_user(user) {
                     message: myvar,
                     opacity: 1,
                 });
+               
             } else {
                 KTApp.unblock('#kt_content');
                 generate_navi(data, finalResult.primary_wallet);
@@ -534,6 +574,11 @@ function image_add(url) {
 
                     updateoptdata(user_Ref, user_local.uid, data).then(function(finalResult) {
                         document.getElementById('add_new_wallet_form').reset();
+                        Swal.fire(
+                            'Success',
+                            'The new wallet was added.',
+                            'success'
+                          )    
                         get_user(user_local);
                     }).catch((error) => {
                         console.log(error);
@@ -578,7 +623,147 @@ function image_add(url) {
                 }
             });
         }
+        
+        var update_password_vali = function() {
+            FormValidation.formValidation(document.getElementById('change_password_form'), { fields: {
+                old_password: {
+                validators: {
+                    notEmpty: {
+                        message: 'Current password is required.'
+                    },
+                }
+            },
+            new_password: {
+                validators: {
+                    notEmpty: {
+                        message: 'The password is required'
+                    },
+                    stringLength: {
+                        min: 8,
+                        message: 'Minimum of 8 characters required.'
+                    },                 
+                }
+            },
+            new_c_password: {
+                validators: {
+                    notEmpty: {
+                        message: 'The password is required.'
+                    },
+                    identical: {
+                        compare: function() {
+                                return document.getElementById('change_password_form').querySelector('[name="new_password"]').value;
+                            },
+                            message: 'The password and its confirm are not the same'
+                        }
+                   
+                }
+            },
+         },
+         plugins: {
+             trigger: new FormValidation.plugins.Trigger(),
+             submitButton: new FormValidation.plugins.SubmitButton(),
+             bootstrap: new FormValidation.plugins.Bootstrap({
+                 eleInvalidClass: '',
+                 eleValidClass: '',
+             })
+         } }).on('core.form.valid', function() {
+                $('#change_password_modal').modal('toggle');
 
+                var old_password = document.getElementById('change_password_form').querySelector('[name="old_password"]').value;
+                var new_password = document.getElementById('change_password_form').querySelector('[name="new_password"]').value;         
+          
+const credential = firebase.auth.EmailAuthProvider.credential(
+    user_local.email, 
+    old_password
+);
+
+
+user_local.reauthenticateWithCredential(credential).then(function() {
+                  console.log("test");
+                  user_local.updatePassword(new_password).then(function() {
+                        Swal.fire(
+                            'Success',
+                            'Your password was updated.',
+                            'success'
+                          );
+                      }).catch(function(error) {
+                        $('#change_password_modal').modal('toggle');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Couldnt update password.',
+                            text: error,
+                          })
+                      });
+                  }).catch(function(error) {
+                      console.log(error);
+                    $('#change_password_modal').modal('toggle');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Couldnt Authendicate.',
+                        text: error,
+                      })
+                  });
+              
+            });
+        }
+        var update_user_validation = function() {
+            FormValidation.formValidation(document.getElementById('edit_user_form'), { fields: {
+                edit_user_name: { 
+                    validators: { 
+                        notEmpty: { message: 'A Name is requried.' } } },  
+                             country: { validators: { notEmpty: { message: 'An country is required.' }, } }, },
+                              plugins: { trigger: new FormValidation.plugins.Trigger(), submitButton: new FormValidation.plugins.SubmitButton(), bootstrap: new FormValidation.plugins.Bootstrap({ eleInvalidClass: '', eleValidClass: '', }) } }).on('core.form.valid', function() {
+                $('#edit_user').modal('toggle');
+
+             
+                var orgi_name = document.getElementById("front_page_name_1").innerHTML;
+             var name = document.getElementById('edit_user_form').querySelector('[name="edit_user_name"]').value; 
+                var contact_no = document.getElementById('edit_user_form').querySelector('[name="ed_contactno"]').value;
+                var gender = document.getElementById('edit_user_form').querySelector('[name="ed_gender"]').value;
+                var country = document.getElementById('edit_user_form').querySelector('[name="country"]').value;        
+                var timestamp = new Date();
+                var data = {
+                  
+                    contact_no:contact_no,
+                    gender:gender,
+                    country:country,
+                    last_updated:timestamp 
+
+                }
+                const promise1 = new Promise((resolve, reject) => {
+                if(name!=orgi_name){
+                   
+                        user_local.updateProfile({
+                            displayName: name,
+                          }).then(function() {
+                            data['name'] = name;
+                              resolve('success');                          
+                          }).catch(function(error) {                      
+                            reject(error);
+                          });                   
+                }else{
+                    resolve("success");
+                }
+            });
+
+            promise1.then((values) => {
+                updateoptdata(user_Ref, user_local.uid, data).then(function(finalResult) {        
+                    Swal.fire(
+                        'Success',
+                        'Your profile was updated.',
+                        'success'
+                      )       
+                    get_user(user_local);
+
+                }).catch((error) => {
+                    console.log(error);
+                });
+              }).catch(function(error) {
+                console.log(error);
+              });            
+               
+            });
+        }
 
 
         return {
@@ -587,6 +772,8 @@ function image_add(url) {
                 start_app_main();
                 edit_entry_From_validation();
                 add_new_wallet_From_validation();
+                update_user_validation();
+                update_password_vali();
             }
         };
     })();

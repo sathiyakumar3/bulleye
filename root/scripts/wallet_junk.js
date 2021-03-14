@@ -171,7 +171,7 @@ async function get_wallet_data(wallet_id, force_flag) {
 
 function add_to_local_table(user_id, description, category, type, payment, amount, selected_repeated, timestamp) {
     return new Promise(function(resolve, reject) {
-    const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }).catch((error) => { resolve({ photo_url: 'none' }); }); });
+    const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }); });
     const user_details_prom = new Promise((resolve, reject) => {
         getoptdata(user_Ref, user_id).then(function(finalResult) {
             var user_email = finalResult.email;

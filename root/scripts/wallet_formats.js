@@ -92,7 +92,7 @@ function get_user_info(user_id) {
                 resolve({ user_email, user_name });
             });
         });
-        const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }).catch((error) => { resolve({ photo_url: error }); }); });
+        const user_image_prom = new Promise((resolve, reject) => { get_user_icon(user_id).then((url) => { resolve({ photo_url: url }); }); });
         return Promise.all([user_image_prom, user_details_prom]).then((values) => {
             var username = values[1]['user_name'];
             var email = values[1]['user_email'];

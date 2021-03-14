@@ -58,19 +58,21 @@ function eraseCookie_local(name) {
 
 /////////////////////////////////// ICON DATABASE LAYER////////////////////////////////////////
 var user_icon_list = {};
+user_icon_list['Adminiate'] = "assets/media/users/blank.png";
 function get_user_icon(user_id) {
     const ref = firebase.storage().ref().child('users/' + user_id);
     return new Promise(function(resolve, reject) {
         if (user_icon_list.hasOwnProperty(user_id)) {
-            var find = user_icon_list[user_id];         
+            var find = user_icon_list[user_id];        
             resolve(find);
         } else {
-            ref.getDownloadURL()
-                .then((url) => {                
+             ref.getDownloadURL()
+                .then((url) => {      
                     user_icon_list[user_id] = url;
                     resolve(url);
                 }).catch((error) => {
-                    reject("assets/media/users/blank.png");
+                    user_icon_list[user_id] = "assets/media/users/blank.png";
+                    resolve("assets/media/users/blank.png");
                 });
         }
     });
@@ -243,7 +245,7 @@ var last_wallet_id = "";
 var last_result = "";
 
 
-function add_to_local_table(user_id, data) {
+function add_to_local_table(user_id) {
     return new Promise(function(resolve, reject) {
         var user_name = '';
         var user_email ='';
@@ -253,11 +255,11 @@ function add_to_local_table(user_id, data) {
         user_email = finalResult.email;
         user_name = finalResult.name;
         get_user_icon(user_id).then((url) => { photo_url= url;
-            var data2 = { user_name: user_name, user_email: user_email, photo_url: photo_url}          
-            resolve(Object.assign(data,data2));
+            var data2 = { user_name: user_name, user_email: user_email, photo_url: photo_url,user_id:user_id}          
+            resolve(data2);
              }).catch((error) => {  photo_url= 'none'; 
-             var data2 = { user_name: user_name, user_email: user_email, photo_url: photo_url}          
-             resolve(Object.assign(data,data2));
+             var data2 = { user_name: user_name, user_email: user_email, photo_url: photo_url,user_id:user_id}          
+             resolve(data2);
                });
     }).catch((error) => {
          console.log(error);       
@@ -268,12 +270,15 @@ function add_to_local_table(user_id, data) {
 
 async function get_wallet_data(wallet_id, force_flag) {
   if (last_wallet_id != wallet_id || force_flag) {
-        console.log("sending new data");
+      //  console.log("sending new data");
         let entries = await db.collection("wallets").doc(wallet_id).collection('entries').orderBy("last_updated").get();      
         var data = [];
         let all_entries_doc_promise = [];
         entries.forEach((entry_doc) => {  
-      
+
+            var str = JSON.stringify(entry_doc.data());
+            setCookie_local(entry_doc.id, str);
+            d++;
                 var arr = entry_doc.data();
                 delete arr["last_updated"];
                 Object.keys(arr).map(function(key, index) {
@@ -282,8 +287,8 @@ async function get_wallet_data(wallet_id, force_flag) {
                         var user_id = arr[key].user;
                         var doc_id = monthts(timestamp);
                         var data2 = { user: user_id, Description: arr[key].Description, Category: arr[key].Category, Type: arr[key].Type, Payment: arr[key].Payment, Amount: arr[key].Amount, Repeated: arr[key].Repeated,Timestamp: new Date(timestamp), doc_id: doc_id}
-                        add_to_local_table(user_id, data2).then(function(result) {
-                            data.push(result);
+                        add_to_local_table(user_id).then(function(result) {
+                            data.push(Object.assign(data2,result));
                             resolve(result);
                         }).catch((error) => {
                             reject(error);
@@ -300,17 +305,21 @@ async function get_wallet_data(wallet_id, force_flag) {
             return data
         });
     } else {
-        console.log("sending old data");
+     //   console.log("sending old data");
         return last_result
     } 
 }
 
 async function get_changes() {
-var data =[];
-        let feedbacks = await db.collection("feedbacks").orderBy("last_updated").limit(50).get();
+ let feedbacks = await db.collection("feedbacks").orderBy("last_updated").limit(50).get();
+        var data =[];
                 var counter = 1;               
                 var promises_wallet = [];
                 feedbacks.forEach((doc) => {
+
+                    var str = JSON.stringify(doc.data());
+                    setCookie_local(doc.id, str);
+                    d++;
                     const promise2 = new Promise((resolve, reject) => {
                         var doc_id = doc.id;
                         var created_on = doc.data().created_on;
@@ -328,8 +337,8 @@ var data =[];
                             status: status,
                             comment: comment,                          
                         }
-                        add_to_local_table(user_id, data2).then(function(result) {
-                            data.push(result);                                                  
+                        add_to_local_table(user_id).then(function(result) {
+                            data.push(Object.assign(data2,result));                                             
                             resolve(result);
                         }).catch((error) => {
                             reject(error);
@@ -348,11 +357,16 @@ var data =[];
 
 
 async function load_navi(user_id) {
-                let wallet_list = await db.collection("wallets").where("users", "array-contains",user_id).limit(6).get();
+ let wallet_list = await db.collection("wallets").where("users", "array-contains",user_id).limit(6).get();
 
-                var promises_wallet = [];
+                var promise_3_FOLDER = [];
                 wallet_list.forEach((doc) => {
-                    const promise2 = new Promise((resolve, reject) => {
+                    
+                    var str = JSON.stringify(doc.data());
+                    setCookie_local(doc.id, str);
+                    d++;
+
+                    const promise_3 = new Promise((resolve, reject) => {
                         var wallet_id = doc.id;
                         var wallet_name = doc.data().name;
                         var wallet_type = doc.data().type;
@@ -360,34 +374,28 @@ async function load_navi(user_id) {
                         var wallet_owner = doc.data().owner;
                         var wallet_location = doc.data().location;
                         var wallet_currency = doc.data().currency;
-                        var promises_users = [];
+                        var promise_1_FOLDER = [];
                         var user_list = doc.data().users;
-                        const get_users = new Promise((resolve, reject) => {
+                        const promise_2 = new Promise((resolve, reject) => {
                             user_list.forEach(function(entry) {
-                                const promise = new Promise((resolve, reject) => {
-                                    getoptdata(user_Ref, entry).then(function(finalResult) {
-                                        menu_subitems(finalResult.name, entry).then((results) => {
-                                            resolve(results);
-                                        }).catch((error) => {
-                                            console.log(error);
-                                            reject(error);
-                                        });
-                                        //   resolve();
+                                const promise_1 = new Promise((resolve, reject) => {                                 
+                                    add_to_local_table(entry).then(function(result) {       
+                                        resolve(result);
                                     }).catch((error) => {
-                                        console.log(error);
-                                    });
+                                        reject(error);                                     
+                                    });     
+               
                                 });
-                                promises_users.push(promise);
+                                promise_1_FOLDER.push(promise_1);
                             });
-                            return Promise.all(promises_users).then((values) => {
+                            return Promise.all(promise_1_FOLDER).then((values) => {
                                 resolve(values);
                             });
                         });
-                        return Promise.all([get_users]).then((values) => {
+                        return promise_2.then((values) => {
                             var n_size = user_list.length;
-                            var u = values.join('');
                             var tabl = {
-                                users: u,
+                                users: values,
                                 users_size: n_size,
                                 wallet_id: wallet_id,
                                 wallet_name: wallet_name,
@@ -400,12 +408,11 @@ async function load_navi(user_id) {
                             resolve(tabl);
                         });
                     });
-                    promises_wallet.push(promise2);
+                    promise_3_FOLDER.push(promise_3);
                 });
 
-                return Promise.all(promises_wallet).then((values) => {
+                return Promise.all(promise_3_FOLDER).then((values) => {
                     return (values);
-                });
-          
-   // });
+                });          
+
 }

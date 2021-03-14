@@ -99,12 +99,22 @@ var start_app = function() {
             },
             columns: [{
                     field: 'test',
-                    title: '',
+                    title: '#',
                     width: 20,
                     sortable: true,
                     template: function(row) { return row.RecordID }
                 },
-                { field: 'RecordID',      title: '',sortable: false, width: 20, selector: { class: '' }, textAlign: 'center', },
+                {
+                    field: 'RecordID',
+                    title: '#',
+                    sortable: false,
+                    width: 20,
+                    type: 'number',
+                    selector: {
+                      class: '',
+                    },
+                    textAlign: 'center',
+                  },
                 {
                     field: 'User',
                     title: 'User',
