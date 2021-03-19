@@ -77,6 +77,8 @@ function user_circle_gen(user_profile) {
     return html_div
 }
 
+
+
 function get_user_info(user_id) {
     return new Promise(function(resolve, reject) {
         var user_Ref = db.collection("users");
@@ -102,13 +104,18 @@ function get_user_info(user_id) {
     });
 }
 
-function dnt4table(datetime) { var e = new Date(datetime); var html_div = '<span style="width: 110px;"><div class="font-weight-bolder text-primary mb-0">' + shortdate(e) + '</div><div class="text-muted">' + formatAMPM(e) + '</div></span>'; return html_div }
+
+function dnt4table(datetime) { var e = new Date(datetime); var html_div = '<span><div class="text-dark-75 font-weight-bold line-height-sm">' + shortdate(e) + '</div><div class="font-size-sm text-dark-50 ">' + formatAMPM(e) + '</div></span>'; return html_div }
 
 function icon_nd_name(icon, name) { var html_div = '<div class="d-flex align-items-center">' + '<div class="symbol symbol-40 symbol-light mr-4">' + '<span class="symbol-label">' + '<span class="svg-icon svg-icon-2x svg-icon-success">' + '<svg><use xlink:href="#' + icon + '"></use></svg>' + '</span>' + '</span>' + '</div>' + ' <div>' + '<a class="text-dark font-weight-bold text-hover-primary mb-1 font-size-lg">  &nbsp; ' + name + '</a>' + '</div>' + '</div>'; return html_div; }
 
 function icon_nd_name_nd_description(icon, name, description) { var html_div = '<div class="d-flex align-items-center">' + '<div class="symbol symbol-40 symbol-light mr-4">' + '<span class="symbol-label">' + '<span class="svg-icon svg-icon-2x svg-icon-success">' + '<svg><use xlink:href="#' + icon + '"></use></svg>' + '</span>' + '</span>' + '</div>' + '<div class="ml-2">' + '<div class="text-dark-75 font-weight-bold line-height-sm">' + name + '</div>' + '<a href="#" class="font-size-sm text-dark-50 text-hover-primary">' + description + '</a>' + '</div></div>'; return html_div; }
 
+function icon_nd_name_nd_description2(photo, name) {   
+ var icon = "";
+if (photo == 'none') { icon = ' <div class="symbol symbol-40 symbol-' + getrandomstate() + ' flex-shrink-0">' + '<div class="symbol-label">' + name.substring(0, 1) + '</div></div>'; } else { icon = '<div class="symbol symbol-40">' + '<div class="symbol-label" style="background-image: url(' + photo + ')" data-toggle="tooltip" title="'+name+'"></div>' + '</div>'; }
 
+return icon;}
 
 function div_message(message) {
     var output = '';
@@ -141,7 +148,7 @@ function photo_nd_name(photo, username) {
  }
 
 
-function payment_status_fomt(type, payment, amount, int_type, currency) { if (type == int_type) { return '<div class="ml-2"><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + currency + ' ' + numberWithCommas(amount) + '</div><a class="' + format_payment(payment) + ' font-weight-bold">' + payment + '</a></div>'; } else { return "" } }
+function payment_status_fomt(type, payment, amount, int_type, currency) { if (type == int_type) { return '<div><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + currency + ' ' + numberWithCommas(amount) + '</div><a class="' + format_payment(payment) + ' font-weight-bold">' + payment + '</a></div>'; } else { return "" } }
 
 function set_sum(html_div, currency, sum) { document.getElementById(html_div).innerText = " " + currency + " " + numberWithCommas(sum); }
 
@@ -149,9 +156,9 @@ function percentage_form(value, total, item) {
     if (value == 0) { var pecentage = 0; } else {
         var pecentage = Math.round((value / total) * 100);
     }
-    if (pecentage > 100) { var pc = '<span class="text-danger mr-2 font-size-sm font-weight-bold"> - ' + (pecentage - 100) + '%</span>'; } else { var pc = '<span class="text-muted mr-2 font-size-sm font-weight-bold">' + pecentage + '%</span>'; }
+    if (pecentage > 100) { var pc = '<span class="text-danger mr-2 font-size-sm font-weight-bold"> - ' + (pecentage - 100) + '%</span>'; } else { var pc = '<span class="text-dark-50 font-size-sm mr-2  font-weight-bold">' + pecentage + '%</span>'; }
     var html_div = '<div class="d-flex flex-column w-100 mr-2">' + '<div class="d-flex align-items-center justify-content-between mb-2">' +
-        pc + '<span class="text-muted font-size-sm font-weight-bold">' + item + ' ' + numberWithCommas(total) + '</span>' + '</div>' + '<div class="progress progress-xs w-100">' + '<div class="progress-bar ' + format_progress_bar(pecentage) + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' + '</div>' + '</div>';
+        pc + '<span class="text-dark-50 font-size-sm font-weight-bold">' + item + ' ' + numberWithCommas(total) + '</span>' + '</div>' + '<div class="progress progress-xs w-100">' + '<div class="progress-bar ' + format_progress_bar(pecentage) + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' + '</div>' + '</div>';
     return html_div
 }
 

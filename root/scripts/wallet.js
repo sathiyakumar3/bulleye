@@ -29,6 +29,8 @@ var start_app = function() {
         var counter = Object.keys(data).length;
         var sum_income = data_process(data, { 'Payment': 'Paid', 'Type': 'Income' });
         var sum_expense = data_process(data, { 'Payment': 'Paid', 'Type': 'Expense' });
+        var sum_income2 = data_process(data, { 'Payment': 'Not Paid', 'Type': 'Income' });
+        var sum_expense2 = data_process(data, { 'Payment': 'Not Paid', 'Type': 'Expense' });
         document.getElementById("number_items_2").innerText = counter + " Entries";
         var currency = '<span class="text-dark-50 font-weight-bold" id>' + wallet_symbol + ' ' + ' </span>';
         document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
@@ -38,7 +40,7 @@ var start_app = function() {
         document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
         table_data = check_RecordID(data);
-        initialze_table();
+        initialze_table(sum_income,sum_expense,sum_income2,sum_expense2);
     }
     var read_data = function(force_flag) {
         get_wallet_data(wallet_id, force_flag).then(function(result) {
@@ -79,7 +81,7 @@ var start_app = function() {
         cb(selected_start, selected_end, '');
     }
     var old_month = "";
-    var initialze_table = function() {
+    var initialze_table = function(sum_income,sum_expense,sum_income2,sum_expense2) {
         KTApp.unblock('#kt_blockui_content');
         var options = {
             data: { type: 'local', source: table_data, serverPaging: false, serverFiltering: true, },
@@ -97,13 +99,14 @@ var start_app = function() {
                 },
 
             },
-            columns: [{
+            columns: [/* {
                     field: 'test',
                     title: '#',
                     width: 20,
                     sortable: true,
                     template: function(row) { return row.RecordID }
-                },
+                }, */
+                
                 {
                     field: 'RecordID',
                     title: '#',
@@ -114,36 +117,69 @@ var start_app = function() {
                       class: '',
                     },
                     textAlign: 'center',
-                  },
-                {
+                  },{
                     field: 'User',
-                    title: 'User',
-                    width: 185,
+                    title: 'User',    
+                    width: 40,              
                     sortable: true,
-                    template: function(row) { return icon_nd_photo_name_email(row.photo_url, row.user_name, row.user_email); }
+                    template: function(row) { return icon_nd_name_nd_description2(row.photo_url,row.user_name) }
+                },{
+                    field: 'Timestamp',
+                    title: 'Date & Time',
+                    textAlign: 'left',
+                    width: 100,
+                    sortable: true,
+                    template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; },
                 },
+                
                 {
                     field: 'Category',
                     title: 'Category & Description',
                     sortable: true,
-                    width: 250,
+                    width: 200,
                     template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); },
                 },
-                {
-                    field: 'Timestamp',
-                    title: 'Date & Time',
+             {
+                    field: 'Value of Total',
+                    title: 'Value of Total',
                     textAlign: 'center',
-
-                    width: 100,
-                    sortable: true,
-                    template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; },
-                }, {
+                 
+                    width: 200,
+                    template: function(row) {
+                        var selet1 = '';
+                        var selet2 = '';
+                        var html_div ='';
+                        switch(row.Type){
+                            case 'Expense':
+                                selet1 = sum_expense;
+                                selet2 = sum_expense2;
+                                break;
+                              case 'Income':
+                                selet1 = sum_income;
+                                selet2 = sum_income2;
+                                break;
+                              default:                           
+                        }
+                        switch(row.Payment){
+                            case 'Not Paid':
+                                html_div = percentage_form(row.Amount, selet2, ' Rs');
+                                break;
+                              case 'Paid':
+                                html_div = percentage_form(row.Amount, selet1, ' Rs');
+                                break;
+                              default:                               
+                        }                        
+                        return html_div ;
+                     },
+                } ,
+                 {
                     field: 'Repeated',
                     title: 'Repeated',
+                    textAlign: 'center',
+                    width: 100,
                     sortable: true,
                     template: function(row) { return format_repeat(row.Repeated); },
                 },
-
                 {
                     field: 'Type2',
                     title: 'Income',
@@ -162,14 +198,11 @@ var start_app = function() {
    
                     template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense', wallet_symbol) },
                 },
-
                 {
                     field: 'Actions',
                     title: 'Actions',
-                    sortable: false,
                     textAlign: 'center',
-
-                  
+                    width: 150,
                     template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; },
                 }
             ],
@@ -201,6 +234,7 @@ var start_app = function() {
             $('#kt_datatable_selected_records_2').html(count);
             if (count > 0) { $('#kt_datatable_group_action_form_2').collapse('show'); } else { $('#kt_datatable_group_action_form_2').collapse('hide'); }
         });
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
     return {
