@@ -87,20 +87,21 @@ var table_databale ='';
        var colums_select = [ 15,9,10,11,5,13,14,12];
         KTApp.unblock('#kt_blockui_content');
         if (table_databale != "") {
-          //  table_databale.empty();
-         //   $('#kt_datatable_fetch_display_2').innerHTML = '';
-          //  $('#kt_datatable_group_action_form_2').collapse('hide');
-          //  $('#kt_datatable_selected_records_2').html(0);
-          table_databale.destroy();
+            table_databale.off('change', '.group-checkable');
+            table_databale.off('change', '.checkable');
+            table_databale.destroy();
+          selected_items = [];
+          refresh_table_buttons();
+         
         }
- 
+        
 		table_databale = $('#kt_datatable_22').DataTable({
             responsive: true,
 			data: table_data,
             dom: `<'row'<'col-sm-6 text-left'f><'col-sm-6 text-right'B>>
 			<'row'<'col-sm-12'tr>>
 			<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
-
+            bInfo : false,          
           buttons: [
             {
                 extend: 'copyHtml5',
@@ -181,6 +182,7 @@ var table_databale ='';
 					orderable: false,
 					render: function(data, type, full, meta) {                     
 						return icon_nd_name_nd_description2(full.photo_url,full.user_name);
+               
 					},
 				},
                 {
@@ -196,13 +198,14 @@ var table_databale ='';
 					title: 'Item',
 					orderable: false,
 					render: function(data, type, full, meta) {                  
-						return  icon_nd_name_nd_description(get_cat_ic(full.Category), full.Description, full.Category);
+					return  icon_nd_name_nd_description(get_cat_ic(full.Category), full.Description, full.Category);
+                   
 					},
 				},
                  
                 {
 					targets: 4,
-					title: 'Progress',
+					title: 'As a %',
 					orderable: false,
 					render: function(data, type, full, meta) {                  
 					    var selet1 = '';
@@ -234,6 +237,7 @@ var table_databale ='';
                 {
 					targets: 5,
 					title: 'Recurring',
+                    className: "dt-center",
 					orderable: false,
 					render: function(data, type, full, meta) {                  
 						return  format_repeat(full.Repeated);
@@ -361,12 +365,9 @@ var table_databale ='';
             refresh_table_buttons();
 		});
 
-        table_databale.on('change', '.checkable', function() {
-            console.log($(this));
+        table_databale.on('change', '.checkable', function() {      
            var checked = $(this).is(':checked');
-            var value = $(this).val();
-		
-	
+            var value = $(this).val();	
         if (checked) {
             selected_items.push(value);     
             table_databale.rows($(this).closest('tr')).select();
@@ -391,6 +392,12 @@ var table_databale ='';
     };
 }();
 jQuery(document).ready(function() {
+    KTApp.block('#kt_blockui_content', {
+        overlayColor: '#1e1e2d',
+        opacity: 0,
+        state: 'primary',
+        message: 'Fetching Entries...'
+    });
     wallet_id = global_data[0];
     wallet_name = global_data[1];
     user_id = global_data[2];
@@ -410,12 +417,7 @@ jQuery(document).ready(function() {
 
     var wallet_type = global_data[3];
     document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
-    KTApp.block('#kt_blockui_content', {
-        overlayColor: '#1e1e2d',
-        opacity: 0,
-        state: 'primary',
-        message: 'Fetching Entries...'
-    });
+
     start_app.init();
 });
 
