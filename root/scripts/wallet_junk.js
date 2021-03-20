@@ -221,3 +221,163 @@ function getCookie(cookieName) {
 function eraseCookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
+
+var old_month = "";
+var initialze_table = function(sum_income,sum_expense,sum_income2,sum_expense2) {
+    KTApp.unblock('#kt_blockui_content');
+    var options = {
+        data: { type: 'local', source: table_data, serverPaging: false, serverFiltering: true, },
+        destroy: true,
+        info: false,
+        layout: { scroll: false, footer: false, },
+        pagination: false,
+        responsive: true,
+        rows: {           
+            afterTemplate: function(row, data, index) {
+                if (monthts(data['Timestamp']) != old_month) {
+                    old_month = monthts(data['Timestamp']);
+                    $(row).before('<span class="label label-xl  my-2 label-primary label-pill label-inline ">' +
+                        old_month + '</span>' + '' + '<div class="separator separator-dashed"></div>');
+                }
+            },
+
+        },
+        columns: [/* {
+                field: 'test',
+                title: '#',
+                width: 20,
+                sortable: true,
+                template: function(row) { return row.RecordID }
+            }, */
+            
+            {
+                field: 'RecordID',
+                title: '#',
+                sortable: false,
+                width: 20,
+                type: 'number',
+                selector: {
+                  class: '',
+                },
+                textAlign: 'center',
+              },{
+                field: 'User',
+                title: 'User',    
+                width: 40,              
+                sortable: true,
+                template: function(row) { return icon_nd_name_nd_description2(row.photo_url,row.user_name) }
+            },{
+                field: 'Timestamp',
+                title: 'Date & Time',
+                textAlign: 'left',
+                width: 100,
+                sortable: true,
+                template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; },
+            },
+            
+            {
+                field: 'Category',
+                title: 'Category & Description',
+                sortable: true,
+                width: 200,
+                template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); },
+            },
+         {
+                field: 'Value of Total',
+                title: 'Value of Total',
+                textAlign: 'center',
+             
+                width: 200,
+                template: function(row) {
+                    var selet1 = '';
+                    var selet2 = '';
+                    var html_div ='';
+                    switch(row.Type){
+                        case 'Expense':
+                            selet1 = sum_expense;
+                            selet2 = sum_expense2;
+                            break;
+                          case 'Income':
+                            selet1 = sum_income;
+                            selet2 = sum_income2;
+                            break;
+                          default:                           
+                    }
+                    switch(row.Payment){
+                        case 'Not Paid':
+                            html_div = percentage_form(row.Amount, selet2, ' Rs');
+                            break;
+                          case 'Paid':
+                            html_div = percentage_form(row.Amount, selet1, ' Rs');
+                            break;
+                          default:                               
+                    }                        
+                    return html_div ;
+                 },
+            } ,
+             {
+                field: 'Repeated',
+                title: 'Repeated',
+                textAlign: 'center',
+                width: 100,
+                sortable: true,
+                template: function(row) { return format_repeat(row.Repeated); },
+            },
+            {
+                field: 'Type2',
+                title: 'Income',
+                textAlign: 'center',
+                width: 100,
+                autoHide: false,
+           
+                template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income', wallet_symbol) },
+            },
+            {
+                field: 'Type',
+                title: 'Expense',
+                width: 100,
+                textAlign: 'center',
+                autoHide: false,
+
+                template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense', wallet_symbol) },
+            },
+            {
+                field: 'Actions',
+                title: 'Actions',
+                textAlign: 'center',
+                width: 150,
+                template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right">' + myvar + edit_button + delete_button + '</div>'; },
+            }
+        ],
+        extensions: { checkbox: true, },
+        search: { input: $('#kt_datatable_search_query_2'), key: 'generalSearch' },
+    }
+    if (datatable != "") {
+        $('#kt_datatable_2').KTDatatable().empty();
+        $('#kt_datatable_fetch_display_2').innerHTML = '';
+        $('#kt_datatable_group_action_form_2').collapse('hide');
+        $('#kt_datatable_selected_records_2').html(0);
+        $('#kt_datatable_2').KTDatatable().destroy();
+    }
+    datatable = $('#kt_datatable_2').KTDatatable(options);
+
+    $('#kt_datatable_search_status_2').on('change', function() {
+        datatable.search($(this).val(), 'Payment');
+        console.log($(this).val())
+    });
+    $('#kt_datatable_search_type_2').on('change', function() {
+        datatable.search(format_repeat($(this).val()), 'Repeated');
+        console.log(format_repeat($(this).val()))
+    });
+
+    $('#kt_datatable_search_status_2, #kt_datatable_search_type_2').selectpicker();
+
+    datatable.on('datatable-on-click-checkbox', function(e) {
+        var ids = datatable.checkbox().getSelectedId();
+        console.log(ids);
+        var count = ids.length;
+        $('#kt_datatable_selected_records_2').html(count);
+        if (count > 0) { $('#kt_datatable_group_action_form_2').collapse('show'); } else { $('#kt_datatable_group_action_form_2').collapse('hide'); }
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+}

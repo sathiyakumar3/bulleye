@@ -187,11 +187,6 @@ currency_convertor = {
     ZWL: '$'
 }
 
-
-
-
-
-
 function selected_repeat() {
     var selected_repeated = document.getElementById('repeat_selection').value;
     var text = "";
@@ -491,3 +486,13 @@ function data_for_pie(data) {
     return [data_set, cat_set];
 }
 
+Array.prototype.remove_item_from_array = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};

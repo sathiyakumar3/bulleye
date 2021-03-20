@@ -148,6 +148,7 @@ function photo_nd_name(photo, username) {
  }
 
 
+
 function payment_status_fomt(type, payment, amount, int_type, currency) { if (type == int_type) { return '<div><div class="text-dark-75 font-weight-bolder d-block font-size-lg">' + currency + ' ' + numberWithCommas(amount) + '</div><a class="' + format_payment(payment) + ' font-weight-bold">' + payment + '</a></div>'; } else { return "" } }
 
 function set_sum(html_div, currency, sum) { document.getElementById(html_div).innerText = " " + currency + " " + numberWithCommas(sum); }

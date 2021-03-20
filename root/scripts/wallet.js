@@ -18,7 +18,7 @@ var selected_end = new Date('1/1/2100').getTime();
 var local_data;
 var table_data;
 var datatable = "";
-
+var selected_items = [];
 var start_app = function() {
     var run_wallet = function() {
 
@@ -40,7 +40,8 @@ var start_app = function() {
         document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
         table_data = check_RecordID(data);
-        initialze_table(sum_income,sum_expense,sum_income2,sum_expense2);
+ 
+        initTable2(sum_income,sum_expense,sum_income2,sum_expense2);
     }
     var read_data = function(force_flag) {
         get_wallet_data(wallet_id, force_flag).then(function(result) {
@@ -80,76 +81,134 @@ var start_app = function() {
         picker.daterangepicker({ direction: KTUtil.isRTL(), startDate: selected_start, endDate: selected_end, opens: 'left', applyClass: 'btn-primary', cancelClass: 'btn-light-primary', ranges: { 'Today': [moment(), moment()], 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')], 'Last 7 Days': [moment().subtract(6, 'days'), moment()], 'Last 30 Days': [moment().subtract(29, 'days'), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')], 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 'All time': [selected_start, selected_end] } }, cb);
         cb(selected_start, selected_end, '');
     }
-    var old_month = "";
-    var initialze_table = function(sum_income,sum_expense,sum_income2,sum_expense2) {
-        KTApp.unblock('#kt_blockui_content');
-        var options = {
-            data: { type: 'local', source: table_data, serverPaging: false, serverFiltering: true, },
-            destroy: true,
-            info: false,
-            layout: { scroll: false, footer: false, },
-            pagination: false,
-            rows: {
-                afterTemplate: function(row, data, index) {
-                    if (monthts(data['Timestamp']) != old_month) {
-                        old_month = monthts(data['Timestamp']);
-                        $(row).before('<span class="label label-xl  my-2 label-primary label-pill label-inline ">' +
-                            old_month + '</span>' + '' + '<div class="separator separator-dashed"></div>');
-                    }
-                },
 
+var table_databale ='';
+    var initTable2 = function(sum_income,sum_expense,sum_income2,sum_expense2) {
+       var colums_select = [ 15,9,10,11,5,13,14,12];
+        KTApp.unblock('#kt_blockui_content');
+        if (table_databale != "") {
+          //  table_databale.empty();
+         //   $('#kt_datatable_fetch_display_2').innerHTML = '';
+          //  $('#kt_datatable_group_action_form_2').collapse('hide');
+          //  $('#kt_datatable_selected_records_2').html(0);
+          table_databale.destroy();
+        }
+ 
+		table_databale = $('#kt_datatable_22').DataTable({
+            responsive: true,
+			data: table_data,
+            dom: `<'row'<'col-sm-6 text-left'f><'col-sm-6 text-right'B>>
+			<'row'<'col-sm-12'tr>>
+			<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
+
+          buttons: [
+            {
+                extend: 'copyHtml5',
+                exportOptions: {               
+                    columns: colums_select
+                }
             },
-            columns: [/* {
-                    field: 'test',
-                    title: '#',
-                    width: 20,
-                    sortable: true,
-                    template: function(row) { return row.RecordID }
-                }, */
-                
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: colums_select
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                title: 'Name : '+wallet_name,
+                messageTop : 'Description : ' + wallet_description + '\n'+'Currency : ' + wallet_currency,
+                messageBottom  : '\n'+'Powered by Adminiate.com',
+                exportOptions: {
+                  
+                    columns: colums_select
+                }
+            },         
+        ],
+            rowGroup: {
+            dataSrc: function(row) {
+               var html_div =  '<span class="label label-xl label-primary label-pill label-inline">' +
+               row.doc_id + '</span>';
+                return html_div;
+              }
+            },
+            "paging": false,        
+            order: [[2, 'asc']],
+            columns : [
+                {data : "RecordID" },
+                {data : "Timestamp" },
+                { data : "doc_id" },
+                { data : "Payment" },
+                { data : "Type" },
+                { data : "Category" },
+                { data : "Category" },
+                { data : "Category" },
+                { data : "Category" },
+                { data : "user_name" },
+                { data : "Category" },
+                { data : "Description" },   
+                { data : "Type" },   
+                { data : "Amount" },   
+                { data : "Amount" },   
+                { data : "Timestamp" }, 
+            ],
+			select: {
+				style: 'multi',
+				selector: 'td:first-child .checkable',
+			}, 
+			headerCallback: function(thead, data, start, end, display) {
+				thead.getElementsByTagName('th')[0].innerHTML = `
+                    <label class="checkbox checkbox-single checkbox-solid checkbox-primary mb-0">
+                        <input type="checkbox" value="" class="group-checkable"/>
+                        <span></span>
+                    </label>`;
+			}, 
+         
+	 	columnDefs: [
+				{
+					targets: 0,
+					orderable: false,
+					render: function(data, type, full, meta) {
+						return '<label class="checkbox checkbox-single checkbox-primary mb-0">'+
+                            '<input type="checkbox" value="'+full.RecordID+'" class="checkable"/>'+
+                            '<span></span>'+
+                        '</label>';
+					},
+				},
+			{
+					targets: 1,
+					title: 'User',
+					orderable: false,
+					render: function(data, type, full, meta) {                     
+						return icon_nd_name_nd_description2(full.photo_url,full.user_name);
+					},
+				},
                 {
-                    field: 'RecordID',
-                    title: '#',
-                    sortable: false,
-                    width: 20,
-                    type: 'number',
-                    selector: {
-                      class: '',
-                    },
-                    textAlign: 'center',
-                  },{
-                    field: 'User',
-                    title: 'User',    
-                    width: 40,              
-                    sortable: true,
-                    template: function(row) { return icon_nd_name_nd_description2(row.photo_url,row.user_name) }
-                },{
-                    field: 'Timestamp',
-                    title: 'Date & Time',
-                    textAlign: 'left',
-                    width: 100,
-                    sortable: true,
-                    template: function(row) { var myvar = dnt4table(row.Timestamp); return myvar; },
-                },
-                
+					targets: 2,
+					title: 'Date & Time',
+					orderable: false,
+					render: function(data, type, full, meta) {                  
+						return dnt4table(full.Timestamp);
+					},
+				},
                 {
-                    field: 'Category',
-                    title: 'Category & Description',
-                    sortable: true,
-                    width: 200,
-                    template: function(row) { return icon_nd_name_nd_description(get_cat_ic(row.Category), row.Description, row.Category); },
-                },
-             {
-                    field: 'Value of Total',
-                    title: 'Value of Total',
-                    textAlign: 'center',
+					targets: 3,
+					title: 'Item',
+					orderable: false,
+					render: function(data, type, full, meta) {                  
+						return  icon_nd_name_nd_description(get_cat_ic(full.Category), full.Description, full.Category);
+					},
+				},
                  
-                    width: 200,
-                    template: function(row) {
-                        var selet1 = '';
+                {
+					targets: 4,
+					title: 'Progress',
+					orderable: false,
+					render: function(data, type, full, meta) {                  
+					    var selet1 = '';
                         var selet2 = '';
                         var html_div ='';
-                        switch(row.Type){
+                        switch(full.Type){
                             case 'Expense':
                                 selet1 = sum_expense;
                                 selet2 = sum_expense2;
@@ -160,82 +219,166 @@ var start_app = function() {
                                 break;
                               default:                           
                         }
-                        switch(row.Payment){
+                        switch(full.Payment){
                             case 'Not Paid':
-                                html_div = percentage_form(row.Amount, selet2, ' Rs');
+                                html_div = percentage_form(full.Amount, selet2, ' Rs');
                                 break;
                               case 'Paid':
-                                html_div = percentage_form(row.Amount, selet1, ' Rs');
+                                html_div = percentage_form(full.Amount, selet1, ' Rs');
                                 break;
                               default:                               
                         }                        
                         return html_div ;
-                     },
-                } ,
-                 {
-                    field: 'Repeated',
-                    title: 'Repeated',
-                    textAlign: 'center',
-                    width: 100,
-                    sortable: true,
-                    template: function(row) { return format_repeat(row.Repeated); },
+					},
+				},
+                {
+					targets: 5,
+					title: 'Recurring',
+					orderable: false,
+					render: function(data, type, full, meta) {                  
+						return  format_repeat(full.Repeated);
+					},
+				},                
+                {
+					targets: 6,
+					title: 'Income',
+					orderable: false,
+					render: function(data, type, full, meta) {                  
+						return payment_status_fomt(full.Type, full.Payment, full.Amount, 'Income', wallet_symbol);
+					},
+				},
+                {	targets: 7,
+					title: 'Expense',
+					orderable: false,
+					render: function(data, type, full, meta) {                  
+						return payment_status_fomt(full.Type, full.Payment, full.Amount, 'Expense', wallet_symbol);
+					},
+				},
+                {
+					targets: 8,
+					title: 'Actions',
+					orderable: false,
+					render: function(data, type, full, meta) {                  
+                        var myvar = paid_nt_paid_button(full.Payment, full.Description, full.Type, full.Category, full.Amount, full.Timestamp, full.user, full.Repeated, full.RecordID);
+                         var delete_button = delete_button1(full.Timestamp); var edit_button = edit_button3(full.Payment, full.Description, full.Type, full.Category, full.Amount, full.Timestamp, full.user, full.Repeated, full.RecordID); 
+                        return '<div class="text-center">' + myvar + edit_button + delete_button + '</div>';
+					},
+				},   
+                {
+                    targets: 9,
+                    title: 'User',
+                  visible: false,
+                   searchable: false,             
+                    render: function(data, type, full, meta) {
+                        return full.user_name;
+                    },
+                },  
+                {
+                    targets: 10,
+                    title: 'Category',
+                  visible: false,
+                   searchable: false,             
+                    render: function(data, type, full, meta) {
+                        return full.Category;
+                    },
+                },   
+                  
+                {
+                    targets: 11,
+                    title: 'Description',
+                  visible: false,
+                   searchable: false,             
+                    render: function(data, type, full, meta) {
+                        return full.Description;
+                    },
+                    
+                },
+                       
+                {
+                    targets: 12,
+                    title: 'Status',
+                  visible: false,
+                   searchable: false,             
+                    render: function(data, type, full, meta) {
+                        return full.Payment;
+                    },
+                    
                 },
                 {
-                    field: 'Type2',
+                    targets: 13,
                     title: 'Income',
-                    textAlign: 'center',
-                    width: 100,
-                    autoHide: false,
-               
-                    template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Income', wallet_symbol) },
+                  visible: false,
+                   searchable: false,             
+                    render: function(data, type, full, meta) {
+                         if(full.Type=='Income'){return full.Amount }else{
+                             return '';
+                         };
+                    },
+                    
                 },
                 {
-                    field: 'Type',
+                    targets: 14,
                     title: 'Expense',
-                    width: 100,
-                    textAlign: 'center',
-                    autoHide: false,
-   
-                    template: function(row) { return payment_status_fomt(row.Type, row.Payment, row.Amount, 'Expense', wallet_symbol) },
+                  visible: false,
+                   searchable: false,             
+                    render: function(data, type, full, meta) {
+                        if(full.Type=='Expense'){return full.Amount }else{
+                            return '';
+                        };
+                    },
+                    
                 },
+                
                 {
-                    field: 'Actions',
-                    title: 'Actions',
-                    textAlign: 'center',
-                    width: 150,
-                    template: function(row) {; var myvar = paid_nt_paid_button(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); var delete_button = delete_button1(row.Timestamp); var edit_button = edit_button3(row.Payment, row.Description, row.Type, row.Category, row.Amount, row.Timestamp, row.user, row.Repeated, row.RecordID); return '<div class="text-right pr-0">' + myvar + edit_button + delete_button + '</div>'; },
-                }
-            ],
-            extensions: { checkbox: true, },
-            search: { input: $('#kt_datatable_search_query_2'), key: 'generalSearch' },
-        }
-        if (datatable != "") {
-            $('#kt_datatable_2').KTDatatable().empty();
-            $('#kt_datatable_fetch_display_2').innerHTML = '';
-            $('#kt_datatable_group_action_form_2').collapse('hide');
-            $('#kt_datatable_selected_records_2').html(0);
-            $('#kt_datatable_2').KTDatatable().destroy();
-        }
-        datatable = $('#kt_datatable_2').KTDatatable(options);
+                    targets: 15,
+                    title: 'Expense',
+                  visible: false,
+                   searchable: false,             
+                    render: function(data, type, full, meta) {
+                     var ts =    shortdate(full.Timestamp) + ' ' + formatAMPM(full.Timestamp) ;
+                       return ts
+                    },
+                    
+                },
+			], 
+		});
 
-        $('#kt_datatable_search_status_2').on('change', function() {
-            datatable.search($(this).val(), 'Payment');
-            console.log($(this).val())
-        });
-        $('#kt_datatable_search_type_2').on('change', function() {
-            datatable.search(format_repeat($(this).val()), 'Repeated');
-            console.log(format_repeat($(this).val()))
-        });
-        $('#kt_datatable_search_status_2, #kt_datatable_search_type_2').selectpicker();
+		table_databale.on('change', '.group-checkable', function() {
+			var set = $(this).closest('table').find('td:first-child .checkable');   
+			var checked = $(this).is(':checked');  
+			$(set).each(function() {
+				if (checked) {
+                    selected_items.push($(this).val());     
+					$(this).prop('checked', true);
+					table_databale.rows($(this).closest('tr')).select();
+				}
+				else {
+                    selected_items.remove_item_from_array($(this).val());  
+					$(this).prop('checked', false);
+					table_databale.rows($(this).closest('tr')).deselect();
+				}
+			});
+            refresh_table_buttons();
+		});
 
-        datatable.on('datatable-on-click-checkbox', function(e) {
-            var ids = datatable.checkbox().getSelectedId();
-            var count = ids.length;
-            $('#kt_datatable_selected_records_2').html(count);
-            if (count > 0) { $('#kt_datatable_group_action_form_2').collapse('show'); } else { $('#kt_datatable_group_action_form_2').collapse('hide'); }
-        });
-        $('[data-toggle="tooltip"]').tooltip();
-    }
+        table_databale.on('change', '.checkable', function() {
+            console.log($(this));
+           var checked = $(this).is(':checked');
+            var value = $(this).val();
+		
+	
+        if (checked) {
+            selected_items.push(value);     
+            table_databale.rows($(this).closest('tr')).select();
+        }
+        else {
+            selected_items.remove_item_from_array(value);           
+        }
+        refresh_table_buttons();
+       
+	});
+	};
+
 
     return {
         init: function() {
@@ -276,7 +419,11 @@ jQuery(document).ready(function() {
     start_app.init();
 });
 
-
+function refresh_table_buttons(){
+    var count = selected_items.length;
+    $('#kt_datatable_selected_records_2').html(count);
+    if (count > 0) { $('#kt_datatable_group_action_form_2').collapse('show'); } else { $('#kt_datatable_group_action_form_2').collapse('hide'); }
+}
 
 function edit_entry_modal(description, category, amount, timestamp, type, payment, repeat, RecordID) {
 
@@ -315,10 +462,14 @@ function entry_delete(timestamp, num_of_repeat, i) {
     Swal.fire({ title: 'Are you sure?', text: "You won't be able to revert this!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' }).then((result) => { if (result.isConfirmed) { del(timestamp, num_of_repeat, i); } })
 }
 
+
+
+
+//delete selected_items
 function delete_selected() {
     Swal.fire({ title: 'Are you sure?', text: "You are about to delete the selected.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Delete!' }).then((result) => {
         if (result.isConfirmed) {
-            var ids = datatable.checkbox().getSelectedId();
+            var ids = selected_items;
             for (var i = 0; i < ids.length; i++) {
                 var data = table_data[ids[i] - 1];
                 var timestamp = data.Timestamp;
@@ -327,7 +478,6 @@ function delete_selected() {
         }
     })
 };
-
 function del(timestamp, num_of_repeat, i) {
     return new Promise(function(resolve, reject) {
         let myPromise = new Promise(function(resolve, reject) {
@@ -349,8 +499,9 @@ function del(timestamp, num_of_repeat, i) {
     });
 }
 
+// update selected_items 
 function update_selected(update) {
-    var ids = datatable.checkbox().getSelectedId();
+    var ids = selected_items;
 
     for (var i = 0; i < ids.length; i++) {
         var data = table_data[ids[i] - 1];
@@ -381,8 +532,6 @@ function update_selected(update) {
         update_entry(description, category, amount, timestamp, type, payment, user, repeat, ids.length, i).then(function() {}).catch((error) => { console.log(error); });
     }
 };
-
-
 function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
 
     var timestamp = new Date(timestamp2);
