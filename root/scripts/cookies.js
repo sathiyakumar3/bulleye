@@ -181,16 +181,15 @@ function deloptfeild(docRef, id, field) {
 function updateoptdata(docRef, id, data) {
   return new Promise(function (resolve, reject) {
     var find = getCookie_local(id);
-    docRef
-      .doc(id)
+    docRef.doc(id)
       .update(data)
       .then(function () {
         if (find != "") {
           find = JSON.parse(find);
           var finalobj1 = {};
-          for (var _obj in find) finalobj1[_obj] = find[_obj];
-          for (var _obj in data) finalobj1[_obj] = data[_obj];
-          find = finalobj1;
+       //   for (var _obj in find) finalobj1[_obj] = find[_obj];
+         for (var _obj in data) {find[_obj] = data[_obj]};
+      //    find = finalobj1;
           var str = JSON.stringify(find);
           setCookie_local(id, str);
         } else {

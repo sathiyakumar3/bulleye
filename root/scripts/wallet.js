@@ -91,9 +91,10 @@ var start_app = function() {
         cb(selected_start, selected_end, '');
     }
     var initTable2 = function(sum_income,sum_expense,sum_income2,sum_expense2) {
+        KTApp.unblock('#kt_blockui_content');
         console.log('[TABLE FETCH ] - '+new Date() );
        var colums_select = [ 15,9,10,11,5,13,14,12];
-        KTApp.unblock('#kt_blockui_content');
+
         if (table_databale != "") {
             table_databale.off('change', '.group-checkable');
             table_databale.off('change', '.checkable');
@@ -418,6 +419,12 @@ var start_app = function() {
             read_data();
         },
         refresh: function() {
+            KTApp.block('#kt_blockui_content', {
+                overlayColor: '#1e1e2d',
+                opacity: 0,
+                state: 'primary',
+                message: 'Fetching Entries...'
+            });
             read_data();
         },
         entries_sync: function(){
