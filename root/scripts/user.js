@@ -256,11 +256,11 @@ function generate_navi(data, p_wallet) {
         var wallet_name = data[i]['wallet_name'];
         var wallet_type = data[i]['wallet_type'];
         var users_size = data[i]['users_size'];
-        var wallet_description = data[i]['wallet_description'];
+ 
         var wallet_owner = data[i]['wallet_owner'];
-        var wallet_location = data[i]['wallet_location'];
-        var wallet_currency = data[i]['wallet_currency'];
-        var month_data = wallet_id + "," + wallet_name + "," + user_local.uid + "," + wallet_type + "," + wallet_description + "," + wallet_owner + "," + wallet_location + ',' + wallet_currency;
+      
+
+        var month_data = wallet_id + "," + wallet_name + "," + user_local.uid;
         if (wallet_id != p_wallet) {
             var my_wallet = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
                 '<a href="javascript:;" class="menu-link menu-toggle">' +

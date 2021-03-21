@@ -396,8 +396,8 @@ var start_app = function() {
 
 
             /* 
-                            var wallet_Ref = db.collection("wallets")
-                            set(wallet_Ref, data).then(function() {
+                            var wallet_Ref_entries = db.collection("wallets")
+                            set(wallet_Ref_entries, data).then(function() {
                                 get_user(user_local);
                             }).catch((error) => {
                                 console.log(error);
@@ -521,26 +521,39 @@ var start_app = function() {
 
 
 jQuery(document).ready(function() {
-    wallet_id = global_data[0];
-    wallet_name = global_data[1];
+    wallet_id = global_data[0]; 
     user_id = global_data[2];
-    wallet_type = global_data[3];
-    wallet_description = global_data[4];
-    wallet_owner = global_data[5];
-    wallet_location = global_data[6];
-    wallet_currency = global_data[7];
-    wallet_symbol = currency_convertor[wallet_currency];
-
+  
+  
+  
+  
     wallet_Ref = db.collection("wallets");
-    document.getElementById("t_wallet_name").innerHTML = wallet_name;
-    // document.getElementById("t_wallet_id").innerText = wallet_id;
-    var wallet_currency = global_data[7];
-    console.log(wallet_currency);
-    $('#edit_cur_selec').selectpicker('val', wallet_currency);
+   
 
-    document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
-    document.getElementById("access_list").innerHTML = document.getElementById("access_list").innerHTML + build_access_control(wallet_type);
-    start_app.init();
+
+    getoptdata(wallet_Ref, wallet_id).then(function(doc) {
+        wallet_name = doc.name;
+        wallet_type = doc.type;
+        wallet_description = doc.description;
+        wallet_owner = doc.owner;
+        wallet_location = doc.location;
+        wallet_currency = doc.currency;
+        wallet_entries = doc.entries; 
+        wallet_symbol = currency_convertor[wallet_currency];
+        document.getElementById("t_wallet_name").innerHTML = wallet_name;
+        $('#edit_cur_selec').selectpicker('val', wallet_currency);
+        document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
+        document.getElementById("access_list").innerHTML = document.getElementById("access_list").innerHTML + build_access_control(wallet_type);
+        start_app.init();
+      }).catch((error) => {
+          console.log(error);       
+     });
+
+
+
+
+
+  
 });
 
 function build_access_control(type) {

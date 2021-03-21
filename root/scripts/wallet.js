@@ -1,5 +1,6 @@
 "use strict";
 var user_id;
+var wallet_Ref_entries = "";
 var wallet_Ref = "";
 var user_Ref = db.collection("users");
 
@@ -11,6 +12,9 @@ var wallet_owner = '';
 var wallet_location = '';
 var wallet_currency = '';
 var wallet_symbol = '';
+var wallet_entries = '';
+
+
 
 var datetime_loaded = false;
 var selected_start = new Date('1/1/1900').getTime();
@@ -19,11 +23,13 @@ var local_data;
 var table_data;
 var datatable = "";
 var selected_items = [];
+var table_databale ='';
+
 var start_app = function() {
     var run_wallet = function() {
 
         var data = date_filter(local_data, selected_end, selected_start);
-        data = sort_obj(data, 'Timestamp');
+       
         var user_profile = user_process(data);
         var user_sum = Object.keys(user_profile).length;
         var counter = Object.keys(data).length;
@@ -43,10 +49,13 @@ var start_app = function() {
  
         initTable2(sum_income,sum_expense,sum_income2,sum_expense2);
     }
-    var read_data = function(force_flag) {
-        get_wallet_data(wallet_id, force_flag).then(function(result) {
+    var read_data = function() {
+        console.log('[DATA FETCH ] - '+new Date() );
+        get_wallet_data(wallet_id,wallet_entries).then(function(result) {
             local_data = result;
             var outcome = date_process(result);
+    
+            console.log('[DATA  GOT ] - '+new Date() );
             selected_start = outcome[0];
             selected_end = outcome[1];
             /*    selected_start =selected_start.setHours(0, 0, 0, 0);
@@ -81,9 +90,8 @@ var start_app = function() {
         picker.daterangepicker({ direction: KTUtil.isRTL(), startDate: selected_start, endDate: selected_end, opens: 'left', applyClass: 'btn-primary', cancelClass: 'btn-light-primary', ranges: { 'Today': [moment(), moment()], 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')], 'Last 7 Days': [moment().subtract(6, 'days'), moment()], 'Last 30 Days': [moment().subtract(29, 'days'), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')], 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 'All time': [selected_start, selected_end] } }, cb);
         cb(selected_start, selected_end, '');
     }
-
-var table_databale ='';
     var initTable2 = function(sum_income,sum_expense,sum_income2,sum_expense2) {
+        console.log('[TABLE FETCH ] - '+new Date() );
        var colums_select = [ 15,9,10,11,5,13,14,12];
         KTApp.unblock('#kt_blockui_content');
         if (table_databale != "") {
@@ -91,17 +99,18 @@ var table_databale ='';
             table_databale.off('change', '.checkable');
             table_databale.destroy();
           selected_items = [];
-          refresh_table_buttons();
-         
+          refresh_table_buttons();         
         }
+
         
-		table_databale = $('#kt_datatable_22').DataTable({
+        var options = {
             responsive: true,
 			data: table_data,
-            dom: `<'row'<'col-sm-6 text-left'f><'col-sm-6 text-right'B>>
+            dom: `<'row hide'<'col-sm-6 text-left'f><'col-sm-6 text-right'B>>
 			<'row'<'col-sm-12'tr>>
-			<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
-            bInfo : false,          
+			<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'lp>>`,
+            bInfo : false,  
+            paging:false,        
           buttons: [
             {
                 extend: 'copyHtml5',
@@ -125,16 +134,9 @@ var table_databale ='';
                     columns: colums_select
                 }
             },         
-        ],
-            rowGroup: {
-            dataSrc: function(row) {
-               var html_div =  '<span class="label label-xl label-primary label-pill label-inline">' +
-               row.doc_id + '</span>';
-                return html_div;
-              }
-            },
-            "paging": false,        
-            order: [[2, 'asc']],
+        ], 
+            order: [[16, 'asc']],
+       
             columns : [
                 {data : "RecordID" },
                 {data : "Timestamp" },
@@ -152,7 +154,9 @@ var table_databale ='';
                 { data : "Amount" },   
                 { data : "Amount" },   
                 { data : "Timestamp" }, 
+                { data : "Timestamp" }
             ],
+     
 			select: {
 				style: 'multi',
 				selector: 'td:first-child .checkable',
@@ -170,6 +174,7 @@ var table_databale ='';
 					targets: 0,
 					orderable: false,
 					render: function(data, type, full, meta) {
+                      
 						return '<label class="checkbox checkbox-single checkbox-primary mb-0">'+
                             '<input type="checkbox" value="'+full.RecordID+'" class="checkable"/>'+
                             '<span></span>'+
@@ -205,7 +210,7 @@ var table_databale ='';
                  
                 {
 					targets: 4,
-					title: 'As a %',
+					title: 'Proportion',
 					orderable: false,
 					render: function(data, type, full, meta) {                  
 					    var selet1 = '';
@@ -335,7 +340,7 @@ var table_databale ='';
                 
                 {
                     targets: 15,
-                    title: 'Expense',
+                    title: 'Timestamp',
                   visible: false,
                    searchable: false,             
                     render: function(data, type, full, meta) {
@@ -344,8 +349,30 @@ var table_databale ='';
                     },
                     
                 },
+                 
+                {
+                    targets: 16,
+                    title: 'For Sorting',
+                  visible: false,
+                   searchable: false,             
+                    render: function(data, type, full, meta) {                  
+                       return full.Timestamp
+                    },
+                    
+                },
 			], 
-		});
+		};
+        if(enable_months){
+            options['rowGroup'] ={
+                dataSrc: function(row) {
+                   var html_div =  '<span class="label label-xl label-primary label-pill label-inline">' +
+                   row.doc_id + '</span>';
+                    return html_div;
+                  }
+                };
+        }
+		table_databale = $('#kt_datatable_22').DataTable(options);
+
 
 		table_databale.on('change', '.group-checkable', function() {
 			var set = $(this).closest('table').find('td:first-child .checkable');   
@@ -378,53 +405,63 @@ var table_databale ='';
         refresh_table_buttons();
        
 	});
+    console.log('[TABLE IINTIZED ] - '+new Date() );
 	};
-
-
     return {
         init: function() {
-            read_data(false);
+            KTApp.block('#kt_blockui_content', {
+                overlayColor: '#1e1e2d',
+                opacity: 0,
+                state: 'primary',
+                message: 'Fetching Entries...'
+            });
+            read_data();
         },
         refresh: function() {
-
-            read_data(true);
+            read_data();
         },
+        entries_sync: function(){
+        sync_wallet_entries(wallet_id).then(function(result) {
+             start_app.refresh();
+            }).catch((error) => {
+             });           
+        }
     };
 }();
 jQuery(document).ready(function() {
-    KTApp.block('#kt_blockui_content', {
-        overlayColor: '#1e1e2d',
-        opacity: 0,
-        state: 'primary',
-        message: 'Fetching Entries...'
-    });
+
     wallet_id = global_data[0];
-    wallet_name = global_data[1];
     user_id = global_data[2];
-    wallet_type = global_data[3];
-    wallet_description = global_data[4];
-    wallet_owner = global_data[5];
-    wallet_location = global_data[6];
-    wallet_currency = global_data[7];
-
-    wallet_symbol = currency_convertor[wallet_currency];
-    wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
-
-    cat2combo(wallet_id);
-
-    document.getElementById("form_currency").innerText = wallet_symbol;
-    document.getElementById("t_wallet_name").innerText = wallet_name;
-
-    var wallet_type = global_data[3];
-    document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
-
-    start_app.init();
+    
+    wallet_Ref_entries = db.collection("wallets").doc(wallet_id).collection('entries');
+    wallet_Ref = db.collection("wallets");
+    getoptdata(wallet_Ref, wallet_id).then(function(doc) {         
+        wallet_name = doc.name;
+        wallet_type = doc.type;
+        wallet_description = doc.description;
+        wallet_owner = doc.owner;
+        wallet_location = doc.location;
+        wallet_currency = doc.currency;
+        wallet_entries = doc.entries;
+        wallet_symbol = currency_convertor[wallet_currency];
+        document.getElementById("form_currency").innerText = wallet_symbol;
+        document.getElementById("t_wallet_name").innerText = wallet_name;
+        cat2combo(wallet_id);      
+       start_app.init();
+      }).catch((error) => {
+          console.log(error);       
+     });
 });
-
+$('#kt_datatable_group_action_form_3').collapse('show');
 function refresh_table_buttons(){
     var count = selected_items.length;
     $('#kt_datatable_selected_records_2').html(count);
-    if (count > 0) { $('#kt_datatable_group_action_form_2').collapse('show'); } else { $('#kt_datatable_group_action_form_2').collapse('hide'); }
+    if (count > 0) {
+         $('#kt_datatable_group_action_form_2').collapse('show');
+     
+ } else { 
+
+     $('#kt_datatable_group_action_form_2').collapse('hide'); }
 }
 
 function edit_entry_modal(description, category, amount, timestamp, type, payment, repeat, RecordID) {
@@ -485,7 +522,7 @@ function del(timestamp, num_of_repeat, i) {
         let myPromise = new Promise(function(resolve, reject) {
             timestamp = new Date(timestamp);
             var entry_id = monthts(timestamp);
-            deloptfeild(wallet_Ref, entry_id, timestamp).then(function() { resolve("success"); }).catch((error) => {
+            deloptfeild(wallet_Ref_entries, entry_id, timestamp).then(function() { resolve("success"); }).catch((error) => {
                 console.log("Error getting documents: ", error);
                 reject(error);
             });
@@ -531,6 +568,7 @@ function update_selected(update) {
                 break;
             default:
         }
+     
         update_entry(description, category, amount, timestamp, type, payment, user, repeat, ids.length, i).then(function() {}).catch((error) => { console.log(error); });
     }
 };
@@ -544,10 +582,25 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
         };
         var entry_id = monthts(timestamp);
 
-        updateoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
+        updateoptdata(wallet_Ref_entries, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
             console.log(error);
-            console.log(error.code);
-            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { setoptdata(wallet_Ref, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => { reject(error); }); }
+            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { 
+
+                setoptdata(wallet_Ref_entries, entry_id, value).then(function() {
+                    uptoptarray(wallet_Ref, wallet_id, 'entries', entry_id).then(function() {
+                        resolve('sucess'); 
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+    
+                    
+                    
+                  
+          
+               
+            }).catch((error) => { 
+                console.log(error);
+                 reject(error); }); }
         });
     });
     return new Promise(function(resolve, reject) {
@@ -560,3 +613,37 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
         }, function(error) { reject(error); });
     });
 }
+
+
+function external_table_btn(x){
+    switch(x) {
+        case 'pdf':
+            table_databale.button('2').trigger();
+          break;
+        case 'copy':
+            table_databale.button('0').trigger();
+          break;
+          case 'excel':
+            table_databale.button('1').trigger();
+            break;
+        default:
+          // code block
+      }
+}
+
+$('#search_id').keyup(function(){
+    table_databale.search($(this).val()).draw() ;
+})
+
+var enable_months = false;
+function monthview(){
+    if(enable_months){
+        document.getElementById('id_month_text').innerText = "Enable Month View";
+    enable_months = false;
+    start_app.refresh();
+    }else{
+        document.getElementById('id_month_text').innerText = "Disable Month View";
+        enable_months = true;
+        start_app.refresh();
+    }     
+};

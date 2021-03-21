@@ -107,7 +107,8 @@ function get_wallet_data2(wallet_id, force_flag) {
                         });
                         return Promise.all(getSubProjectsPromises);
                     });
-                    all_wallet_doc_promise.push(each_wallet_subdoc_promise);
+                   
+                    
                 });
             });
         return Promise.all(all_wallet_doc_promise).then((subProjectSnapshots) => {
@@ -381,3 +382,25 @@ var initialze_table = function(sum_income,sum_expense,sum_income2,sum_expense2) 
     });
     $('[data-toggle="tooltip"]').tooltip();
 }
+
+var data =          
+['2VK6nZLGeoMreLiS3T5c',
+'7dXv1ciUxSDkIrUGDBje',
+'AbXO8AP2ST1yJee3AIXX',
+'Bz0wok8BYoI7DDJkrvOr',
+'CClzfdfHEX6hbJaVXF5x',
+'H3D6taJCkOVNxETuehVf',
+'JxVTE92jNJbLAcOfkc8H',
+'N5ERuybhQG0EbkheJcWH',
+'T7oAhdxVnvVBbI3Glt2T',
+'XVVOQn0uFvGP18YGGIRY',
+'g4HuKHCKdd86l22eqtEj',
+'gKslYwg6XDQSIBY0N6Oe',
+'js95dohALlyBDdElBFmG',
+'pci8eOv2A8eSH01LlQuK',
+'sMexJvahMZ5KWo6mCdsZ',
+'vFvjqJDsLjtuZ5Zp3w2B',
+'w1UM8nR4mZdRlRaDLN4h']
+data.forEach(function(item, index, array) {
+    sync_wallet_entries(item);
+  })

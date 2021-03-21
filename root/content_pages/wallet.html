@@ -6,10 +6,29 @@
             <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Balance Sheet</h5>
             <!--end::Page Title-->
             <!--begin::Actions-->
+
+<!--             <span class="text-muted font-weight-bold mr-4" id="t_wallet_type">---</span> -->
             <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-            <span class="text-muted font-weight-bold mr-4" id="t_wallet_type">---</span>
-            <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-            <span class="text-muted font-weight-bold mr-4" id="dummy">The first step in the finance management is identifying transactions.</span>
+            <div class="input-group input-group input-group-solid  mr-2 " style="max-width: 175px">
+                <input type="text" class="form-control" id="search_id" placeholder="Search...">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <span class="svg-icon">
+                            <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/General/Search.svg-->
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                    <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                    <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero"></path>
+                                </g>
+                            </svg>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <!--<i class="flaticon2-search-1 icon-sm"></i>-->
+                    </span>
+                </div>
+            </div>     
+         <!--    <span class="text-muted font-weight-bold mr-4" id="dummy">The first step in the finance management is identifying transactions.</span> -->
             <!--end::Actions-->
         </div>
         <!--end::Info-->
@@ -25,7 +44,7 @@
                         <div class="btn-group show" hidden>
                             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Secondary</button>
                             <div class="dropdown-menu show" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" onclick="print()">Pdf</a>
                                 <a class="dropdown-item" href="#">Another action</a>
                                 <a class="dropdown-item" href="#">Something else here</a>
                                 <div class="dropdown-divider"></div>
@@ -60,21 +79,50 @@
                                 </ul>
                             </div>
                         </div>
+                        <div class="dropdown">
+                            <button class="btn btn-light-info  mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Export
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" onclick="external_table_btn('pdf')">PDF</a>
+                                <a class="dropdown-item" onclick="external_table_btn('excel')">Excel</a>
+                                <a class="dropdown-item" onclick="external_table_btn('copy')">Copy</a>
+                            </div>
+                        </div>
                         <button class="btn  btn-light-danger mr-2" type="button" id="kt_datatable_delete_all" onclick="delete_selected()">Delete</button>
                     </div>
                 </div>
             </a>
+         <!--    <span class="switch switch-lg switch-icon ml-2">
+                <label>
+                    <input type="checkbox" name="select" id="enable_months">
+                    <span></span>
+                </label>
+            </span> -->
+        
+          
+  
+           
+
     
-            <a href="#" class="btn btn-sm btn-light font-weight-bold mr-2 " id="kt_dashboard_daterangepicker">
-                <span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today:</span>
-                <span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Jan 30</span>
+            <a href="#" class="btn btn-transparent-primary font-weight-bold mr-2 nowrap" id="kt_dashboard_daterangepicker">
+                <span class="font-size-base mr-2" id="kt_dashboard_daterangepicker_title">-- :</span>
+                <span class="font-size-base" id="kt_dashboard_daterangepicker_date">-- --</span>
 
             </a>
 
             <!--end::Daterange-->
-
-            <a class="btn btn-transparent-primary font-weight-bold  mr-2" onclick="add_entry_modal()">Add Entry</a>
-            <a class="btn btn-transparent-primary font-weight-bold  mr-2" onclick="start_app.refresh()">Refresh</a>
+    
+            <a class="btn btn-transparent-primary font-weight-bold  mr-2 nowrap" onclick="add_entry_modal()"><span>Add Entry</span></a>
+            <div class="dropdown">
+                <button class="btn btn-light-success  mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Options
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" onclick="monthview('pdf')" id="id_month_text">Enable Month View</a>      
+                    <a class="dropdown-item" onclick="start_app.entries_sync()">Refresh Table</a>           
+                </div>
+            </div>
         </div>
         <!--end::Toolbar-->
     </div>
@@ -85,46 +133,8 @@
     <!--begin::Container-->
     <div class="container" id="kt_blockui_content">
         <div class="card card-custom gutter-b">
-            <div class="card-body">
-                <!--begin: Datatable-->
-                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_2"></div>
-                <!--end: Datatable-->
-                <!--begin::Search Form-->
-
-                <!--begin: Selected Rows Group Action Form-->
-                <!--end: Selected Rows Group Action Form-->
-                <table class="table table-hover table-checkable" id="kt_datatable_22" style="margin-top: 13px !important;">
-                 <!--    <thead>
-                        <tr>
-                            <th>Record ID</th>
-                            <th>Order ID</th>
-                            <th>Country</th>
-                            <th>Ship City</th>
-                            <th>Ship Address</th>
-                            <th>Company Agent</th>
-                            <th>Company Name</th>
-                            <th>Ship Date</th>
-                            <th>Status</th>
-                            <th>Type</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                  
-                    <tfoot>
-                        <tr>
-                            <th>Record ID</th>
-                            <th>Order ID</th>
-                            <th>Country</th>
-                            <th>Ship City</th>
-                            <th>Ship Address</th>
-                            <th>Company Agent</th>
-                            <th>Company Name</th>
-                            <th>Ship Date</th>
-                            <th>Status</th>
-                            <th>Type</th>
-                            <th>Actions</th>
-                        </tr>
-                    </tfoot> -->
+            <div class="card-body">            
+                <table class="table table-hover table-checkable" id="kt_datatable_22" >              
                 </table>
             </div>
         </div>

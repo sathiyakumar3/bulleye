@@ -64,3 +64,10 @@ div.sticky {
         transform: scaleY(3);
     }
 }
+
+.hide {
+    display: none;
+ }
+ .nowrap{
+    white-space: nowrap;
+ }

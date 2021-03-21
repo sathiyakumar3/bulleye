@@ -17,7 +17,7 @@ var selected_start = new Date('1/1/1900').getTime();
 var selected_end = new Date('1/1/2100').getTime();
 var local_data;
 
-
+var wallet_entries = '';
 
 var flag_expand = true;
 
@@ -277,7 +277,7 @@ var start_app = function() {
     }
     var read_data = function(force_flag) {
 
-        get_wallet_data(wallet_id, force_flag).then(function(result) {
+        get_wallet_data(wallet_id,wallet_entries).then(function(result) {
 
             local_data = sort_obj(result, 'Timestamp');
             var entries_size = Object.keys(local_data).length;
@@ -435,11 +435,25 @@ var start_app = function() {
 
     return {
         init: function() {
-            read_data(false);
+            KTApp.block('#kt_blockui_content', {
+                overlayColor: '#1e1e2d',
+                opacity: 0,
+                state: 'primary',
+                message: 'Fetching Entries...'
+            });
+        
+            read_data();
 
         },
         refresh: function() {
-            read_data(true);
+            KTApp.block('#kt_blockui_content', {
+                overlayColor: '#1e1e2d',
+                opacity: 0,
+                state: 'primary',
+                message: 'Fetching Entries...'
+            });
+        
+            read_data();
         },
         cat: function() {
             run_cat();
@@ -448,40 +462,43 @@ var start_app = function() {
 }();
 jQuery(document).ready(function() {
     wallet_id = global_data[0];
-    wallet_name = global_data[1];
-    user_id = global_data[2];
-    wallet_type = global_data[3];
-    wallet_description = global_data[4];
-    wallet_owner = global_data[5];
-    wallet_location = global_data[6];
-    wallet_currency = global_data[7];
-    wallet_symbol = currency_convertor[wallet_currency];
+    user_id = global_data[2];   
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
+    getoptdata(wallet_Ref, wallet_id).then(function(doc) {
+        wallet_name = doc.name;
+        wallet_type = doc.type;
+        wallet_description = doc.description;
+        wallet_owner = doc.owner;
+        wallet_location = doc.location;
+        wallet_currency = doc.currency;
+        wallet_entries = doc.entries; 
+        wallet_symbol = currency_convertor[wallet_currency];
+        cat2combo(wallet_id);
+        document.getElementById("form_currency").innerText = wallet_symbol;
+        getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
+            var user_name = finalResult.name;
+            document.getElementById("owrner_fp").innerText = user_name;
+        }).catch((error) => { console.log(error); });
+    
+        document.getElementById("location_fp").innerText = wallet_location;
+        document.getElementById("t_wallet_name").innerHTML = wallet_name;
+        //wallet_name.toUpperCase();
+        document.getElementById("t_wallet_id").innerText = wallet_id;
+        document.getElementById("wallet_title").innerText = wallet_description;
+        document.getElementById("wallet_init").innerText = wallet_symbol
+    
+        document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
+        start_app.init();
+      }).catch((error) => {
+          console.log(error);       
+     });
 
 
-    KTApp.block('#kt_blockui_content', {
-        overlayColor: '#1e1e2d',
-        opacity: 0,
-        state: 'primary',
-        message: 'Fetching Entries...'
-    });
 
-    cat2combo(wallet_id);
-    document.getElementById("form_currency").innerText = wallet_symbol;
-    getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
-        var user_name = finalResult.name;
-        document.getElementById("owrner_fp").innerText = user_name;
-    }).catch((error) => { console.log(error); });
 
-    document.getElementById("location_fp").innerText = wallet_location;
-    document.getElementById("t_wallet_name").innerHTML = wallet_name;
-    //wallet_name.toUpperCase();
-    document.getElementById("t_wallet_id").innerText = wallet_id;
-    document.getElementById("wallet_title").innerText = wallet_description;
-    document.getElementById("wallet_init").innerText = wallet_symbol
 
-    document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
-    start_app.init();
+ 
+   
 });
 
 function check_balance() {
@@ -509,8 +526,47 @@ function check_balance() {
         }
     })
 }
-
 function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
+
+    var timestamp = new Date(timestamp2);
+    let myPromise = new Promise(function(resolve, reject) {
+        var value = {
+            [timestamp]: { "user": user, "Description": description, "Category": category, "Type": type, "Payment": payment, "Amount": amount, "Repeated": repeat, },
+            last_updated: timestamp
+        };
+        var entry_id = monthts(timestamp);
+
+        updateoptdata(wallet_Ref_entries, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
+            console.log(error);
+            console.log(error.code);
+            if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { 
+
+                setoptdata(wallet_Ref_entries, entry_id, value).then(function() {
+                    uptoptarray(wallet_Ref, wallet_id, 'entries', entry_id).then(function() {
+                        resolve('sucess'); 
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+    
+                    
+                    
+                  
+          
+               
+            }).catch((error) => { reject(error); }); }
+        });
+    });
+    return new Promise(function(resolve, reject) {
+        myPromise.then(function(value) {
+            swalfire(i, num_of_repeat);
+            if (i == (num_of_repeat - 1)) {
+                start_app.refresh();
+            }
+            resolve('sucess');
+        }, function(error) { reject(error); });
+    });
+}
+/* function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
 
     var timestamp = new Date(timestamp2);
     let myPromise = new Promise(function(resolve, reject) {
@@ -535,7 +591,7 @@ function update_entry(description, category, amount, timestamp2, type, payment, 
             resolve('sucess');
         }, function(error) { reject(error); });
     });
-}
+} */
 
 var chat_elements = [];
 var generate_chart = function(div_id, options) {
