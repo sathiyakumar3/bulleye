@@ -398,8 +398,11 @@ function check_RecordID(data) {
 
     var counter = 0;
     Object.keys(data).map(function(key, index) {
-        counter++;
-        data[key]['RecordID'] = counter;
+        if( data[key]['Timestamp']!=null){
+            counter++;
+            data[key]['RecordID'] = counter;
+        }
+        
     });
     return data;
 }

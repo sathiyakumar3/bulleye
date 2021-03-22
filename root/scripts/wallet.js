@@ -530,20 +530,97 @@ function entry_delete(timestamp, num_of_repeat, i) {
 
 //delete selected_items
 function delete_selected() {
-     
-    var ids = selected_items;
-
-    for (var i = 0; i < ids.length; i++) {
-      
-        var sel = ids[i];  
-        console.log(sel);    
-        table_databale.row(sel-1).remove().draw();
-    }
-    selected_items =[];
-    refresh_table_buttons();
+    var rows = table_databale.rows( '.selected' );
+    rows.remove().draw();
+    save_updates();
 };
 
 
+
+// update selected_items 
+function update_selected(update) {
+       var ids = selected_items; 
+    var main_data = table_databale.data();  
+    for (var i = 0; i < ids.length; i++) {   
+    var sel_item =   ids[i] - 1;
+        var data = main_data[sel_item];
+        var type = data.Type;      
+        var payment = data.Payment; 
+        switch (update) {
+            case "Not Paid":
+                payment = "Not Paid";
+                break;
+            case "Paid":
+                payment = "Paid";
+                break;
+            case "Income":
+                type = "Income";
+                break;
+            case "Expense":
+                type = "Expense";
+                break;   
+            default:
+        }     
+        data.Payment = payment;
+        data.Type = type;
+        main_data[sel_item] = data;           
+    }
+    table_databale.clear().draw();
+    table_databale.rows.add(main_data); 
+    table_databale.columns.adjust().draw();
+    save_updates();
+
+};
+
+function save_updates(){
+    $('#save_changes_unit').collapse('show');
+
+    //  save_changes();
+    selected_items =[];
+    refresh_table_buttons();
+}
+
+function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
+
+
+
+}
+
+function sync_wallet_entries() {
+    var results = table_databale.data();
+    for (var i = 0; i < results.length; i++) {
+        var data = results[i];
+        var timestamp = new Date(data.Timestamp);
+        var entry = monthts(timestamp);
+        if (!wallet_entries.includes(entry)) {
+            wallet_entries.push(entry);         
+        }
+    }
+
+}
+
+function save_changes(){    
+    sync_wallet_entries();
+    var results = table_databale.data();
+    for (var i = 0; i < wallet_entries.length; i++) {
+        var entry_id = wallet_entries[i];     
+       var data = get_selected_month_data(results,entry_id); 
+       setoptdata(wallet_Ref_entries, entry_id, data).then(function() {            
+        updateoptdata(wallet_Ref, wallet_id, {'entries':wallet_entries}).then(function() {                         
+        }).catch((error) => {
+            console.log(error);
+        });   }).catch((error) => {
+                    console.log(error);                   
+                });
+    }
+    $('#save_changes_unit').collapse('hide');   
+    selected_items =[];
+    refresh_table_buttons();
+}
+
+
+
+///////////Osolite
 function delete_selected1() {
     Swal.fire({ title: 'Are you sure?', text: "You are about to delete the selected.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Delete!' }).then((result) => {
         if (result.isConfirmed) {
@@ -577,116 +654,9 @@ function del(timestamp, num_of_repeat, i) {
     });
 }
 
-// update selected_items 
-function update_selected(update) {
-   
-    var ids = selected_items;
-    var main_data = table_databale.data();  
-    for (var i = 0; i < ids.length; i++) {
-        var data = table_data[ids[i] - 1];
-        var type = data.Type;      
-        var payment = data.Payment;
-     
-        var delete_flag = false;
-        switch (update) {
-            case "Not Paid":
-                payment = "Not Paid";
-                break;
-            case "Paid":
-                payment = "Paid";
-                break;
-            case "Income":
-                type = "Income";
-                break;
-            case "Expense":
-                type = "Expense";
-                break;      
-                case "Delete":
-                    delete_flag = true;
-                    break;      
-            default:
-        }
-        data.Payment = payment;
-        data.Type = type;
-        main_data[ids[i] - 1] = data;
-    
-        if(delete_flag){
-            main_data.splice(ids[i] - 1,1 );
-        }
-       
-        
-        //  table_databale.row(ids[i]-1).data( data ).draw();
 
-        // /*         update_entry(description, category, amount, timestamp, type, payment, user, repeat, ids.length, i).then(function() {}).catch((error) => { console.log(error); }); */
-    }
-    table_databale.clear().draw();
-    table_databale.rows.add(main_data); // Add new data
-    table_databale.columns.adjust().draw(); // Redraw the DataTable
-    $('#save_changes_unit').collapse('show');
- /*    for (var i = 0; i < selected_items.length; i++) {
-        table_databale.row(':eq('+selected_items[i]+')', { page: 'current' }).select();
-    
-        
-      //  table_databale.row(selected_items[i]).toggleClass('selected');        
-    }    */
-
-  //  save_changes();
-  selected_items =[];
-  refresh_table_buttons();
-
-};
-
-
-
-function sync_wallet_entries() {
-    var results = table_databale.data();
-    for (var i = 0; i < results.length; i++) {
-        var data = results[i];
-        var timestamp = new Date(data.Timestamp);
-        var entry = monthts(timestamp);
-        if (!wallet_entries.includes(entry)) {
-            wallet_entries.push(entry);         
-        }
-    }
-
-}
-
-function save_changes(){    
-    sync_wallet_entries();
-    var results = table_databale.data();
-    for (var i = 0; i < wallet_entries.length; i++) {
-        var entry_id = wallet_entries[i];     
-       var data = get_selected_month_data(results,entry_id);       
-           updateoptdata(wallet_Ref_entries, entry_id, data).then(function() {          
-            $('#save_changes_unit').collapse('hide');         
-            }).catch((error) => {
-                    console.log(error);
-                    if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { 
-                        setoptdata(wallet_Ref_entries, entry_id, data).then(function() {
-                            uptoptarray(wallet_Ref, wallet_id, 'entries', entry_id).then(function() {
-                          
-                                $('#save_changes_unit').collapse('hide');
-                            
-                            }).catch((error) => {
-                                console.log(error);
-                            });                
-                            
-                    }).catch((error) => { 
-                        console.log(error);
-                         reject(error); }); }
-                });                
-    }
-    selected_items =[];
-    refresh_table_buttons();
-}
-
-
-
-
-
-
-
-function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
+///////////Osolite
+function update_entry1(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
 
 
 

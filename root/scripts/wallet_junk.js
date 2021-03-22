@@ -404,3 +404,19 @@ var data =
 data.forEach(function(item, index, array) {
     sync_wallet_entries(item);
   })
+
+
+  updateoptdata(wallet_Ref_entries, entry_id, data).then(function() {          
+}).catch((error) => {
+        console.log(error);
+        if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { 
+            setoptdata(wallet_Ref_entries, entry_id, data).then(function() {
+                uptoptarray(wallet_Ref, wallet_id, 'entries', entry_id).then(function() {                         
+                }).catch((error) => {
+                    console.log(error);
+                });                
+                
+        }).catch((error) => { 
+            console.log(error);
+             reject(error); }); }
+    });   
