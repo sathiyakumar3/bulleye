@@ -186,12 +186,14 @@ function updateoptdata(docRef, id, data) {
       .then(function () {
         if (find != "") {
           find = JSON.parse(find);
+      //    console.log(data);
           var finalobj1 = {};
-       //   for (var _obj in find) finalobj1[_obj] = find[_obj];
+        for (var _obj in find) finalobj1[_obj] = find[_obj];
          for (var _obj in data) {find[_obj] = data[_obj]};
-      //    find = finalobj1;
+        find = finalobj1;
           var str = JSON.stringify(find);
           setCookie_local(id, str);
+    //      console.log(str);
         } else {
           var str = JSON.stringify(data);
           setCookie_local(id, str);
@@ -430,6 +432,7 @@ async function get_wallet_data(wallet_id, wallet_entries) {
     let each_wallet_subdoc_promise = getoptdata(db.collection("wallets").doc(wallet_id).collection("entries"),entry_doc)
       .then(function (arr) {
         delete arr["last_updated"];
+    
         Object.keys(arr).map(function (key, index) {
           const each_entry_promise = new Promise((resolve, reject) => {
             var timestamp = new Date(key);

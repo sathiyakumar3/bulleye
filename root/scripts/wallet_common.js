@@ -345,6 +345,25 @@ function date_filter(data, to, from) {
     return new_data;
 }
 
+function get_selected_month_data(data,item) {
+    var new_data = {};
+    Object.keys(data).map(function(key, index) {
+    
+        var datetime = new Date(data[key]['Timestamp']);
+        if(datetime!=null){
+            if (item==monthts(datetime)) {
+             /*  var value = {
+                [datetime]: data[key]            
+              }  
+                new_data.push(value); */
+                new_data[datetime]= data[key];
+            }
+        }
+     
+    });
+    return new_data;
+}
+
 function delete_item(data, item) {
     var new_data = [];
     Object.keys(data).map(function(key, index) {
@@ -496,3 +515,4 @@ Array.prototype.remove_item_from_array = function() {
     }
     return this;
 };
+

@@ -285,7 +285,7 @@ function generate_navi(data, p_wallet) {
                 '</li>';
             navi = my_wallet + navi;
         } else {
-            load_page('content_pages/wallet_dashboard.html', month_data);
+            load_page('content_pages/wallet.html', month_data);
            // just_load_page('content_pages/the_team.html');
             starting = '<li class="menu-section">' +
                 '<h4 class="menu-text text-white">' + wallet_name + '</h4>' +

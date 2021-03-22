@@ -28,6 +28,11 @@
                     </span>
                 </div>
             </div>     
+            <div class="collapse" id="save_changes_unit">
+                <div class="d-flex align-items-center">              
+                    <button class="btn  btn-light-danger mr-2 pulse pulse-danger" type="button" id="kt_datatable_delete_all" onclick="save_changes()">Save Changes  <span class="pulse-ring"></span></button>
+                </div>
+            </div>
          <!--    <span class="text-muted font-weight-bold mr-4" id="dummy">The first step in the finance management is identifying transactions.</span> -->
             <!--end::Actions-->
         </div>
@@ -89,7 +94,7 @@
                                 <a class="dropdown-item" onclick="external_table_btn('copy')">Copy</a>
                             </div>
                         </div>
-                        <button class="btn  btn-light-danger mr-2" type="button" id="kt_datatable_delete_all" onclick="delete_selected()">Delete</button>
+                        <button class="btn  btn-light-danger mr-2" type="button" id="kt_datatable_delete_all" onclick="update_selected('Delete')">Delete</button>
                     </div>
                 </div>
             </a>
