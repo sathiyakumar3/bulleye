@@ -135,10 +135,14 @@ var start_app = function() {
         document.getElementById("non_progress").innerHTML = percentage_form(non_net, non_income, wallet_symbol);
         document.getElementById("non_pl").innerHTML = profit_loss_format(non_net);
         var fin_income = data_process(data, { 'Type': 'Income' });
+  
         set_sum('fin_income', wallet_symbol, fin_income);
         var fin_expense = data_process(data, { 'Type': 'Expense' });
         set_sum('fin_expense', wallet_symbol, fin_expense);
         var fin_net = fin_income - fin_expense;
+
+        
+        document.getElementById("final_balance").innerHTML = '<strong>'+wallet_symbol + ' ' + numberWithCommas(fin_net)+'</strong>';
         document.getElementById("widget_fb").innerText = wallet_symbol + ' ' + numberWithCommas(fin_net);
         set_sum('fin_net', wallet_symbol, fin_net);
         document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, wallet_symbol);
@@ -462,7 +466,8 @@ var start_app = function() {
 }();
 jQuery(document).ready(function() {
     wallet_id = global_data[0];
-    user_id = global_data[2];   
+    user_id = global_data[2];  
+    var user_photo =   global_data[3];  
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     getoptdata(wallet_Ref, wallet_id).then(function(doc) {
         wallet_name = doc.name;
@@ -473,7 +478,8 @@ jQuery(document).ready(function() {
         wallet_currency = doc.currency;
         wallet_entries = doc.entries; 
         wallet_symbol = currency_convertor[wallet_currency];
-        document.getElementById("wallet_cur").innerText = wallet_currency +' - '+wallet_symbol;
+        document.getElementById("wallet_cur").innerText = wallet_currency;
+        document.getElementById("welcome_photo").innerHTML = '<div class="symbol-label" style="background-image:url('+user_photo+')"></div>'
         
 
      //   document.getElementById("form_currency").innerText = wallet_symbol;

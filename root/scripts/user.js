@@ -1,5 +1,7 @@
 var user_local;
 var user_name;
+var user_email;
+var user_photo;
 var user_Ref = db.collection("users");
 
 function menu_subitems(name, link) {
@@ -261,7 +263,7 @@ function generate_navi(data, p_wallet) {
         var wallet_owner = data[i]['wallet_owner'];
       
 
-        var month_data = wallet_id + "," + user_name + "," + user_local.uid;
+        var month_data = wallet_id + "," + user_name + "," + user_local.uid + "," + user_photo;
         if (wallet_id != p_wallet) {
             var my_wallet = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
                 '<a href="javascript:;" class="menu-link menu-toggle">' +
@@ -324,7 +326,8 @@ function get_user(user) {
         document.getElementById("ad_wal_loc_id").value = finalResult.name;
         document.getElementById("conutry_t").innerHTML = finalResult.country;
         user_name = finalResult.name;
-
+        user_email =  finalResult.email;
+        
         ///////////////// Form Inputs
 
         document.getElementById('edit_user_form').querySelector('[name="edit_user_name"]').value = finalResult.name;
@@ -336,6 +339,7 @@ function get_user(user) {
 
         get_user_icon(user_local.uid).then((url) => {        
             image_add(url);
+            user_photo = url;
         });
         load_navi(user_local.uid).then(function(data) {
   
