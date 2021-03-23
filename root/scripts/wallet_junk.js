@@ -420,3 +420,126 @@ data.forEach(function(item, index, array) {
             console.log(error);
              reject(error); }); }
     });   
+
+    
+///////////Osolite
+function delete_selected1() {
+    Swal.fire({ title: 'Are you sure?', text: "You are about to delete the selected.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Delete!' }).then((result) => {
+        if (result.isConfirmed) {
+            var ids = selected_items;
+            for (var i = 0; i < ids.length; i++) {
+                var data = table_data[ids[i] - 1];
+                var timestamp = data.Timestamp;
+                del(timestamp, ids.length, i).then(function () { }).catch((error) => { console.log(error); })
+            }
+        }
+    })
+};
+function del(timestamp, num_of_repeat, i) {
+    return new Promise(function (resolve, reject) {
+        let myPromise = new Promise(function (resolve, reject) {
+            timestamp = new Date(timestamp);
+            var entry_id = monthts(timestamp);
+            deloptfeild(wallet_Ref_entries, entry_id, timestamp).then(function () { resolve("success"); }).catch((error) => {
+                console.log("Error getting documents: ", error);
+                reject(error);
+            });
+        });
+        myPromise.then(function (value) {
+            swalfire(i, num_of_repeat);
+            if (i == (num_of_repeat - 1)) {
+                console.log('REFresh');
+                start_app.refresh();
+            }
+            resolve('succeess');
+        }, function (error) { reject(error); });
+    });
+}
+
+
+///////////Osolite
+function update_entry1(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
+
+
+
+
+
+       var timestamp = new Date(timestamp2);
+        let myPromise = new Promise(function(resolve, reject) {
+            var value = {
+                [timestamp]: { "user": user, "Description": description, "Category": category, "Type": type, "Payment": payment, "Amount": amount, "Repeated": repeat, },
+                last_updated: timestamp
+            };
+            var entry_id = monthts(timestamp);
+
+            updateoptdata(wallet_Ref_entries, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
+                console.log(error);
+                if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { 
+
+                    setoptdata(wallet_Ref_entries, entry_id, value).then(function() {
+                        uptoptarray(wallet_Ref, wallet_id, 'entries', entry_id).then(function() {
+                            resolve('sucess'); 
+                        }).catch((error) => {
+                            console.log(error);
+                        });
+
+
+
+
+
+
+                }).catch((error) => { 
+                    console.log(error);
+                     reject(error); }); }
+            });
+        });
+        return new Promise(function(resolve, reject) {
+            myPromise.then(function(value) {
+                swalfire(i, num_of_repeat);
+                if (i == (num_of_repeat - 1)) {
+                    start_app.refresh();
+                }
+                resolve('sucess');
+            }, function(error) { reject(error); });
+        }); 
+
+
+}
+
+function edit_entry_modal(description, category, amount, timestamp, type, payment, repeat, RecordID) {
+
+    document.getElementById('record_id').value = RecordID;
+    $('#edit_incex_form_modal').modal('toggle');
+    document.getElementById('example-number-input2').value = 1;
+    $('#edit_cat_selec').selectpicker('val', category);
+    document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = description;
+    document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = amount;
+    switch (type) {
+        case 'Expense':
+            document.getElementById("expense_radio").checked = true;
+            break;
+        case 'Income':
+            document.getElementById("income_radio").checked = true;
+            break;
+        default:
+    }
+    switch (payment) {
+        case 'Not Paid':
+            document.getElementById("not_paid_radio").checked = true;
+            break;
+        case 'Paid':
+            document.getElementById("paid_radio").checked = true;
+            break;
+        default:
+    }
+    $('#kt_datetimepicker_10').datetimepicker('clear');
+    $('#kt_datetimepicker_10').datetimepicker('destroy');
+    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(timestamp), format: 'MM/DD/YYYY hh:mm:ss A', disable: true });
+    document.getElementById('repeat_selection').value = repeat;
+    document.getElementById('title_33').innerText = "Edit Entry"
+} 
+
+function entry_delete(timestamp, num_of_repeat, i) {
+    Swal.fire({ title: 'Are you sure?', text: "You won't be able to revert this!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' }).then((result) => { if (result.isConfirmed) { del(timestamp, num_of_repeat, i); } })
+}
+

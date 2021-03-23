@@ -277,9 +277,11 @@ var start_app = function () {
                     title: 'Actions',
                     orderable: false,
                     render: function (data, type, full, meta) {
-                        var myvar = paid_nt_paid_button(full.Payment, full.Description, full.Type, full.Category, full.Amount, full.Timestamp, full.user, full.Repeated, full.RecordID);
-                        var delete_button = delete_button1(full.Timestamp); var edit_button = edit_button3(full.Payment, full.Description, full.Type, full.Category, full.Amount, full.Timestamp, full.user, full.Repeated, full.RecordID);
-                        return '<div class="text-center">' + myvar + edit_button + delete_button + '</div>';
+
+                        var myvar = paid_nt_paid_button(meta.row, full.Payment);
+                        //     var delete_button = delete_button1(meta.row);
+                        var edit_button = edit_button3(meta.row);
+                        return '<div class="text-center">' + myvar + edit_button + '</div>';
                     },
                 },
                 {
@@ -424,6 +426,9 @@ var start_app = function () {
         });
         console.log('[TABLE IINTIZED ] - ' + new Date());
     };
+
+
+
     return {
         init: function () {
             KTApp.block('#kt_blockui_content', {
@@ -432,6 +437,7 @@ var start_app = function () {
                 state: 'primary',
                 message: 'Fetching Entries...'
             });
+
             read_data();
         },
         refresh: function () {
@@ -488,12 +494,92 @@ function refresh_table_buttons() {
     }
 }
 
-function edit_entry_modal(description, category, amount, timestamp, type, payment, repeat, RecordID) {
+
+
+
+//delete selected_items
+function delete_selected() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Selected rows will be deleted.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var rows = table_databale.rows('.selected');
+            rows.remove().draw();
+            var main_data = table_databale.data();
+            table_databale.clear().draw();
+            table_databale.rows.add(main_data);
+            table_databale.columns.adjust().draw();
+            save_updates();
+            Swal.fire(
+                'Deleted!',
+                'The items have been deleted.',
+                'success'
+            )
+        }
+    });
+};
+
+function update_paid_not(sel_item) {
+    var main_data = table_databale.data();
+    var data = main_data[sel_item];
+    var payment = data.Payment;
+    switch (payment) {
+        case 'Not Paid':
+            payment = "Paid";
+            break;
+        case 'Paid':
+            payment = "Not Paid";
+            break;
+        default:
+    }
+    data.Payment = payment;
+    main_data[sel_item] = data;
+    table_databale.clear().draw();
+    table_databale.rows.add(main_data);
+    table_databale.columns.adjust().draw();
+}
+
+function add_entry_modal() {
+    $('#edit_incex_form_modal').modal('toggle');
+    $('#edit_cat_selec').selectpicker('refresh');
+    document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = "";
+    document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = "";
+    document.getElementById("expense_radio").checked = true;
+    document.getElementById("paid_radio").checked = true;
+    $('#kt_datetimepicker_10').datetimepicker('clear');
+    $('#kt_datetimepicker_10').datetimepicker('destroy');
+    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), format: 'MM/DD/YYYY hh:mm:ss A', enable: true });
+    document.getElementById('title_33').innerText = "Add to Wallet";
+    document.getElementById('record_id').value = '';
+    document.getElementById('add_edit_button').innerText = 'Add';
+
+}
+function edit_entry_modal(sel) {
+    selected_items = [];
+    refresh_table_buttons();
+    selected_items.push(sel);
+    var main_data = table_databale.data();
+    var sel_data = main_data[sel];
+    var description = sel_data.Description;
+    var category = sel_data.Category;
+    var amount = sel_data.Amount
+    var timestamp = sel_data.Timestamp;
+    var type = sel_data.Type;
+    var payment = sel_data.Payment;
+    var repeat = sel_data.Repeated;
+    var RecordID = sel_data.RecordID;
 
     document.getElementById('record_id').value = RecordID;
     $('#edit_incex_form_modal').modal('toggle');
     document.getElementById('example-number-input2').value = 1;
-    $('#edit_cat_selec').selectpicker('val', category);
+    $('select[name=form_catergory_2]').val(category);
+    $('.selectpicker').selectpicker('refresh');
     document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = description;
     document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = amount;
     switch (type) {
@@ -518,34 +604,19 @@ function edit_entry_modal(description, category, amount, timestamp, type, paymen
     $('#kt_datetimepicker_10').datetimepicker('destroy');
     $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(timestamp), format: 'MM/DD/YYYY hh:mm:ss A', disable: true });
     document.getElementById('repeat_selection').value = repeat;
-    document.getElementById('title_33').innerText = "Edit Entry"
+    document.getElementById('title_33').innerText = "Edit Entry";
+    document.getElementById('add_edit_button').innerText = 'Edit';
 }
-
-function entry_delete(timestamp, num_of_repeat, i) {
-    Swal.fire({ title: 'Are you sure?', text: "You won't be able to revert this!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' }).then((result) => { if (result.isConfirmed) { del(timestamp, num_of_repeat, i); } })
-}
-
-
-
-
-//delete selected_items
-function delete_selected() {
-    var rows = table_databale.rows( '.selected' );
-    rows.remove().draw();
-    save_updates();
-};
-
-
 
 // update selected_items 
 function update_selected(update) {
-       var ids = selected_items; 
-    var main_data = table_databale.data();  
-    for (var i = 0; i < ids.length; i++) {   
-    var sel_item =   ids[i] - 1;
+    var ids = selected_items;
+    var main_data = table_databale.data();
+    for (var i = 0; i < ids.length; i++) {
+        var sel_item = ids[i] - 1;
         var data = main_data[sel_item];
-        var type = data.Type;      
-        var payment = data.Payment; 
+        var type = data.Type;
+        var payment = data.Payment;
         switch (update) {
             case "Not Paid":
                 payment = "Not Paid";
@@ -558,32 +629,26 @@ function update_selected(update) {
                 break;
             case "Expense":
                 type = "Expense";
-                break;   
+                break;
             default:
-        }     
+        }
         data.Payment = payment;
         data.Type = type;
-        main_data[sel_item] = data;           
+        main_data[sel_item] = data;
     }
     table_databale.clear().draw();
-    table_databale.rows.add(main_data); 
+    table_databale.rows.add(main_data);
     table_databale.columns.adjust().draw();
     save_updates();
 
 };
 
-function save_updates(){
+function save_updates() {
+    unsaved_flag = true;
     $('#save_changes_unit').collapse('show');
-
     //  save_changes();
-    selected_items =[];
+    selected_items = [];
     refresh_table_buttons();
-}
-
-function update_entry(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
-
-
-
 }
 
 function sync_wallet_entries() {
@@ -593,117 +658,32 @@ function sync_wallet_entries() {
         var timestamp = new Date(data.Timestamp);
         var entry = monthts(timestamp);
         if (!wallet_entries.includes(entry)) {
-            wallet_entries.push(entry);         
+            wallet_entries.push(entry);
         }
     }
 
 }
 
-function save_changes(){    
+function save_changes() {
     sync_wallet_entries();
     var results = table_databale.data();
     for (var i = 0; i < wallet_entries.length; i++) {
-        var entry_id = wallet_entries[i];     
-       var data = get_selected_month_data(results,entry_id); 
-       setoptdata(wallet_Ref_entries, entry_id, data).then(function() {            
-        updateoptdata(wallet_Ref, wallet_id, {'entries':wallet_entries}).then(function() {                         
+        var entry_id = wallet_entries[i];
+        var data = get_selected_month_data(results, entry_id);
+        setoptdata(wallet_Ref_entries, entry_id, data).then(function () {
+            updateoptdata(wallet_Ref, wallet_id, { 'entries': wallet_entries }).then(function () {
+            }).catch((error) => {
+                console.log(error);
+            });
         }).catch((error) => {
             console.log(error);
-        });   }).catch((error) => {
-                    console.log(error);                   
-                });
+        });
     }
-    $('#save_changes_unit').collapse('hide');   
-    selected_items =[];
+    $('#save_changes_unit').collapse('hide');
+    unsaved_flag = false;
+    selected_items = [];
     refresh_table_buttons();
 }
-
-
-
-///////////Osolite
-function delete_selected1() {
-    Swal.fire({ title: 'Are you sure?', text: "You are about to delete the selected.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Delete!' }).then((result) => {
-        if (result.isConfirmed) {
-            var ids = selected_items;
-            for (var i = 0; i < ids.length; i++) {
-                var data = table_data[ids[i] - 1];
-                var timestamp = data.Timestamp;
-                del(timestamp, ids.length, i).then(function () { }).catch((error) => { console.log(error); })
-            }
-        }
-    })
-};
-function del(timestamp, num_of_repeat, i) {
-    return new Promise(function (resolve, reject) {
-        let myPromise = new Promise(function (resolve, reject) {
-            timestamp = new Date(timestamp);
-            var entry_id = monthts(timestamp);
-            deloptfeild(wallet_Ref_entries, entry_id, timestamp).then(function () { resolve("success"); }).catch((error) => {
-                console.log("Error getting documents: ", error);
-                reject(error);
-            });
-        });
-        myPromise.then(function (value) {
-            swalfire(i, num_of_repeat);
-            if (i == (num_of_repeat - 1)) {
-                console.log('REFresh');
-                start_app.refresh();
-            }
-            resolve('succeess');
-        }, function (error) { reject(error); });
-    });
-}
-
-
-///////////Osolite
-function update_entry1(description, category, amount, timestamp2, type, payment, user, repeat, num_of_repeat, i) {
-
-
-
-
-
-    /*     var timestamp = new Date(timestamp2);
-        let myPromise = new Promise(function(resolve, reject) {
-            var value = {
-                [timestamp]: { "user": user, "Description": description, "Category": category, "Type": type, "Payment": payment, "Amount": amount, "Repeated": repeat, },
-                last_updated: timestamp
-            };
-            var entry_id = monthts(timestamp);
-    
-            updateoptdata(wallet_Ref_entries, entry_id, value).then(function() { resolve('sucess'); }).catch((error) => {
-                console.log(error);
-                if (error == 'Document doesn\'t exist.' || error.code == 'not-found') { 
-    
-                    setoptdata(wallet_Ref_entries, entry_id, value).then(function() {
-                        uptoptarray(wallet_Ref, wallet_id, 'entries', entry_id).then(function() {
-                            resolve('sucess'); 
-                        }).catch((error) => {
-                            console.log(error);
-                        });
-        
-                        
-                        
-                      
-              
-                   
-                }).catch((error) => { 
-                    console.log(error);
-                     reject(error); }); }
-            });
-        });
-        return new Promise(function(resolve, reject) {
-            myPromise.then(function(value) {
-                swalfire(i, num_of_repeat);
-                if (i == (num_of_repeat - 1)) {
-                    start_app.refresh();
-                }
-                resolve('sucess');
-            }, function(error) { reject(error); });
-        }); */
-
-
-}
-
 
 function external_table_btn(x) {
     switch (x) {

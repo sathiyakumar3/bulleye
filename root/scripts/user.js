@@ -592,37 +592,7 @@ function image_add(url) {
             });
         }
 
-        var edit_entry_From_validation = function() {
-            FormValidation.formValidation(document.getElementById('edit_incex_form'), { fields: { form_catergory_2: { validators: { notEmpty: { message: 'Category is requried.' } } }, form_description_2: { validators: { notEmpty: { message: 'A description is required.' }, } }, form_amount_2: { validators: { notEmpty: { message: 'An Amount is required.' }, } }, repeat_numbrs: { validators: { between: { min: 0, max: 30, message: 'The number must be between 0 and 30' } } } }, plugins: { trigger: new FormValidation.plugins.Trigger(), submitButton: new FormValidation.plugins.SubmitButton(), bootstrap: new FormValidation.plugins.Bootstrap({ eleInvalidClass: '', eleValidClass: '', }) } }).on('core.form.valid', function() {
-                $('#edit_incex_form_modal').modal('toggle');
-                var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;
-                var description = document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value;
-                var amount = document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value;
-                var type = $('input[name="form_radios11_2"]:checked').val();
-                var payment = $('input[name="radios11_2"]:checked').val();
 
-                var given_date = $("#kt_datetimepicker_10").find("input").val();
-                var timestamp = new Date(given_date);
-                var selected_repeated = document.getElementById('repeat_selection').value;
-                var num_of_repeat = document.getElementById('example-number-input2').value;
-
-                for (var i = 0; i < num_of_repeat; i++) {
-                    update_entry(description, category, amount, timestamp, type, payment, user_id, selected_repeated, num_of_repeat, i).then(function() {}).catch((error) => { console.log(error); });
-                    switch (selected_repeated) {
-                        case 'Monthly':
-                            timestamp.setMonth(timestamp.getMonth() + 1);
-                            break;
-                        case 'Weekly':
-                            timestamp.setDate(timestamp.getDate() + 7);
-                            break;
-                        case 'Daily':
-                            timestamp.setDate(timestamp.getDate() + 1);
-                            break;
-                        default:
-                    }
-                }
-            });
-        }
         
         var update_password_vali = function() {
             FormValidation.formValidation(document.getElementById('change_password_form'), { fields: {
@@ -764,14 +734,73 @@ user_local.reauthenticateWithCredential(credential).then(function() {
                
             });
         }
+        var add_edit_form_validation = function () {
+            FormValidation.formValidation(document.getElementById('edit_incex_form'), { fields: { form_catergory_2: { validators: { notEmpty: { message: 'Category is requried.' } } }, form_description_2: { validators: { notEmpty: { message: 'A description is required.' }, } }, form_amount_2: { validators: { notEmpty: { message: 'An Amount is required.' }, } }, repeat_numbrs: { validators: { between: { min: 0, max: 30, message: 'The number must be between 0 and 30' } } } }, plugins: { trigger: new FormValidation.plugins.Trigger(), submitButton: new FormValidation.plugins.SubmitButton(), bootstrap: new FormValidation.plugins.Bootstrap({ eleInvalidClass: '', eleValidClass: '', }) } }).on('core.form.valid', function () {
+                $('#edit_incex_form_modal').modal('toggle');
+                var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;
+                var description = document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value;
+                var amount = document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value;
+                var type = $('input[name="form_radios11_2"]:checked').val();
+                var payment = $('input[name="radios11_2"]:checked').val();
+                var given_date = $("#kt_datetimepicker_10").find("input").val();
+                var timestamp = new Date(given_date);
+                var selected_repeated = document.getElementById('repeat_selection').value;
+                var num_of_repeat = document.getElementById('example-number-input2').value;
+                var main_data = table_databale.data();
 
+                if(document.getElementById('add_edit_button').innerText == 'Edit'){
+                    var se = selected_items.pop();
+                    main_data.splice(se, 1);                   
+                }
+              
+                add_to_local_table(user_id)
+                .then(function (result) {              
+                    for (var i = 0; i < num_of_repeat; i++) {
+                        var data = {
+                            Timestamp: new Date(timestamp),
+                            user: user_id,
+                            Description: description,
+                            Category: category,
+                            Type: type,
+                            Payment: payment,
+                            RecordID: 1,
+                            Repeated: selected_repeated,
+                            doc_id: monthts(timestamp),
+                            Amount: amount
+                        }  
+                        main_data.push(Object.assign(data, result));              
+                        switch (selected_repeated) {
+                            case 'Monthly':
+                                timestamp.setMonth(timestamp.getMonth() + 1);
+                                break;
+                            case 'Weekly':
+                                timestamp.setDate(timestamp.getDate() + 7);
+                                break;
+                            case 'Daily':
+                                timestamp.setDate(timestamp.getDate() + 1);
+                                break;
+                            default:
+                        }
+                        if(i==num_of_repeat-1){
+                            table_databale.clear().draw();
+                            table_databale.rows.add(main_data);
+                            table_databale.columns.adjust().draw();          
+                            save_updates();
+                        }    
+                    }    
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            });
+        }
 
         return {
             // public functions
             init: function() {
-                start_app_main();
-                edit_entry_From_validation();
+                start_app_main();           
                 add_new_wallet_From_validation();
+                add_edit_form_validation();
                 update_user_validation();
                 update_password_vali();
             }

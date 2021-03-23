@@ -237,19 +237,7 @@ function cat2combo(wallet_id) {
     })).catch((error) => { console.error(error); });
 }
 
-function add_entry_modal() {
-    $('#edit_incex_form_modal').modal('toggle');
-    $('#edit_cat_selec').selectpicker('refresh');
-    document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = "";
-    document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = "";
-    document.getElementById("expense_radio").checked = true;
-    document.getElementById("paid_radio").checked = true;
-    $('#kt_datetimepicker_10').datetimepicker('clear');
-    $('#kt_datetimepicker_10').datetimepicker('destroy');
-    $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), format: 'MM/DD/YYYY hh:mm:ss A', enable: true });
-    document.getElementById('title_33').innerText = "Add to Wallet";
-    document.getElementById('record_id').value = '';
-}
+
 
 function access_restric_error() { Swal.fire({ icon: 'error', title: 'Access Restricted', html: 'Not available for ' + form_wal_type('Free'), }) }
 
