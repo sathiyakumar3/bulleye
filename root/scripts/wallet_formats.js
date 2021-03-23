@@ -129,13 +129,18 @@ function div_message(message) {
     return output
 }
 
-function form_wal_type(wallet_type) {
+function form_wal_type1(wallet_type) {
     var html_div = "";
     if (wallet_type == 'Free') { html_div = '<span class="label label-lg label-danger label-pill label-inline mr-2">Personal Use</span>' }
     if (wallet_type == 'Premium') { html_div = '<span class="label label-lg label-success label-pill label-inline mr-2">Business Use</span>' }
     return html_div
 }
-
+function form_wal_type(wallet_type) {
+    var html_div = "";
+    if (wallet_type == 'Free') { html_div = 'Personal Use' }
+    if (wallet_type == 'Premium') { html_div = 'Business Use' }
+    return html_div
+}
 function icon_nd_photo_name_email(photo, username, email) {
     var icon = "";
     if (photo == 'none') { icon = ' <div class="symbol symbol-40 symbol-' + getrandomstate() + ' flex-shrink-0">' + '<div class="symbol-label">' + username.substring(0, 1) + '</div></div>'; } else { icon = '<div class="symbol symbol-40 flex-shrink-0">' + '<div class="symbol-label" style="background-image: url(' + photo + ')"></div>' + '</div>'; }

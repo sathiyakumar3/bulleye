@@ -473,15 +473,14 @@ jQuery(document).ready(function() {
         wallet_currency = doc.currency;
         wallet_entries = doc.entries; 
         wallet_symbol = currency_convertor[wallet_currency];
-        cat2combo(wallet_id);
-        document.getElementById("form_currency").innerText = wallet_symbol;
+     //   document.getElementById("form_currency").innerText = wallet_symbol;
         getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
             var user_name = finalResult.name;
             document.getElementById("owrner_fp").innerText = user_name;
         }).catch((error) => { console.log(error); });
     
         document.getElementById("location_fp").innerText = wallet_location;
-        document.getElementById("t_wallet_name").innerHTML = wallet_name;
+        document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3">'+wallet_name+'</a>' ;
         //wallet_name.toUpperCase();
         document.getElementById("t_wallet_id").innerText = wallet_id;
         document.getElementById("wallet_title").innerText = wallet_description;

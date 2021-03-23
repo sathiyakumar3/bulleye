@@ -15,9 +15,11 @@ function load_page(url, l) {
           }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
+                unsaved_flag = false;
                 save_changes();   
                 load_p(url, l);   
             } else if (result.isDenied) {
+                unsaved_flag = false;
                 load_p(url, l);
             }
           });

@@ -474,7 +474,7 @@ jQuery(document).ready(function () {
         wallet_entries = doc.entries;
         wallet_symbol = currency_convertor[wallet_currency];
         document.getElementById("form_currency").innerText = wallet_symbol;
-        document.getElementById("t_wallet_name").innerText = wallet_name;
+        document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3">'+wallet_name+'</a>' ;
         cat2combo(wallet_id);
         start_app.init();
     }).catch((error) => {
@@ -526,6 +526,8 @@ function delete_selected() {
 };
 
 function update_paid_not(sel_item) {
+    selected_items = [];
+    refresh_table_buttons();
     var main_data = table_databale.data();
     var data = main_data[sel_item];
     var payment = data.Payment;
@@ -543,6 +545,7 @@ function update_paid_not(sel_item) {
     table_databale.clear().draw();
     table_databale.rows.add(main_data);
     table_databale.columns.adjust().draw();
+    save_updates();
 }
 
 function add_entry_modal() {
@@ -717,3 +720,59 @@ function monthview() {
         start_app.refresh();
     }
 };
+
+function selected_repeat() {
+    var selected_repeated = document.getElementById('repeat_selection').value;
+    var text = "";
+    switch (selected_repeated) {
+        case 'Monthly':
+            document.getElementById('recommended').style.display = "block";
+            document.getElementById('example-number-input2').disabled = false;
+            text = 'Months';
+            break;
+        case 'Weekly':
+            document.getElementById('recommended').style.display = "block";
+            document.getElementById('example-number-input2').disabled = false;
+            text = 'Weeks';
+            break;
+        case 'Daily':
+            document.getElementById('recommended').style.display = "block";
+            document.getElementById('example-number-input2').disabled = false;
+            text = 'Days';
+            break;
+        case 'Once':
+            document.getElementById('recommended').style.display = "none";
+            document.getElementById('example-number-input2').disabled = true;
+            document.getElementById('example-number-input2').value = 1;
+            text = 'Time';
+            break;
+        default:
+            document.getElementById('recommended').style.display = "block";
+            document.getElementById('example-number-input2').disabled = false;
+            text = 'Time';
+    }
+    document.getElementById('selected_repeated').innerText = text;
+}
+
+function selected_category() {
+    var category = document.getElementById('edit_cat_selec').value;
+    document.getElementById('sel_icon_add').innerHTML = '<svg><use xlink:href="#' + get_cat_ic(category) + '"></use></svg>';
+}
+
+
+function cat2combo(wallet_id) {
+    document.getElementById("edit_cat_selec").innerHTML = "";
+    var wallet_base_Ref = db.collection("wallets");
+    var select = document.getElementById('edit_cat_selec');
+    getoptdata(wallet_base_Ref, wallet_id).then((function (doc) {
+        cat_icon_list = doc.categories;
+        cat_icon_list.sort(sortOn("name"));
+        for (let i = 0; i < cat_icon_list.length; i++) {
+            newar[cat_icon_list[i]['name']] = cat_icon_list[i];
+            var opt = document.createElement('option');
+            opt.value = cat_icon_list[i]['name'];
+            opt.innerHTML = cat_icon_list[i]['name'];
+            select.appendChild(opt);
+        }
+    })).catch((error) => { console.error(error); });
+}

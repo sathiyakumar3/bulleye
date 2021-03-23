@@ -285,7 +285,7 @@ function generate_navi(data, p_wallet) {
                 '</li>';
             navi = my_wallet + navi;
         } else {
-            load_page('content_pages/wallet.html', month_data);
+            load_page('content_pages/wallet_dashboard.html', month_data);
            // just_load_page('content_pages/the_team.html');
             starting = '<li class="menu-section">' +
                 '<h4 class="menu-text text-white">' + wallet_name + '</h4>' +
@@ -747,7 +747,7 @@ user_local.reauthenticateWithCredential(credential).then(function() {
                 var selected_repeated = document.getElementById('repeat_selection').value;
                 var num_of_repeat = document.getElementById('example-number-input2').value;
                 var main_data = table_databale.data();
-
+             
                 if(document.getElementById('add_edit_button').innerText == 'Edit'){
                     var se = selected_items.pop();
                     main_data.splice(se, 1);                   
