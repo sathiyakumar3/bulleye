@@ -473,18 +473,22 @@ jQuery(document).ready(function() {
         wallet_currency = doc.currency;
         wallet_entries = doc.entries; 
         wallet_symbol = currency_convertor[wallet_currency];
+        document.getElementById("wallet_cur").innerText = wallet_currency +' - '+wallet_symbol;
+        
+
      //   document.getElementById("form_currency").innerText = wallet_symbol;
         getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
             var user_name = finalResult.name;
-            document.getElementById("owrner_fp").innerText = user_name;
+       //     document.getElementById("owrner_fp").innerText = user_name;
         }).catch((error) => { console.log(error); });
     
         document.getElementById("location_fp").innerText = wallet_location;
         document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3">'+wallet_name+'</a>' ;
         //wallet_name.toUpperCase();
         document.getElementById("t_wallet_id").innerText = wallet_id;
-        document.getElementById("wallet_title").innerText = wallet_description;
-        document.getElementById("wallet_init").innerText = wallet_symbol
+         document.getElementById("wallet_title").innerText = wallet_description;
+
+    //    document.getElementById("wallet_init").innerText = wallet_symbol
     
         document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
         start_app.init();
@@ -492,13 +496,35 @@ jQuery(document).ready(function() {
           console.log(error);       
      });
 
-
+     
+     greetings(global_data[1]);
 
 
 
  
    
 });
+
+function greetings(x){
+    var d = new Date();
+var time = d.getHours();
+var greet ='';
+
+if (time < 12) {
+    greet = ' Good Morning, ';
+}
+if (time > 12 &&  time< 17) {
+    greet = ' Good Afternoon, ';
+}
+
+if (time> 17) {
+    greet = ' Good Evening, ';
+}
+
+document.getElementById("welcome_message").innerText = greet + x;
+ 
+
+}
 
 function check_balance() {
     Swal.fire({

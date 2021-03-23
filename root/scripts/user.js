@@ -1,4 +1,5 @@
 var user_local;
+var user_name;
 var user_Ref = db.collection("users");
 
 function menu_subitems(name, link) {
@@ -260,7 +261,7 @@ function generate_navi(data, p_wallet) {
         var wallet_owner = data[i]['wallet_owner'];
       
 
-        var month_data = wallet_id + "," + wallet_name + "," + user_local.uid;
+        var month_data = wallet_id + "," + user_name + "," + user_local.uid;
         if (wallet_id != p_wallet) {
             var my_wallet = '<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">' +
                 '<a href="javascript:;" class="menu-link menu-toggle">' +
@@ -322,7 +323,7 @@ function get_user(user) {
         document.getElementById("front_page_email_1").innerHTML = finalResult.email;
         document.getElementById("ad_wal_loc_id").value = finalResult.name;
         document.getElementById("conutry_t").innerHTML = finalResult.country;
-
+        user_name = finalResult.name;
 
         ///////////////// Form Inputs
 
