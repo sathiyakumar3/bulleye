@@ -540,7 +540,7 @@ jQuery(document).ready(function() {
         wallet_currency = doc.currency;
         wallet_entries = doc.entries; 
         wallet_symbol = currency_convertor[wallet_currency];
-        document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3">'+wallet_name+'</a>' ;
+        document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3" style = "text-transform:uppercase;">'+wallet_name+'</a>' ;
         $('#edit_cur_selec').selectpicker('val', wallet_currency);
         document.getElementById("t_wallet_type").innerHTML = form_wal_type(wallet_type);
         document.getElementById("access_list").innerHTML = document.getElementById("access_list").innerHTML + build_access_control(wallet_type);

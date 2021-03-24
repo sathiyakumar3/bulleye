@@ -489,7 +489,7 @@ jQuery(document).ready(function() {
         }).catch((error) => { console.log(error); });
     
         document.getElementById("location_fp").innerText = wallet_location;
-        document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3">'+wallet_name+'</a>' ;
+        document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3" style = "text-transform:uppercase;">'+wallet_name+'</a>' ;
         //wallet_name.toUpperCase();
         document.getElementById("t_wallet_id").innerText = wallet_id;
          document.getElementById("wallet_title").innerText = wallet_description;

@@ -450,10 +450,8 @@ var start_app = function () {
             read_data();
         },
         entries_sync: function () {
-            sync_wallet_entries(wallet_id).then(function (result) {
-                start_app.refresh();
-            }).catch((error) => {
-            });
+            sync_wallet_entries();
+            start_app.refresh();
         }
     };
 }();
@@ -474,7 +472,7 @@ jQuery(document).ready(function () {
         wallet_entries = doc.entries;
         wallet_symbol = currency_convertor[wallet_currency];
         document.getElementById("form_currency").innerText = wallet_symbol;
-        document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3">'+wallet_name+'</a>' ;
+        document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3" style = "text-transform:uppercase;">'+wallet_name+'</a>' ;
         cat2combo(wallet_id);
         start_app.init();
     }).catch((error) => {
