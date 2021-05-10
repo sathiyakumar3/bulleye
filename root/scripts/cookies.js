@@ -26,7 +26,7 @@ function getCookie(cookieName) {
 function eraseCookie(name) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
-//////////////////////////////////////////  WEB COOKIE    /////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////  LOCAL DATABASE   /////////////////////////////////////////////////////////////////////////////////////
 var local_docs = [];
 
 var c = 0;
@@ -63,7 +63,7 @@ function eraseCookie_local(name) {
   delete arr[name];
 }
 
-/////////////////////////////////// ICON DATABASE LAYER////////////////////////////////////////
+/////////////////////////////////// LOCAL ICON DATABASE ////////////////////////////////////////
 var user_icon_list = {};
 user_icon_list["Adminiate"] = "assets/media/users/blank.png";
 function get_user_icon(user_id) {
@@ -90,7 +90,7 @@ function get_user_icon(user_id) {
   });
 }
 
-//////////////////////////////////////////  FIREBASE LAYER    ////////////////////////////////////////////////////////
+//////////////////////////////////////////  CLOUD DATABASE    ////////////////////////////////////////////////////////
 
 // Read Doc
 function getoptdata(docRef, id) {
@@ -271,9 +271,8 @@ function deltoptarray(docRef, id, arrayname, item, data) {
 }
 
 ////////////////// Application Specific ////////////////////////////////
-var last_wallet_id = "";
-var last_result = "";
 
+// add user info to data
 function add_to_local_table(user_id) {
   return new Promise(function (resolve, reject) {
     var user_name = "";
@@ -312,6 +311,7 @@ function add_to_local_table(user_id) {
   });
 }
 
+// get feedbacks
 async function get_changes() {
   let feedbacks = await db
     .collection("feedbacks")
@@ -359,6 +359,7 @@ async function get_changes() {
   });
 }
 
+// get user_info
 async function load_navi(user_id) {
   let wallet_list = await db
     .collection("wallets")
@@ -423,7 +424,7 @@ async function load_navi(user_id) {
   });
 }
 
-//optimized for local datausage.
+// get wallet_entries
 async function get_wallet_data(wallet_id, wallet_entries) {
   var data = [];
   let all_entries_doc_promise = [];
@@ -474,6 +475,7 @@ async function get_wallet_data(wallet_id, wallet_entries) {
   });
 }
 
+// sync wallet_entries
 async function sync_wallet_entries(wallet_id) {
   let entry_list = await db
     .collection("wallets")
