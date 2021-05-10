@@ -57,7 +57,7 @@ var start_app = function () {
             local_data = result;
 
             console.log('[DATA  GOT ] - ' + new Date());
-            console.log(result);
+          
             var outcome = date_process(result);
 
 
@@ -65,7 +65,34 @@ var start_app = function () {
             selected_end = outcome[1];
             /*    selected_start =selected_start.setHours(0, 0, 0, 0);
                selected_end = selected_end.setHours(23, 59, 59, 999); */
-
+              var cat = cat_process(local_data);
+               
+               const d_income_prom = new Promise((resolve, reject) => {
+                   get_data(local_data, { 'Type': ['Income'] }, cat).then(function(result) {
+                       resolve(result);
+                   }).catch((error) => {
+                       console.log(error);
+                       reject(error);
+                   });
+               });
+               const d_expense_prom = new Promise((resolve, reject) => {
+                   get_data(local_data, { 'Type': ['Expense'] }, cat).then(function(result) {
+                       resolve(result);
+                   }).catch((error) => {
+                       console.log(error);
+                       reject(error);
+                   });
+               });
+               Promise.all([d_income_prom, d_expense_prom]).then((values) => {
+                 var  d_income = values[0];
+                 var  d_expense = values[1];
+                   build_timeline(cat,d_expense,d_income)
+                //    console.log(d_income);
+                //    console.log(d_expense);
+               }).catch((error) => {
+                   console.log("Error getting documents: ", error);
+                   reject(error);
+               });
             _initDaterangepicker();
         }).catch((error) => { console.log(error); });
     };
@@ -96,7 +123,7 @@ var start_app = function () {
         cb(selected_start, selected_end, '');
     }
     var initTable2 = function (sum_income, sum_expense, sum_income2, sum_expense2) {
-
+    
         KTApp.unblock('#kt_blockui_content');
         console.log('[TABLE FETCH ] - ' + new Date());
         console.log(table_data);
@@ -219,6 +246,7 @@ var start_app = function () {
                 {
                     targets: 4,
                     title: 'Proportion',
+                    visible: false,
                     orderable: false,
                     render: function (data, type, full, meta) {
                         var selet1 = '';
@@ -425,6 +453,7 @@ var start_app = function () {
 
         });
         console.log('[TABLE IINTIZED ] - ' + new Date());
+     
     };
 
 
@@ -656,12 +685,47 @@ function sync_wallet_entries() {
     var results = table_databale.data();
     for (var i = 0; i < results.length; i++) {
         var data = results[i];
+      
         var timestamp = new Date(data.Timestamp);
         var entry = monthts(timestamp);
         if (!wallet_entries.includes(entry)) {
             wallet_entries.push(entry);
         }
     }
+
+
+}
+
+function build_timeline(cat,d_expense,d_income) {
+    var myvar = '';
+/*     console.log(cat);
+    console.log(d_expense);
+    console.log(d_income); */
+    for (var i = 0; i < cat.length; i++) {
+       var ccd = '';
+        var myvar = '<div class="timeline-item align-items-start">'+
+        '														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">'+cat[i]+'</div>'+
+        '														<div class="timeline-badge">'+
+        '															<i class="fa fa-genderless text-warning icon-xl"></i>'+
+        '														</div><br>'+
+        '<div class="timeline-content font-weight-bolder font-size-lg text-dark-75 pl-3">Income'+
+        '        <a href="#" class="text-primary">'+d_income[i]+'  </a>'+wallet_currency+'</div>'+
+        '<div class="timeline-content font-weight-bolder font-size-lg text-dark-75 pl-3">Expense'+
+        '        <a href="#" class="text-primary">'+d_expense[i]+'  </a>'+wallet_currency+'</div><br>'+
+        '<div class="timeline-content font-weight-bolder font-size-lg text-dark-75 pl-3">Expense'+
+        '        <a href="#" class="text-primary">'+(Number(d_expense[i])-Number(d_income[i]))+'  </a>'+wallet_currency+'</div>'+
+        '														<!--end::Text-->'+
+        '													</div>'+myvar;
+ 
+       
+  
+
+	
+
+    }
+    console.log(myvar);
+
+    document.getElementById('timeline_menu').innerHTML = myvar;
 
 }
 

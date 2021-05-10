@@ -7,6 +7,13 @@ div.sticky {
     opacity: 0.80;
 }
 
+div.wallet_menu {
+    position: fixed;
+  left: 23%;
+
+  transform: translateX(-50%);
+}
+
 .animation-loading {
     position: relative;
     padding: 40px 0;
