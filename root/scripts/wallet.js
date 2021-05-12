@@ -698,34 +698,176 @@ function sync_wallet_entries() {
 
 function build_timeline(cat,d_expense,d_income) {
     var myvar = '';
+    var teser ='';
 /*     console.log(cat);
     console.log(d_expense);
     console.log(d_income); */
+    var d_netcome = [];
     for (var i = 0; i < cat.length; i++) {
-       var ccd = '';
+        var teser = '<button type="button" class="btn btn-primary btn-lg btn-block">'+cat[i]+ ' - '+wallet_currency+' '+(Number(d_income[i])-Number(d_expense[i]))+'</button>'+teser;																		
+       var ccd = '<div class="d-flex flex-wrap align-items-center justify-content-between w-100">'+ 
+       '																	<div class="d-flex flex-column align-items-cente py-2 w-75">'+
+       '																		<a href="#" class="text-dark-75 font-weight-bold text-hover-primary font-size-lg mb-1">'+(Number(d_expense[i])-Number(d_income[i]))+'  </a>'+wallet_currency+'</a>'+
+       '																		<span class="text-muted font-weight-bold">Profit</span>'+   
+       '																	</div>'+
+       '																	<span class="label label-lg label-light-primary label-inline font-weight-bold py-4">Closed</span>'+
+       '																</div>';
+           
+       
         var myvar = '<div class="timeline-item align-items-start">'+
         '														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">'+cat[i]+'</div>'+
         '														<div class="timeline-badge">'+
         '															<i class="fa fa-genderless text-warning icon-xl"></i>'+
-        '														</div><br>'+
-        '<div class="timeline-content font-weight-bolder font-size-lg text-dark-75 pl-3">Income'+
-        '        <a href="#" class="text-primary">'+d_income[i]+'  </a>'+wallet_currency+'</div>'+
-        '<div class="timeline-content font-weight-bolder font-size-lg text-dark-75 pl-3">Expense'+
-        '        <a href="#" class="text-primary">'+d_expense[i]+'  </a>'+wallet_currency+'</div><br>'+
-        '<div class="timeline-content font-weight-bolder font-size-lg text-dark-75 pl-3">Expense'+
-        '        <a href="#" class="text-primary">'+(Number(d_expense[i])-Number(d_income[i]))+'  </a>'+wallet_currency+'</div>'+
-        '														<!--end::Text-->'+
+        '														</div>'+teser+
         '													</div>'+myvar;
  
        
-  
 
-	
+        
+        d_netcome.push((Number(d_income[i])-Number(d_expense[i])));
 
     }
     console.log(myvar);
 
-    document.getElementById('timeline_menu').innerHTML = myvar;
+  document.getElementById('timeline_menu').innerHTML = teser;
+  
+ 
+    var element = document.getElementById("kt_tiles_widget_8_chart");
+    var height = parseInt(KTUtil.css(element, 'height'));
+    var color = KTUtil.hasAttr(element, 'data-color') ? KTUtil.attr(element, 'data-color') : 'danger';
+
+    if (!element) {
+        return;
+    }
+
+    var options = {
+        series: [{
+            name: 'Net Profit',
+            data: d_netcome
+        }],
+        chart: {
+            type: 'area',
+            height: 150,
+            toolbar: {
+                show: false
+            },
+            zoom: {
+                enabled: false
+            },
+            sparkline: {
+                enabled: true
+            }
+        },
+        plotOptions: {},
+        legend: {
+            show: false
+        },
+        dataLabels: {
+            enabled: false
+        },
+        fill: {
+            type: 'solid'
+        },
+        stroke: {
+            curve: 'smooth',
+            show: true,
+            width: 3,
+            colors: [KTApp.getSettings()['colors']['theme']['base'][color]]
+        },
+        xaxis: {
+            categories: cat,
+            axisBorder: {
+                show: false,
+            },
+            axisTicks: {
+                show: false
+            },
+            labels: {
+                show: false,
+                style: {
+                    colors: KTApp.getSettings()['colors']['gray']['gray-500'],
+                    fontSize: '12px',
+                    fontFamily: KTApp.getSettings()['font-family']
+                }
+            },
+            crosshairs: {
+                show: false,
+                position: 'front',
+                stroke: {
+                    color: KTApp.getSettings()['colors']['gray']['gray-300'],
+                    width: 1,
+                    dashArray: 3
+                }
+            },
+            tooltip: {
+                enabled: true,
+                formatter: undefined,
+                offsetY: 0,
+                style: {
+                    fontSize: '12px',
+                    fontFamily: KTApp.getSettings()['font-family']
+                }
+            }
+        },
+        yaxis: {
+            min: 0,
+            max: 10000,
+            labels: {
+                show: false,
+                style: {
+                    colors: KTApp.getSettings()['colors']['gray']['gray-500'],
+                    fontSize: '12px',
+                    fontFamily: KTApp.getSettings()['font-family']
+                }
+            }
+        },
+        states: {
+            normal: {
+                filter: {
+                    type: 'none',
+                    value: 0
+                }
+            },
+            hover: {
+                filter: {
+                    type: 'none',
+                    value: 0
+                }
+            },
+            active: {
+                allowMultipleDataPointsSelection: false,
+                filter: {
+                    type: 'none',
+                    value: 0
+                }
+            }
+        },
+        tooltip: {
+            style: {
+                fontSize: '12px',
+                fontFamily: KTApp.getSettings()['font-family']
+            },
+            y: {
+                formatter: function (val) {
+                    return "$" + val + " thousands"
+                }
+            }
+        },
+        colors: [KTApp.getSettings()['colors']['theme']['light'][color]],
+        markers: {
+            colors: [KTApp.getSettings()['colors']['theme']['light'][color]],
+            strokeColor: [KTApp.getSettings()['colors']['theme']['base'][color]],
+            strokeWidth: 3
+        },
+        padding: {
+            top: 0,
+            bottom: 0
+        }
+    };
+
+    var chart = new ApexCharts(element, options);
+    chart.render();
+
 
 }
 
