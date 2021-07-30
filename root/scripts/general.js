@@ -56,3 +56,21 @@ function rmelearray(i, actual) {
     }
     return newArray;
 }
+
+function greetings(){
+    var d = new Date();
+var time = d.getHours();
+var greet ='';
+
+if (time < 12) {
+    greet = ' Good Morning, ';
+}
+if (time >= 12 &&  time< 17) {
+    greet = ' Good Afternoon, ';
+}
+if (time> 17) {
+    greet = ' Good Evening, ';
+}
+
+return greet; 
+}

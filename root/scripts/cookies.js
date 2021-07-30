@@ -45,7 +45,7 @@ function getCookie_local(cookieName) {
     document.getElementById("data_compressor").innerHTML = percentage_form(
       d,
       c + d,
-      d + " of "
+      d + " of ",false
     );
     return local_docs[cookieName];
   } else {
@@ -53,7 +53,7 @@ function getCookie_local(cookieName) {
     document.getElementById("data_compressor").innerHTML = percentage_form(
       d,
       c + d,
-      d + " of "
+      d + " of ",false
     );
     return "";
   }

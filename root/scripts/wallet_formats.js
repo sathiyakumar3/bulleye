@@ -64,7 +64,24 @@ function format_update_status(update) {
     }
 }
 
-function format_progress_bar(pecentage) { if (pecentage > 75) { return 'bg-danger'; } else if (pecentage > 50) { return 'bg-warning'; } else if (pecentage > 25) { return 'bg-primary'; } else { return 'bg-success'; } }
+function format_progress_bar(pecentage,good_flag) {
+    if(!good_flag){
+        if (pecentage > 75) { return 'bg-danger'; } 
+        else if (pecentage > 50) { return 'bg-warning'; } 
+        else if (pecentage > 25) { return 'bg-primary'; } 
+        else { return 'bg-success';}
+    }else{
+        if (pecentage > 75) { return 'bg-success'; } 
+        else if (pecentage > 50) { return 'bg-primary'; } 
+        else if (pecentage > 25) { return 'bg-primary'; } 
+        else { return 'bg-primary';
+    }
+   
+
+
+}
+
+}
 
 function getrandomstate() { var stateNo = KTUtil.getRandomInt(0, 7); var states = ['success', 'primary', 'danger', 'success', 'warning', 'dark', 'primary', 'info']; return states[stateNo]; }
 
@@ -172,13 +189,30 @@ function payment_status_fomt(type, payment, amount, int_type, currency) {
 
 function set_sum(html_div, currency, sum) { document.getElementById(html_div).innerText = " " + currency + " " + numberWithCommas(sum); }
 
-function percentage_form(value, total, item) {
+function percentage_form(value, total, item,good_flag) {
     if (value == 0) { var pecentage = 0; } else {
         var pecentage = Math.round((value / total) * 100);
     }
     if (pecentage > 100) { var pc = '<span class="text-danger mr-2 font-size-sm font-weight-bold"> - ' + (pecentage - 100) + '%</span>'; } else { var pc = '<span class="text-dark-50 font-size-sm mr-2  font-weight-bold">' + pecentage + '%</span>'; }
     var html_div = '<div class="d-flex flex-column w-100 mr-2">' + '<div class="d-flex align-items-center justify-content-between mb-2">' +
-        pc + '<span class="text-dark-50 font-size-sm font-weight-bold">' + item + ' ' + numberWithCommas(total) + '</span>' + '</div>' + '<div class="progress progress-xs w-100">' + '<div class="progress-bar ' + format_progress_bar(pecentage) + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' + '</div>' + '</div>';
+        pc + '<span class="text-dark-50 font-size-sm font-weight-bold">' + item + ' ' + numberWithCommas(total) + '</span>' + '</div>' 
+        + '<div class="progress progress-xs w-100">' + '<div class="progress-bar ' + format_progress_bar(pecentage,good_flag) + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' + '</div>' + '</div>';
+    return html_div
+}
+
+function percentage_form_custom(value, total, item,item2,item3) {
+    if (value == 0) { var pecentage = 0; } else {
+        var pecentage = Math.round((value / total) * 100);
+    }
+    var good_flag = false;
+    if(item3=='Income'){
+        good_flag = true;
+    }
+    if (pecentage > 100) { var pc = '<span class="text-danger mr-2 font-size-sm font-weight-bold"> - ' + (pecentage - 100) + '% '+item2+'</span>'; }
+     else { var pc = '<span class="text-dark-50 font-size-sm mr-2  font-weight-bold">' + pecentage + '% '+item2+' '+item3+'</span>'; }
+    var html_div = '<div class="d-flex flex-column w-100 mr-2">' + '<div class="d-flex align-items-center justify-content-between mb-2">' +
+        pc  + '</div>' + '<div class="progress progress-xs w-100">' + '<div class="progress-bar ' + format_progress_bar(pecentage,good_flag)
+         + '" role="progressbar" style="width: ' + pecentage + '%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>' + '</div>' + '</div>';
     return html_div
 }
 
@@ -225,11 +259,11 @@ function edit_button3(row) {
 function swalfire(i, num_of_repeat) {
     if (i != 0) {
         console.log(i + " of " + num_of_repeat);
-        var dt = percentage_form(i, num_of_repeat - 1, 'Items');
+        var dt = percentage_form(i, num_of_repeat - 1, 'Items',false);
         document.getElementById('progres_par').innerHTML = dt;
     } else {
         console.log('started');
-        Swal.fire({ title: 'Please Wait', html: '<div id=\"progres_par\" >' + percentage_form(0, 0, 'Items') + '</div>', showConfirmButton: false, });
+        Swal.fire({ title: 'Please Wait', html: '<div id=\"progres_par\" >' + percentage_form(0, 0, 'Items',false) + '</div>', showConfirmButton: false, });
     }
     if (i == (num_of_repeat - 1)) {
         console.log('closed');

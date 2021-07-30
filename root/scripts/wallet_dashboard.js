@@ -113,7 +113,7 @@ var start_app = function() {
         document.getElementById("current_net2").innerText = current_net;
         document.getElementById("widget_cb").innerText = wallet_symbol + ' ' + numberWithCommas(current_net);
         set_sum('current_net', wallet_symbol, current_net);
-        document.getElementById("cur_progress").innerHTML = percentage_form(current_net, current_income, wallet_symbol);
+        document.getElementById("cur_progress").innerHTML = percentage_form(current_net, current_income, wallet_symbol,true);
         document.getElementById("cur_pl").innerHTML = profit_loss_format(current_net);
         var rec_income = data_process(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income', 'Payment': 'Paid', });
         set_sum('rec_income', wallet_symbol, rec_income);
@@ -122,7 +122,7 @@ var start_app = function() {
         var rec_net = rec_income - rec_expense;
         document.getElementById("widget_rb").innerText = wallet_symbol + ' ' + numberWithCommas(rec_net);
         set_sum('rec_net', wallet_symbol, rec_net);
-        document.getElementById("rec_progress").innerHTML = percentage_form(rec_net, rec_income, wallet_symbol);
+        document.getElementById("rec_progress").innerHTML = percentage_form(rec_net, rec_income, wallet_symbol,true);
         document.getElementById("rec_pl").innerHTML = profit_loss_format(rec_net);
         var non_income = rec_net + data_process(data, { 'Repeated': 'Once', 'Type': 'Income', 'Payment': 'Paid', });
 
@@ -132,7 +132,7 @@ var start_app = function() {
         var non_net = non_income - non_expense;
         document.getElementById("widget_ob").innerText = wallet_symbol + ' ' + numberWithCommas(non_net);
         set_sum('non_net', wallet_symbol, non_net);
-        document.getElementById("non_progress").innerHTML = percentage_form(non_net, non_income, wallet_symbol);
+        document.getElementById("non_progress").innerHTML = percentage_form(non_net, non_income, wallet_symbol,true);
         document.getElementById("non_pl").innerHTML = profit_loss_format(non_net);
         var fin_income = data_process(data, { 'Type': 'Income' });
   
@@ -145,7 +145,7 @@ var start_app = function() {
         document.getElementById("final_balance").innerHTML = '<strong>'+wallet_symbol + ' ' + numberWithCommas(fin_net)+'</strong>';
         document.getElementById("widget_fb").innerText = wallet_symbol + ' ' + numberWithCommas(fin_net);
         set_sum('fin_net', wallet_symbol, fin_net);
-        document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, wallet_symbol);
+        document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, wallet_symbol,true);
         document.getElementById("fin_pl").innerHTML = profit_loss_format(fin_net);
     
         var data66 = data_for_pie(get_available_data(data, 'Category', { 'Type': 'Income' }));
@@ -503,34 +503,15 @@ jQuery(document).ready(function() {
      });
 
      
-     greetings(global_data[1]);
-
+    
+     document.getElementById("welcome_message").innerText =  greetings() + global_data[1];
 
 
  
    
 });
 
-function greetings(x){
-    var d = new Date();
-var time = d.getHours();
-var greet ='';
 
-if (time < 12) {
-    greet = ' Good Morning, ';
-}
-if (time > 12 &&  time< 17) {
-    greet = ' Good Afternoon, ';
-}
-
-if (time> 17) {
-    greet = ' Good Evening, ';
-}
-
-document.getElementById("welcome_message").innerText = greet + x;
- 
-
-}
 
 function check_balance() {
     Swal.fire({
