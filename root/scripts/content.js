@@ -1,7 +1,7 @@
 var global_data;
 var unsaved_flag = false;
 
-function load_page(url, l) {
+function load_page(c,url, l) {
     if(!unsaved_flag){
 
         load_p(url, l);
@@ -26,7 +26,8 @@ function load_page(url, l) {
     }
    
 }
-function just_load_page(url) {  
+function just_load_page(c,url) {  
+  console.log(c);
     $('#kt_content').load(url);
 }
 
@@ -35,6 +36,11 @@ function just_load_page(url) {
  function load_p(url, l){
     var l = l.split(',');
     global_data = l;
+
+
+   // $('.active').removeClass('active');
+   // $('.active').addClass('active');
+
     $('#kt_content').load(url);
  }
 

@@ -56,8 +56,8 @@ function get_user_profile(user) {
 function build_trend(month_data, type) {
 
     if (type == 'Premium') {
-        var html_div = '<li class="menu-item" aria-haspopup="true">' +
-            '<a class="menu-link" onclick="load_page(\'content_pages/wallet_trends.html\',\'' + month_data + '\')">' +
+        var html_div = '<li class="menu-item" id="menu_'+(page_counter++)+'" aria-haspopup="true">' +
+            '<a class="menu-link" onclick="load_page('+page_counter+',' +'\'content_pages/wallet_trends.html\',\'' + month_data + '\')">' +
             '<span class="svg-icon menu-icon">' +
             '<svg><use xlink:href="#pie_chart"></use></svg>' +
             '</span>' +
@@ -88,19 +88,19 @@ function build_trend(month_data, type) {
     }
 }
 
-
+var page_counter =0;
 function build_site(month_data, users_size, users_list, type) {
-
-    var html_div = '<li class="menu-item menu-item-active" aria-haspopup="true">' +
-        '<a class="menu-link" onclick="load_page(\'content_pages/wallet_dashboard.html\',\'' + month_data + '\')">' +
+ 
+    var html_div = '<li class="menu-item menu-item-active" id="menu_'+(page_counter++)+'" aria-haspopup="true">' +
+        '<a class="menu-link" onclick="load_page('+page_counter+',' +'\'content_pages/wallet_dashboard.html\',\'' + month_data + '\')">' +
         '<span class="svg-icon menu-icon">' +
         '<svg><use xlink:href="#pie_chart"></use></svg>' +
         '<!--end::Svg Icon-->' +
         '</span>' +
         '<span class="menu-text">Dashboard</span>' +
         '</a>' +
-        '</li>' + '<li class="menu-item" aria-haspopup="true">' +
-        '<a class="menu-link" onclick="load_page(\'content_pages/wallet.html\',\'' + month_data + '\')">' +
+        '</li>' + '<li class="menu-item" id="menu_'+(page_counter++)+'"  aria-haspopup="true">' +
+        '<a class="menu-link" onclick="load_page('+page_counter+',' +'\'content_pages/wallet.html\',\'' + month_data + '\')">' +
         '<span class="svg-icon menu-icon">' +
         '<svg><use xlink:href="#cal"></use></svg>' +
         '</span>' +
@@ -125,8 +125,8 @@ function build_site(month_data, users_size, users_list, type) {
         '</ul>' +
         '</div>' +
         '</li>' +
-        '<li class="menu-item" aria-haspopup="true">' +
-        '<a class="menu-link" onclick="load_page(\'content_pages/wallet_settings.html\',\'' + month_data + '\')">' +
+        '<li class="menu-item" id="menu_'+(page_counter++)+'"  aria-haspopup="true">' +
+        '<a class="menu-link" onclick="load_page('+page_counter+',' +'\'content_pages/wallet_settings.html\',\'' + month_data + '\')">' +
         '<span class="svg-icon menu-icon">' +
         '<svg><use xlink:href="#settings"></use></svg>' +
         '</span>' +
@@ -182,8 +182,8 @@ function generate_navi(data, p_wallet) {
     '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
     '</li>';
 
-    var about = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
-    '<a class="menu-link" onclick="just_load_page(\'content_pages/about_us.html\')">' +
+    var about = '<li class="menu-item" id="menu_'+(page_counter++)+'"  aria-haspopup="true" data-menu-toggle="hover">' +
+    '<a class="menu-link" onclick="just_load_page('+page_counter+',' +'\'content_pages/about_us.html\')">' +
     '<span class="svg-icon menu-icon">' +
     '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
     '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -197,8 +197,8 @@ function generate_navi(data, p_wallet) {
     '</a>' +
     '</li>';
 
-    var feedback = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
-    '<a class="menu-link" onclick="just_load_page(\'content_pages/feedback.html\')">' +
+    var feedback = '<li class="menu-item" id="menu_'+(page_counter++)+'" aria-haspopup="true" data-menu-toggle="hover">' +
+    '<a class="menu-link" onclick="just_load_page('+page_counter+',' +'\'content_pages/feedback.html\')">' +
     '<span class="svg-icon menu-icon">' +
     '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
     '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -213,8 +213,8 @@ function generate_navi(data, p_wallet) {
     '</a>' +
     '</li>';
 
-    var team = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
-    '<a class="menu-link" onclick="just_load_page(\'content_pages/the_team.html\')">' +
+    var team = '<li class="menu-item" id="menu_'+(page_counter++)+'" aria-haspopup="true" data-menu-toggle="hover">' +
+    '<a class="menu-link" onclick="just_load_page('+page_counter+',' +'\'content_pages/the_team.html\')">' +
     '<span class="svg-icon menu-icon">' +
     '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
     '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -231,8 +231,8 @@ function generate_navi(data, p_wallet) {
     '</a>' +
     '</li>';
     
-  var faq = '<li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">' +
-    '<a class="menu-link" onclick="just_load_page(\'content_pages/faq.html\')">' +
+  var faq = '<li class="menu-item" id="menu_'+(page_counter++)+'" aria-haspopup="true" data-menu-toggle="hover">' +
+    '<a class="menu-link" onclick="just_load_page('+page_counter+',' +'\'content_pages/faq.html\')">' +
     '<span class="svg-icon menu-icon">' +
     '<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->' +
     '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
@@ -288,7 +288,7 @@ function generate_navi(data, p_wallet) {
                 '</li>';
             navi = my_wallet + navi;
         } else {
-            load_page('content_pages/wallet.html', month_data);
+            load_page('content_pages/wallet_dashboard.html', month_data);
            // just_load_page('content_pages/the_team.html');
             starting = '<li class="menu-section">' +
                 '<h4 class="menu-text text-white">' + wallet_name + '</h4>' +
