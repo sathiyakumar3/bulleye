@@ -288,7 +288,8 @@ function generate_navi(data, p_wallet) {
                 '</li>';
             navi = my_wallet + navi;
         } else {
-            load_page('content_pages/wallet_dashboard.html', month_data);
+            load_p('content_pages/wallet_dashboard.html', month_data);
+         //   load_p(url, l);  
            // just_load_page('content_pages/the_team.html');
             starting = '<li class="menu-section">' +
                 '<h4 class="menu-text text-white">' + wallet_name + '</h4>' +
@@ -654,7 +655,7 @@ const credential = firebase.auth.EmailAuthProvider.credential(
 
 
 user_local.reauthenticateWithCredential(credential).then(function() {
-                  console.log("test");
+
                   user_local.updatePassword(new_password).then(function() {
                         Swal.fire(
                             'Success',
@@ -751,16 +752,14 @@ user_local.reauthenticateWithCredential(credential).then(function() {
                 var timestamp = new Date(given_date);
                 var selected_repeated = document.getElementById('repeat_selection').value;
                 var num_of_repeat = document.getElementById('example-number-input2').value;
-                var main_data = table_databale.data();
-             
+           
+              //  get_fulldata(); 
+                var main_data = table_databale.data(); 
                 if(document.getElementById('add_edit_button').innerText == 'Edit'){
-                    var se = selected_items.pop();
-                    main_data.splice(se, 1);                   
-                }
-              
+                    var se = selected_items.pop();        
+                    local_data = arrayRemove(local_data, main_data[se]);               
                 add_to_local_table(user_id)
-                .then(function (result) {              
-                    for (var i = 0; i < num_of_repeat; i++) {
+                .then(function (result) {            
                         var data = {
                             Timestamp: new Date(timestamp),
                             user: user_id,
@@ -773,30 +772,63 @@ user_local.reauthenticateWithCredential(credential).then(function() {
                             doc_id: monthts(timestamp),
                             Amount: amount
                         }  
-                        main_data.push(Object.assign(data, result));              
-                        switch (selected_repeated) {
-                            case 'Monthly':
-                                timestamp.setMonth(timestamp.getMonth() + 1);
-                                break;
-                            case 'Weekly':
-                                timestamp.setDate(timestamp.getDate() + 7);
-                                break;
-                            case 'Daily':
-                                timestamp.setDate(timestamp.getDate() + 1);
-                                break;
-                            default:
-                        }
-                        if(i==num_of_repeat-1){
-                            table_databale.clear().draw();
-                            table_databale.rows.add(main_data);
-                            table_databale.columns.adjust().draw();          
-                            save_updates();
-                        }    
-                    }    
+                        main_data[se] = Object.assign(data, result);
+                        local_data.push(Object.assign(data, result));
+                      table_databale.clear().draw();                      
+                      table_databale.rows.add(main_data);
+                    table_databale.columns.adjust().draw(); 
+                    save_updates();
                 })
                 .catch((error) => {
                     console.log(error);
-                });
+                }); 
+                }else{
+                    add_to_local_table(user_id)
+                    .then(function (result) {              
+                        for (var i = 0; i < num_of_repeat; i++) {
+                            var data = {
+                                Timestamp: new Date(timestamp),
+                                user: user_id,
+                                Description: description,
+                                Category: category,
+                                Type: type,
+                                Payment: payment,
+                                RecordID: 1,
+                                Repeated: selected_repeated,
+                                doc_id: monthts(timestamp),
+                                Amount: amount
+                            }  
+                            
+                            main_data.push(Object.assign(data, result)); 
+                            local_data.push(Object.assign(data, result)); 
+                          //  local_data.push(main_data);             
+                            switch (selected_repeated) {
+                                case 'Monthly':
+                                    timestamp.setMonth(timestamp.getMonth() + 1);
+                                    break;
+                                case 'Weekly':
+                                    timestamp.setDate(timestamp.getDate() + 7);
+                                    break;
+                                case 'Daily':
+                                    timestamp.setDate(timestamp.getDate() + 1);
+                                    break;
+                                default:
+                            }
+                            if(i==num_of_repeat-1){
+                               
+                              table_databale.clear().draw();                      
+                              table_databale.rows.add(main_data);
+                            table_databale.columns.adjust().draw(); 
+                            on_month_call();
+                             save_updates();
+                            }    
+                        }    
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });  
+                }           
+   
             });
         }
 

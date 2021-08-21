@@ -201,9 +201,14 @@ function percentage_form(value, total, item,good_flag) {
 }
 
 function percentage_form_custom(value, total, item,item2,item3) {
-    if (value == 0) { var pecentage = 0; } else {
+
+    if ( total ==0) { var pecentage = 100; } else {    
         var pecentage = Math.round((value / total) * 100);
+        console.log("Full Amount : "+value);
+        console.log("Full Total : "+total);
+        console.log("Perdentage : " +pecentage);
     }
+
     var good_flag = false;
     if(item3=='Income'){
         good_flag = true;

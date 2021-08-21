@@ -21,6 +21,8 @@ var wallet_entries = '';
 var datetime_loaded = false;
 var selected_start = new Date('1/1/1900').getTime();
 var selected_end = new Date('1/1/2100').getTime();
+
+
 var local_data;
 var table_data;
 var datatable = "";
@@ -31,21 +33,33 @@ var start_app = function () {
     var run_wallet = function () {
 
         var data = date_filter(local_data, selected_end, selected_start);
-
+        document.getElementById("welcome_message_2").innerText  =  month_year(new Date(selected_start));
+        document.getElementById("second_mes").innerText = selected_start.format('MMM D') + ' - ' + selected_end.format('MMM D');;
         var user_profile = user_process(data);
         var user_sum = Object.keys(user_profile).length;
         var counter = Object.keys(data).length;
         var sum_income = data_process(data, { 'Payment': 'Paid', 'Type': 'Income' });
         var sum_expense = data_process(data, { 'Payment': 'Paid', 'Type': 'Expense' });
-        var sum_income2 = data_process(data, { 'Payment': 'Not Paid', 'Type': 'Income' });//
-        var sum_expense2 = data_process(data, { 'Payment': 'Not Paid', 'Type': 'Expense' });//
+      //  var sum_income2 = data_process(data, { 'Payment': 'Not Paid', 'Type': 'Income' });//
+      //  var sum_expense2 = data_process(data, { 'Payment': 'Not Paid', 'Type': 'Expense' });//
         
-        var monthly_income = data_process(data,  { 'Repeated': 'Monthly', 'Type': 'Income', 'Payment': 'Paid', });
+/*         var monthly_income = data_process(data,  { 'Repeated': 'Monthly', 'Type': 'Income', 'Payment': 'Paid', });
         var monthly_expense = data_process(data, { 'Repeated': 'Monthly', 'Type': 'Expense', 'Payment': 'Paid', });
         var weekly_income = data_process(data,  { 'Repeated': 'Weekly', 'Type': 'Income', 'Payment': 'Paid', });
         var weekly_expense = data_process(data, { 'Repeated': 'Weekly', 'Type': 'Expense', 'Payment': 'Paid', });
         var daily_income = data_process(data,  { 'Repeated': 'Daily', 'Type': 'Income', 'Payment': 'Paid', });
         var daily_expense = data_process(data, { 'Repeated': 'Daily', 'Type': 'Expense', 'Payment': 'Paid', });
+ */ console.log(data);
+        var sum_income_2 = data_process(data, { 'Type': 'Income' });
+        var sum_expense_2 = data_process(data, { 'Type': 'Expense' });
+
+        var monthly_income = data_process(data,  { 'Repeated': 'Monthly', 'Type': 'Income' });
+        var monthly_expense = data_process(data, { 'Repeated': 'Monthly', 'Type': 'Expense' });
+
+        var weekly_income = data_process(data,  { 'Repeated': 'Weekly', 'Type': 'Income' });
+        var weekly_expense = data_process(data, { 'Repeated': 'Weekly', 'Type': 'Expense' });
+        var daily_income = data_process(data,  { 'Repeated': 'Daily', 'Type': 'Income' });
+        var daily_expense = data_process(data, { 'Repeated': 'Daily', 'Type': 'Expense' });
 
         document.getElementById("number_items_2").innerText = counter + " Entries";
         var currency = '<span class="text-dark-50 font-weight-bold" id>' + wallet_symbol + ' ' + ' </span>';
@@ -56,61 +70,34 @@ var start_app = function () {
         document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
         table_data = check_RecordID(data);
-
-        initTable2(sum_income, sum_expense, sum_income2, sum_expense2,monthly_income,monthly_expense,weekly_income,weekly_expense,daily_income,daily_expense);
+        console.log(monthly_income);
+console.log(monthly_expense);
+        initTable2(monthly_income,monthly_expense,weekly_income,weekly_expense,daily_income,daily_expense,sum_income_2,sum_expense_2);
     }
-    var read_data = function () {
-        console.log('[DATA FETCH ] - ' + new Date());
+
+
+    var read_data = function () {  
         get_wallet_data(wallet_id, wallet_entries).then(function (result) {
-            local_data = result;
-
-            console.log('[DATA  GOT ] - ' + new Date());
-          
+            local_data = result;       
             var outcome = date_process(result);
+          //  selected_start = outcome[0];
+          //  selected_end = outcome[1];      
 
+            var today = new Date();
+            selected_start = new Date(today.getFullYear(), today.getMonth(), 1);
+            selected_end = new Date(today.getFullYear(), today.getMonth() + 1, 0);            
 
-            selected_start = outcome[0];
-            selected_end = outcome[1];
-            /*    selected_start =selected_start.setHours(0, 0, 0, 0);
-               selected_end = selected_end.setHours(23, 59, 59, 999); */
-              var cat = cat_process(local_data);
-               
-               const d_income_prom = new Promise((resolve, reject) => {
-                   get_data(local_data, { 'Type': ['Income'] }, cat).then(function(result) {
-                       resolve(result);
-                   }).catch((error) => {
-                       console.log(error);
-                       reject(error);
-                   });
-               });
-               const d_expense_prom = new Promise((resolve, reject) => {
-                   get_data(local_data, { 'Type': ['Expense'] }, cat).then(function(result) {
-                       resolve(result);
-                   }).catch((error) => {
-                       console.log(error);
-                       reject(error);
-                   });
-               });
-               Promise.all([d_income_prom, d_expense_prom]).then((values) => {
-                 var  d_income = values[0];
-                 var  d_expense = values[1];
-                   build_timeline(cat,d_expense,d_income)
-                //    console.log(d_income);
-                //    console.log(d_expense);
-               }).catch((error) => {
-                   console.log("Error getting documents: ", error);
-                   reject(error);
-               });
+            document.getElementById("month_liset").innerHTML =  create_month_list(outcome[2]);
             _initDaterangepicker();
         }).catch((error) => { console.log(error); });
     };
     var _initDaterangepicker = function () {
-        if ($('#kt_dashboard_daterangepicker').length == 0) { return; }
+   //     if ($('#kt_dashboard_daterangepicker').length == 0) { return; }
         selected_start = moment(selected_start);
         selected_end = moment(selected_end);
-        var picker = $('#kt_dashboard_daterangepicker');
+     //   var picker = $('#kt_dashboard_daterangepicker');
 
-        function cb(start, end, label) {
+  /*       function cb(start, end, label) {
             var title = '';
             var range = '';
             if ((end - start) < 100 || label == 'Today') {
@@ -121,35 +108,29 @@ var start_app = function () {
                 range = start.format('MMM D');
             } else { range = start.format('MMM D') + ' - ' + end.format('MMM D'); }
             $('#kt_dashboard_daterangepicker_date').html(range);
-            $('#kt_dashboard_daterangepicker_title').html(title);
-
-            selected_start = start;
-            selected_end = end;
+            $('#kt_dashboard_daterangepicker_title').html(title); */
+       
+      //      selected_start = start;
+         //   selected_end = end;
             run_wallet();
-        }
-        picker.daterangepicker({ direction: KTUtil.isRTL(), startDate: selected_start, endDate: selected_end, opens: 'left', applyClass: 'btn-primary', cancelClass: 'btn-light-primary', ranges: { 'Today': [moment(), moment()], 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')], 'Last 7 Days': [moment().subtract(6, 'days'), moment()], 'Last 30 Days': [moment().subtract(29, 'days'), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')], 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 'All time': [selected_start, selected_end] } }, cb);
-        cb(selected_start, selected_end, '');
+      //  }
+      /*   picker.daterangepicker({ direction: KTUtil.isRTL(), startDate: selected_start, endDate: selected_end, opens: 'left', applyClass: 'btn-primary', cancelClass: 'btn-light-primary', ranges: { 'Today': [moment(), moment()], 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')], 'Last 7 Days': [moment().subtract(6, 'days'), moment()], 'Last 30 Days': [moment().subtract(29, 'days'), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')], 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 'All time': [selected_start, selected_end] } }, cb);
+        cb(selected_start, selected_end, ''); */
     }
-    var initTable2 = function (sum_income, sum_expense, sum_income2, sum_expense2,monthly_income,monthly_expense,weekly_income,weekly_expense,daily_income,daily_expense) {
-    
+    var initTable2 = function (monthly_income,monthly_expense,weekly_income,weekly_expense,daily_income,daily_expense,sum_income_2,sum_expense_2) {
+        console.log(monthly_income);
+        console.log(monthly_expense);
         KTApp.unblock('#kt_blockui_content');
-        console.log('[TABLE FETCH ] - ' + new Date());
-        console.log(table_data);
+   
         var colums_select = [15, 9, 10, 11, 5, 13, 14, 12];
-        if (table_databale != "") {
-            table_databale.off('change', '.group-checkable');
-            table_databale.off('change', '.checkable');
-            table_databale.destroy();
-            selected_items = [];
-            refresh_table_buttons();
-        }
+
 
 
         var options = {
-            responsive: true,
+  /*           responsive: true,
             destroy: true,
-            processing: true,
-            data: table_data,
+            processing: true, */
+        
             dom: `<'row hide'<'col-sm-6 text-left'f><'col-sm-6 text-right'B>>
 			<'row'<'col-sm-12'tr>>
 			<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'lp>>`,
@@ -263,7 +244,7 @@ var start_app = function () {
                         var html_div = '';
 
                         switch (full.Repeated) {
-                            case 'Monthly':
+                            case 'Monthly':                            
                                 selet1 = monthly_income;
                                 selet2 = monthly_expense;
                                 break;
@@ -276,13 +257,13 @@ var start_app = function () {
                                     selet2 = daily_expense;                             
                                     break;
                                     case 'Once':
-                                        selet1 = sum_income;
-                                        selet2 = sum_expense;
+                                        selet1 = sum_income_2;
+                                        selet2 = sum_expense_2;
                                         text = 'Total';
                                         break;
                             default:
                         }
-                       
+
 
                         switch (full.Type) {
                             case 'Expense':
@@ -452,9 +433,27 @@ var start_app = function () {
                 }
             };
         }
-        table_databale = $('#kt_datatable_22').DataTable(options);
 
-
+/*         if (table_databale != "") {
+            console.log("table destroedy");
+            table_databale.off('change', '.group-checkable');
+            table_databale.off('change', '.checkable');
+            table_databale.destroy();
+            selected_items = [];
+            refresh_table_buttons();
+        } */
+        if (table_databale == "") {
+            table_databale = $('#kt_datatable_22').DataTable(options);
+        }else{
+            table_databale.off('change', '.group-checkable');
+            table_databale.off('change', '.checkable');
+          //  table_databale.destroy();
+            selected_items = [];
+            refresh_table_buttons();
+        }
+        
+      //  $('#my_table').DataTable().clear().rows.add(data).draw()
+      table_databale.clear().rows.add(table_data).draw();
         table_databale.on('change', '.group-checkable', function () {
             var set = $(this).closest('table').find('td:first-child .checkable');
             var checked = $(this).is(':checked');
@@ -514,16 +513,21 @@ var start_app = function () {
         },
         entries_sync: function () {
             sync_wallet_entries();
+            on_month_call();
             start_app.refresh();
+        },
+        load_tabl:function(){
+            _initDaterangepicker();
         }
     };
 }();
 jQuery(document).ready(function () {
-
+   // document.getElementById("kt_dashboard_daterangepicker_date").style.display = "none";
+ 
     wallet_id = global_data[0];
     user_id = global_data[2];
-    document.getElementById("welcome_message_2").innerText =  greetings() + global_data[1];
-    document.getElementById("second_mes").innerText = new Date().toDateString();
+   // document.getElementById("welcome_message_2").innerText =  greetings() + global_data[1];
+
    
 
     wallet_Ref_entries = db.collection("wallets").doc(wallet_id).collection('entries');
@@ -557,10 +561,7 @@ function refresh_table_buttons() {
         $('#kt_datatable_group_action_form_2').collapse('hide');
     }
 }
-
-
-
-
+    
 //delete selected_items
 function delete_selected() {
     Swal.fire({
@@ -574,6 +575,9 @@ function delete_selected() {
     }).then((result) => {
         if (result.isConfirmed) {
             var rows = table_databale.rows('.selected');
+            for (let i = 0; i < rows.data().length; i++) {
+                local_data = arrayRemove(local_data, rows.data()[i]);
+              }     
             rows.remove().draw();
             var main_data = table_databale.data();
             table_databale.clear().draw();
@@ -622,9 +626,11 @@ function add_entry_modal() {
     $('#kt_datetimepicker_10').datetimepicker('clear');
     $('#kt_datetimepicker_10').datetimepicker('destroy');
     $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(), format: 'MM/DD/YYYY hh:mm:ss A', enable: true });
-    document.getElementById('title_33').innerText = "Add to Wallet";
+    document.getElementById('title_313').innerText = "Add to Wallet";
     document.getElementById('record_id').value = '';
     document.getElementById('add_edit_button').innerText = 'Add';
+    $('select[name=form_catergory_2]').val('default');
+    $('select[name=form_catergory_2]').selectpicker("refresh");
 
 }
 function edit_entry_modal(sel) {
@@ -641,12 +647,18 @@ function edit_entry_modal(sel) {
     var payment = sel_data.Payment;
     var repeat = sel_data.Repeated;
     var RecordID = sel_data.RecordID;
+  
+$('select[name=form_catergory_2]').val(category);
+
+$('select[name=form_catergory_2]').selectpicker('refresh');
+
 
     document.getElementById('record_id').value = RecordID;
     $('#edit_incex_form_modal').modal('toggle');
     document.getElementById('example-number-input2').value = 1;
-    $('select[name=form_catergory_2]').val(category);
-    $('.selectpicker').selectpicker('refresh');
+
+
+
     document.getElementById('edit_incex_form').querySelector('[name="form_description_2"]').value = description;
     document.getElementById('edit_incex_form').querySelector('[name="form_amount_2"]').value = amount;
     switch (type) {
@@ -671,7 +683,7 @@ function edit_entry_modal(sel) {
     $('#kt_datetimepicker_10').datetimepicker('destroy');
     $('#kt_datetimepicker_10').datetimepicker({ defaultDate: new Date(timestamp), format: 'MM/DD/YYYY hh:mm:ss A', disable: true });
     document.getElementById('repeat_selection').value = repeat;
-    document.getElementById('title_33').innerText = "Edit Entry";
+    document.getElementById('title_313').innerText = "Edit Entry";
     document.getElementById('add_edit_button').innerText = 'Edit';
 }
 
@@ -721,194 +733,18 @@ function save_updates() {
 function sync_wallet_entries() {
     var results = table_databale.data();
     for (var i = 0; i < results.length; i++) {
-        var data = results[i];
-      
+        var data = results[i];      
         var timestamp = new Date(data.Timestamp);
         var entry = monthts(timestamp);
         if (!wallet_entries.includes(entry)) {
             wallet_entries.push(entry);
         }
     }
-
-
-}
-
-function build_timeline(cat,d_expense,d_income) {
-    var myvar = '';
-    var teser ='';
-/*     console.log(cat);
-    console.log(d_expense);
-    console.log(d_income); */
-    var d_netcome = [];
-    for (var i = 0; i < cat.length; i++) {
-        var teser = '<button type="button" class="btn btn-primary btn-lg btn-block">'+cat[i]+ ' - '+wallet_currency+' '+(Number(d_income[i])-Number(d_expense[i]))+'</button>'+teser;																		
-       var ccd = '<div class="d-flex flex-wrap align-items-center justify-content-between w-100">'+ 
-       '																	<div class="d-flex flex-column align-items-cente py-2 w-75">'+
-       '																		<a href="#" class="text-dark-75 font-weight-bold text-hover-primary font-size-lg mb-1">'+(Number(d_expense[i])-Number(d_income[i]))+'  </a>'+wallet_currency+'</a>'+
-       '																		<span class="text-muted font-weight-bold">Profit</span>'+   
-       '																	</div>'+
-       '																	<span class="label label-lg label-light-primary label-inline font-weight-bold py-4">Closed</span>'+
-       '																</div>';
-           
-       
-        var myvar = '<div class="timeline-item align-items-start">'+
-        '														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">'+cat[i]+'</div>'+
-        '														<div class="timeline-badge">'+
-        '															<i class="fa fa-genderless text-warning icon-xl"></i>'+
-        '														</div>'+teser+
-        '													</div>'+myvar;
- 
-       
-
-        
-        d_netcome.push((Number(d_income[i])-Number(d_expense[i])));
-
-    }
- 
-
-  //document.getElementById('timeline_menu').innerHTML = teser;
-  
- 
-    var element = document.getElementById("kt_tiles_widget_8_chart");
-    var height = parseInt(KTUtil.css(element, 'height'));
-    var color = KTUtil.hasAttr(element, 'data-color') ? KTUtil.attr(element, 'data-color') : 'danger';
-
-    if (!element) {
-        return;
-    }
-
-    var options = {
-        series: [{
-            name: 'Net Profit',
-            data: d_netcome
-        }],
-        chart: {
-            type: 'area',
-            height: 150,
-            toolbar: {
-                show: false
-            },
-            zoom: {
-                enabled: false
-            },
-            sparkline: {
-                enabled: true
-            }
-        },
-        plotOptions: {},
-        legend: {
-            show: false
-        },
-        dataLabels: {
-            enabled: false
-        },
-        fill: {
-            type: 'solid'
-        },
-        stroke: {
-            curve: 'smooth',
-            show: true,
-            width: 3,
-            colors: [KTApp.getSettings()['colors']['theme']['base'][color]]
-        },
-        xaxis: {
-            categories: cat,
-            axisBorder: {
-                show: false,
-            },
-            axisTicks: {
-                show: false
-            },
-            labels: {
-                show: false,
-                style: {
-                    colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                }
-            },
-            crosshairs: {
-                show: false,
-                position: 'front',
-                stroke: {
-                    color: KTApp.getSettings()['colors']['gray']['gray-300'],
-                    width: 1,
-                    dashArray: 3
-                }
-            },
-            tooltip: {
-                enabled: true,
-                formatter: undefined,
-                offsetY: 0,
-                style: {
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                }
-            }
-        },
-        yaxis: {
-            min: 0,
-            max: 10000,
-            labels: {
-                show: false,
-                style: {
-                    colors: KTApp.getSettings()['colors']['gray']['gray-500'],
-                    fontSize: '12px',
-                    fontFamily: KTApp.getSettings()['font-family']
-                }
-            }
-        },
-        states: {
-            normal: {
-                filter: {
-                    type: 'none',
-                    value: 0
-                }
-            },
-            hover: {
-                filter: {
-                    type: 'none',
-                    value: 0
-                }
-            },
-            active: {
-                allowMultipleDataPointsSelection: false,
-                filter: {
-                    type: 'none',
-                    value: 0
-                }
-            }
-        },
-        tooltip: {
-            style: {
-                fontSize: '12px',
-                fontFamily: KTApp.getSettings()['font-family']
-            },
-            y: {
-                formatter: function (val) {
-                    return "$" + val + " thousands"
-                }
-            }
-        },
-        colors: [KTApp.getSettings()['colors']['theme']['light'][color]],
-        markers: {
-            colors: [KTApp.getSettings()['colors']['theme']['light'][color]],
-            strokeColor: [KTApp.getSettings()['colors']['theme']['base'][color]],
-            strokeWidth: 3
-        },
-        padding: {
-            top: 0,
-            bottom: 0
-        }
-    };
-
-    var chart = new ApexCharts(element, options);
-    chart.render();
-
-
 }
 
 function save_changes() {
+    get_fulldata();
+
     sync_wallet_entries();
     var results = table_databale.data();
     for (var i = 0; i < wallet_entries.length; i++) {
@@ -927,6 +763,9 @@ function save_changes() {
     unsaved_flag = false;
     selected_items = [];
     refresh_table_buttons();
+    var outcome = date_process(local_data);       
+    document.getElementById("month_liset").innerHTML =  create_month_list(outcome[2]);
+    on_month_call();
 }
 
 function external_table_btn(x) {
@@ -1002,6 +841,7 @@ function selected_category() {
 
 
 function cat2combo(wallet_id) {
+
     document.getElementById("edit_cat_selec").innerHTML = "";
     var wallet_base_Ref = db.collection("wallets");
     var select = document.getElementById('edit_cat_selec');
@@ -1014,11 +854,17 @@ function cat2combo(wallet_id) {
             opt.value = cat_icon_list[i]['name'];
             opt.innerHTML = cat_icon_list[i]['name'];
             select.appendChild(opt);
+            if(i==(cat_icon_list.length-1)){
+                $('select[name=form_catergory_2]').selectpicker('refresh');
+            }
+
         }
+
     })).catch((error) => { console.error(error); });
+   
 }
 
-$(window).scroll(function() {
+/* $(window).scroll(function() {
     if ($(this).scrollTop() > 50 ) {
         console.log("now");
         document.getElementById('add_transa').style.display = "block";
@@ -1028,4 +874,102 @@ $(window).scroll(function() {
         document.getElementById('add_transa').style.display = "none";
         console.log("later");
     }
-});
+}); */
+   // Returns [32, 33, 40]
+
+function checkAdult(date) {
+  return date >=  new Date();
+}
+var month_buttons = [];
+function create_month_list(outcome){
+    outcome =outcome.sort(function(a,b){return a.getTime() - b.getTime()});
+    var before =outcome.filter(function(a){return  a <  new Date()});
+    var after = outcome.filter(function(a){return  a >=  new Date()});
+
+    var l_list = '';
+    var r_list ='';
+    var text = '';
+    var side_text = ''
+var left_list ='';
+var right_list ='';
+var limit = 1;
+
+    var today = new Date();
+    var monthts_tod = monthts(today);
+    month_buttons.push(monthts_tod);
+  var base =  '<button type="button" id="'+monthts_tod+'_but"onclick="on_month_call(\''+today+'\')" class="btn btn-outline-secondary btn-dark"><b>'+monthts_tod+'</b></button> ';
+
+  before.slice().reverse().forEach(element => {     
+        var monthts_ele = monthts(element);
+        if (monthts_ele!=monthts_tod){           
+            text ='<button type="button" id="'+monthts_ele+'_but" onclick="on_month_call(\''+element+'\')" class="btn btn-outline-secondary">'+monthts_ele+'</button> ';
+            side_text = '<a class="dropdown-item btn"  id="'+monthts_ele+'_but"  onclick="on_month_call(\''+element+'\')" >'+monthts_ele+'</a>';
+            month_buttons.push(monthts_ele);                      
+                if(limit>5){
+                    left_list = left_list + side_text;
+                }else{
+                    l_list =  text+l_list;
+                }
+                limit++;    
+        }
+       });
+
+       after.forEach(element => {     
+        var monthts_ele = monthts(element);
+        if (monthts_ele!=monthts_tod){           
+            text ='<button type="button" id="'+monthts_ele+'_but" onclick="on_month_call(\''+element+'\')" class="btn btn-outline-secondary">'+monthts_ele+'</button> ';
+            side_text = '<a class="dropdown-item btn"  id="'+monthts_ele+'_but"  onclick="on_month_call(\''+element+'\')" >'+monthts_ele+'</a>';
+            month_buttons.push(monthts_ele);
+                if(limit>5){
+                    right_list = right_list + side_text;
+                }else{
+                    r_list =  r_list + text;
+                }
+                limit++;            
+        }
+       });
+       return add_downdown(left_list)+ l_list+ base +r_list+ add_downdown(right_list);
+} 
+
+function add_downdown(list){
+    if(list!=''){
+        return '<div class="btn-group" role="group">'+
+        '<button id="btnGroupVerticalDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</button>'+
+        '<div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">'+
+        list+'</div></div>';
+               }else{
+                   return '';
+               }
+}
+var last_call = new Date();
+
+function on_month_call(date){
+    
+    if(date==''||date==undefined){
+        date= last_call;
+    }
+  var  monthts_ele = monthts(new Date(date));
+ month_buttons.forEach(element => {
+if(monthts_ele!=element){
+    if(document.getElementById(element+'_but')){
+    document.getElementById(element+'_but').classList.remove("btn-dark");
+    }
+}   
+ });
+ if(document.getElementById(monthts_ele+'_but')){
+    document.getElementById(monthts_ele+'_but').classList.add("btn-dark"); 
+    last_call = new Date(date); 
+  }else{
+    last_call = new Date();    
+    document.getElementById(monthts(last_call)+'_but').classList.add("btn-dark"); 
+  }    
+selected_start = new Date(last_call.getFullYear(), last_call.getMonth(), 1);
+selected_end = new Date(last_call.getFullYear(), last_call.getMonth() + 1, 0);
+start_app.load_tabl();
+}
+
+function get_fulldata(){
+selected_start = new Date('1/1/1900').getTime();
+selected_end = new Date('1/1/2100').getTime();
+start_app.load_tabl();
+}

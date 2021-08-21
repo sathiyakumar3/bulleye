@@ -261,12 +261,19 @@ function date_process(data) {
     data = sort_obj(data, 'Timestamp');
     var first_day = "";
     var last_day = "";
+    var month_list = [];
+    var month_list_2 = [];
     Object.keys(data).map(function (key, index) {
-        var datetime = data[key]['Timestamp']
+        var datetime = data[key]['Timestamp'];
+        if(!month_list.includes(monthts(datetime))){
+            month_list.push(monthts(datetime));
+            month_list_2.push(datetime);
+        }
         if (first_day == "" || datetime < first_day) { first_day = datetime }
         if (last_day == "" || datetime > last_day) { last_day = datetime }
     });
-    var results = [first_day, last_day];
+    var results = [first_day, last_day,month_list_2];
+    
     return results;
 }
 

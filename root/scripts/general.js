@@ -2,9 +2,18 @@ const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
     "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
 ];
 
+const monthNames_2 = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
 function shortdate(d) {
     return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" +
         d.getFullYear();
+}
+
+function month_year(d) {
+
+    return (monthNames_2[d.getMonth()] + " , " + d.getFullYear());
 }
 
 function shortdateclean(d) {
@@ -73,4 +82,12 @@ if (time> 17) {
 }
 
 return greet; 
+}
+
+function arrayRemove(arr, value) {     
+    return arr.filter(function(ele){ 
+     /*    console.log(ele);
+        console.log(value); */
+        return ele != value; 
+    });
 }
