@@ -71,7 +71,19 @@ var start_app = function () {
         var currency = '<span class="text-dark-50 font-weight-bold" id>' + wallet_symbol + ' ' + ' </span>';
         document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
         document.getElementById("sum_expenses").innerHTML = currency + numberWithCommas(sum_expense);
-        if ((sum_income - sum_expense) < 0) { document.getElementById("sum_net").classList.add("text-danger"); } else { document.getElementById("sum_net").classList.add("text-success"); }
+        if ((sum_income - sum_expense) < 0) {
+            document.getElementById("sum_net").classList.remove("text-success"); 
+             document.getElementById("sum_net").classList.add("text-danger");
+             document.getElementById("month_indi2").classList.remove("bg-success");
+             document.getElementById("month_indi2").classList.add("bg-danger");
+        
+             } else {
+                document.getElementById("sum_net").classList.remove("text-danger");
+                  document.getElementById("sum_net").classList.add("text-success"); 
+                  document.getElementById("month_indi2").classList.remove("bg-danger");
+                  document.getElementById("month_indi2").classList.add("bg-success");
+                 
+                }
         if (user_sum > 1) { document.getElementById("user_list_2").innerText = user_sum + " Users"; } else { document.getElementById("user_list_2").innerText = user_sum + " User"; }
         document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
@@ -516,12 +528,10 @@ run_wallet();
     };
 }();
 jQuery(document).ready(function () {
-   // document.getElementById("kt_dashboard_daterangepicker_date").style.display = "none";
- 
+   // document.getElementById("kt_dashboard_daterangepicker_date").style.display = "none"; 
     wallet_id = global_data[0];
     user_id = global_data[2];
    // document.getElementById("welcome_message_2").innerText =  greetings() + global_data[1];  
-
     wallet_Ref_entries = db.collection("wallets").doc(wallet_id).collection('entries');
     wallet_Ref = db.collection("wallets");
     getoptdata(wallet_Ref, wallet_id).then(function (doc) {
