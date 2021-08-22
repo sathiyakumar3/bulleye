@@ -29,38 +29,44 @@ var datatable = "";
 var selected_items = [];
 var table_databale = '';
 
+var monthly_income = 0;
+var monthly_expense = 0;
+var weekly_income = 0;
+var weekly_expense =0;
+var daily_income = 0;
+var daily_expense =0;
+var sum_income_2 = 0;
+var sum_expense_2 = 0;
+
 var start_app = function () {
     var run_wallet = function () {
-
         var data = date_filter(local_data, selected_end, selected_start);
-        document.getElementById("welcome_message_2").innerText  =  month_year(new Date(selected_start));
-        document.getElementById("second_mes").innerText = selected_start.format('MMM D') + ' - ' + selected_end.format('MMM D');;
+        document.getElementById("welcome_message_2").innerHTML  = selected_start.format('MMM D') + ' - ' + selected_end.format('MMM D');
+        document.getElementById("second_mes").innerText = new Date(selected_start).getFullYear();
+    
+        document.getElementById("month_ini").innerText = monthNames[new Date(selected_start).getMonth()];
         var user_profile = user_process(data);
         var user_sum = Object.keys(user_profile).length;
         var counter = Object.keys(data).length;
         var sum_income = data_process(data, { 'Payment': 'Paid', 'Type': 'Income' });
         var sum_expense = data_process(data, { 'Payment': 'Paid', 'Type': 'Expense' });
       //  var sum_income2 = data_process(data, { 'Payment': 'Not Paid', 'Type': 'Income' });//
-      //  var sum_expense2 = data_process(data, { 'Payment': 'Not Paid', 'Type': 'Expense' });//
-        
+      //  var sum_expense2 = data_process(data, { 'Payment': 'Not Paid', 'Type': 'Expense' });//        
 /*         var monthly_income = data_process(data,  { 'Repeated': 'Monthly', 'Type': 'Income', 'Payment': 'Paid', });
         var monthly_expense = data_process(data, { 'Repeated': 'Monthly', 'Type': 'Expense', 'Payment': 'Paid', });
         var weekly_income = data_process(data,  { 'Repeated': 'Weekly', 'Type': 'Income', 'Payment': 'Paid', });
         var weekly_expense = data_process(data, { 'Repeated': 'Weekly', 'Type': 'Expense', 'Payment': 'Paid', });
         var daily_income = data_process(data,  { 'Repeated': 'Daily', 'Type': 'Income', 'Payment': 'Paid', });
-        var daily_expense = data_process(data, { 'Repeated': 'Daily', 'Type': 'Expense', 'Payment': 'Paid', });
- */ console.log(data);
-        var sum_income_2 = data_process(data, { 'Type': 'Income' });
-        var sum_expense_2 = data_process(data, { 'Type': 'Expense' });
+        var daily_expense = data_process(data, { 'Repeated': 'Daily', 'Type': 'Expense', 'Payment': 'Paid', });*/ 
 
-        var monthly_income = data_process(data,  { 'Repeated': 'Monthly', 'Type': 'Income' });
-        var monthly_expense = data_process(data, { 'Repeated': 'Monthly', 'Type': 'Expense' });
-
-        var weekly_income = data_process(data,  { 'Repeated': 'Weekly', 'Type': 'Income' });
-        var weekly_expense = data_process(data, { 'Repeated': 'Weekly', 'Type': 'Expense' });
-        var daily_income = data_process(data,  { 'Repeated': 'Daily', 'Type': 'Income' });
-        var daily_expense = data_process(data, { 'Repeated': 'Daily', 'Type': 'Expense' });
-
+        monthly_income = data_process(data,  { 'Repeated': 'Monthly', 'Type': 'Income' });
+        monthly_expense = data_process(data, { 'Repeated': 'Monthly', 'Type': 'Expense' });
+        weekly_income = data_process(data,  { 'Repeated': 'Weekly', 'Type': 'Income' });
+        weekly_expense = data_process(data, { 'Repeated': 'Weekly', 'Type': 'Expense' });
+        daily_income = data_process(data,  { 'Repeated': 'Daily', 'Type': 'Income' });
+        daily_expense = data_process(data, { 'Repeated': 'Daily', 'Type': 'Expense' });
+        sum_income_2 = data_process(data, { 'Type': 'Income' })-monthly_income-weekly_income-daily_income;
+        sum_expense_2 = data_process(data, { 'Type': 'Expense' })-monthly_expense-weekly_expense-daily_expense;
         document.getElementById("number_items_2").innerText = counter + " Entries";
         var currency = '<span class="text-dark-50 font-weight-bold" id>' + wallet_symbol + ' ' + ' </span>';
         document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
@@ -70,62 +76,37 @@ var start_app = function () {
         document.getElementById("sum_net").innerHTML = currency + numberWithCommas(sum_income - sum_expense);
         document.getElementById("image_list_3").innerHTML = user_circle_gen(user_profile);
         table_data = check_RecordID(data);
-        console.log(monthly_income);
-console.log(monthly_expense);
-        initTable2(monthly_income,monthly_expense,weekly_income,weekly_expense,daily_income,daily_expense,sum_income_2,sum_expense_2);
+  /*       console.log("Monthly I : "+monthly_income);
+        console.log("Monthly E : "+monthly_expense);
+        console.log("Weekly I : "+weekly_income);
+        console.log("Weekly E : "+weekly_expense);
+        console.log("Daily I : "+daily_income);
+        console.log("Daily E: "+daily_expense);
+        console.log("Once I : "+sum_income_2);
+        console.log("Once E : "+sum_expense_2); */
+        initTable2();
     }
-
-
     var read_data = function () {  
         get_wallet_data(wallet_id, wallet_entries).then(function (result) {
             local_data = result;       
             var outcome = date_process(result);
           //  selected_start = outcome[0];
-          //  selected_end = outcome[1];      
-
+          //  selected_end = outcome[1];
             var today = new Date();
             selected_start = new Date(today.getFullYear(), today.getMonth(), 1);
-            selected_end = new Date(today.getFullYear(), today.getMonth() + 1, 0);            
-
+            selected_end = new Date(today.getFullYear(), today.getMonth() + 1, 0);     
             document.getElementById("month_liset").innerHTML =  create_month_list(outcome[2]);
-            _initDaterangepicker();
+            selected_start = moment(selected_start);
+            selected_end = moment(selected_end);
+            run_wallet();
         }).catch((error) => { console.log(error); });
     };
-    var _initDaterangepicker = function () {
-   //     if ($('#kt_dashboard_daterangepicker').length == 0) { return; }
-        selected_start = moment(selected_start);
-        selected_end = moment(selected_end);
-     //   var picker = $('#kt_dashboard_daterangepicker');
 
-  /*       function cb(start, end, label) {
-            var title = '';
-            var range = '';
-            if ((end - start) < 100 || label == 'Today') {
-                title = 'Today:';
-                range = start.format('MMM D');
-            } else if (label == 'Yesterday') {
-                title = 'Yesterday:';
-                range = start.format('MMM D');
-            } else { range = start.format('MMM D') + ' - ' + end.format('MMM D'); }
-            $('#kt_dashboard_daterangepicker_date').html(range);
-            $('#kt_dashboard_daterangepicker_title').html(title); */
-       
-      //      selected_start = start;
-         //   selected_end = end;
-            run_wallet();
-      //  }
-      /*   picker.daterangepicker({ direction: KTUtil.isRTL(), startDate: selected_start, endDate: selected_end, opens: 'left', applyClass: 'btn-primary', cancelClass: 'btn-light-primary', ranges: { 'Today': [moment(), moment()], 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')], 'Last 7 Days': [moment().subtract(6, 'days'), moment()], 'Last 30 Days': [moment().subtract(29, 'days'), moment()], 'This Month': [moment().startOf('month'), moment().endOf('month')], 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], 'All time': [selected_start, selected_end] } }, cb);
-        cb(selected_start, selected_end, ''); */
-    }
-    var initTable2 = function (monthly_income,monthly_expense,weekly_income,weekly_expense,daily_income,daily_expense,sum_income_2,sum_expense_2) {
-        console.log(monthly_income);
-        console.log(monthly_expense);
-        KTApp.unblock('#kt_blockui_content');
-   
+    var initTable2 = function () {
+     
+
+        KTApp.unblock('#kt_blockui_content');   
         var colums_select = [15, 9, 10, 11, 5, 13, 14, 12];
-
-
-
         var options = {
   /*           responsive: true,
             destroy: true,
@@ -163,15 +144,15 @@ console.log(monthly_expense);
             order: [[16, 'asc']],
 
             columns: [
-                { data: "RecordID" },
-                { data: "Timestamp" },
-                { data: "doc_id" },
-                { data: "Payment" },
-                { data: "Type" },
-                { data: "Category" },
-                { data: "Category" },
-                { data: "Category" },
-                { data: "Category" },
+                { data: "RecordID", "width": "5%" },
+                { data: "Timestamp", "width": "5%" },
+                { data: "doc_id", "width": "10%"},
+                { data: "Payment" , "width": "17%"},
+                { data: "Type", "width": "15%" },
+                { data: "Recurring", "width": "10%" },
+                { data: "Category", "width": "10%" },
+                { data: "Category" , "width": "10%"},
+                { data: "Category" , "width": "10%"},
                 { data: "user_name" },
                 { data: "Category" },
                 { data: "Description" },
@@ -238,11 +219,19 @@ console.log(monthly_expense);
                     visible: true,
                     orderable: false,
                     render: function (data, type, full, meta) {
-                        var selet1 = '';
-                        var selet2 = '';
+                        var selet1 = 0;
+                        var selet2 = 0;
                         var text = full.Repeated;
                         var html_div = '';
 
+/*                         console.log("Monthly I : "+monthly_income);
+                        console.log("Monthly E : "+monthly_expense);
+                        console.log("Weekly I : "+weekly_income);
+                        console.log("Weekly E : "+weekly_expense);
+                        console.log("Daily I : "+daily_income);
+                        console.log("Daily E: "+daily_expense);
+                        console.log("Once I : "+sum_income_2);
+                        console.log("Once E : "+sum_expense_2); */
                         switch (full.Repeated) {
                             case 'Monthly':                            
                                 selet1 = monthly_income;
@@ -252,27 +241,29 @@ console.log(monthly_expense);
                                 selet1 = weekly_income;
                                 selet2 = weekly_expense;
                                 break;
-                                case 'Daily':
-                                    selet1 = daily_income;
-                                    selet2 = daily_expense;                             
-                                    break;
-                                    case 'Once':
-                                        selet1 = sum_income_2;
-                                        selet2 = sum_expense_2;
-                                        text = 'Total';
-                                        break;
+                            case 'Daily':
+                                selet1 = daily_income;
+                                selet2 = daily_expense;                             
+                                break;
+                            case 'Once':
+                                selet1 = sum_income_2;
+                                selet2 = sum_expense_2;
+                                text = 'Total';
+                                break;
                             default:
                         }
-
+                     
 
                         switch (full.Type) {
                             case 'Expense':
                                 html_div = percentage_form_custom(full.Amount, selet2, ' Rs',' of '+text,full.Type);
+                                console.log("[EXPENSE] Value : "+full.Amount + " Total : "+selet2);
                               //  selet1 = sum_expense;
                              //   selet2 = sum_expense2;
                                 break;
                             case 'Income':
                                 html_div = percentage_form_custom(full.Amount, selet1, ' Rs',' of '+text,full.Type);
+                                console.log("[INCOME] Value : "+full.Amount + " Total : "+selet1);
                              //   selet1 = sum_income;
                              //   selet2 = sum_income2;
                                 break;
@@ -302,6 +293,7 @@ console.log(monthly_expense);
                 {
                     targets: 6,
                     title: 'Income',
+                    className: "dt-center",
                     orderable: false,
                     render: function (data, type, full, meta) {
                         return payment_status_fomt(full.Type, full.Payment, full.Amount, 'Income', wallet_symbol);
@@ -310,6 +302,7 @@ console.log(monthly_expense);
                 {
                     targets: 7,
                     title: 'Expense',
+                    className: "dt-center",
                     orderable: false,
                     render: function (data, type, full, meta) {
                         return payment_status_fomt(full.Type, full.Payment, full.Amount, 'Expense', wallet_symbol);
@@ -318,6 +311,7 @@ console.log(monthly_expense);
                 {
                     targets: 8,
                     title: 'Actions',
+                    className: "dt-center",
                     orderable: false,
                     render: function (data, type, full, meta) {
 
@@ -516,8 +510,8 @@ console.log(monthly_expense);
             on_month_call();
             start_app.refresh();
         },
-        load_tabl:function(){
-            _initDaterangepicker();
+        refresh_data: function(){
+run_wallet();
         }
     };
 }();
@@ -526,9 +520,7 @@ jQuery(document).ready(function () {
  
     wallet_id = global_data[0];
     user_id = global_data[2];
-   // document.getElementById("welcome_message_2").innerText =  greetings() + global_data[1];
-
-   
+   // document.getElementById("welcome_message_2").innerText =  greetings() + global_data[1];  
 
     wallet_Ref_entries = db.collection("wallets").doc(wallet_id).collection('entries');
     wallet_Ref = db.collection("wallets");
@@ -965,11 +957,15 @@ if(monthts_ele!=element){
   }    
 selected_start = new Date(last_call.getFullYear(), last_call.getMonth(), 1);
 selected_end = new Date(last_call.getFullYear(), last_call.getMonth() + 1, 0);
-start_app.load_tabl();
+selected_start = moment(selected_start);
+selected_end = moment(selected_end);
+start_app.refresh_data();
 }
 
 function get_fulldata(){
 selected_start = new Date('1/1/1900').getTime();
 selected_end = new Date('1/1/2100').getTime();
-start_app.load_tabl();
+selected_start = moment(selected_start);
+selected_end = moment(selected_end);
+start_app.refresh_data();
 }

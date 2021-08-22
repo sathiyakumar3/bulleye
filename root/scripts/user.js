@@ -819,7 +819,7 @@ user_local.reauthenticateWithCredential(credential).then(function() {
                               table_databale.clear().draw();                      
                               table_databale.rows.add(main_data);
                             table_databale.columns.adjust().draw(); 
-                            on_month_call();
+                            on_month_call(timestamp);
                              save_updates();
                             }    
                         }    

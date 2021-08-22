@@ -204,9 +204,7 @@ function percentage_form_custom(value, total, item,item2,item3) {
 
     if ( total ==0) { var pecentage = 100; } else {    
         var pecentage = Math.round((value / total) * 100);
-        console.log("Full Amount : "+value);
-        console.log("Full Total : "+total);
-        console.log("Perdentage : " +pecentage);
+
     }
 
     var good_flag = false;
