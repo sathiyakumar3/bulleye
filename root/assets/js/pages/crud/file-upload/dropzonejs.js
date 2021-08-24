@@ -172,13 +172,13 @@ var KTDropzoneDemo = function () {
     return {
         // public functions
         init: function() {
-            demo1();
+         //   demo1();
             demo2();
-            demo3();
+        //   demo3();
         }
     };
 }();
 
-KTUtil.ready(function() {
+jQuery(document).ready(function() {
     KTDropzoneDemo.init();
 });

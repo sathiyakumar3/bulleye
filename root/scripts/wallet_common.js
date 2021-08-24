@@ -1,4 +1,4 @@
-var newly_added_cats =[];
+
 currency_convertor = {
     AED: 'د.إ',
     AFN: '؋',
@@ -217,7 +217,7 @@ function sort_obj(obj, key) {
 }
 
 function sortOn(property) { return function (a, b) { if (a[property] < b[property]) { return -1; } else if (a[property] > b[property]) { return 1; } else { return 0; } } }
-var cat_icon_list = {};
+var cat_icon_list = [];
 var newar = [];
 
 function get_cat_ic(name) { if (newar.hasOwnProperty(name)) { return newar[name]['icon']; } else { return 'adminiate_sec_icon' } }

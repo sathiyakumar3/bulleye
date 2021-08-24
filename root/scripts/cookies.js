@@ -187,10 +187,11 @@ function updateoptdata(docRef, id, data) {
         if (find != "") {
           find = JSON.parse(find);
       //    console.log(data);
-          var finalobj1 = {};
+     /*      var finalobj1 = {};
         for (var _obj in find) finalobj1[_obj] = find[_obj];
          for (var _obj in data) {find[_obj] = data[_obj]};
-        find = finalobj1;
+        find = finalobj1; */
+        find =Object.assign(find, data)
           var str = JSON.stringify(find);
           setCookie_local(id, str);
     //      console.log(str);
@@ -236,7 +237,7 @@ function uptoptarray(docRef, id, arrayname, data) {
         var find = getCookie_local(id);
         find = JSON.parse(find);
         find[[arrayname]].push(data);
-        var str = JSON.stringify(find);
+        var str = JSON.stringify(find);    
         setCookie_local(id, str);
         resolve("success");
       })

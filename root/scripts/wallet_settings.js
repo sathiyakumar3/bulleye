@@ -29,9 +29,10 @@ function input_icon() {
 
 
 function build_cat_table(obj) {
-console.log(obj);
+
+var length = obj.length;
     var promises = [];
-    for (let i = 0; i < obj.length; i++) {
+    for (let i = 0; i < length; i++) {
         if(obj[i]!=null){
             const user_details_prom = new Promise((resolve, reject) => {
                 var icon_name = obj[i]['icon'];
@@ -197,6 +198,8 @@ function pin_wall() {
 function del_cat(i) {
     deltoptarray(wallet_Ref, wallet_id, 'categories', i, cat_table).then(function() {
         cat_table = rmelearray(i, cat_table);
+        newar = rmelearray(i, newar);
+        selected_items.remove_item_from_array(i);
      //   cat_icon_list = rmelearray(i, cat_table);
         refresh_cat_table();
     }).catch((error) => {
@@ -216,6 +219,7 @@ function del_user(i) {
 }
 
 function refresh_cat_table() {
+  
     build_cat_table(cat_table).then(function(finalResult) {
         document.getElementById("cat_table").innerHTML = finalResult;
     }).catch((error) => {
@@ -241,6 +245,9 @@ var start_app = function() {
             document.getElementById('edit_name_form').value = doc.name;
             document.getElementById('edit_desc_form').value = doc.description;
             document.getElementById('edit_loc_form').value = doc.location;
+            cat_table = doc.categories;
+            user_table = doc.users
+         
             switch (doc.type) {
                 case 'Premium':
                     document.getElementById("premium_radio").checked = true;
@@ -251,7 +258,7 @@ var start_app = function() {
                 default:
             }
 
-
+           // console.log(JSON.parse(local_docs[wallet_id]));
             document.getElementById('edit_id_form').value = wallet_id;
             get_user_info(doc.owner).then((function(doc) { // console.log(doc);
                 document.getElementById('edit_owner_form').innerHTML = doc;
@@ -260,7 +267,7 @@ var start_app = function() {
                 console.error(error);
             });
             //       $('input[name="edit_wallet_form"]:checked').val() = doc.type;
-            console.log(cat_icon_list);
+     /*        console.log(cat_icon_list);
             console.log(Object.keys(cat_icon_list).length);
            
             user_table = doc.users;
@@ -268,10 +275,9 @@ var start_app = function() {
                 cat_table = cat_icon_list;
             }else{
                 cat_table = doc.categories;
-            }
+            } */
            // cat_table = Object.assign(doc.categories, newly_added_cats);
-         
-            console.log(cat_table);    
+       
             refresh_cat_table();
             refresh_user_table();
         })).catch((error) => {
@@ -323,7 +329,8 @@ var start_app = function() {
                 created_on: timestamp
             }
             cat_table.push(data);
-            console.log(cat_table);
+        
+            
             uptoptarray(wallet_Ref, wallet_id, 'categories', data).then(function() {
                 $('#add_cat_modal').modal('toggle');
 

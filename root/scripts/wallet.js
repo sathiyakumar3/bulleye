@@ -635,20 +635,62 @@ function add_entry_modal() {
     $('select[name=form_catergory_2]').selectpicker("refresh");
 
 }
-var bulk_table;
+var bulk_table ="";
 function add_bulk_entry_modal() {
     $('#edit_incex_form_modal_bulk').modal('toggle');
-    var dataSet = [
+/*     var dataSet = [
         [ "8/23/2021  12:24:52 AM", "Monthly", "Car", "Leasing", "Expense", "43243" ],
         [ "8/22/2021  7:36:52 PM", "Once", "Car", "Loan", "Income", "43243" ],
         [ "8/22/2021  2:48:52 PM", "Monthly", "Productivity", "Broadband", "Expense", "432432" ],
         [ "8/22/2021  10:00:52 AM", "Once", "Family", "Sathees 4rd Instal", "Income", "543435" ],
         [ "8/22/2021  5:12:52 AM", "Once", "Productivity", "Cupboard 1st ", "Income", "6543" ]
     ];
-    
-    $(document).ready(function() {
-        bulk_table=  $('#bulk_table').DataTable( {
-            data: dataSet,
+    console.table(dataSet); */
+
+}
+
+
+    function uploadDealcsv () {}; 
+
+  /*------ Method for read uploded csv file ------*/
+  uploadDealcsv.prototype.getCsv = function(e) {
+       
+      let input = document.getElementById('dealCsv');
+      input.addEventListener('change', function() {
+
+        if (this.files && this.files[0]) {
+
+            var myFile = this.files[0];
+            var reader = new FileReader();
+            
+            reader.addEventListener('load', function (e) {
+                
+                let csvdata = e.target.result; 
+                parseCsv.getParsecsvdata(csvdata); // calling function for parse csv data 
+            });
+            
+            reader.readAsBinaryString(myFile);
+        }
+      });
+    }
+
+    /*------- Method for parse csv data and display --------------*/
+    uploadDealcsv.prototype.getParsecsvdata = function(data) {
+
+        let parsedata = [];
+
+        let newLinebrk = data.split("\n");
+        for(let i = 0; i < newLinebrk.length; i++) {
+console.log(newLinebrk[i]);
+if(newLinebrk[i]!=null &&newLinebrk[i]!=undefined &&newLinebrk[i]!=''){
+    parsedata.push(newLinebrk[i].split(","))
+}
+            //parsedata.push(newLinebrk[i].split(","))
+        }
+
+        console.table(parsedata);
+        var options = {       
+            data: parsedata,
             columns: [
                 { title: "Date" },
                 { title: "Recurring" },
@@ -657,10 +699,19 @@ function add_bulk_entry_modal() {
                 { title: "Type" },
                 { title: "Amount" }
             ]
-        } );
-    } );
+      
+    }
+      if (bulk_table == "") {
+          bulk_table = $('#bulk_table').DataTable(options);
+         
+      }
+    }
 
-}
+    var parseCsv = new uploadDealcsv();
+    parseCsv.getCsv();
+  
+
+
 
 function save_bulk(){
     var new_cat =[];
@@ -674,7 +725,7 @@ add_to_local_table(user_id)
 .then(function (result) {              
     for (var i = 0; i < count; i++) {
         var row_data =bulk_table_data[i];
-        console.log(row_data)
+      
         var timestamp =  new Date(row_data[0]);
         var category_r = row_data[2];
         var data = {
@@ -700,15 +751,24 @@ add_to_local_table(user_id)
                 created_by: user_id,
                 created_on: tst
             }
-            cat_icon_list.push(new_cat_list);         
-         
+          //  cat_icon_list = Object.assign(cat_icon_list, new_cat_list)
+          cat_icon_list.push(new_cat_list);         
+           // cat_table.push(new_cat_list);  
+         /*   console.log(cat_icon_list);
+            uptoptarray(wallet_Ref, wallet_id, 'categories', cat_icon_list).then(function() {
+              
+
+              
+            }).catch((error) => {
+                console.log(error);
+            }); */
         } 
 
         main_data.push(Object.assign(data, result)); 
         local_data.push(Object.assign(data, result));    
         if(i==count-1){          
 
-updateoptdata(wallet_Ref, wallet_id, { 'categories': cat_icon_list }).then(function () {
+
    
       $('#edit_incex_form_modal_bulk').modal('toggle');
       table_databale.clear().draw();                      
@@ -716,25 +776,31 @@ updateoptdata(wallet_Ref, wallet_id, { 'categories': cat_icon_list }).then(funct
     table_databale.columns.adjust().draw(); 
     on_month_call(timestamp);
      save_updates();
-
-     
-     build_new_icons(cat_table).then(function(finalResult) {
-  
-        Swal.fire({
-            icon: 'success',
-            html :finalResult,
-            title: 'Below categories were added automatically',      
-            footer: 'You can change the icons at the settings menu.'
-            
-          })
-        
-    }).catch((error) => {
-        console.log(error);
-    });
    
-}).catch((error) => {
-    console.log(error);
-}); 
+  //   console.log(JSON.parse(local_docs[wallet_id]));
+
+    
+ /*     build_new_icons(new_cat).then(function(finalResult) { */
+    if(new_cat.length!=0){
+        updateoptdata(wallet_Ref, wallet_id, { 'categories': cat_icon_list }).then(function () {
+            
+                Swal.fire({
+                    icon: 'success',
+                    html :new_cat,
+                    title: 'Below Categories were added',      
+                    footer: 'You can change the icons at the settings menu.'
+                    
+                  })
+                
+           /*  }).catch((error) => {
+                console.log(error);
+            });  */
+           
+        }).catch((error) => {
+            console.log(error);
+        }); 
+    }
+
      }   
     }    
 })
@@ -746,17 +812,17 @@ updateoptdata(wallet_Ref, wallet_id, { 'categories': cat_icon_list }).then(funct
 function build_new_icons(obj) {
     console.log(obj);
         var promises = [];
-        for (let i = 0; i < obj.length; i++) {
-            if(obj[i]!=null){
+        obj.forEach(element => {
+           
                 const user_details_prom = new Promise((resolve, reject) => {
                     var cat_name = obj[i]['name'];
-var myvar = ' ' + cat_name + " ";
+var myvar = cat_name;
     resolve(myvar);
  });
                 promises.push(user_details_prom);
-            }
+           
        
-        }
+        });
     
         return Promise.all(promises).then((values) => {
     
