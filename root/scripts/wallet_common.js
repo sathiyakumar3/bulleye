@@ -1,3 +1,4 @@
+var newly_added_cats =[];
 currency_convertor = {
     AED: 'د.إ',
     AFN: '؋',
@@ -219,7 +220,8 @@ function sortOn(property) { return function (a, b) { if (a[property] < b[propert
 var cat_icon_list = {};
 var newar = [];
 
-function get_cat_ic(name) { if (newar.hasOwnProperty(name)) { return newar[name]['icon']; } else { return 'garden' } }
+function get_cat_ic(name) { if (newar.hasOwnProperty(name)) { return newar[name]['icon']; } else { return 'adminiate_sec_icon' } }
+
 
 function data_process(data, find) {
     var sum = 0;

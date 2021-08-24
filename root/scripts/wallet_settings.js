@@ -29,43 +29,45 @@ function input_icon() {
 
 
 function build_cat_table(obj) {
-
+console.log(obj);
     var promises = [];
     for (let i = 0; i < obj.length; i++) {
-
-        const user_details_prom = new Promise((resolve, reject) => {
-            var icon_name = obj[i]['icon'];
-            var cat_name = obj[i]['name'];
-            var datetime = obj[i]['created_on'];
-            var created_by = obj[i]['created_by'];
-            get_user_info(created_by).then((function(doc) { //
-                var delete_button = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="del_cat(\'' + i + '\')">' +
-                    '        <span class="svg-icon svg-icon-md svg-icon-primary">' +
-                    '            <!--begin::Svg Icon | path:assets/media/svg/icons/General/Trash.svg-->' +
-                    '            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
-                    '                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-                    '                    <rect x="0" y="0" width="24" height="24"></rect>' +
-                    '                    <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"></path>' +
-                    '                    <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"></path>' +
-                    '                </g>' +
-                    '            </svg>' +
-                    '            <!--end::Svg Icon-->' +
-                    '        </span>' +
-                    '    </a>';
-                var myvar = '<tr>' + '<td>' + icon_nd_name(icon_name, cat_name) + ' </td>' +
-                    ' <td>' + dnt4table(datetime) + '</td>' +
-                    '  <td>' + doc + '</td>' +
-                    '                                            <td class="text-center">' +
-                    '<div class="text-right">' + delete_button + '</div>' +
-                    '                                            </td>' +
-                    '                                        </tr>';
-
-                resolve(myvar);
-            })).catch((error) => {
-                console.error(error);
+        if(obj[i]!=null){
+            const user_details_prom = new Promise((resolve, reject) => {
+                var icon_name = obj[i]['icon'];
+                var cat_name = obj[i]['name'];
+                var datetime = obj[i]['created_on'];
+                var created_by = obj[i]['created_by'];
+                get_user_info(created_by).then((function(doc) { //
+                    var delete_button = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="del_cat(\'' + i + '\')">' +
+                        '        <span class="svg-icon svg-icon-md svg-icon-primary">' +
+                        '            <!--begin::Svg Icon | path:assets/media/svg/icons/General/Trash.svg-->' +
+                        '            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">' +
+                        '                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
+                        '                    <rect x="0" y="0" width="24" height="24"></rect>' +
+                        '                    <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"></path>' +
+                        '                    <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"></path>' +
+                        '                </g>' +
+                        '            </svg>' +
+                        '            <!--end::Svg Icon-->' +
+                        '        </span>' +
+                        '    </a>';
+                    var myvar = '<tr>' + '<td>' + icon_nd_name(icon_name, cat_name) + ' </td>' +
+                        ' <td>' + dnt4table(datetime) + '</td>' +
+                        '  <td>' + doc + '</td>' +
+                        '                                            <td class="text-center">' +
+                        '<div class="text-right">' + delete_button + '</div>' +
+                        '                                            </td>' +
+                        '                                        </tr>';
+    
+                    resolve(myvar);
+                })).catch((error) => {
+                    console.error(error);
+                });
             });
-        });
-        promises.push(user_details_prom);
+            promises.push(user_details_prom);
+        }
+   
     }
 
     return Promise.all(promises).then((values) => {
@@ -194,7 +196,8 @@ function pin_wall() {
 
 function del_cat(i) {
     deltoptarray(wallet_Ref, wallet_id, 'categories', i, cat_table).then(function() {
-        cat_table = rmelearray(i, cat_table)
+        cat_table = rmelearray(i, cat_table);
+     //   cat_icon_list = rmelearray(i, cat_table);
         refresh_cat_table();
     }).catch((error) => {
         console.log(error);
@@ -234,7 +237,7 @@ var start_app = function() {
 
     var load_cat = function() {
         getoptdata(wallet_Ref, wallet_id).then((function(doc) { //  console.log(doc);
-
+            cat_table = [];
             document.getElementById('edit_name_form').value = doc.name;
             document.getElementById('edit_desc_form').value = doc.description;
             document.getElementById('edit_loc_form').value = doc.location;
@@ -257,11 +260,18 @@ var start_app = function() {
                 console.error(error);
             });
             //       $('input[name="edit_wallet_form"]:checked').val() = doc.type;
-
-
+            console.log(cat_icon_list);
+            console.log(Object.keys(cat_icon_list).length);
+           
             user_table = doc.users;
-            cat_table = doc.categories;
-    
+            if(Object.keys(cat_icon_list).length!=0){
+                cat_table = cat_icon_list;
+            }else{
+                cat_table = doc.categories;
+            }
+           // cat_table = Object.assign(doc.categories, newly_added_cats);
+         
+            console.log(cat_table);    
             refresh_cat_table();
             refresh_user_table();
         })).catch((error) => {
@@ -313,6 +323,7 @@ var start_app = function() {
                 created_on: timestamp
             }
             cat_table.push(data);
+            console.log(cat_table);
             uptoptarray(wallet_Ref, wallet_id, 'categories', data).then(function() {
                 $('#add_cat_modal').modal('toggle');
 
@@ -386,8 +397,6 @@ var start_app = function() {
                 type: type,
                 currency: currency
             }
-            console.log(data);
-
             updateoptdata(wallet_Ref, id2, data).then(function() {
                 get_user(user_local);
             }).catch((error) => {

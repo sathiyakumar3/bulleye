@@ -143,6 +143,23 @@
                         </svg>
                         <!--end::Svg Icon-->
                     </span>Add Transaction</a>
+                    
+            </div>
+            <div class="card-toolbar" id="add_transa_3">
+                <a onclick="add_bulk_entry_modal()" class="btn btn-primary font-weight-bolder font-size-sm mr-2">
+                    <span class="svg-icon svg-icon-md svg-icon-white">
+                        <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Communication/Add-user.svg-->
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"/>
+                                <circle fill="#000000" opacity="0.3" cx="20.5" cy="12.5" r="1.5"/>
+                                <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 6.500000) rotate(-15.000000) translate(-12.000000, -6.500000) " x="3" y="3" width="18" height="7" rx="1"/>
+                                <path d="M22,9.33681558 C21.5453723,9.12084552 21.0367986,9 20.5,9 C18.5670034,9 17,10.5670034 17,12.5 C17,14.4329966 18.5670034,16 20.5,16 C21.0367986,16 21.5453723,15.8791545 22,15.6631844 L22,18 C22,19.1045695 21.1045695,20 20,20 L4,20 C2.8954305,20 2,19.1045695 2,18 L2,6 C2,4.8954305 2.8954305,4 4,4 L20,4 C21.1045695,4 22,4.8954305 22,6 L22,9.33681558 Z" fill="#000000"/>
+                            </g>
+                        </svg>
+                        <!--end::Svg Icon-->
+                    </span>Add Bluk</a>
+                    
             </div>
 <!--             <div class="dropdown">
                 <button class="btn btn-light-success  mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -174,7 +191,7 @@
             <!--begin::Content-->
             <div class="col-lg-12" id="kt_chat_content">
                 <!--begin::Card-->
-                <div class="card card-custom bgi-no-repeat gutter-b px-5 pt-5 "  style="background-position: right top; background-size: 30% auto; background-image: url(/assets/media/svg/shapes/abstract-4.svg)">
+                <div class="card card-custom gutter-b px-5 pt-5 ">
                     <div class="card-header py-3" >
                         <div class="d-flex flex-wrap align-items-center py-1">
 															<!--begin:Pic-->
@@ -216,35 +233,38 @@
         
                                 <td class="datatable-cell-sorted datatable-cell" data-field="Category" aria-label="Power"><span style="width: 170px;">      <div class="d-flex align-items-center flex-lg-fill ">
                                     <span class="mr-4">
-                                      <i class="flaticon-network icon-2x text-muted font-weight-bold"></i>
+                                      <i class="flaticon-network icon-2x text-white font-weight-bold"></i>
                                       </span>
                                     <div class="symbol-group symbol-hover" id="image_list_3">
                                     </div>
                         </div>
                         </span>
                         </td>
-                        <td class="datatable-cell-center datatable-cell" data-field="Description" data-autohide-disabled="false" aria-label="dsa"><span style="width: 170px;">              <div class="d-flex align-items-center flex-lg-fill mr-5 ">
-                            <span class="mr-4">
-                              <i class="flaticon-file-2 icon-2x text-muted font-weight-bold"></i>
-                              </span>
-                            <div class="d-flex flex-column flex-lg-fill">
-                                <span class="text-white font-weight-bolder font-size-sm" id="number_items_2">- Entries</span>
-                                <a class="text-primary font-weight-bolder">Active Entries</a>
-                            </div>
-                    </div>
-                    </span>
-                    </td>
-                    <td data-field="Repeated" aria-label="Daily" class="datatable-cell"><span style="width: 150px;">             <div class="d-flex align-items-center flex-lg-fill mr-5 ">
+                        <td data-field="Repeated" aria-label="Daily" class="datatable-cell"><span style="width: 150px;">             <div class="d-flex align-items-center flex-lg-fill mr-5 ">
                             <span class="mr-4">
                               <i class="flaticon-chat-1 icon-2x text-white font-weight-bold"></i>
                               </span>
                         <div class="d-flex flex-column">
-                            <span class="text-white font-weight-bolder font-size-sm" id=user_list_2>---</span>
-                            <a class="text-primary font-weight-bolder">Active Users</a>
+                            <a class="text-white font-weight-bolder">Active Users</a>
+                            <span class="text-white  font-size-sm" id=user_list_2>---</span>
+                  
                         </div>
                 </div>
                 </span>
                 </td>
+                        <td class="datatable-cell-center datatable-cell" data-field="Description" data-autohide-disabled="false" aria-label="dsa"><span style="width: 170px;">              <div class="d-flex align-items-center flex-lg-fill mr-5 ">
+                            <span class="mr-4">
+                              <i class="flaticon-file-2 icon-2x text-white  font-weight-bold"></i>
+                              </span>
+                            <div class="d-flex flex-column flex-lg-fill">
+                                <a class="text-white font-weight-bolder">Active Entries</a>
+                                <span class="text-white font-size-sm" id="number_items_2"></span>
+                           
+                            </div>
+                    </div>
+                    </span>
+                    </td>
+      
                 <td class="datatable-cell-center datatable-cell" data-field="Type2" data-autohide-disabled="false" aria-label="null"><span style="width: 170px;">        <div class="d-flex align-items-center flex-lg-fill mr-5 ">
                         <span class="mr-4">
                           <i class="flaticon-piggy-bank icon-2x text-white font-weight-bold"></i>
@@ -271,7 +291,7 @@
         </td>
         <td class="datatable-cell-center datatable-cell" data-field="Actions" data-autohide-disabled="false" aria-label="null"><span style="width: 170px">   <div class="d-flex align-items-center flex-lg-fill mr-5 ">
                 <span class="mr-4">
-                  <i class="flaticon-pie-chart icon-2x text-muted font-weight-bold"></i>
+                  <i class="flaticon-pie-chart icon-2x text-white  font-weight-bold"></i>
                   </span>
             <div class="d-flex flex-column text-white-75 text-danger">
                 <span class="font-weight-bolder text-white  font-size-sm">Net</span>

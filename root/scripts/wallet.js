@@ -65,8 +65,8 @@ var start_app = function () {
         weekly_expense = data_process(data, { 'Repeated': 'Weekly', 'Type': 'Expense' });
         daily_income = data_process(data,  { 'Repeated': 'Daily', 'Type': 'Income' });
         daily_expense = data_process(data, { 'Repeated': 'Daily', 'Type': 'Expense' });
-        sum_income_2 = data_process(data, { 'Type': 'Income' })-monthly_income-weekly_income-daily_income;
-        sum_expense_2 = data_process(data, { 'Type': 'Expense' })-monthly_expense-weekly_expense-daily_expense;
+        sum_income_2 = data_process(data, { 'Type': 'Income' });
+        sum_expense_2 = data_process(data, { 'Type': 'Expense' });
         document.getElementById("number_items_2").innerText = counter + " Entries";
         var currency = '<span class="text-dark-50 font-weight-bold" id>' + wallet_symbol + ' ' + ' </span>';
         document.getElementById("sum_earnings").innerHTML = currency + numberWithCommas(sum_income);
@@ -269,13 +269,13 @@ var start_app = function () {
                         switch (full.Type) {
                             case 'Expense':
                                 html_div = percentage_form_custom(full.Amount, selet2, ' Rs',' of '+text,full.Type);
-                                console.log("[EXPENSE] Value : "+full.Amount + " Total : "+selet2);
+                            //    console.log("[EXPENSE] Value : "+full.Amount + " Total : "+selet2);
                               //  selet1 = sum_expense;
                              //   selet2 = sum_expense2;
                                 break;
                             case 'Income':
                                 html_div = percentage_form_custom(full.Amount, selet1, ' Rs',' of '+text,full.Type);
-                                console.log("[INCOME] Value : "+full.Amount + " Total : "+selet1);
+                         //       console.log("[INCOME] Value : "+full.Amount + " Total : "+selet1);
                              //   selet1 = sum_income;
                              //   selet2 = sum_income2;
                                 break;
@@ -635,6 +635,135 @@ function add_entry_modal() {
     $('select[name=form_catergory_2]').selectpicker("refresh");
 
 }
+var bulk_table;
+function add_bulk_entry_modal() {
+    $('#edit_incex_form_modal_bulk').modal('toggle');
+    var dataSet = [
+        [ "8/23/2021  12:24:52 AM", "Monthly", "Car", "Leasing", "Expense", "43243" ],
+        [ "8/22/2021  7:36:52 PM", "Once", "Car", "Loan", "Income", "43243" ],
+        [ "8/22/2021  2:48:52 PM", "Monthly", "Productivity", "Broadband", "Expense", "432432" ],
+        [ "8/22/2021  10:00:52 AM", "Once", "Family", "Sathees 4rd Instal", "Income", "543435" ],
+        [ "8/22/2021  5:12:52 AM", "Once", "Productivity", "Cupboard 1st ", "Income", "6543" ]
+    ];
+    
+    $(document).ready(function() {
+        bulk_table=  $('#bulk_table').DataTable( {
+            data: dataSet,
+            columns: [
+                { title: "Date" },
+                { title: "Recurring" },
+                { title: "Category" },
+                { title: "Description." },
+                { title: "Type" },
+                { title: "Amount" }
+            ]
+        } );
+    } );
+
+}
+
+function save_bulk(){
+    var new_cat =[];
+var bulk_table_data = bulk_table.data();
+var count = 5;
+
+get_fulldata();
+var main_data = table_databale.data();
+
+add_to_local_table(user_id)
+.then(function (result) {              
+    for (var i = 0; i < count; i++) {
+        var row_data =bulk_table_data[i];
+        console.log(row_data)
+        var timestamp =  new Date(row_data[0]);
+        var category_r = row_data[2];
+        var data = {
+            Timestamp: timestamp,
+            user: user_id,
+            Description: row_data[3],
+            Category: category_r,
+            Type: row_data[4],
+            Payment: "Paid",
+            RecordID: 1,
+            Repeated: row_data[1],
+            doc_id: monthts(timestamp),
+            Amount: row_data[5]
+        } 
+        
+      
+         if (!newar.hasOwnProperty(category_r)&& !new_cat.includes(category_r))
+         {   new_cat.push(category_r);
+            var tst=  Date.now();
+            var new_cat_list = {
+                name: category_r,
+                icon: "adminiate_sec_icon",
+                created_by: user_id,
+                created_on: tst
+            }
+            cat_icon_list.push(new_cat_list);         
+         
+        } 
+
+        main_data.push(Object.assign(data, result)); 
+        local_data.push(Object.assign(data, result));    
+        if(i==count-1){          
+
+updateoptdata(wallet_Ref, wallet_id, { 'categories': cat_icon_list }).then(function () {
+   
+      $('#edit_incex_form_modal_bulk').modal('toggle');
+      table_databale.clear().draw();                      
+      table_databale.rows.add(main_data);
+    table_databale.columns.adjust().draw(); 
+    on_month_call(timestamp);
+     save_updates();
+
+     
+     build_new_icons(cat_table).then(function(finalResult) {
+  
+        Swal.fire({
+            icon: 'success',
+            html :finalResult,
+            title: 'Below categories were added automatically',      
+            footer: 'You can change the icons at the settings menu.'
+            
+          })
+        
+    }).catch((error) => {
+        console.log(error);
+    });
+   
+}).catch((error) => {
+    console.log(error);
+}); 
+     }   
+    }    
+})
+.catch((error) => {
+    console.log(error);
+});   
+}
+
+function build_new_icons(obj) {
+    console.log(obj);
+        var promises = [];
+        for (let i = 0; i < obj.length; i++) {
+            if(obj[i]!=null){
+                const user_details_prom = new Promise((resolve, reject) => {
+                    var cat_name = obj[i]['name'];
+var myvar = ' ' + cat_name + " ";
+    resolve(myvar);
+ });
+                promises.push(user_details_prom);
+            }
+       
+        }
+    
+        return Promise.all(promises).then((values) => {
+    
+            return values;
+        });
+    }
+
 function edit_entry_modal(sel) {
     selected_items = [];
     refresh_table_buttons();
@@ -849,6 +978,7 @@ function cat2combo(wallet_id) {
     var select = document.getElementById('edit_cat_selec');
     getoptdata(wallet_base_Ref, wallet_id).then((function (doc) {
         cat_icon_list = doc.categories;
+       // console.log(cat_icon_list);
         cat_icon_list.sort(sortOn("name"));
         for (let i = 0; i < cat_icon_list.length; i++) {
             newar[cat_icon_list[i]['name']] = cat_icon_list[i];
