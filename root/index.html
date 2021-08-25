@@ -1377,17 +1377,46 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Import from .csv</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i aria-hidden="true" class="ki ki-close"></i>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-hover table-checkable" id="bulk_table" >              
-                    </table>
-                    <input type="file" id="dealCsv"/>
+                   
+                    
+   
+                                <div class="form-group">
+                                    <label>File Browser</label>
+                                    <div></div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="dealCsv" accept=".csv">
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                        <span class="form-text text-muted" id="instru">Please use the below sequence, seperated by commas.</span>
+                                    </div>
+                                  
+                        
+                                </div>
+                               <!--       <div class="form-group"><table class="table table-hover table-checkable" id="bulk_table" >              
+                                </table></div> -->
+                                <table class="table table-bordered table-hover table-checkable" id="bulk_table" style="margin-top: 13px !important">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Recurring</th>
+                                            <th>Category</th>
+                                            <th>Description</th>
+                                            <th>Type</th>
+                                            <th>Payment</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                    
+          <!--           <input type="file" id="dealCsv"/> -->
+                    
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer">             
                     <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
                     <button type="button"  onclick="save_bulk()" class="btn btn-primary font-weight-bold">Save changes</button>
                 </div>

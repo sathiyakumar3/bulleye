@@ -687,30 +687,118 @@ if(newLinebrk[i]!=null &&newLinebrk[i]!=undefined &&newLinebrk[i]!=''){
 }
             //parsedata.push(newLinebrk[i].split(","))
         }
+var dsa = "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+"<'row'<'col-sm-12'tr>>" +
+"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>";
+var options = {       
+    data: parsedata,
+/*             columns: [
+        { title: "Date" },
+        { title: "Recurring" },
+        { title: "Category" },
+        { title: "Description" },
+        { title: "Type" },
+        { title: "Payment" },
+        { title: "Amount" }
+    ], */
+    dom: dsa,
+    /* '<"top"lf>rt<"bottom"ip><"clear">', */
+    columnDefs: [
+        {
+            targets: 0,
+            orderable: false,
+            render: function (data, type, full, meta) {
+                return data;
+            },
+        },
+        {
+            targets: 1,
+            title: 'User',
+            orderable: false,
+            render: function (data, type, full, meta) {
+                return data.trim();
 
-        console.table(parsedata);
-        var options = {       
-            data: parsedata,
-            columns: [
-                { title: "Date" },
-                { title: "Recurring" },
-                { title: "Category" },
-                { title: "Description." },
-                { title: "Type" },
-                { title: "Amount" }
-            ]
-      
-    }
+            },
+        },
+        {
+            targets: 2,
+            title: 'Date & Time',
+            orderable: false,
+            render: function (data, type, full, meta) {
+                return data.trim();
+            },
+        },
+        {
+            targets: 3,
+            title: 'Item',
+            orderable: false,
+            render: function (data, type, full, meta) {
+                return data.trim();
+            },
+        },               
+        {
+            targets: 4,
+            title: 'Recurring',
+            className: "dt-center",
+            orderable: false,
+            render: function (data, type, full, meta) {
+                return data;
+            },
+        },
+                       
+        {
+            targets: 5,
+            title: 'Payment',
+            className: "dt-center",
+            orderable: false,
+            render: function (data, type, full, meta) {
+                return data;
+            },
+        },
+        {
+            targets: 6,
+            title: 'Amount',
+            className: "dt-center",
+            orderable: false,
+            render: function (data, type, full, meta) {
+                
+                return data.match(/\d+/)[0] 
+            },
+        }
+    ],
+    
+}
+try {
+
       if (bulk_table == "") {
-          bulk_table = $('#bulk_table').DataTable(options);
-         
+    
+          bulk_table = $('#bulk_table').DataTable(options);                   
+          document.getElementById("instru").style.display = "none";
+      }else{
+        bulk_table.clear().draw();
+        bulk_table.rows.add(parsedata);
+        bulk_table.columns.adjust().draw();
+        document.getElementById("instru").style.display = "none";
+      }
+
+     
+    }catch(err) {
+        Swal.fire({
+            icon: 'error',
+            text :err.message,
+            title: 'Ops',      
+            footer: 'Please use the right sequence, seperated by commas.'
+            
+          }) 
+          document.getElementById("instru").style.display = "block";         
+          $('#bulk_table').DataTable().clear().destroy();
+          bulk_table = "";
       }
     }
 
     var parseCsv = new uploadDealcsv();
     parseCsv.getCsv();
   
-
 
 
 function save_bulk(){
@@ -734,11 +822,11 @@ add_to_local_table(user_id)
             Description: row_data[3],
             Category: category_r,
             Type: row_data[4],
-            Payment: "Paid",
+            Payment: row_data[5],
             RecordID: 1,
             Repeated: row_data[1],
             doc_id: monthts(timestamp),
-            Amount: row_data[5]
+            Amount: row_data[6]
         } 
         
       
