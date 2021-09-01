@@ -21,13 +21,38 @@ function change_icon(d) {
 }
 
 function input_icon() {
-    console.log('YEa');
+   
     table_icons.style.display = "block";
 }
 
 
+var edit_mode = false;
+var edit_mode_select;
+function edit_icon(i,item,y){
+    edit_mode = true;
+    edit_mode_select = item;
+    console.log(edit_mode_select);
+    $('#add_cat_modal').modal('toggle'); 
+    $("#cat_name_form3").val(i);
+  //  document.getElementById("cat_name_form3").disabled = true;
+    document.getElementById("catefgo_tit").innerText = "Edit Category";
+    document.getElementById("cat_btn").innerText = "Edit";
+    change_icon(y);
+ 
+}
 
 
+function add_icon_modal(){
+
+    document.getElementById("sel_icon").innerHTML ='<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.77 15.2"><defs><style>.cls-1{fill:#009789;}.cls-2{fill:#fdc113;}.cls-3{fill:#0b897b;}.cls-4{fill:#fcb316;}.cls-5{fill:#0dbcd4;}</style></defs><path class="cls-1" d="M7.51.4A27.41,27.41,0,0,1,.12,15.6H4.6A30.85,30.85,0,0,0,10.88.85L7.68.4Z" transform="translate(-0.12 -0.4)"/><path class="cls-2" d="M14,9.78A30.84,30.84,0,0,0,.13,15.6H6.6A27.46,27.46,0,0,1,15.7,13,30.92,30.92,0,0,1,14,9.78Z" transform="translate(-0.12 -0.4)"/><path class="cls-3" d="M10.65.81,8,.45l-.52,0c-.07.48-.15,1-.25,1.45A30.65,30.65,0,0,0,8.38,9.39a31.3,31.3,0,0,0,2.29-7.24C10.65,1.7,10.64,1.26,10.65.81Z" transform="translate(-0.12 -0.4)"/><path class="cls-4" d="M12.16,10.11A33,33,0,0,0,8.88,11a29.7,29.7,0,0,0,1.26,3.16,27.42,27.42,0,0,1,3.35-.86A26.85,26.85,0,0,1,12.16,10.11Z" transform="translate(-0.12 -0.4)"/><path class="cls-5" d="M10.91.4H7.52a30.84,30.84,0,0,0,4.33,15.2h4A27.55,27.55,0,0,1,10.91.4Z" transform="translate(-0.12 -0.4)"/></svg>';
+                       
+    edit_mode = false;
+    $('#add_cat_modal').modal('toggle');
+    $("#cat_name_form3").val('');
+    document.getElementById("cat_btn").innerText = "Add";
+    document.getElementById("catefgo_tit").innerText = "Add Category";
+  //  document.getElementById("cat_name_form3").disabled = false;
+}
 function build_cat_table(obj) {
 
 var length = obj.length;
@@ -53,11 +78,29 @@ var length = obj.length;
                         '            <!--end::Svg Icon-->' +
                         '        </span>' +
                         '    </a>';
+
+
+                        var edit_button = '<a href="javascript:;" class="btn btn-icon btn-light btn-hover-primary btn-sm" onclick="edit_icon(\'' + cat_name + '\',\''+i+ '\',\''+icon_name+'\')">' +
+                        '        <span class="svg-icon svg-icon-md svg-icon-primary">' +
+                        '            <!--begin::Svg Icon | path:assets/media/svg/icons/General/Trash.svg-->' +
+'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" '+
+'viewBox="0 0 24 24" version="1.1">                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">'+
+                    '<rect x="0" y="0" width="24" height="24"></rect>'+
+                    '<path d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953)"></path>                    <path d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>                </g>            </svg>'+
+                        '            <!--end::Svg Icon-->' +
+                        '        </span>' +
+                        '    </a>';
+
+
+
+
+
+                        
                     var myvar = '<tr>' + '<td>' + icon_nd_name(icon_name, cat_name) + ' </td>' +
                         ' <td>' + dnt4table(datetime) + '</td>' +
                         '  <td>' + doc + '</td>' +
                         '                                            <td class="text-center">' +
-                        '<div class="text-right">' + delete_button + '</div>' +
+                        '<div class="text-right">'+edit_button +'&nbsp;&nbsp;&nbsp;'+ delete_button + '</div>' +
                         '                                            </td>' +
                         '                                        </tr>';
     
@@ -199,7 +242,7 @@ function del_cat(i) {
     deltoptarray(wallet_Ref, wallet_id, 'categories', i, cat_table).then(function() {
         cat_table = rmelearray(i, cat_table);
         newar = rmelearray(i, newar);
-        selected_items.remove_item_from_array(i);
+     //   selected_items.remove_item_from_array(i);
      //   cat_icon_list = rmelearray(i, cat_table);
         refresh_cat_table();
     }).catch((error) => {
@@ -318,7 +361,11 @@ var start_app = function() {
                 }
             }
         ).on('core.form.valid', function() {
-
+            if(edit_mode){
+              
+                del_cat(edit_mode_select);
+                edit_mode=false;
+            }
             var name = document.getElementById('add_cat_form').querySelector('[name="cat_name_form"]').value;
             var icon = document.getElementById('add_cat_form').querySelector('[name="cat_icon_form"]').value;
             var timestamp = Date.now();

@@ -199,13 +199,20 @@ var start_app = function() {
         })).catch((error) => { console.error(error); });
 
 
-        console.log(series1);   
+  
 
-        _init_main_chart_4(series1, cat, 'kt_main_chart_cat_income', false);
-        _init_main_chart_4(series2, cat, 'kt_main_chart_cat_expense', false);
+       _init_main_chart_4(series1, cat, 'kt_main_chart_3', false);
+      _init_main_chart_4(series2, cat, 'kt_main_chart_4', false);
+   //    _init_main_chart_4(series1, cat, 'kt_main_chart_3', false);
+   //   _init_main_chart_4(series2, cat, 'kt_main_chart_4', false);
+
+       
+    }
+    var test = function() {
+        console.log()
     }
     var run_trends = function() {
-
+        
         var cat = cat_process(local_data);
         const d_income_prom = new Promise((resolve, reject) => {
             get_data(local_data, { 'Type': ['Income'] }, cat).then(function(result) {
@@ -224,7 +231,7 @@ var start_app = function() {
             });
         });
 
-        const d_re_income_prom = new Promise((resolve, reject) => {
+     /*    const d_re_income_prom = new Promise((resolve, reject) => {
             get_data(local_data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income' }, cat).then(function(result) {
                 resolve(result);
             }).catch((error) => {
@@ -258,21 +265,23 @@ var start_app = function() {
                 console.log(error);
                 reject(error);
             });
-        });
+        }); */
 
-        Promise.all([d_income_prom, d_expense_prom, d_re_income_prom, d_re_expense_prom, d_on_income_prom, d_on_expense_prom]).then((values) => {
+        Promise.all([d_income_prom, d_expense_prom]).then((values) => {
             var d_income = values[0];
             var d_expense = values[1];
             var d_netincome = chart_subraction(d_income, d_expense);
-            var d_re_income = values[2];
-            var d_re_expense = values[3];
-            var d_on_income = values[4];
-            var d_on_expense = values[5];
-            _init_main_chart_4([{ name: 'Other', type: 'column', data: d_on_income }, { name: 'Recurring', type: 'column', data: d_re_income }], cat, 'kt_main_chart_3', true);
-            _init_main_chart_4([{ name: 'Other', type: 'column', data: d_on_expense }, { name: 'Recurring', type: 'column', data: d_re_expense }], cat, 'kt_main_chart_4', true);
-            _init_main_chart(extract_net_data(d_income), extract_net_data(d_expense), cat);
+        //    var d_re_income = values[2];
+         //   var d_re_expense = values[3];
+       //     var d_on_income = values[4];
+       //     var d_on_expense = values[5];
+       
+           // _init_main_chart_4([{ name: 'Other', type: 'column', data: d_on_income }, { name: 'Recurring', type: 'column', data: d_re_income }], cat, 'kt_main_chart_cat_income', false);
+         //  _init_main_chart_4([{ name: 'Other', type: 'column', data: d_on_expense }, { name: 'Recurring', type: 'column', data: d_re_expense }], cat, 'kt_main_chart_cat_expense', false);
+      //      _init_main_chart(d_income, d_expense, cat);
             _initTilesWidget20(d_income, d_expense, extract_net_data(d_netincome), cat);
             _initDaterangepicker();
+            run_cat();
         }).catch((error) => {
             console.log("Error getting documents: ", error);
             reject(error);
@@ -347,8 +356,44 @@ var start_app = function() {
         const info = '#8950FC';
         const warning = '#FFA800';
         const danger = '#F64E60';
-        var options = { series: [{ name: 'Income', type: 'column', data: data }, { name: 'Expense', type: 'column', data: data1 }, { name: 'Net', type: 'line', data: data2 }], chart: { height: '350px', type: 'line', stacked: false }, dataLabels: { enabled: false }, stroke: { width: [1, 1, 4] }, xaxis: { categories: cat, }, yaxis: [{ axisTicks: { show: true, }, axisBorder: { show: true, color: primary }, labels: { style: { colors: primary, } }, title: { text: "Income", style: { color: primary, } }, tooltip: { enabled: true } }, { seriesName: 'Income', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: success }, labels: { style: { colors: success, } }, title: { text: "Expense", style: { color: success, } }, }, { seriesName: 'Net Revenue', opposite: true, axisTicks: { show: true, }, axisBorder: { show: true, color: warning }, labels: { style: { colors: warning, }, }, title: { text: "Revenue", style: { color: warning, } } }, ], tooltip: { fixed: { enabled: true, position: 'topLeft', offsetY: 30, offsetX: 60 }, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return wallet_symbol + ' ' + numberWithCommas(val); } } }, legend: { horizontalAlign: 'left', offsetX: 40 } };
-        generate_chart("kt_main_chart_trends", options);
+        var options = { series: [{name: 'Income', type: 'column',data: data },
+             { name: 'Expense', type: 'column', data: data1 },
+              { name: 'Net', type: 'line', data: data2 }],
+               chart: { height: '350px', type: 'line', stacked: false }, 
+               dataLabels: { enabled: false }, 
+               stroke: { width: [1, 1, 4] },
+               xaxis: { categories: cat, }, 
+               yaxis: [{ 
+                seriesName: 'Income',
+                   axisTicks: { show: true, }, 
+                   axisBorder: { show: true, color: primary }, 
+                     labels: { style: { colors: primary, } , formatter: (value) => { return nFormatter(value, 0) } }, 
+                     title: { text: wallet_currency, style: { color: primary, } }, 
+              //  tooltip: { enabled: true }
+             }, 
+             { 
+                 seriesName: 'Income',
+                 show: false,
+     /*             axisTicks: { show: true, }, 
+                 axisBorder: { show: true, color: success },
+                 labels: { style: { colors: success, },formatter: (value) => { return numberWithCommas(value) } },
+                 title: { text: "Expense", style: { color: success,} }, */
+                
+                },
+
+                 {
+                seriesName: 'Net Revenue', 
+                opposite: true,
+                axisTicks: { show: true, }, axisBorder: { show: true, color: warning }, 
+                labels: { style: { colors: warning, },   formatter: (value) => { return nFormatter(value, 0) }, },
+                title: { text: "Net", style: { color: warning, } } }
+                 
+                 , ], 
+                 tooltip: {
+
+                 style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] },
+                  y: { formatter: function(val) { return wallet_symbol + ' ' + numberWithCommas(val); } } }, legend: { horizontalAlign: 'left', offsetX: 40 } };
+        generate_chart("kt_main_chart", options);
     }
     var piechart_123 = function(data_set, cat_set, html_div) {
         const primary = '#6993FF';
@@ -356,8 +401,18 @@ var start_app = function() {
         const info = '#8950FC';
         const warning = '#FFA800';
         const danger = '#F64E60';
-        var options = { series: data_set, chart: { type: 'pie', width: '100%' }, labels: cat_set, 
-        responsive: [{ options: { legend: { position: 'bottom' } } }], colors: [info, danger, warning, success, primary], tooltip: { style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { return wallet_symbol + ' ' + numberWithCommas(val); } } }, breakpoint: 480, legend: { show: true, position: 'bottom', horizontalAlign: 'center', } };
+        var options = { series: data_set, chart: { type: 'pie', height: 375,width: '100%' }, labels: cat_set, 
+        responsive: [{ options: { legend: { position: 'bottom' } } }],
+        colors: ["#FF4560", "#F9CE1D", "#13D8AA", "#546E7A", "#FA4443", "#662E9B", "#F46036", "#EA3546", "#5A2A27", "#2983FF","#775DD0", "#FF9800", "#A5978B", "#FD6A6A", "#69D2E7", "#C5D86D", "#E2C044", "#43BCCD", "#C4BBAF", "#00B1F2"]
+         , tooltip: { style: { fontSize: '12px',
+          fontFamily: KTApp.getSettings()['font-family'] }, y: { formatter: function(val) { 
+              return wallet_symbol + ' ' + numberWithCommas(val); } } }, breakpoint: 480, 
+              legend: { show: true, position: 'bottom', horizontalAlign: 'center',       onItemClick: {
+          toggleDataSeries: true
+      },
+      onItemHover: {
+          highlightDataSeries: true
+      },} };
         generate_chart(html_div, options);
     }
 
@@ -372,6 +427,7 @@ var start_app = function() {
             stroke: { show: true, curve: 'smooth', lineCap: 'butt', width: 0.1, dashArray: 0, },
             chart: { height: 350, stacked: true, toolbar: { show: false }, zoom: { enabled: true } },
             legend: {
+                show: true,
                 position: 'bottom', 
                 showForNullSeries: false,
                 showForZeroSeries: false,
@@ -381,10 +437,18 @@ var start_app = function() {
                  breakpoint: 480,
                }],
             plotOptions: { bar: { borderRadius: 8, horizontal: false, }, },
-            xaxis: { categories: cat },
-
+            xaxis: { categories: cat }, 
+            yaxis: { 
+                labels: { 
+                    style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'],
+                     fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }
+                     , formatter: (value) => { return nFormatter(value, 0) }
+                    
+                    } 
+                    
+                    },
             dataLabels: {
-                enabled: true,
+                enabled: false,
                 offsetY: -20,
                 style: { fontSize: '12px', colors: ["#304758"] },
                 formatter: function(value, { seriesIndex, dataPointIndex, w }) {
@@ -401,15 +465,19 @@ var start_app = function() {
                         return wallet_symbol + ' ' + numberWithCommas(val); }}
                      }
             },
-            fill: { opacity: 1 }
+            fill: { opacity: 1 },
+            colors: ["#FF4560", "#F9CE1D", "#13D8AA", "#546E7A", "#FA4443", "#662E9B", "#F46036", "#EA3546", "#5A2A27", "#2983FF","#775DD0", "#FF9800", "#A5978B", "#FD6A6A", "#69D2E7", "#C5D86D", "#E2C044", "#43BCCD", "#C4BBAF", "#00B1F2"]
+         //   colors: ["#775DD0", "#FF9800", "#A5978B", "#FD6A6A", "#69D2E7", "#C5D86D", "#E2C044", "#43BCCD", "#C4BBAF", "#00B1F2"]
         };
-
-        if (colours_flag) {
+/* 
+         if (colours_flag) {
             options['colors'] = [success, primary, warning, info];
-        }
+        }  */
         generate_chart(html_div, options)
     }
-    var _init_main_chart = function(data1, data2, cat) {
+/*     var _init_main_chart = function(data1, data2, cat) {
+        console.log(data1);
+        console.log(data2);
         var options = {
             series: [{ name: 'Income', data: data1 }, { name: 'Expense', data: data2 }],
             chart: { type: 'area', height: 350, toolbar: { show: false } },
@@ -419,7 +487,15 @@ var start_app = function() {
             fill: { type: 'solid', opacity: 1 },
             stroke: { curve: 'smooth' },
             xaxis: { categories: cat, axisBorder: { show: false, }, axisTicks: { show: false }, labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } }, crosshairs: { position: 'front', stroke: { color: KTApp.getSettings()['colors']['theme']['light']['success'], width: 1, dashArray: 3 } }, tooltip: { enabled: true, formatter: undefined, offsetY: 0, style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } },
-            yaxis: { labels: { style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'], fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] } } },
+            yaxis: { 
+                labels: { 
+                    style: { colors: KTApp.getSettings()['colors']['gray']['gray-500'],
+                     fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] }
+                     , formatter: (value) => { return nFormatter(value, 0) }
+                    
+                    } 
+                    
+                    },
             states: { normal: { filter: { type: 'none', value: 0 } }, hover: { filter: { type: 'none', value: 0 } }, active: { allowMultipleDataPointsSelection: false, filter: { type: 'none', value: 0 } } },
             tooltip: {
                 style: { fontSize: '12px', fontFamily: KTApp.getSettings()['font-family'] },
@@ -434,8 +510,8 @@ var start_app = function() {
             grid: { borderColor: KTApp.getSettings()['colors']['gray']['gray-200'], strokeDashArray: 4, yaxis: { lines: { show: true } } },
             markers: { colors: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeColor: [KTApp.getSettings()['colors']['theme']['light']['success'], KTApp.getSettings()['colors']['theme']['light']['warning']], strokeWidth: 3 }
         };
-        generate_chart("kt_main_chart", options)
-    }
+        generate_chart("kt_main_chart_trends", options)
+    } */
 
     return {
         init: function() {

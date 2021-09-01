@@ -452,7 +452,7 @@
                         </div>
                         <div>
                             <!--          <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Submit</button> -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_cat_modal">Add Category</button>
+                            <button type="button" class="btn btn-primary" onclick="add_icon_modal()" data-toggle="modal" data-target="#add_cat_modal">Add Category</button>
 
                         </div>
                     </div>
@@ -492,7 +492,7 @@
 
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-12">
-                    <h3 class="font-weight-bolder" id="title_33">Add Category</h3>
+                    <h3 class="font-weight-bolder" id="catefgo_tit">Add Category</h3>
                     <div class="text-muted font-size-md mt-2">Build your own catergory list.</div>
                 </div>
 
@@ -507,7 +507,7 @@
                     <div class="form-group row">
                         <label class="col-form-label text-right col-lg-3 col-sm-12">Name</label>
                         <div class="col-lg-9 col-md-9 col-sm-12">
-                            <input type="text" class="form-control  form-control-lg  form-control-solid" maxlength="20" placeholder="Description" type="text" name="cat_name_form" value="">
+                            <input type="text" class="form-control  form-control-lg  form-control-solid" maxlength="20" placeholder="Name of the Catergory" id="cat_name_form3" type="text" name="cat_name_form" value="">
                         </div>
                     </div>
 
@@ -826,7 +826,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary font-weight-bold mr-2">Add</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold mr-2" id="cat_btn">Add</button>
 
 
                 </div>

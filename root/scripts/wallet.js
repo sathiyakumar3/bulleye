@@ -650,59 +650,51 @@ function add_bulk_entry_modal() {
 }
 
 
-    function uploadDealcsv () {}; 
+function uploadDealcsv () {}; 
 
-  /*------ Method for read uploded csv file ------*/
-  uploadDealcsv.prototype.getCsv = function(e) {
-       
+  uploadDealcsv.prototype.getCsv = function(e) {       
       let input = document.getElementById('dealCsv');
       input.addEventListener('change', function() {
-
         if (this.files && this.files[0]) {
-
             var myFile = this.files[0];
-            var reader = new FileReader();
-            
-            reader.addEventListener('load', function (e) {
-                
+            var reader = new FileReader();            
+            reader.addEventListener('load', function (e) {                
                 let csvdata = e.target.result; 
                 parseCsv.getParsecsvdata(csvdata); // calling function for parse csv data 
-            });
-            
+            });            
             reader.readAsBinaryString(myFile);
         }
       });
     }
-
-    /*------- Method for parse csv data and display --------------*/
+  
     uploadDealcsv.prototype.getParsecsvdata = function(data) {
 
         let parsedata = [];
 
         let newLinebrk = data.split("\n");
         for(let i = 0; i < newLinebrk.length; i++) {
-console.log(newLinebrk[i]);
+//console.log(newLinebrk[i]);
 if(newLinebrk[i]!=null &&newLinebrk[i]!=undefined &&newLinebrk[i]!=''){
-    parsedata.push(newLinebrk[i].split(","))
-}
+    parsedata.push(newLinebrk[i].split(","));}
             //parsedata.push(newLinebrk[i].split(","))
         }
-var dsa = "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+        console.table(parsedata)
+        load_upload_table(parsedata);
+    }
+
+    var parseCsv = new uploadDealcsv();
+    parseCsv.getCsv();
+  
+function load_upload_table(parsedata){
+    var dsa = "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 "<'row'<'col-sm-12'tr>>" +
 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>";
-var options = {       
-    data: parsedata,
-/*             columns: [
-        { title: "Date" },
-        { title: "Recurring" },
-        { title: "Category" },
-        { title: "Description" },
-        { title: "Type" },
-        { title: "Payment" },
-        { title: "Amount" }
-    ], */
+
+var new_cat_2 = [];
+var options = {   
+
     dom: dsa,
-    /* '<"top"lf>rt<"bottom"ip><"clear">', */
+    bDestroy:true,
     columnDefs: [
         {
             targets: 0,
@@ -712,8 +704,7 @@ var options = {
             },
         },
         {
-            targets: 1,
-            title: 'User',
+            targets: 1,        
             orderable: false,
             render: function (data, type, full, meta) {
                 return data.trim();
@@ -722,15 +713,18 @@ var options = {
         },
         {
             targets: 2,
-            title: 'Date & Time',
             orderable: false,
             render: function (data, type, full, meta) {
-                return data.trim();
+                      var category_r = data.trim();
+         if (!new_cat_2.includes(category_r))
+         {   new_cat_2.push(category_r);   
+        } 
+                return category_r;
+
             },
         },
         {
             targets: 3,
-            title: 'Item',
             orderable: false,
             render: function (data, type, full, meta) {
                 return data.trim();
@@ -771,41 +765,64 @@ var options = {
 try {
 
       if (bulk_table == "") {
-    
-          bulk_table = $('#bulk_table').DataTable(options);                   
+          bulk_table = $('#bulk_table').DataTable(options);    
+          bulk_table.rows.add(parsedata);         
+          bulk_table.columns.adjust().draw();    
           document.getElementById("instru").style.display = "none";
       }else{
+     
         bulk_table.clear().draw();
         bulk_table.rows.add(parsedata);
         bulk_table.columns.adjust().draw();
         document.getElementById("instru").style.display = "none";
       }
+      console.log();
+      Swal.fire({
+        icon: 'success',
+        text :parsedata.length +" entires were verfied.",
+        title: 'Verifed Successfully!',         
+      }) 
+      console.log(new_cat_2);
+      new_cat_2 =[];
 
-     
     }catch(err) {
+     
         Swal.fire({
             icon: 'error',
             text :err.message,
             title: 'Ops',      
-            footer: 'Please use the right sequence, seperated by commas.'
-            
+            footer: 'Please use the right sequence, seperated by commas.'            
           }) 
-          document.getElementById("instru").style.display = "block";         
-          $('#bulk_table').DataTable().clear().destroy();
-          bulk_table = "";
+          document.getElementById("instru").style.display = "block";  
+          document.getElementById("instru").classList.remove("text-muted");
+          document.getElementById("instru").classList.add("text-danger");
+        
+        //  bulk_table.clear().draw();    
+        bulk_table = $('#bulk_table').DataTable(options); 
+        bulk_table.clear().draw();         
+         // $('#bulk_table').DataTable().clear().destroy();
+       //   bulk_table = "";
+         
       }
     }
 
-    var parseCsv = new uploadDealcsv();
-    parseCsv.getCsv();
-  
-
+function reset_table(){
+    table_databale.clear().draw(); 
+    local_data = [];
+    save_updates();    
+}
 
 function save_bulk(){
     var new_cat =[];
-var bulk_table_data = bulk_table.data();
-var count = 5;
+    if(bulk_table!=""){
 
+
+    try {
+        
+ 
+var bulk_table_data = bulk_table.data();
+var count = bulk_table_data.length;
+console.log(count);
 get_fulldata();
 var main_data = table_databale.data();
 
@@ -841,33 +858,19 @@ add_to_local_table(user_id)
             }
           //  cat_icon_list = Object.assign(cat_icon_list, new_cat_list)
           cat_icon_list.push(new_cat_list);         
-           // cat_table.push(new_cat_list);  
-         /*   console.log(cat_icon_list);
-            uptoptarray(wallet_Ref, wallet_id, 'categories', cat_icon_list).then(function() {
-              
 
-              
-            }).catch((error) => {
-                console.log(error);
-            }); */
-        } 
-
-        main_data.push(Object.assign(data, result)); 
-        local_data.push(Object.assign(data, result));    
-        if(i==count-1){          
-
-
-   
+        }   
+            main_data.push(Object.assign(data, result));     
+            local_data.push(Object.assign(data, result));   
+        if(i==count-1){     
       $('#edit_incex_form_modal_bulk').modal('toggle');
-      table_databale.clear().draw();                      
-      table_databale.rows.add(main_data);
+      table_databale.clear().draw();          
+    
+      table_databale.rows.add(main_data.unique());
     table_databale.columns.adjust().draw(); 
     on_month_call(timestamp);
-     save_updates();
-   
-  //   console.log(JSON.parse(local_docs[wallet_id]));
-
-    
+     save_updates();   
+  //   console.log(JSON.parse(local_docs[wallet_id]));    
  /*     build_new_icons(new_cat).then(function(finalResult) { */
     if(new_cat.length!=0){
         updateoptdata(wallet_Ref, wallet_id, { 'categories': cat_icon_list }).then(function () {
@@ -876,14 +879,11 @@ add_to_local_table(user_id)
                     icon: 'success',
                     html :new_cat,
                     title: 'Below Categories were added',      
-                    footer: 'You can change the icons at the settings menu.'
-                    
-                  })
-                
+                    footer: 'You can change the icons at the settings menu.'                    
+                  })                
            /*  }).catch((error) => {
                 console.log(error);
-            });  */
-           
+            });  */           
         }).catch((error) => {
             console.log(error);
         }); 
@@ -891,10 +891,34 @@ add_to_local_table(user_id)
 
      }   
     }    
-})
-.catch((error) => {
-    console.log(error);
-});   
+})  
+} catch (err) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err.message
+      })  
+}
+}else{
+    Swal.fire({
+        icon: 'error',
+        title: 'No Data',
+        text: "Import file first."
+      })  
+}
+}
+
+function check_duplicates(timestamp,data){
+    var flag = false;
+    for (var i = 0; i < data.length; i++) {
+        if(timestamp== data[i]['timestamp']){
+            flag = true;
+            return true;
+        } 
+        if(i==data.length-1){
+            return false;
+        }   
+    }
 }
 
 function build_new_icons(obj) {
