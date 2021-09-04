@@ -147,7 +147,7 @@
                                         </td>
                                         <td>
                                             <span id="fin_pl"></span></td>
-                                        <td>
+                                        <td id=trans_5 class="collapse">
 
                                             <div class="d-flex flex-column w-100 mr-2" id="total_progress"></div>
                                         </td>
@@ -158,7 +158,7 @@
 
                                     </tr>
 
-                                    <tr id='trans_2' class="collapse pl-0">
+                                    <tr id='trans_2' class="collapse pl-0 table-active">
                                         <td class="">
                                             <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-40 flex-shrink-0 mr-4">
@@ -166,11 +166,11 @@
                                 <use xlink:href="#users"></use></svg></span></span>
                                                 </div>
                                                 <div>
-                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Recurring</a> <span class="text-muted font-weight-bold d-block" id="p_entires">Transactions</span>
+                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Recurring</a> <span class="text-dark font-weight-bold d-block" id="p_entires">Transactions</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center"><span class="text-muted font-weight-500">Paid Only</span></td>
+                                        <td class="text-center"><span class="text-dark font-weight-500">Paid Only</span></td>
                                         <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id="rec_income">---</span></td>
                                         <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id="rec_expense">---</span></td>
                                         <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id="rec_net">---</span></td>
@@ -181,7 +181,7 @@
                                         <td><span class="text-center font-weight-normal">The remaining sum after the recurring transactions.<br>
                      </span></td>
                                     </tr>
-                                    <tr id='trans_3' class="collapse pl-0">
+                                    <tr id='trans_3' class="collapse pl-0 table-active">
                                         <td class="">
                                             <div class="d-flex align-items-center">
                                                 <div class="symbol symbol-40 flex-shrink-0 mr-4">
@@ -189,11 +189,11 @@
                                 <use xlink:href="#foursquare"></use></svg></span></span>
                                                 </div>
                                                 <div>
-                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Other</a> <span class="text-muted font-weight-bold d-block" id="p_entires">Transactions</span>
+                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">Other</a> <span class="text-dark font-weight-bold d-block" id="p_entires">Transactions</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center"><span class="text-muted font-weight-500">Paid Only</span></td>
+                                        <td class="text-center"><span class="text-dark font-weight-500">Paid Only</span></td>
                                         <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id="non_income">---</span></td>
                                         <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id="non_expense">---</span></td>
                                         <td class="text-center"><span class="text-dark-75 font-weight-bolder d-block font-size-lg" id="non_net">---</span></td>
@@ -396,9 +396,9 @@
                                         <a class="nav-link py-2 px-4" data-toggle="tab" href="#k2t_tab_pane_1_4">Expense</a>
                                     </li>
                                   
-                                    <li class="nav-item">
+                                   <!--  <li class="nav-item">
                                         <a class="nav-link py-2 px-4" data-toggle="tab" href="#k2t_tab_pane_1_2">Summary</a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </div>
                         </div>
@@ -415,11 +415,11 @@
                                 </div>
                                 <!--end::Tap pane-->
                                 <!--begin::Tap pane-->
-                                <div class="tab-pane fade" id="k2t_tab_pane_1_2" role="tabpanel" aria-labelledby="k2t_tab_pane_1_2">
-                                    <!--begin::Table-->
+<!--                                 <div class="tab-pane fade" id="k2t_tab_pane_1_2" role="tabpanel" aria-labelledby="k2t_tab_pane_1_2">
+                                  
                                     <div id="kt_main_chart_trends"></div>
-                                    <!--end::Table-->
-                                </div>
+                                  
+                                </div> -->
                                 <div class="tab-pane fade" id="k2t_tab_pane_1_3" role="tabpanel" aria-labelledby="k2t_tab_pane_1_3">
                                     <!--begin::Table-->
                                     <div id="kt_main_chart_3"></div>
@@ -456,11 +456,12 @@
                             </div>
                             <div class="card-toolbar">
                                 <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                                
                                     <li class="nav-item">
-                                        <a class="nav-link py-2 px-4 active" data-toggle="tab" href="#k2t_tab_pane_3_3">Expense</a>
+                                        <a class="nav-link py-2 px-4 active" data-toggle="tab" href="#k2t_tab_pane_3_1">Income</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link py-2 px-4 " data-toggle="tab" href="#k2t_tab_pane_3_1">Income</a>
+                                        <a class="nav-link py-2 px-4 " data-toggle="tab" href="#k2t_tab_pane_3_3">Expense</a>
                                     </li>
 
                                    
@@ -471,18 +472,11 @@
                         </div>
                         <div class="card-body pt-2 pb-0 mt-n3">
                             <div class="tab-content mt-5" id="myTabTables1">
-                                <!--begin::Tap pane-->
-                                <div class="tab-pane fade " id="k2t_tab_pane_3_1" role="tabpanel" aria-labelledby="k2t_tab_pane_3_1">
-                                    <!--begin::Table-->
+                                <div class="tab-pane fade show active" id="k2t_tab_pane_3_1" role="tabpanel" aria-labelledby="k2t_tab_pane_3_1">
                                     <div id="kt_pie_chart_cat_i" class="d-flex justify-content-center"></div>
-                                    <!--end::Table-->
                                 </div>
-                                <!--end::Tap pane-->
-                                <!--begin::Tap pane-->
-                                <div class="tab-pane fade show active" id="k2t_tab_pane_3_3" role="tabpanel" aria-labelledby="k2t_tab_pane_3_3">
-                                    <!--begin::Table-->
+                                <div class="tab-pane fade" id="k2t_tab_pane_3_3" role="tabpanel" aria-labelledby="k2t_tab_pane_3_3">
                                     <div id="kt_pie_chart_cat_e" class="d-flex justify-content-center"></div>
-                                    <!--end::Table-->
                                 </div>
                             </div>
                         </div>

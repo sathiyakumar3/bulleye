@@ -317,6 +317,7 @@ function generate_navi(data, p_wallet) {
 
 function get_user(user) {
     user_local = user;
+    try {
     getoptdata(user_Ref, user_local.uid).then((function(finalResult) {
         
         document.getElementById("init_name").innerHTML = name_intials(finalResult.name);
@@ -353,8 +354,9 @@ function get_user(user) {
                     '<h4 class="menu-text">You have no wallets.</h4>' +
                     '<i class="menu-icon ki ki-bold-more-hor icon-md"></i>' +
                     '</li>';
-
-                var myvar = '<div class="col-lg-12"><div class="card card-custom p-6 mb-8 mb-lg-0"><div class="card-body"><div class="row"><div class="col-sm-7">  <img src="assets/media/logos/logo-4.png" class="max-h-70px" alt=""><h2 class="text-dark mb-4"><p></p><p></p>Welcome, It\'s fresh & empty!</h2><p class="text-dark-50 font-size-lg">You cant control, what you cant measure.  </p></div><div class="col-sm-5 d-flex align-items-center justify-content-sm-end"><a  class="btn font-weight-bolder text-uppercase font-size-lg btn-success py-3 px-6" data-toggle="modal" data-target="#add_new_wallet">Crete your first Wallet</a></div></div></div></div></div>';
+                    
+                    document.getElementById("t_wallet_name").innerHTML = '<h3 class="">'+greetings()+' '+user_name+'</h3>'
+                var myvar = '<div class="col-lg-12"><div class="card card-custom p-6 mb-8 mb-lg-0 "><div class="card-body"><div class="row"><div class="col-sm-7">  <img src="assets/media/logos/logo-4.png" class="max-h-70px" alt=""><h2 class="text-dark mb-4"><p></p><p></p>Welcome, It\'s fresh & empty!</h2><p class="text-dark-50 font-size-lg">You cant control, what you cant measure.  </p></div><div class="col-sm-5 d-flex align-items-center justify-content-sm-end"><a  class="btn dance floating font-weight-bolder text-uppercase font-size-lg btn-success py-3 px-6" data-toggle="modal" data-target="#add_new_wallet">Create your first Wallet</a></div></div></div></div></div>';
                 KTApp.block_null('#kt_content', {
                     overlayColor: '#F3F6F9',
                     message: myvar,
@@ -374,9 +376,13 @@ function get_user(user) {
 
 
     })).catch((error) => {
-        console.error(error);
+        console.log(error);
     });
-
+} catch (error) {
+    console.log(error);
+    // expected output: ReferenceError: nonExistentFunction is not defined
+    // Note - error messages will vary depending on browser
+  }
 }
 
 function image_add(url) {
@@ -754,6 +760,7 @@ user_local.reauthenticateWithCredential(credential).then(function() {
                 var num_of_repeat = document.getElementById('example-number-input2').value;
            
               //  get_fulldata(); 
+            
                 var main_data = table_databale.data(); 
                 if(document.getElementById('add_edit_button').innerText == 'Edit'){
                     var se = selected_items.pop();        
@@ -816,18 +823,28 @@ user_local.reauthenticateWithCredential(credential).then(function() {
                             }
                             if(i==num_of_repeat-1){
                                
-                              table_databale.clear().draw();                      
-                              table_databale.rows.add(main_data);
-                            table_databale.columns.adjust().draw(); 
-                            on_month_call(timestamp);
-                             save_updates();
+                                    table_databale.clear().draw();                      
+                                    table_databale.rows.add(main_data);
+                                  table_databale.columns.adjust().draw(); 
+                                 // on_month_call(timestamp);
+                                  save_updates();
+
+                            
+                                  
+                            
+                                    KTApp.unblock('#kt_blockui_content_2');   
+                                
+                               
+                            
+                             
                             }    
                         }    
                     })
                     .catch((error) => {
                         console.log(error);
                     });  
-                }           
+                }    
+               
    
             });
         }

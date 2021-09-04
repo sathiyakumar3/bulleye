@@ -1,6 +1,5 @@
 "use strict";
 
-
 var user_id;
 var wallet_Ref_entries = "";
 var wallet_Ref = "";
@@ -23,8 +22,8 @@ var selected_start = new Date('1/1/1900').getTime();
 var selected_end = new Date('1/1/2100').getTime();
 
 
-var local_data;
-var table_data;
+var local_data = [];
+var table_data =[];
 var datatable = "";
 var selected_items = [];
 var table_databale = '';
@@ -99,6 +98,7 @@ var start_app = function () {
         initTable2();
     }
     var read_data = function () {  
+        if(wallet_entries!=undefined){
         get_wallet_data(wallet_id, wallet_entries).then(function (result) {
             local_data = result;       
             var outcome = date_process(result);
@@ -112,12 +112,23 @@ var start_app = function () {
             selected_end = moment(selected_end);
             run_wallet();
         }).catch((error) => { console.log(error); });
+
+    }else{
+        var myvar = '<div class="col-lg-12"><div class="card card-custom p-6 mb-8 mb-lg-0"><div class="card-body"><div class="row"><div class="col-sm-7">  <img src="assets/media/logos/logo-4.png" class="max-h-70px" alt=""><h2 class="text-dark mb-4"><p></p><p></p>Welcome, It\'s fresh & empty!</h2><p class="text-dark-50 font-size-lg">You cant control, what you cant measure.  </p></div><div class="col-sm-5 d-flex align-items-center justify-content-sm-end"><a  class="btn font-weight-bolder text-uppercase font-size-lg dance btn-success py-3 px-6" onclick="add_entry_modal()">Add your first Entry</a></div></div></div></div></div>';
+        KTApp.block_null('#kt_blockui_content_2', {
+            overlayColor: '#F3F6F9',
+            message: myvar,
+            opacity: 1,
+        });
+       initTable2();
+    }
+
     };
 
     var initTable2 = function () {
      
 
-        KTApp.unblock('#kt_blockui_content');   
+        KTApp.unblock('#kt_blockui_content_2');   
         var colums_select = [15, 9, 10, 11, 5, 13, 14, 12];
         var options = {
   /*           responsive: true,
@@ -499,7 +510,7 @@ var start_app = function () {
 
     return {
         init: function () {
-            KTApp.block('#kt_blockui_content', {
+            KTApp.block('#kt_blockui_content_2', {
                 overlayColor: '#1e1e2d',
                 opacity: 0,
                 state: 'primary',
@@ -509,7 +520,7 @@ var start_app = function () {
             read_data();
         },
         refresh: function () {
-            KTApp.block('#kt_blockui_content', {
+            KTApp.block('#kt_blockui_content_2', {
                 overlayColor: '#1e1e2d',
                 opacity: 0,
                 state: 'primary',
@@ -530,6 +541,8 @@ run_wallet();
 jQuery(document).ready(function () {
    // document.getElementById("kt_dashboard_daterangepicker_date").style.display = "none"; 
     wallet_id = global_data[0];
+
+  // console.log(user_name);
     user_id = global_data[2];
    // document.getElementById("welcome_message_2").innerText =  greetings() + global_data[1];  
     wallet_Ref_entries = db.collection("wallets").doc(wallet_id).collection('entries');
@@ -776,7 +789,7 @@ try {
         bulk_table.columns.adjust().draw();
         document.getElementById("instru").style.display = "none";
       }
-      console.log();
+     
       Swal.fire({
         icon: 'success',
         text :parsedata.length +" entires were verfied.",
@@ -1045,36 +1058,70 @@ function sync_wallet_entries() {
         var data = results[i];      
         var timestamp = new Date(data.Timestamp);
         var entry = monthts(timestamp);
-        if (!wallet_entries.includes(entry)) {
+        console.log(wallet_entries);
+        if(wallet_entries==undefined){
+            wallet_entries = [];
             wallet_entries.push(entry);
+        }else{
+            if (!wallet_entries.includes(entry)) {
+                wallet_entries.push(entry);
+            }
         }
+    
     }
 }
 
-function save_changes() {
-    get_fulldata();
 
+
+function save_changes() {
+    /*     Swal.fire({
+        title: 'Please Wait !',
+        html: 'Saving entries...',// add html attribute if you want or remove
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+            Swal.showLoading()
+        },
+    });   */ 
+    get_fulldata();
+    var promiesSS = [];
     sync_wallet_entries();
     var results = table_databale.data();
-    for (var i = 0; i < wallet_entries.length; i++) {
+    for (var i = 0; i < wallet_entries.length; i++) {      
         var entry_id = wallet_entries[i];
         var data = get_selected_month_data(results, entry_id);
-        setoptdata(wallet_Ref_entries, entry_id, data).then(function () {
-            updateoptdata(wallet_Ref, wallet_id, { 'entries': wallet_entries }).then(function () {
+        const save_entries = new Promise((resolve, reject) => {
+            setoptdata(wallet_Ref_entries, entry_id, data).then(function () {
+                updateoptdata(wallet_Ref, wallet_id, { 'entries': wallet_entries }).then(function () {
+                    resolve(true);
+                }).catch((error) => {
+                    console.log(error);
+                    reject(error);
+                });
             }).catch((error) => {
                 console.log(error);
+                reject(error);
             });
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-    $('#save_changes_unit').collapse('hide');
-    unsaved_flag = false;
-    selected_items = [];
-    refresh_table_buttons();
-    var outcome = date_process(local_data);       
-    document.getElementById("month_liset").innerHTML =  create_month_list(outcome[2]);
-    on_month_call();
+        });  
+        promiesSS.push(save_entries);
+    }  
+
+      Promise.all(promiesSS)
+      .then((results) => {
+          $('#save_changes_unit').collapse('hide');
+          unsaved_flag = false;
+          selected_items = [];
+          refresh_table_buttons();
+          var outcome = date_process(local_data);       
+          document.getElementById("month_liset").innerHTML =  create_month_list(outcome[2]);
+          on_month_call();              
+      })
+      .catch((e) => {
+          // Handle errors here
+          console.log(e);
+      });
+
+    
 }
 
 function external_table_btn(x) {

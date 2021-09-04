@@ -1,5 +1,7 @@
 "use strict";
 var user_id;
+var user_photo;
+var user_name;
 var wallet_Ref = '';
 var user_Ref = db.collection("users");
 
@@ -42,18 +44,20 @@ function expand_shrink() {
         '</svg><!--end::Svg Icon-->';
     if (flag_expand) {
         document.getElementById("expandicon").innerHTML = myvar3;
-        $('#trans_1').collapse("show");
+    //    $('#trans_1').collapse("show");
         $('#trans_2').collapse("show");
         $('#trans_3').collapse("show");
         $('#trans_4').collapse("show");
+        $('#trans_5').collapse("show");
 
         flag_expand = false;
     } else {
         document.getElementById("expandicon").innerHTML = myvar2;
-        $('#trans_1').collapse("hide");
+      //  $('#trans_1').collapse("hide");
         $('#trans_2').collapse("hide");
         $('#trans_3').collapse("hide");
         $('#trans_4').collapse("hide");
+        $('#trans_5').collapse("hide");
         flag_expand = true;
     }
 
@@ -109,42 +113,57 @@ var start_app = function() {
         document.getElementById("net_percent_bar").style.width = net_perc + "%";
 
 
-
         document.getElementById("current_net2").innerText = current_net;
         document.getElementById("widget_cb").innerText = wallet_symbol + ' ' + numberWithCommas(current_net);
         set_sum('current_net', wallet_symbol, current_net);
         document.getElementById("cur_progress").innerHTML = percentage_form(current_net, current_income, wallet_symbol,true);
         document.getElementById("cur_pl").innerHTML = profit_loss_format(current_net);
+////////////
         var rec_income = data_process(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Income', 'Payment': 'Paid', });
         set_sum('rec_income', wallet_symbol, rec_income);
         var rec_expense = data_process(data, { 'Repeated': ['Monthly', 'Daily', 'Weekly'], 'Type': 'Expense', 'Payment': 'Paid', });
         set_sum('rec_expense', wallet_symbol, rec_expense);
         var rec_net = rec_income - rec_expense;
-        document.getElementById("widget_rb").innerText = wallet_symbol + ' ' + numberWithCommas(rec_net);
+        document.getElementById("widget_rb").innerText = wallet_symbol + ' ' + numberWithCommas(rec_net);     
         set_sum('rec_net', wallet_symbol, rec_net);
         document.getElementById("rec_progress").innerHTML = percentage_form(rec_net, rec_income, wallet_symbol,true);
         document.getElementById("rec_pl").innerHTML = profit_loss_format(rec_net);
-        var non_income = rec_net + data_process(data, { 'Repeated': 'Once', 'Type': 'Income', 'Payment': 'Paid', });
+       
+        var non_income = rec_net + data_process(data, { 'Repeated': ['Once'], 'Type': 'Income', 'Payment': 'Paid', });
+//var non_income = current_income - rec_income;
 
         set_sum('non_income', wallet_symbol, non_income);
-        var non_expense = data_process(data, { 'Repeated': 'Once', 'Type': 'Expense', 'Payment': 'Paid', });
-        set_sum('non_expense', wallet_symbol, current_expense);
+      var non_expense = data_process(data, { 'Repeated': ['Once'], 'Type': 'Expense', 'Payment': 'Paid', });
+    // var non_expense = current_expense - rec_expense;
+        set_sum('non_expense', wallet_symbol, non_expense);
         var non_net = non_income - non_expense;
         document.getElementById("widget_ob").innerText = wallet_symbol + ' ' + numberWithCommas(non_net);
+    
         set_sum('non_net', wallet_symbol, non_net);
         document.getElementById("non_progress").innerHTML = percentage_form(non_net, non_income, wallet_symbol,true);
         document.getElementById("non_pl").innerHTML = profit_loss_format(non_net);
-        var fin_income = data_process(data, { 'Type': 'Income' });
-  
+        ////////////
+
+        var fin_income = data_process(data, { 'Type': 'Income' });  
         set_sum('fin_income', wallet_symbol, fin_income);
         var fin_expense = data_process(data, { 'Type': 'Expense' });
         set_sum('fin_expense', wallet_symbol, fin_expense);
-        var fin_net = fin_income - fin_expense;
-
-        
+        var fin_net = fin_income - fin_expense;  
         document.getElementById("final_balance").innerHTML = '<strong>'+wallet_symbol + ' ' + numberWithCommas(fin_net)+'</strong>';
         document.getElementById("widget_fb").innerText = wallet_symbol + ' ' + numberWithCommas(fin_net);
         set_sum('fin_net', wallet_symbol, fin_net);
+
+        
+if(fin_net==current_net){
+    $('#trans_1').collapse("hide");
+    $('#trans_5').collapse("show");
+}else{
+    $('#trans_1').collapse("show");
+    $('#trans_5').collapse("hide");
+}
+        
+
+   ////////////
         document.getElementById("total_progress").innerHTML = percentage_form(fin_net, fin_income, wallet_symbol,true);
         document.getElementById("fin_pl").innerHTML = profit_loss_format(fin_net);
     
@@ -208,9 +227,7 @@ var start_app = function() {
 
        
     }
-    var test = function() {
-        console.log()
-    }
+
     var run_trends = function() {
         
         var cat = cat_process(local_data);
@@ -289,35 +306,46 @@ var start_app = function() {
 
     }
     var read_data = function(force_flag) {
+ 
+        if(wallet_entries!=undefined){
+            get_wallet_data(wallet_id,wallet_entries).then(function(result) {
 
-        get_wallet_data(wallet_id,wallet_entries).then(function(result) {
+                local_data = sort_obj(result, 'Timestamp');
+                var entries_size = Object.keys(local_data).length;
+    
+                if (entries_size > 0) {
+                    var outcome = date_process(result);
+                    selected_start = outcome[0];
+                    selected_end = outcome[1];
+    
+    
+                    run_trends();
+                } else {
+                    KTApp.unblock('#kt_blockui_content');
+    
+    
+                    var myvar = '<div class="col-lg-12"><div class="card card-custom p-6 mb-8 mb-lg-0"><div class="card-body"><div class="row"><div class="col-sm-7">  <img src="assets/media/logos/logo-4.png" class="max-h-70px" alt=""><h2 class="text-dark mb-4"><p></p><p></p>Welcome, It\'s fresh & empty!</h2><p class="text-dark-50 font-size-lg">You cant control, what you cant measure.  </p></div><div class="col-sm-5 d-flex align-items-center justify-content-sm-end"><a  class="btn font-weight-bolder text-uppercase font-size-lg btn-success py-3 px-6" onclick="go_to_wallet_entries()">Add your first Entry</a></div></div></div></div></div>';
+                    KTApp.block_null('#kt_blockui_content', {
+                        overlayColor: '#F3F6F9',
+                        message: myvar,
+                        opacity: 1,
+                    });
+                }
+    
+    
+    
+            }).catch((error) => { console.log(error); });
+    
+        }else{
+            var myvar = '<div class="col-lg-12"><div class="card card-custom p-6 mb-8 mb-lg-0"><div class="card-body"><div class="row"><div class="col-sm-7">  <img src="assets/media/logos/logo-4.png" class="max-h-70px" alt=""><h2 class="text-dark mb-4"><p></p><p></p>Welcome, It\'s fresh & empty!</h2><p class="text-dark-50 font-size-lg">You cant control, what you cant measure.  </p></div><div class="col-sm-5 d-flex align-items-center justify-content-sm-end"><a  class="btn font-weight-bolder text-uppercase font-size-lg dance btn-success py-3 px-6" onclick="go_to_wallet_entries()">Add your first Entry</a></div></div></div></div></div>';
+            KTApp.block_null('#kt_blockui_content', {
+                overlayColor: '#F3F6F9',
+                message: myvar,
+                opacity: 1,
+            });
+        }
 
-            local_data = sort_obj(result, 'Timestamp');
-            var entries_size = Object.keys(local_data).length;
-
-            if (entries_size > 0) {
-                var outcome = date_process(result);
-                selected_start = outcome[0];
-                selected_end = outcome[1];
-
-
-                run_trends();
-            } else {
-                KTApp.unblock('#kt_blockui_content');
-
-
-                var myvar = '<div class="col-lg-12"><div class="card card-custom p-6 mb-8 mb-lg-0"><div class="card-body"><div class="row"><div class="col-sm-7">  <img src="assets/media/logos/logo-4.png" class="max-h-70px" alt=""><h2 class="text-dark mb-4"><p></p><p></p>Welcome, It\'s fresh & empty!</h2><p class="text-dark-50 font-size-lg">You cant control, what you cant measure.  </p></div><div class="col-sm-5 d-flex align-items-center justify-content-sm-end"><a  class="btn font-weight-bolder text-uppercase font-size-lg btn-success py-3 px-6" onclick="add_entry_modal()">Add your first Entry</a></div></div></div></div></div>';
-                KTApp.block_null('#kt_blockui_content', {
-                    overlayColor: '#F3F6F9',
-                    message: myvar,
-                    opacity: 1,
-                });
-            }
-
-
-
-        }).catch((error) => { console.log(error); });
-
+    
     };
 
 
@@ -543,7 +571,8 @@ var start_app = function() {
 jQuery(document).ready(function() {
     wallet_id = global_data[0];
     user_id = global_data[2];  
-    var user_photo =   global_data[3];  
+    user_name = global_data[1];  
+    user_photo =   global_data[3];  
     wallet_Ref = db.collection("wallets").doc(wallet_id).collection('entries');
     getoptdata(wallet_Ref, wallet_id).then(function(doc) {
         wallet_name = doc.name;
@@ -559,10 +588,10 @@ jQuery(document).ready(function() {
         
 
      //   document.getElementById("form_currency").innerText = wallet_symbol;
-        getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
-            var user_name = finalResult.name;
-       //     document.getElementById("owrner_fp").innerText = user_name;
-        }).catch((error) => { console.log(error); });
+      /*   getoptdata(user_Ref, wallet_owner).then(function(finalResult) {
+            user_name = finalResult.name;
+         document.getElementById("owrner_fp").innerText = user_name;
+        }).catch((error) => { console.log(error); }); */
     
         document.getElementById("location_fp").innerText = wallet_location;
         document.getElementById("t_wallet_name").innerHTML ='<a  class="btn btn-dark btn-shadow  font-weight-bold  px-6 py-3" style = "text-transform:uppercase;">'+wallet_name+'</a>' ;
@@ -587,6 +616,10 @@ jQuery(document).ready(function() {
    
 });
 
+function go_to_wallet_entries(){
+    var month_data = wallet_id + "," + user_name + "," + user_id + "," + user_photo;
+    load_p('content_pages/wallet.html', month_data);
+}
 
 
 function check_balance() {

@@ -91,7 +91,28 @@ div.wallet_menu {
   
 @keyframes floating { 
     0% { transform: translate(0,  0px); } 
-    50%  { transform: translate(0, 3px); } 
+    50%  { transform: translate(0, 5px); } 
     100%   { transform: translate(0, -0px); }     
 } 
+.dance {   
+    animation: attention 4s ease infinite;
+} 
+  
 
+@keyframes attention {
+    9% {
+      transform: none;
+    }
+    12% {
+      transform: scale(1.05);
+    }
+    16% {
+      transform: scale(0.95);
+    }
+    20% {
+      transform: scale(1.03);
+    }
+    24% {
+      transform: scale(1);
+    }
+  }
