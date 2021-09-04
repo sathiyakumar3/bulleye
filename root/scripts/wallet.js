@@ -1058,7 +1058,7 @@ function sync_wallet_entries() {
         var data = results[i];      
         var timestamp = new Date(data.Timestamp);
         var entry = monthts(timestamp);
-        console.log(wallet_entries);
+       
         if(wallet_entries==undefined){
             wallet_entries = [];
             wallet_entries.push(entry);
@@ -1074,54 +1074,76 @@ function sync_wallet_entries() {
 
 
 function save_changes() {
-    /*     Swal.fire({
-        title: 'Please Wait !',
-        html: 'Saving entries...',// add html attribute if you want or remove
+   
+        Swal.fire({
+        title: 'Please Wait',
+        html: '<p id="pods" >Processing entries...</p>',// add html attribute if you want or remove
         allowOutsideClick: false,
         showConfirmButton: false,
         onBeforeOpen: () => {
-            Swal.showLoading()
+            Swal.showLoading();
         },
-    });   */ 
-    get_fulldata();
-    var promiesSS = [];
-    sync_wallet_entries();
-    var results = table_databale.data();
-    for (var i = 0; i < wallet_entries.length; i++) {      
-        var entry_id = wallet_entries[i];
-        var data = get_selected_month_data(results, entry_id);
-        const save_entries = new Promise((resolve, reject) => {
-            setoptdata(wallet_Ref_entries, entry_id, data).then(function () {
-                updateoptdata(wallet_Ref, wallet_id, { 'entries': wallet_entries }).then(function () {
-                    resolve(true);
-                }).catch((error) => {
-                    console.log(error);
-                    reject(error);
-                });
-            }).catch((error) => {
-                console.log(error);
-                reject(error);
+        didOpen: () => {
+
+            get_fulldata();
+
+            var promiesSS = [];
+            sync_wallet_entries();
+        
+            var o =0;
+            var results = table_databale.data();
+            for (var i = 0; i < wallet_entries.length; i++) {      
+                var entry_id = wallet_entries[i];
+                var data = get_selected_month_data(results, entry_id);
+                const save_entries = new Promise((resolve, reject) => {
+                    setoptdata(wallet_Ref_entries, entry_id, data).then(function () {
+                        updateoptdata(wallet_Ref, wallet_id, { 'entries': wallet_entries }).then(function () {
+
+                            document.getElementById('pods').innerHTML =  percentage_form(o++, wallet_entries.length, wallet_entries[o] + ' | ',true);
+
+                            resolve(true);
+                        }).catch((error) => {
+                            console.log(error);
+                            reject(error);
+                        });
+                    }).catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    });
+                });  
+                promiesSS.push(save_entries);
+                console.log("pushing entries");
+        
+            }  
+            document.getElementById('pods').innerHTML =  "Saving entries...";
+
+            Promise.all(promiesSS)
+            .then((results) => {
+
+                $('#save_changes_unit').collapse('hide');
+                unsaved_flag = false;
+                selected_items = [];
+                refresh_table_buttons();
+                var outcome = date_process(local_data);       
+                document.getElementById("month_liset").innerHTML =  create_month_list(outcome[2]);
+                on_month_call();     
+                Swal.fire({           
+                  icon: 'success',
+                  title: 'Your work has been saved',
+                  showConfirmButton: false,
+                  timer: 1500
+                })         
+            })
+            .catch((e) => {
+                // Handle errors here
+                console.log(e);
             });
-        });  
-        promiesSS.push(save_entries);
-    }  
+        }
+    });  
 
-      Promise.all(promiesSS)
-      .then((results) => {
-          $('#save_changes_unit').collapse('hide');
-          unsaved_flag = false;
-          selected_items = [];
-          refresh_table_buttons();
-          var outcome = date_process(local_data);       
-          document.getElementById("month_liset").innerHTML =  create_month_list(outcome[2]);
-          on_month_call();              
-      })
-      .catch((e) => {
-          // Handle errors here
-          console.log(e);
-      });
+  
 
-    
+
 }
 
 function external_table_btn(x) {
