@@ -4,16 +4,19 @@ var unsaved_flag = false;
 function active_panels(c){
   
   for (let i = 0; i < page_counter; i++) {
+    var myEle = document.getElementById("menu_"+i);
+    if(myEle){
     if(i==(c-1)){
-    
-      document.getElementById("menu_"+i).classList.add("menu-item-active");
+      myEle.classList.add("menu-item-active");
     }else{
       
-      document.getElementById("menu_"+i).classList.remove("menu-item-active");
+      myEle.classList.remove("menu-item-active");
     }
-   
+  }
   }
 }
+
+
 
 function load_page(c,url, l) {
   active_panels(c);

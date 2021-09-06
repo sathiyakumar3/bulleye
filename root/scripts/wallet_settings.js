@@ -1,3 +1,5 @@
+
+
 var user_id;
 var wallet_Ref = "";
 var user_Ref = db.collection("users");
@@ -203,6 +205,51 @@ function del_wall() {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
+       var prom_del = []
+            wallet_Ref.doc(wallet_id).collection("entries").get()
+            .then((querySnapshot) => {
+                console.log(querySnapshot.size);
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+                    const del_e = new Promise((resolve, reject) => {
+                        deloptdoc(wallet_Ref.doc(wallet_id).collection("entries"), doc.id).then(function() {
+                        resolve(true);
+                                    
+                    }).catch((error) => {
+                        reject(true);
+                        console.log(error);
+                    });
+                    prom_del.push(del_e);
+                });
+                });
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+
+            Promise.all(prom_del)
+            .then((results) => {
+                console.log("All done", results);
+                deloptdoc(wallet_Ref, wallet_id).then(function() {
+                    
+                    Swal.fire(
+                        'Deleted!',
+                        'The wallet has been deleted.',
+                        'success'
+                    );
+                    get_user(user_local);
+                }).catch((error) => {
+                    console.log(error);
+                });
+                 
+            })
+            .catch((e) => {
+                // Handle errors here
+            });
+                
+
+/* 
             deloptdoc(wallet_Ref, wallet_id).then(function() {
                 get_user(user_local);
                 Swal.fire(
@@ -213,6 +260,8 @@ function del_wall() {
             }).catch((error) => {
                 console.log(error);
             });
+ */
+
 
         }
     })

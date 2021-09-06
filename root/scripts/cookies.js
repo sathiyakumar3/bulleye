@@ -60,7 +60,7 @@ function getCookie_local(cookieName) {
 }
 
 function eraseCookie_local(name) {
-  delete arr[name];
+  delete local_docs[name];
 }
 
 /////////////////////////////////// LOCAL ICON DATABASE ////////////////////////////////////////
