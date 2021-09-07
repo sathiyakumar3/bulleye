@@ -370,6 +370,8 @@ if(fin_net==current_net){
             } else { range = start.format('MMM D') + ' - ' + end.format('MMM D'); }
             $('#kt_dashboard_daterangepicker_date').html(range);
             $('#kt_dashboard_daterangepicker_title').html(title);
+            document.getElementById("cat_perii").innerText = range;
+            
 
             selected_start = start;
             selected_end = end;

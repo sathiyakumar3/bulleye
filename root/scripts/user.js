@@ -462,6 +462,7 @@ function image_add(url) {
         }
 
         var add_new_wallet_From_validation = function() {
+            document.getElementById("add_new_wallet_form").reset();
             FormValidation.formValidation(
                 document.getElementById('add_new_wallet_form'), {
                     fields: {
@@ -747,6 +748,7 @@ user_local.reauthenticateWithCredential(credential).then(function() {
             });
         }
         var add_edit_form_validation = function () {
+            document.getElementById("edit_incex_form").reset();
             FormValidation.formValidation(document.getElementById('edit_incex_form'), { fields: { form_catergory_2: { validators: { notEmpty: { message: 'Category is requried.' } } }, form_description_2: { validators: { notEmpty: { message: 'A description is required.' }, } }, form_amount_2: { validators: { notEmpty: { message: 'An Amount is required.' }, } }, repeat_numbrs: { validators: { between: { min: 0, max: 30, message: 'The number must be between 0 and 30' } } } }, plugins: { trigger: new FormValidation.plugins.Trigger(), submitButton: new FormValidation.plugins.SubmitButton(), bootstrap: new FormValidation.plugins.Bootstrap({ eleInvalidClass: '', eleValidClass: '', }) } }).on('core.form.valid', function () {
                 $('#edit_incex_form_modal').modal('toggle');
                 var category = document.getElementById('edit_incex_form').querySelector('[name="form_catergory_2"]').value;

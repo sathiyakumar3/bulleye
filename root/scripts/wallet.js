@@ -691,7 +691,7 @@ if(newLinebrk[i]!=null &&newLinebrk[i]!=undefined &&newLinebrk[i]!=''){
     parsedata.push(newLinebrk[i].split(","));}
             //parsedata.push(newLinebrk[i].split(","))
         }
-        console.table(parsedata)
+     
         load_upload_table(parsedata);
     }
 
@@ -699,6 +699,7 @@ if(newLinebrk[i]!=null &&newLinebrk[i]!=undefined &&newLinebrk[i]!=''){
     parseCsv.getCsv();
   
 function load_upload_table(parsedata){
+    console.log(parsedata);
     var dsa = "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 "<'row'<'col-sm-12'tr>>" +
 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>";
@@ -828,22 +829,16 @@ function reset_table(){
 function save_bulk(){
     var new_cat =[];
     if(bulk_table!=""){
-
-
-    try {
-        
- 
+    try {       
 var bulk_table_data = bulk_table.data();
 var count = bulk_table_data.length;
-console.log(count);
 get_fulldata();
 var main_data = table_databale.data();
 
 add_to_local_table(user_id)
 .then(function (result) {              
     for (var i = 0; i < count; i++) {
-        var row_data =bulk_table_data[i];
-      
+        var row_data =bulk_table_data[i];      
         var timestamp =  new Date(row_data[0]);
         var category_r = row_data[2];
         var data = {
@@ -857,8 +852,7 @@ add_to_local_table(user_id)
             Repeated: row_data[1],
             doc_id: monthts(timestamp),
             Amount: row_data[6]
-        } 
-        
+        }         
       
          if (!newar.hasOwnProperty(category_r)&& !new_cat.includes(category_r))
          {   new_cat.push(category_r);
@@ -877,12 +871,13 @@ add_to_local_table(user_id)
             local_data.push(Object.assign(data, result));   
         if(i==count-1){     
       $('#edit_incex_form_modal_bulk').modal('toggle');
-      table_databale.clear().draw();          
-    
+      table_databale.clear().draw();         
       table_databale.rows.add(main_data.unique());
-    table_databale.columns.adjust().draw(); 
+     table_databale.columns.adjust().draw(); 
     on_month_call(timestamp);
      save_updates();   
+     bulk_table.clear().draw();
+     document.getElementById("dealCsv").value = "";
   //   console.log(JSON.parse(local_docs[wallet_id]));    
  /*     build_new_icons(new_cat).then(function(finalResult) { */
     if(new_cat.length!=0){
@@ -894,6 +889,7 @@ add_to_local_table(user_id)
                     title: 'Below Categories were added',      
                     footer: 'You can change the icons at the settings menu.'                    
                   })                
+
            /*  }).catch((error) => {
                 console.log(error);
             });  */           
